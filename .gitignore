@@ -18,3 +18,5 @@ output
 # Claude Code
 .claude/
 .worktrees/
+ios/Bazar.xcodeproj/
+ios/Bazar/Shared/Secrets.swift
