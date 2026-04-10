@@ -9,6 +9,10 @@ import '~/domain/location/infrastructure/graphql/inputs'
 import '~/domain/location/infrastructure/graphql/queries'
 import '~/domain/location/infrastructure/graphql/mutations'
 
+// Scan domain
+import '~/domain/scan/infrastructure/graphql/types'
+import '~/domain/scan/infrastructure/graphql/mutations'
+
 // Item domain
 import '~/domain/item/infrastructure/graphql/enums'
 import '~/domain/item/infrastructure/graphql/types'
