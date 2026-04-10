@@ -1,0 +1,561 @@
+"""Input for manually adding a new item"""
+input AddItemInput {
+  """Item category"""
+  category: ItemCategory!
+
+  """Item description"""
+  description: String
+
+  """Item name"""
+  name: ItemName!
+
+  """Personal notes"""
+  personalNotes: String
+
+  """Photo as base64 encoded string"""
+  photoBase64: String
+
+  """Quantity (default 1)"""
+  quantity: Quantity
+
+  """Storage location"""
+  storageId: StorageId
+}
+
+"""Item count per category"""
+type CategoryCount {
+  """Item category"""
+  category: ItemCategory!
+
+  """Number of items in this category"""
+  count: Int!
+}
+
+"""Input for confirming a scanned item"""
+input ConfirmItemInput {
+  """Item category"""
+  category: ItemCategory!
+
+  """Item description"""
+  description: String
+
+  """Item name"""
+  name: ItemName!
+
+  """Photo from scan preview as base64"""
+  previewImageBase64: String
+
+  """Quantity (default 1)"""
+  quantity: Quantity
+
+  """Storage location"""
+  storageId: StorageId
+}
+
+"""Input for creating a new place"""
+input CreatePlaceInput {
+  """Optional emoji icon"""
+  icon: String
+
+  """Place name"""
+  name: PlaceName!
+}
+
+"""Input for creating a new room"""
+input CreateRoomInput {
+  """Optional emoji icon"""
+  icon: String
+
+  """Room name"""
+  name: RoomName!
+
+  """Parent place"""
+  placeId: PlaceId!
+}
+
+"""Input for creating a new storage spot"""
+input CreateStorageInput {
+  """Storage name"""
+  name: StorageName!
+
+  """Parent zone"""
+  zoneId: ZoneId!
+}
+
+"""Input for creating a new zone"""
+input CreateZoneInput {
+  """Zone name"""
+  name: ZoneName!
+
+  """Parent room"""
+  roomId: RoomId!
+}
+
+"""Dashboard with inventory statistics"""
+type Dashboard {
+  """Item counts grouped by category"""
+  itemsByCategory: [CategoryCount!]!
+
+  """Item counts grouped by place"""
+  itemsByPlace: [PlaceCount!]!
+
+  """Most recently added items"""
+  recentItems: [Item!]!
+
+  """Total number of items"""
+  totalItems: Int!
+}
+
+"""ISO 8601 date-time string"""
+scalar DateTime
+
+"""Image unique identifier (UUID)"""
+scalar ImageId
+
+"""A household item stored in the inventory"""
+type Item {
+  """User who added this item"""
+  addedBy: UserTag!
+
+  """Item category"""
+  category: ItemCategory!
+
+  """Creation date"""
+  createdAt: DateTime!
+
+  """Item description"""
+  description: String!
+
+  """Item unique identifier"""
+  id: ItemId!
+
+  """Resolved location path"""
+  location: LocationPath
+
+  """Item display name"""
+  name: ItemName!
+
+  """Personal notes"""
+  personalNotes: String!
+
+  """Photo image identifier"""
+  photoImageId: ImageId
+
+  """Number of identical items"""
+  quantity: Quantity!
+
+  """Last update date"""
+  updatedAt: DateTime!
+}
+
+"""Category of household item"""
+enum ItemCategory {
+  """Home appliances"""
+  appliances
+
+  """Books and magazines"""
+  books
+
+  """Clothing and accessories"""
+  clothing
+
+  """Decoration and art"""
+  decor
+
+  """Documents and paperwork"""
+  documents
+
+  """Electronics and gadgets"""
+  electronics
+
+  """Food and beverages"""
+  food
+
+  """Furniture"""
+  furniture
+
+  """Hygiene and personal care"""
+  hygiene
+
+  """Kitchen items and utensils"""
+  kitchenware
+
+  """Bed linen, towels, curtains"""
+  linen
+
+  """CDs, DVDs, vinyl records"""
+  media
+
+  """Uncategorized items"""
+  other
+
+  """Sports and outdoor equipment"""
+  sports
+
+  """Tools and hardware"""
+  tools
+
+  """Toys and games"""
+  toys
+}
+
+"""Item unique identifier (UUID)"""
+scalar ItemId
+
+"""Item name (non-empty, max 500 characters)"""
+scalar ItemName
+
+"""Preview of an item identified by AI from a photo"""
+type ItemPreview {
+  """Suggested category"""
+  category: String
+
+  """Item description"""
+  description: String!
+
+  """Identified item name"""
+  name: String!
+
+  """Preview identifier"""
+  previewId: String!
+
+  """Number of identical items"""
+  quantity: Int!
+}
+
+"""Sort field for item listing"""
+enum ItemSort {
+  """Sort by category"""
+  category
+
+  """Sort by item name"""
+  name
+}
+
+"""Paginated list of items"""
+type Items {
+  """Whether more items are available"""
+  hasMore: Boolean!
+  items: [Item!]!
+
+  """Total number of matching items"""
+  totalCount: Int!
+}
+
+"""Full resolved location path for an item"""
+type LocationPath {
+  """Full path string (e.g. "Appartement > Cuisine > Placard > Etagere 2")"""
+  fullPath: String!
+  placeId: PlaceId!
+  placeName: PlaceName!
+  roomId: RoomId!
+  roomName: RoomName!
+  storageId: StorageId!
+  storageName: StorageName!
+  zoneId: ZoneId!
+  zoneName: ZoneName!
+}
+
+type Mutation {
+  """Manually add a new item to the inventory"""
+  addItem(input: AddItemInput!): Item!
+
+  """Analyze a photo with Gemini AI to identify household items"""
+  analyzeItemPhoto(
+    """Photo as base64 encoded JPEG"""
+    imageBase64: String!
+  ): [ItemPreview!]!
+
+  """Confirm and create items from a scan preview"""
+  confirmItems(input: [ConfirmItemInput!]!): [Item!]!
+
+  """Create a new place (e.g. Appartement, Cave)"""
+  createPlace(input: CreatePlaceInput!): Place!
+
+  """Create a new room in a place"""
+  createRoom(input: CreateRoomInput!): Room!
+
+  """Create a new storage spot in a zone"""
+  createStorage(input: CreateStorageInput!): Storage!
+
+  """Create a new zone in a room"""
+  createZone(input: CreateZoneInput!): Zone!
+
+  """Delete an item and its photo"""
+  deleteItem(id: ItemId!): Boolean!
+
+  """Delete a place and all its rooms, zones, and storages"""
+  deletePlace(id: PlaceId!): Boolean!
+
+  """Delete a room and all its zones and storages"""
+  deleteRoom(id: RoomId!): Boolean!
+
+  """Delete a storage spot"""
+  deleteStorage(id: StorageId!): Boolean!
+
+  """Delete a zone and all its storages"""
+  deleteZone(id: ZoneId!): Boolean!
+
+  """Move an item to a different storage location"""
+  moveItem(id: ItemId!, storageId: StorageId!): Item!
+
+  """Update an existing item"""
+  updateItem(id: ItemId!, input: UpdateItemInput!): Item!
+
+  """Update an existing place"""
+  updatePlace(id: PlaceId!, input: UpdatePlaceInput!): Place!
+
+  """Update an existing room"""
+  updateRoom(id: RoomId!, input: UpdateRoomInput!): Room!
+
+  """Update an existing storage spot"""
+  updateStorage(id: StorageId!, input: UpdateStorageInput!): Storage!
+
+  """Update an existing zone"""
+  updateZone(id: ZoneId!, input: UpdateZoneInput!): Zone!
+}
+
+"""A physical location (e.g. Appartement, Cave)"""
+type Place {
+  """Optional emoji icon"""
+  icon: String
+
+  """Place unique identifier"""
+  id: PlaceId!
+
+  """Place display name"""
+  name: PlaceName!
+
+  """Sort order"""
+  order: Int!
+
+  """Rooms in this place"""
+  rooms: [Room!]!
+}
+
+"""Item count per place"""
+type PlaceCount {
+  """Number of items in this place"""
+  count: Int!
+
+  """Place identifier"""
+  placeId: String!
+
+  """Place display name"""
+  placeName: PlaceName!
+}
+
+"""Place unique identifier (UUID)"""
+scalar PlaceId
+
+"""Place name (non-empty, max 200 characters)"""
+scalar PlaceName
+
+"""Item quantity (positive integer)"""
+scalar Quantity
+
+type Query {
+  """Dashboard with inventory statistics"""
+  dashboard: Dashboard!
+
+  """Get a single item by ID"""
+  item(
+    """Item identifier"""
+    id: ItemId!
+  ): Item
+
+  """List items with optional filters and pagination"""
+  items(
+    """Filter by category"""
+    category: ItemCategory
+
+    """Pagination limit (default 40)"""
+    limit: Int
+
+    """Pagination offset"""
+    offset: Int
+
+    """Sort direction"""
+    order: SortOrder
+
+    """Filter by place"""
+    placeId: PlaceId
+
+    """Filter by room"""
+    roomId: RoomId
+
+    """Search in name, description, notes"""
+    search: String
+
+    """Sort field"""
+    sort: ItemSort
+  ): Items!
+
+  """All places with nested rooms, zones, and storages"""
+  places: [Place!]!
+
+  """Full-text search across items and locations"""
+  search(
+    """Maximum results (default 20)"""
+    limit: Int
+
+    """Search query"""
+    query: String!
+  ): [SearchEntry!]!
+}
+
+"""A room within a place (e.g. Cuisine, Salon)"""
+type Room {
+  """Optional emoji icon"""
+  icon: String
+
+  """Room unique identifier"""
+  id: RoomId!
+
+  """Room display name"""
+  name: RoomName!
+
+  """Sort order"""
+  order: Int!
+
+  """Parent place identifier"""
+  placeId: PlaceId!
+
+  """Zones in this room"""
+  zones: [Zone!]!
+}
+
+"""Room unique identifier (UUID)"""
+scalar RoomId
+
+"""Room name (non-empty, max 200 characters)"""
+scalar RoomName
+
+"""A search result entry"""
+type SearchEntry {
+  """ID of the matched entity"""
+  entityId: String!
+
+  """Matched text content"""
+  text: String!
+
+  """Entry type (item, place, room)"""
+  type: String!
+}
+
+"""Sort direction"""
+enum SortOrder {
+  """Ascending"""
+  asc
+
+  """Descending"""
+  desc
+}
+
+"""A specific storage spot (e.g. Etagere 2, Tiroir 3)"""
+type Storage {
+  """Storage unique identifier"""
+  id: StorageId!
+
+  """Storage display name"""
+  name: StorageName!
+
+  """Sort order"""
+  order: Int!
+
+  """Parent zone identifier"""
+  zoneId: ZoneId!
+}
+
+"""Storage unique identifier (UUID)"""
+scalar StorageId
+
+"""Storage name (non-empty, max 200 characters)"""
+scalar StorageName
+
+"""Input for updating an existing item"""
+input UpdateItemInput {
+  """New category"""
+  category: ItemCategory
+
+  """New description"""
+  description: String
+
+  """New item name"""
+  name: ItemName
+
+  """New personal notes"""
+  personalNotes: String
+
+  """New quantity"""
+  quantity: Quantity
+}
+
+"""Input for updating a place"""
+input UpdatePlaceInput {
+  """New emoji icon"""
+  icon: String
+
+  """New place name"""
+  name: PlaceName
+
+  """New sort order"""
+  order: Int
+}
+
+"""Input for updating a room"""
+input UpdateRoomInput {
+  """New emoji icon"""
+  icon: String
+
+  """New room name"""
+  name: RoomName
+
+  """New sort order"""
+  order: Int
+}
+
+"""Input for updating a storage spot"""
+input UpdateStorageInput {
+  """New storage name"""
+  name: StorageName
+
+  """New sort order"""
+  order: Int
+}
+
+"""Input for updating a zone"""
+input UpdateZoneInput {
+  """New zone name"""
+  name: ZoneName
+
+  """New sort order"""
+  order: Int
+}
+
+"""User identifier tag (e.g. "thibaut")"""
+scalar UserTag
+
+"""A zone within a room (e.g. Placard haut, Etagere metallique)"""
+type Zone {
+  """Zone unique identifier"""
+  id: ZoneId!
+
+  """Zone display name"""
+  name: ZoneName!
+
+  """Sort order"""
+  order: Int!
+
+  """Parent room identifier"""
+  roomId: RoomId!
+
+  """Storage spots in this zone"""
+  storages: [Storage!]!
+}
+
+"""Zone unique identifier (UUID)"""
+scalar ZoneId
+
+"""Zone name (non-empty, max 200 characters)"""
+scalar ZoneName
