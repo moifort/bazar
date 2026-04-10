@@ -20,4 +20,12 @@ import '~/domain/item/infrastructure/graphql/inputs'
 import '~/domain/item/infrastructure/graphql/queries'
 import '~/domain/item/infrastructure/graphql/mutations'
 
+// Search domain
+import '~/domain/search/infrastructure/graphql/types'
+import '~/domain/search/infrastructure/graphql/queries'
+
+// Dashboard domain
+import '~/domain/dashboard/infrastructure/graphql/types'
+import '~/domain/dashboard/infrastructure/graphql/queries'
+
 export const schema = builder.toSchema()

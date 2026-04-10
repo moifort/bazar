@@ -64,9 +64,16 @@ mock.module('~/system/logger', () => ({
   }),
 }))
 
+import { registerSearchEventHandlers } from '~/domain/search/event-handlers'
 import { clearHandlers } from '~/system/event-bus'
 
 afterEach(async () => {
   await clearAllStores()
   clearHandlers()
+})
+
+import { beforeEach } from 'bun:test'
+
+beforeEach(() => {
+  registerSearchEventHandlers()
 })
