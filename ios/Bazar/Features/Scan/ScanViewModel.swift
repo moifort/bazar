@@ -27,7 +27,7 @@ final class ScanViewModel {
         Task {
             do {
                 let base64 = imageData.base64EncodedString()
-                let previews = try await ScanAPI.analyze(imageBase64: base64)
+                let previews = try await GraphQLScanAPI.analyze(imageBase64: base64)
                 self.step = .preview(previews, imageBase64: base64)
             } catch {
                 self.error = reportError(error)
@@ -36,7 +36,7 @@ final class ScanViewModel {
         }
     }
 
-    func confirmItems(_ previews: [ItemPreview], storageId: String?) async -> [ItemListItem]? {
+    func confirmItems(_ previews: [ItemPreview], storageId: String?) async -> Bool {
         do {
             let inputs = previews.map { preview in
                 ConfirmItemInput(
@@ -48,10 +48,11 @@ final class ScanViewModel {
                     previewImageBase64: nil
                 )
             }
-            return try await ScanAPI.confirmItems(inputs)
+            try await GraphQLScanAPI.confirmItems(inputs)
+            return true
         } catch {
             self.error = reportError(error)
-            return nil
+            return false
         }
     }
 

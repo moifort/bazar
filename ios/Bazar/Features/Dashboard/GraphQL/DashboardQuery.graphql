@@ -1,0 +1,26 @@
+query Dashboard {
+  dashboard {
+    totalItems
+    itemsByCategory {
+      category
+      count
+    }
+    itemsByPlace {
+      placeId
+      placeName
+      count
+    }
+    recentItems {
+      id
+      name
+      category
+      quantity
+      photoImageId
+      addedBy
+      createdAt
+      location {
+        fullPath
+      }
+    }
+  }
+}

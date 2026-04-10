@@ -10,7 +10,7 @@ final class LocationsViewModel {
         isLoading = true
         error = nil
         do {
-            places = try await LocationsAPI.allPlaces()
+            places = try await GraphQLLocationsAPI.allPlaces()
         } catch is CancellationError {
             // Ignored
         } catch {
@@ -21,7 +21,7 @@ final class LocationsViewModel {
 
     func createPlace(name: String, icon: String?) async {
         do {
-            let place = try await LocationsAPI.createPlace(name: name, icon: icon)
+            let place = try await GraphQLLocationsAPI.createPlace(name: name, icon: icon)
             places.append(place)
         } catch {
             self.error = reportError(error)
@@ -30,7 +30,7 @@ final class LocationsViewModel {
 
     func deletePlace(id: String) async {
         do {
-            try await LocationsAPI.deletePlace(id: id)
+            try await GraphQLLocationsAPI.deletePlace(id: id)
             places.removeAll { $0.id == id }
         } catch {
             self.error = reportError(error)
@@ -39,7 +39,7 @@ final class LocationsViewModel {
 
     func createRoom(placeId: String, name: String) async {
         do {
-            let room = try await LocationsAPI.createRoom(placeId: placeId, name: name)
+            let room = try await GraphQLLocationsAPI.createRoom(placeId: placeId, name: name)
             guard let index = places.firstIndex(where: { $0.id == placeId }) else { return }
             places[index].rooms.append(room)
         } catch {
@@ -49,7 +49,7 @@ final class LocationsViewModel {
 
     func deleteRoom(id: String) async {
         do {
-            try await LocationsAPI.deleteRoom(id: id)
+            try await GraphQLLocationsAPI.deleteRoom(id: id)
             for placeIndex in places.indices {
                 places[placeIndex].rooms.removeAll { $0.id == id }
             }
@@ -60,7 +60,7 @@ final class LocationsViewModel {
 
     func createZone(roomId: String, name: String) async {
         do {
-            let zone = try await LocationsAPI.createZone(roomId: roomId, name: name)
+            let zone = try await GraphQLLocationsAPI.createZone(roomId: roomId, name: name)
             for placeIndex in places.indices {
                 for roomIndex in places[placeIndex].rooms.indices {
                     if places[placeIndex].rooms[roomIndex].id == roomId {
@@ -76,7 +76,7 @@ final class LocationsViewModel {
 
     func deleteZone(id: String) async {
         do {
-            try await LocationsAPI.deleteZone(id: id)
+            try await GraphQLLocationsAPI.deleteZone(id: id)
             for placeIndex in places.indices {
                 for roomIndex in places[placeIndex].rooms.indices {
                     places[placeIndex].rooms[roomIndex].zones.removeAll { $0.id == id }
@@ -89,7 +89,7 @@ final class LocationsViewModel {
 
     func createStorage(zoneId: String, name: String) async {
         do {
-            let storage = try await LocationsAPI.createStorage(zoneId: zoneId, name: name)
+            let storage = try await GraphQLLocationsAPI.createStorage(zoneId: zoneId, name: name)
             for placeIndex in places.indices {
                 for roomIndex in places[placeIndex].rooms.indices {
                     for zoneIndex in places[placeIndex].rooms[roomIndex].zones.indices {
@@ -107,7 +107,7 @@ final class LocationsViewModel {
 
     func deleteStorage(id: String) async {
         do {
-            try await LocationsAPI.deleteStorage(id: id)
+            try await GraphQLLocationsAPI.deleteStorage(id: id)
             for placeIndex in places.indices {
                 for roomIndex in places[placeIndex].rooms.indices {
                     for zoneIndex in places[placeIndex].rooms[roomIndex].zones.indices {

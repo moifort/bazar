@@ -19,7 +19,7 @@ struct ItemDetailPage: View {
                         initial: ItemEditForm.Fields(from: item),
                         onSave: { fields in
                             // Will be wired to real API later
-                            self.item = try await ItemsAPI.getDetail(id: itemId)
+                            self.item = try await GraphQLItemsAPI.getDetail(id: itemId)
                             isEditing = false
                             onUpdated()
                         },
@@ -157,7 +157,7 @@ struct ItemDetailPage: View {
     private func loadDetail() async {
         error = nil
         do {
-            item = try await ItemsAPI.getDetail(id: itemId)
+            item = try await GraphQLItemsAPI.getDetail(id: itemId)
         } catch {
             self.error = reportError(error)
         }
@@ -165,7 +165,7 @@ struct ItemDetailPage: View {
 
     private func deleteItem() async {
         do {
-            try await ItemsAPI.delete(id: itemId)
+            try await GraphQLItemsAPI.delete(id: itemId)
             onDeleted()
             dismiss()
         } catch {

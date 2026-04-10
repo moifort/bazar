@@ -1,0 +1,80 @@
+query AllPlaces {
+  places {
+    id
+    name
+    icon
+    order
+    rooms {
+      id
+      placeId
+      name
+      icon
+      order
+      zones {
+        id
+        roomId
+        name
+        order
+        storages {
+          id
+          zoneId
+          name
+          order
+        }
+      }
+    }
+  }
+}
+
+mutation CreatePlace($input: CreatePlaceInput!) {
+  createPlace(input: $input) {
+    id
+    name
+    icon
+    order
+  }
+}
+
+mutation CreateRoom($input: CreateRoomInput!) {
+  createRoom(input: $input) {
+    id
+    placeId
+    name
+    icon
+    order
+  }
+}
+
+mutation CreateZone($input: CreateZoneInput!) {
+  createZone(input: $input) {
+    id
+    roomId
+    name
+    order
+  }
+}
+
+mutation CreateStorage($input: CreateStorageInput!) {
+  createStorage(input: $input) {
+    id
+    zoneId
+    name
+    order
+  }
+}
+
+mutation DeletePlace($id: PlaceId!) {
+  deletePlace(id: $id)
+}
+
+mutation DeleteRoom($id: RoomId!) {
+  deleteRoom(id: $id)
+}
+
+mutation DeleteZone($id: ZoneId!) {
+  deleteZone(id: $id)
+}
+
+mutation DeleteStorage($id: StorageId!) {
+  deleteStorage(id: $id)
+}

@@ -139,7 +139,7 @@ struct LocationPicker: View {
         isLoading = true
         error = nil
         do {
-            places = try await LocationsAPI.allPlaces()
+            places = try await GraphQLLocationsAPI.allPlaces()
         } catch {
             self.error = reportError(error)
         }
@@ -151,12 +151,12 @@ struct LocationPicker: View {
         do {
             switch target {
             case .room(let placeId):
-                let room = try await LocationsAPI.createRoom(placeId: placeId, name: name)
+                let room = try await GraphQLLocationsAPI.createRoom(placeId: placeId, name: name)
                 if let index = places.firstIndex(where: { $0.id == placeId }) {
                     places[index].rooms.append(room)
                 }
             case .zone(let roomId):
-                let zone = try await LocationsAPI.createZone(roomId: roomId, name: name)
+                let zone = try await GraphQLLocationsAPI.createZone(roomId: roomId, name: name)
                 for placeIndex in places.indices {
                     for roomIndex in places[placeIndex].rooms.indices {
                         if places[placeIndex].rooms[roomIndex].id == roomId {
@@ -166,7 +166,7 @@ struct LocationPicker: View {
                     }
                 }
             case .storage(let zoneId):
-                let storage = try await LocationsAPI.createStorage(zoneId: zoneId, name: name)
+                let storage = try await GraphQLLocationsAPI.createStorage(zoneId: zoneId, name: name)
                 for placeIndex in places.indices {
                     for roomIndex in places[placeIndex].rooms.indices {
                         for zoneIndex in places[placeIndex].rooms[roomIndex].zones.indices {

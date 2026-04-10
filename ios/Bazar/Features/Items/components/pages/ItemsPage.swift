@@ -169,7 +169,7 @@ struct ItemsPage: View {
 
     private func deleteItem(id: String) async {
         do {
-            try await ItemsAPI.delete(id: id)
+            try await GraphQLItemsAPI.delete(id: id)
             viewModel.removeItem(id: id)
         } catch {
             viewModel.error = reportError(error)

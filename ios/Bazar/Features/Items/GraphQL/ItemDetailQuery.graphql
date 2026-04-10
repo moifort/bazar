@@ -1,0 +1,25 @@
+query ItemDetail($id: ItemId!) {
+  item(id: $id) {
+    id
+    name
+    description
+    category
+    quantity
+    photoImageId
+    addedBy
+    personalNotes
+    createdAt
+    updatedAt
+    location {
+      fullPath
+      placeId
+      placeName
+      roomId
+      roomName
+      zoneId
+      zoneName
+      storageId
+      storageName
+    }
+  }
+}

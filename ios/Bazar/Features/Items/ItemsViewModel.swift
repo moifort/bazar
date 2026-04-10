@@ -77,7 +77,7 @@ final class ItemsViewModel {
 
     func updateItem(id: String) async {
         do {
-            guard let detail = try await ItemsAPI.getDetail(id: id) else { return }
+            guard let detail = try await GraphQLItemsAPI.getDetail(id: id) else { return }
             guard let index = items.firstIndex(where: { $0.id == id }) else { return }
             items[index] = ItemListItem(
                 id: detail.id,
@@ -100,7 +100,7 @@ final class ItemsViewModel {
     }
 
     private func fetchPage(offset: Int) async throws -> ItemListPage {
-        try await ItemsAPI.list(
+        try await GraphQLItemsAPI.list(
             category: categoryFilter?.rawValue,
             placeId: placeFilter?.id,
             sort: sort.rawValue,

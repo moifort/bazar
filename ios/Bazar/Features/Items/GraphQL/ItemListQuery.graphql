@@ -1,0 +1,40 @@
+query ItemList(
+  $category: ItemCategory
+  $placeId: PlaceId
+  $roomId: RoomId
+  $search: String
+  $sort: ItemSort
+  $order: SortOrder
+  $offset: Int
+  $limit: Int
+) {
+  items(
+    category: $category
+    placeId: $placeId
+    roomId: $roomId
+    search: $search
+    sort: $sort
+    order: $order
+    offset: $offset
+    limit: $limit
+  ) {
+    items {
+      id
+      name
+      category
+      quantity
+      photoImageId
+      addedBy
+      createdAt
+      location {
+        fullPath
+        placeId
+        placeName
+        roomId
+        roomName
+      }
+    }
+    totalCount
+    hasMore
+  }
+}

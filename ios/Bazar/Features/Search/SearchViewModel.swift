@@ -1,8 +1,22 @@
+import Apollo
 import Foundation
 
-enum SearchAPI {
-    static func search(query: String) async throws -> [SearchEntry] {
-        []
+enum GraphQLSearchAPI {
+    private static var client: ApolloClient { GraphQLClient.shared.apollo }
+
+    static func search(query: String, limit: Int? = nil) async throws -> [SearchEntry] {
+        let gqlQuery = BazarGraphQL.SearchQuery(
+            query: query,
+            limit: limit.map { .some($0) } ?? .none
+        )
+        let data = try await GraphQLHelpers.fetch(client, query: gqlQuery)
+        return data.search.map { entry in
+            SearchEntry(
+                type: entry.type,
+                entityId: entry.entityId,
+                text: entry.text
+            )
+        }
     }
 }
 
@@ -44,7 +58,7 @@ final class SearchViewModel {
         }
 
         do {
-            let data = try await SearchAPI.search(query: query)
+            let data = try await GraphQLSearchAPI.search(query: query)
             if !Task.isCancelled {
                 results = data
             }

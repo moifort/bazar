@@ -1,0 +1,43 @@
+mutation AddItem($input: AddItemInput!) {
+  addItem(input: $input) {
+    id
+    name
+    category
+    quantity
+    createdAt
+  }
+}
+
+mutation UpdateItem($id: ItemId!, $input: UpdateItemInput!) {
+  updateItem(id: $id, input: $input) {
+    id
+    name
+    category
+    quantity
+    updatedAt
+  }
+}
+
+mutation DeleteItem($id: ItemId!) {
+  deleteItem(id: $id)
+}
+
+mutation MoveItem($id: ItemId!, $storageId: StorageId!) {
+  moveItem(id: $id, storageId: $storageId) {
+    id
+    name
+    location {
+      fullPath
+    }
+  }
+}
+
+mutation ConfirmItems($input: [ConfirmItemInput!]!) {
+  confirmItems(input: $input) {
+    id
+    name
+    category
+    quantity
+    createdAt
+  }
+}

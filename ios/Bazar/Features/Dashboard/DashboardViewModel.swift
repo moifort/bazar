@@ -10,7 +10,7 @@ final class DashboardViewModel {
         isLoading = true
         error = nil
         do {
-            data = try await DashboardAPI.getData()
+            data = try await GraphQLDashboardAPI.getData()
         } catch is CancellationError {
             // Ignored — task cancelled by SwiftUI (e.g. refreshTrigger changed)
         } catch {

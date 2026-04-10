@@ -11,6 +11,11 @@ settings:
     SWIFT_VERSION: "6.0"
     SWIFT_STRICT_CONCURRENCY: complete
 
+packages:
+  Apollo:
+    url: https://github.com/apollographql/apollo-ios.git
+    minorVersion: "1.18.0"
+
 targets:
   Bazar:
     type: application
@@ -19,6 +24,9 @@ targets:
       - path: Bazar
         excludes:
           - "**/*.graphql"
+    dependencies:
+      - package: Apollo
+        product: Apollo
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: co.polyforms.bazar

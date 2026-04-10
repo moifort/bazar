@@ -25,7 +25,7 @@ struct ScanFlowView: View {
                         previews: previews,
                         onScanAnother: { viewModel.reset() },
                         onConfirm: { editedPreviews, storageId in
-                            guard let _ = await viewModel.confirmItems(editedPreviews, storageId: storageId) else {
+                            guard await viewModel.confirmItems(editedPreviews, storageId: storageId) else {
                                 return
                             }
                             viewModel.reset()

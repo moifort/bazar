@@ -1,0 +1,29 @@
+{
+  "schemaNamespace": "BazarGraphQL",
+  "input": {
+    "schemaSearchPaths": ["../shared/schema.graphql"],
+    "operationSearchPaths": [
+      "Bazar/Features/Items/GraphQL/*.graphql",
+      "Bazar/Features/Locations/GraphQL/*.graphql",
+      "Bazar/Features/Scan/GraphQL/*.graphql",
+      "Bazar/Features/Search/GraphQL/*.graphql",
+      "Bazar/Features/Dashboard/GraphQL/*.graphql"
+    ]
+  },
+  "output": {
+    "schemaTypes": {
+      "path": "Bazar/Generated/GraphQL",
+      "moduleType": {
+        "embeddedInTarget": {
+          "name": "Bazar"
+        }
+      }
+    },
+    "operations": {
+      "inSchemaModule": {}
+    },
+    "testMocks": {
+      "none": {}
+    }
+  }
+}

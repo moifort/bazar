@@ -1,0 +1,9 @@
+mutation AnalyzeItemPhoto($imageBase64: String!) {
+  analyzeItemPhoto(imageBase64: $imageBase64) {
+    previewId
+    name
+    category
+    description
+    quantity
+  }
+}

@@ -1,0 +1,7 @@
+query Search($query: String!, $limit: Int) {
+  search(query: $query, limit: $limit) {
+    type
+    entityId
+    text
+  }
+}
