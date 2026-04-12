@@ -4,9 +4,7 @@ final class APIClient: Sendable {
     static let shared = APIClient()
 
     var baseURL: URL {
-        let stored = SharedConfig.sharedDefaults.string(forKey: SharedConfig.serverURLKey)
-            ?? SharedConfig.defaultURL
-        return URL(string: stored) ?? URL(string: SharedConfig.defaultURL)!
+        URL(string: SharedConfig.serverURL) ?? URL(string: SharedConfig.defaultURL)!
     }
 
     private let session = URLSession.shared

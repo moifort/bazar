@@ -5,9 +5,7 @@ import Foundation
 final class GraphQLClient: @unchecked Sendable {
     static let shared = GraphQLClient()
 
-    let apollo: ApolloClient
-
-    private init() {
+    var apollo: ApolloClient {
         let url = APIClient.shared.baseURL.appendingPathComponent("graphql")
 
         let store = ApolloStore()
@@ -21,6 +19,8 @@ final class GraphQLClient: @unchecked Sendable {
             ]
         )
 
-        apollo = ApolloClient(networkTransport: transport, store: store)
+        return ApolloClient(networkTransport: transport, store: store)
     }
+
+    private init() {}
 }
