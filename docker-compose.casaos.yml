@@ -1,0 +1,57 @@
+name: bazar
+services:
+  bazar:
+    cpu_shares: 90
+    command: []
+    container_name: bazar
+    deploy:
+      resources:
+        limits:
+          memory: 1816M
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+      - NITRO_API_TOKEN=${NITRO_API_TOKEN}
+      - NITRO_GOOGLE_API_KEY=${NITRO_GOOGLE_API_KEY}
+    hostname: bazar
+    image: moifort/bazar:latest
+    labels:
+      icon: https://cdn-icons-png.flaticon.com/512/2331/2331966.png
+    ports:
+      - target: 3000
+        published: "3002"
+        protocol: tcp
+    pull_policy: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /DATA/AppData/bazar
+        target: /app/.data
+    devices: []
+    cap_add: []
+    network_mode: bridge
+    privileged: false
+x-casaos:
+  author: self
+  category: self
+  hostname: ""
+  icon: https://cdn-icons-png.flaticon.com/512/2331/2331966.png
+  index: /
+  is_uncontrolled: false
+  port_map: "3002"
+  scheme: http
+  store_app_id: bazar
+  title:
+    custom: ""
+    en_us: bazar
