@@ -64,10 +64,10 @@ struct LocationsPage: View {
                 Button("Annuler", role: .cancel) { addTarget = nil; addName = "" }
                 Button("Ajouter") {
                     let name = addName.trimmingCharacters(in: .whitespaces)
-                    guard !name.isEmpty else { return }
-                    Task { await handleAdd(name: name) }
+                    guard !name.isEmpty, let target = addTarget else { return }
                     addTarget = nil
                     addName = ""
+                    Task { await handleAdd(target: target, name: name) }
                 }
             }
         }
@@ -174,8 +174,7 @@ struct LocationsPage: View {
 
     // MARK: - Add Helpers
 
-    private func handleAdd(name: String) async {
-        guard let target = addTarget else { return }
+    private func handleAdd(target: AddTarget, name: String) async {
         switch target {
         case .room(let placeId):
             await viewModel.createRoom(placeId: placeId, name: name)
