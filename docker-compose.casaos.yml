@@ -7,7 +7,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1816M
+          memory: 128M
     environment:
       - HOST=0.0.0.0
       - PORT=3000
