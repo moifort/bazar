@@ -86,6 +86,7 @@
 		D2084765C552602B44617769 /* AllPlacesQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553E53662DE2917B8EAEAADB /* AllPlacesQuery.graphql.swift */; };
 		D40E5B5543BBF6A5C796E93C /* Storage.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C287E4E1711FFF3CB73ECC7 /* Storage.graphql.swift */; };
 		DAC19910FC0549DCB22C8EE1 /* GraphQLHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CA514B286B483D95F72332 /* GraphQLHelpers.swift */; };
+		DB07574C619B0A79EECC91B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB435D37310E05F4FD7D1329 /* Assets.xcassets */; };
 		DB4643B8CAAEC8F7F79715C3 /* ItemListQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262B1E132623D7CA1A5EA5CD /* ItemListQuery.graphql.swift */; };
 		DC41FB3E6CE08646F9975145 /* DashboardPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463FE00C70C09C329A295D39 /* DashboardPage.swift */; };
 		DEA2EE40F2114AAB73818859 /* DeleteStorageMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7CE050E23A05E065096D0E /* DeleteStorageMutation.graphql.swift */; };
@@ -176,6 +177,7 @@
 		B0A6BBB115A19984F10B3C4D /* ScanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewModel.swift; sourceTree = "<group>"; };
 		B46BE2355F083FD3ED6B86D5 /* SearchEntry.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEntry.graphql.swift; sourceTree = "<group>"; };
 		B4F3D2F0AF5C4C86FAE93678 /* CreateRoomMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomMutation.graphql.swift; sourceTree = "<group>"; };
+		BB435D37310E05F4FD7D1329 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BC7CE050E23A05E065096D0E /* DeleteStorageMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteStorageMutation.graphql.swift; sourceTree = "<group>"; };
 		BD1BAC47263C29C7FAA508C6 /* UpdateItemMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateItemMutation.graphql.swift; sourceTree = "<group>"; };
 		C11803D072639B81ED576701 /* CreateStorageInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateStorageInput.graphql.swift; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 		7B0AE523B93DD86AE35411F1 /* Bazar */ = {
 			isa = PBXGroup;
 			children = (
+				BB435D37310E05F4FD7D1329 /* Assets.xcassets */,
 				9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */,
 				91BAC7F26D2161B9FFDAA1E0 /* ContentView.swift */,
 				DC6BD8B0FE59C15DB8DFD1AB /* Settings.bundle */,
@@ -687,6 +690,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB07574C619B0A79EECC91B6 /* Assets.xcassets in Resources */,
 				3CABAC0F9055A7A36FD132C0 /* Secrets.swift.example in Resources */,
 				F29020770C979EE1B6C47647 /* Settings.bundle in Resources */,
 			);
