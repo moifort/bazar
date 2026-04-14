@@ -1,5 +1,8 @@
 import Apollo
 import Foundation
+import OSLog
+
+private let graphQLLog = Logger(subsystem: "co.polyforms.bazar", category: "graphql")
 
 enum GraphQLHelpers {
     static func fetch<Q: GraphQLQuery>(_ client: ApolloClient, query: Q) async throws -> Q.Data {
@@ -8,7 +11,8 @@ enum GraphQLHelpers {
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors, !errors.isEmpty {
-                        continuation.resume(throwing: APIError.httpError(422))
+                        logGraphQLErrors(operation: Q.operationName, errors: errors)
+                        continuation.resume(throwing: APIError.graphQL(messages: errors.compactMap(\.message)))
                         return
                     }
                     guard let data = graphQLResult.data else {
@@ -18,6 +22,7 @@ enum GraphQLHelpers {
                     nonisolated(unsafe) let sendableData = data
                     continuation.resume(returning: sendableData)
                 case .failure(let error):
+                    graphQLLog.error("\(Q.operationName, privacy: .public) transport failure: \(error.localizedDescription, privacy: .public)")
                     continuation.resume(throwing: error)
                 }
             }
@@ -30,7 +35,8 @@ enum GraphQLHelpers {
                 switch result {
                 case .success(let graphQLResult):
                     if let errors = graphQLResult.errors, !errors.isEmpty {
-                        continuation.resume(throwing: APIError.httpError(422))
+                        logGraphQLErrors(operation: M.operationName, errors: errors)
+                        continuation.resume(throwing: APIError.graphQL(messages: errors.compactMap(\.message)))
                         return
                     }
                     guard let data = graphQLResult.data else {
@@ -40,6 +46,7 @@ enum GraphQLHelpers {
                     nonisolated(unsafe) let sendableData = data
                     continuation.resume(returning: sendableData)
                 case .failure(let error):
+                    graphQLLog.error("\(M.operationName, privacy: .public) transport failure: \(error.localizedDescription, privacy: .public)")
                     continuation.resume(throwing: error)
                 }
             }
@@ -56,5 +63,13 @@ enum GraphQLHelpers {
 
     static func graphQLNullable<T>(_ value: T?) -> GraphQLNullable<T> {
         value.map { .some($0) } ?? .none
+    }
+}
+
+private func logGraphQLErrors(operation: String, errors: [GraphQLError]) {
+    for error in errors {
+        let message = error.message ?? "<no message>"
+        let code = (error.extensions?["code"] as? String) ?? "<no code>"
+        graphQLLog.error("\(operation, privacy: .public) [\(code, privacy: .public)] \(message, privacy: .public)")
     }
 }
