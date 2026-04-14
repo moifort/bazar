@@ -4,8 +4,10 @@ import SwiftUI
 struct BazarApp: App {
     init() {
         UserDefaults.standard.register(defaults: [
-            SharedConfig.serverURLKey: SharedConfig.defaultURL,
-            SharedConfig.userTagKey: "thibaut",
+            SharedConfig.environmentKey: SharedConfig.defaultEnvironment.rawValue,
+            SharedConfig.devServerURLKey: SharedConfig.defaultDevURL,
+            SharedConfig.productionURLKey: SharedConfig.productionURL,
+            SharedConfig.userTagKey: SharedConfig.defaultUserTag,
         ])
     }
 
