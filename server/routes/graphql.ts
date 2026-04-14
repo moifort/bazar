@@ -1,5 +1,34 @@
 import { type ApolloServer, HeaderMap } from '@apollo/server'
 import { createLoaders } from '~/domain/shared/graphql/loaders'
+import { createLogger } from '~/system/logger'
+
+const log = createLogger('graphql')
+
+type GraphQLBody = { operationName?: string | null }
+type GraphQLErrorBody = {
+  errors?: Array<{ message?: string; extensions?: { code?: string } }>
+}
+
+const extractOperationName = (body: unknown): string => {
+  if (body && typeof body === 'object' && 'operationName' in body) {
+    const op = (body as GraphQLBody).operationName
+    if (typeof op === 'string' && op.length > 0) return op
+  }
+  return 'anonymous'
+}
+
+const logErrorsFromResponseBody = (operation: string, responseBody: string) => {
+  try {
+    const parsed = JSON.parse(responseBody) as GraphQLErrorBody
+    if (!parsed.errors?.length) return
+    for (const err of parsed.errors) {
+      const code = err.extensions?.code ?? 'UNKNOWN'
+      log.warn(`${operation} [${code}] ${err.message ?? '<no message>'}`)
+    }
+  } catch {
+    // Non-JSON response — nothing to extract.
+  }
+}
 
 export default defineEventHandler(async (event) => {
   const apollo = useApollo()
@@ -31,6 +60,8 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
+  const operation = extractOperationName(body)
+  log.info(`→ ${operation} from ${userTag}`)
 
   const response = await apollo.executeHTTPGraphQLRequest({
     httpGraphQLRequest: {
@@ -41,6 +72,10 @@ export default defineEventHandler(async (event) => {
     },
     context: async () => ({ event, loaders: createLoaders(), userTag }),
   })
+
+  if (response.body.kind === 'complete') {
+    logErrorsFromResponseBody(operation, response.body.string)
+  }
 
   return sendApolloResponse(event, response)
 })
