@@ -9,7 +9,7 @@ final class GraphQLClient: @unchecked Sendable {
         let url = APIClient.shared.baseURL.appendingPathComponent("graphql")
 
         let store = ApolloStore()
-        let interceptorProvider = DefaultInterceptorProvider(store: store)
+        let interceptorProvider = LoggingInterceptorProvider(store: store)
         let transport = RequestChainNetworkTransport(
             interceptorProvider: interceptorProvider,
             endpointURL: url,
