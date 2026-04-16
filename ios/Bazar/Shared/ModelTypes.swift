@@ -102,7 +102,7 @@ struct LocationPath: Sendable {
 
 struct Place: Identifiable, Sendable {
     let id: String
-    let name: String
+    var name: String
     var icon: String?
     let order: Int
     var rooms: [Room]
@@ -111,7 +111,7 @@ struct Place: Identifiable, Sendable {
 struct Room: Identifiable, Sendable {
     let id: String
     let placeId: String
-    let name: String
+    var name: String
     var icon: String?
     let order: Int
     var zones: [Zone]
@@ -120,7 +120,7 @@ struct Room: Identifiable, Sendable {
 struct Zone: Identifiable, Sendable {
     let id: String
     let roomId: String
-    let name: String
+    var name: String
     let order: Int
     var storages: [Storage]
 }
@@ -128,7 +128,7 @@ struct Zone: Identifiable, Sendable {
 struct Storage: Identifiable, Sendable {
     let id: String
     let zoneId: String
-    let name: String
+    var name: String
     let order: Int
 }
 

@@ -52,6 +52,17 @@ enum GraphQLLocationsAPI {
         return Place(id: p.id, name: p.name, icon: p.icon, order: p.order, rooms: [])
     }
 
+    static func updatePlace(id: String, name: String, icon: String?) async throws -> (name: String, icon: String?) {
+        let input = BazarGraphQL.UpdatePlaceInput(
+            icon: icon.map { .some($0) } ?? .null,
+            name: .some(name)
+        )
+        let mutation = BazarGraphQL.UpdatePlaceMutation(id: id, input: input)
+        let data = try await GraphQLHelpers.perform(client, mutation: mutation)
+        let p = data.updatePlace
+        return (name: p.name, icon: p.icon)
+    }
+
     static func deletePlace(id: String) async throws {
         let mutation = BazarGraphQL.DeletePlaceMutation(id: id)
         _ = try await GraphQLHelpers.perform(client, mutation: mutation)
@@ -63,6 +74,17 @@ enum GraphQLLocationsAPI {
         let data = try await GraphQLHelpers.perform(client, mutation: mutation)
         let r = data.createRoom
         return Room(id: r.id, placeId: r.placeId, name: r.name, icon: r.icon, order: r.order, zones: [])
+    }
+
+    static func updateRoom(id: String, name: String, icon: String?) async throws -> (name: String, icon: String?) {
+        let input = BazarGraphQL.UpdateRoomInput(
+            icon: icon.map { .some($0) } ?? .null,
+            name: .some(name)
+        )
+        let mutation = BazarGraphQL.UpdateRoomMutation(id: id, input: input)
+        let data = try await GraphQLHelpers.perform(client, mutation: mutation)
+        let r = data.updateRoom
+        return (name: r.name, icon: r.icon)
     }
 
     static func deleteRoom(id: String) async throws {
@@ -78,6 +100,13 @@ enum GraphQLLocationsAPI {
         return Zone(id: z.id, roomId: z.roomId, name: z.name, order: z.order, storages: [])
     }
 
+    static func updateZone(id: String, name: String) async throws -> String {
+        let input = BazarGraphQL.UpdateZoneInput(name: .some(name))
+        let mutation = BazarGraphQL.UpdateZoneMutation(id: id, input: input)
+        let data = try await GraphQLHelpers.perform(client, mutation: mutation)
+        return data.updateZone.name
+    }
+
     static func deleteZone(id: String) async throws {
         let mutation = BazarGraphQL.DeleteZoneMutation(id: id)
         _ = try await GraphQLHelpers.perform(client, mutation: mutation)
@@ -89,6 +118,13 @@ enum GraphQLLocationsAPI {
         let data = try await GraphQLHelpers.perform(client, mutation: mutation)
         let s = data.createStorage
         return Storage(id: s.id, zoneId: s.zoneId, name: s.name, order: s.order)
+    }
+
+    static func updateStorage(id: String, name: String) async throws -> String {
+        let input = BazarGraphQL.UpdateStorageInput(name: .some(name))
+        let mutation = BazarGraphQL.UpdateStorageMutation(id: id, input: input)
+        let data = try await GraphQLHelpers.perform(client, mutation: mutation)
+        return data.updateStorage.name
     }
 
     static func deleteStorage(id: String) async throws {

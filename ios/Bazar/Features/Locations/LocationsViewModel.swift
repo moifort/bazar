@@ -61,6 +61,17 @@ final class LocationsViewModel {
         }
     }
 
+    func updatePlace(id: String, name: String, icon: String?) async {
+        do {
+            let updated = try await GraphQLLocationsAPI.updatePlace(id: id, name: name, icon: icon)
+            guard let index = places.firstIndex(where: { $0.id == id }) else { return }
+            places[index].name = updated.name
+            places[index].icon = updated.icon
+        } catch {
+            self.error = reportError(error)
+        }
+    }
+
     func createRoom(placeId: String, name: String) async {
         do {
             let room = try await GraphQLLocationsAPI.createRoom(placeId: placeId, name: name)
@@ -76,6 +87,21 @@ final class LocationsViewModel {
             try await GraphQLLocationsAPI.deleteRoom(id: id)
             for placeIndex in places.indices {
                 places[placeIndex].rooms.removeAll { $0.id == id }
+            }
+        } catch {
+            self.error = reportError(error)
+        }
+    }
+
+    func updateRoom(id: String, name: String, icon: String?) async {
+        do {
+            let updated = try await GraphQLLocationsAPI.updateRoom(id: id, name: name, icon: icon)
+            for placeIndex in places.indices {
+                if let roomIndex = places[placeIndex].rooms.firstIndex(where: { $0.id == id }) {
+                    places[placeIndex].rooms[roomIndex].name = updated.name
+                    places[placeIndex].rooms[roomIndex].icon = updated.icon
+                    return
+                }
             }
         } catch {
             self.error = reportError(error)
@@ -111,6 +137,22 @@ final class LocationsViewModel {
         }
     }
 
+    func updateZone(id: String, name: String) async {
+        do {
+            let updatedName = try await GraphQLLocationsAPI.updateZone(id: id, name: name)
+            for placeIndex in places.indices {
+                for roomIndex in places[placeIndex].rooms.indices {
+                    if let zoneIndex = places[placeIndex].rooms[roomIndex].zones.firstIndex(where: { $0.id == id }) {
+                        places[placeIndex].rooms[roomIndex].zones[zoneIndex].name = updatedName
+                        return
+                    }
+                }
+            }
+        } catch {
+            self.error = reportError(error)
+        }
+    }
+
     func createStorage(zoneId: String, name: String) async {
         do {
             let storage = try await GraphQLLocationsAPI.createStorage(zoneId: zoneId, name: name)
@@ -136,6 +178,24 @@ final class LocationsViewModel {
                 for roomIndex in places[placeIndex].rooms.indices {
                     for zoneIndex in places[placeIndex].rooms[roomIndex].zones.indices {
                         places[placeIndex].rooms[roomIndex].zones[zoneIndex].storages.removeAll { $0.id == id }
+                    }
+                }
+            }
+        } catch {
+            self.error = reportError(error)
+        }
+    }
+
+    func updateStorage(id: String, name: String) async {
+        do {
+            let updatedName = try await GraphQLLocationsAPI.updateStorage(id: id, name: name)
+            for placeIndex in places.indices {
+                for roomIndex in places[placeIndex].rooms.indices {
+                    for zoneIndex in places[placeIndex].rooms[roomIndex].zones.indices {
+                        if let storageIndex = places[placeIndex].rooms[roomIndex].zones[zoneIndex].storages.firstIndex(where: { $0.id == id }) {
+                            places[placeIndex].rooms[roomIndex].zones[zoneIndex].storages[storageIndex].name = updatedName
+                            return
+                        }
                     }
                 }
             }
