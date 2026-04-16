@@ -13,24 +13,55 @@ struct ViewfinderOverlay: View {
             Canvas { context, size in
                 context.fill(
                     Path(CGRect(origin: .zero, size: size)),
-                    with: .color(.black.opacity(0.4))
+                    with: .color(.black.opacity(0.3))
                 )
                 context.blendMode = .clear
                 context.fill(
-                    Path(roundedRect: cutoutRect, cornerRadius: 20),
+                    Path(roundedRect: cutoutRect, cornerRadius: 24),
                     with: .color(.white)
                 )
             }
             .allowsHitTesting(false)
             .ignoresSafeArea()
 
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(.white.opacity(0.8), lineWidth: 3)
+            CornerBrackets()
+                .stroke(.white.opacity(0.9), lineWidth: 3)
                 .frame(width: width, height: height)
                 .position(x: geo.size.width / 2, y: geo.size.height / 2)
                 .allowsHitTesting(false)
         }
         .ignoresSafeArea()
+    }
+}
+
+private struct CornerBrackets: Shape {
+    var armLength: CGFloat = 22
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let l = armLength
+
+        // Top-left
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY + l))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX + l, y: rect.minY))
+
+        // Top-right
+        path.move(to: CGPoint(x: rect.maxX - l, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY + l))
+
+        // Bottom-right
+        path.move(to: CGPoint(x: rect.maxX, y: rect.maxY - l))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.maxX - l, y: rect.maxY))
+
+        // Bottom-left
+        path.move(to: CGPoint(x: rect.minX + l, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY - l))
+
+        return path
     }
 }
 

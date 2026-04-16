@@ -71,15 +71,7 @@ struct ScanConfirmationView: View {
                 Button {
                     showLocationPicker = true
                 } label: {
-                    HStack {
-                        Label("Emplacement", systemImage: "mappin.and.ellipse")
-                        Spacer()
-                        Text(selectedStorageId ?? "Non défini")
-                            .foregroundStyle(.secondary)
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
-                    }
+                    LabeledContent("Emplacement", value: selectedStorageId ?? "Non défini")
                 }
                 .tint(.primary)
             }
