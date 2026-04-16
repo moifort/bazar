@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { ImageCommand } from '~/domain/image/command'
 import { LocationQuery } from '~/domain/location/query'
 import type { StorageId } from '~/domain/location/types'
+import { ReminderCommand } from '~/domain/reminder/command'
 import { UserTag } from '~/domain/shared/primitives'
 import { emit } from '~/system/event-bus'
 import * as repository from './infrastructure/repository'
@@ -131,6 +132,7 @@ const remove = async (id: string) => {
   if (item.invoiceImageId) {
     await ImageCommand.remove(item.invoiceImageId)
   }
+  await ReminderCommand.removeByItem(id)
 
   await repository.remove(id)
   await emit('item-changed', { type: 'item-removed' as const, itemId: id })

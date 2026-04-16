@@ -1,4 +1,6 @@
 import { describe, expect, test } from 'bun:test'
+import { ReminderCommand } from '~/domain/reminder/command'
+import { ReminderQuery } from '~/domain/reminder/query'
 import { ItemCommand } from './command'
 import { ItemQuery } from './query'
 
@@ -81,5 +83,26 @@ describe('ItemCommand purchase fields', () => {
     const result = await ItemCommand.update(item.id, { invoiceImageBase64: '' })
     if (result === 'not-found') throw new Error('unexpected')
     expect(result.item.invoiceImageId).toBeNull()
+  })
+})
+
+describe('ItemCommand.remove', () => {
+  test('cascades deletion to attached reminders', async () => {
+    const item = await addItem()
+    await ReminderCommand.add({
+      itemId: item.id,
+      title: 'A',
+      dueDate: new Date('2026-07-01T00:00:00.000Z'),
+    })
+    await ReminderCommand.add({
+      itemId: item.id,
+      title: 'B',
+      dueDate: new Date('2026-08-01T00:00:00.000Z'),
+      frequency: 'monthly',
+    })
+
+    await ItemCommand.remove(item.id)
+
+    expect(await ReminderQuery.byItem(item.id)).toHaveLength(0)
   })
 })
