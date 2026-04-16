@@ -23,9 +23,14 @@ enum GraphQLItemsAPI {
             limit: limit.map { .some($0) } ?? .none
         )
         let data = try await GraphQLHelpers.fetch(client, query: query)
+        let now = Date()
         return ItemListPage(
             items: data.items.items.map { item in
-                ItemListItem(
+                let overdue = item.reminders.reduce(0) { count, reminder in
+                    let due = GraphQLHelpers.parseISO8601(reminder.dueDate) ?? now
+                    return due <= now ? count + 1 : count
+                }
+                return ItemListItem(
                     id: item.id,
                     name: item.name,
                     category: ItemCategory(rawValue: item.category.rawValue) ?? .other,
@@ -33,7 +38,8 @@ enum GraphQLItemsAPI {
                     photoImageId: item.photoImageId,
                     locationFullPath: item.location?.fullPath,
                     addedBy: item.addedBy,
-                    createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date()
+                    createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date(),
+                    overdueReminderCount: overdue
                 )
             },
             totalCount: data.items.totalCount,
@@ -54,6 +60,9 @@ enum GraphQLItemsAPI {
             photoImageId: item.photoImageId,
             addedBy: item.addedBy,
             personalNotes: item.personalNotes,
+            purchaseDate: item.purchaseDate.flatMap { GraphQLHelpers.parseISO8601($0) },
+            purchaseLocation: item.purchaseLocation,
+            invoiceImageId: item.invoiceImageId,
             createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date(),
             updatedAt: GraphQLHelpers.parseISO8601(item.updatedAt) ?? Date(),
             location: item.location.map { loc in
@@ -68,8 +77,29 @@ enum GraphQLItemsAPI {
                     storageId: loc.storageId,
                     storageName: loc.storageName
                 )
+            },
+            reminders: item.reminders.map { r in
+                Reminder(
+                    id: r.id,
+                    itemId: item.id,
+                    title: r.title,
+                    notes: r.notes,
+                    dueDate: GraphQLHelpers.parseISO8601(r.dueDate) ?? Date(),
+                    frequency: r.frequency.flatMap {
+                        ReminderFrequency(rawValue: $0.rawValue)
+                    },
+                    customIntervalDays: r.customIntervalDays,
+                    createdAt: GraphQLHelpers.parseISO8601(r.createdAt) ?? Date(),
+                    updatedAt: GraphQLHelpers.parseISO8601(r.updatedAt) ?? Date()
+                )
             }
         )
+    }
+
+    static func distinctPurchaseLocations() async throws -> [String] {
+        let query = BazarGraphQL.DistinctPurchaseLocationsQuery()
+        let data = try await GraphQLHelpers.fetch(client, query: query)
+        return data.distinctPurchaseLocations
     }
 
     static func add(input: BazarGraphQL.AddItemInput) async throws {

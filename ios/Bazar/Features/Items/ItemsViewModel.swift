@@ -79,6 +79,7 @@ final class ItemsViewModel {
         do {
             guard let detail = try await GraphQLItemsAPI.getDetail(id: id) else { return }
             guard let index = items.firstIndex(where: { $0.id == id }) else { return }
+            let now = Date()
             items[index] = ItemListItem(
                 id: detail.id,
                 name: detail.name,
@@ -87,7 +88,8 @@ final class ItemsViewModel {
                 photoImageId: detail.photoImageId,
                 locationFullPath: detail.location?.fullPath,
                 addedBy: detail.addedBy,
-                createdAt: detail.createdAt
+                createdAt: detail.createdAt,
+                overdueReminderCount: detail.reminders.filter { $0.dueDate <= now }.count
             )
         } catch {
             // Silent — worst case the item has stale data until next refresh

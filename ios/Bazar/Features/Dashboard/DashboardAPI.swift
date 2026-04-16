@@ -32,7 +32,8 @@ enum GraphQLDashboardAPI {
                     photoImageId: item.photoImageId,
                     locationFullPath: item.location?.fullPath,
                     addedBy: item.addedBy,
-                    createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date()
+                    createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date(),
+                    overdueReminderCount: 0
                 )
             }
         )

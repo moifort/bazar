@@ -11,9 +11,13 @@ struct Item: Identifiable, Sendable {
     var photoImageId: String?
     var addedBy: String
     let personalNotes: String
+    var purchaseDate: Date?
+    var purchaseLocation: String
+    var invoiceImageId: String?
     let createdAt: Date
     let updatedAt: Date
     var location: LocationPath?
+    var reminders: [Reminder]
 }
 
 struct ItemListItem: Identifiable, Sendable {
@@ -25,12 +29,49 @@ struct ItemListItem: Identifiable, Sendable {
     var locationFullPath: String?
     var addedBy: String
     let createdAt: Date
+    var overdueReminderCount: Int
 }
 
 struct ItemListPage: Sendable {
     let items: [ItemListItem]
     let totalCount: Int
     let hasMore: Bool
+}
+
+// MARK: - Reminder
+
+enum ReminderFrequency: String, Sendable, CaseIterable, Identifiable {
+    case monthly
+    case quarterly
+    case biannual
+    case annual
+    case customDays = "custom_days"
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .monthly: "Tous les mois"
+        case .quarterly: "Tous les 3 mois"
+        case .biannual: "Tous les 6 mois"
+        case .annual: "Tous les ans"
+        case .customDays: "Personnalisé"
+        }
+    }
+}
+
+struct Reminder: Identifiable, Sendable, Hashable {
+    let id: String
+    let itemId: String
+    var title: String
+    var notes: String
+    var dueDate: Date
+    var frequency: ReminderFrequency?
+    var customIntervalDays: Int?
+    let createdAt: Date
+    let updatedAt: Date
+
+    var isOverdue: Bool { dueDate <= Date() }
 }
 
 // MARK: - Item Preview (from scan)

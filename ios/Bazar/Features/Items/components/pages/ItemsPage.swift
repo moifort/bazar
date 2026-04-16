@@ -157,8 +157,8 @@ struct ItemsPage: View {
     NavigationStack {
         ItemsPage(
             items: [
-                ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", addedBy: "Thibaut", createdAt: .now),
-                ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, photoImageId: nil, locationFullPath: "Maison > Cellier", addedBy: "Thibaut", createdAt: .now),
+                ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, photoImageId: nil, locationFullPath: "Maison > Cellier", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
             ],
             totalCount: 2,
             hasMore: false,
@@ -222,7 +222,7 @@ struct ItemsPage: View {
     NavigationStack {
         ItemsPage(
             items: [
-                ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", addedBy: "Thibaut", createdAt: .now),
+                ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
             ],
             totalCount: 1,
             hasMore: false,
