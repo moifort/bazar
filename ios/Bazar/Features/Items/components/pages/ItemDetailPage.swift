@@ -95,12 +95,16 @@ struct ItemDetailPage: View {
             }
 
             Section("Informations") {
-                LabeledInfoRow(title: "Catégorie", value: category.label, icon: category.icon)
-                LabeledInfoRow(title: "Quantité", value: "\(quantity)", icon: "number")
-                if let locationPath {
-                    LabeledInfoRow(title: "Lieu", value: locationPath, icon: "mappin.and.ellipse")
+                LabeledContent("Catégorie") {
+                    Label(category.label, systemImage: category.icon)
+                        .foregroundStyle(category.color)
+                        .labelStyle(.titleAndIcon)
                 }
-                LabeledInfoRow(title: "Ajouté par", value: addedBy, icon: "person")
+                LabeledContent("Quantité", value: "\(quantity)")
+                if let locationPath {
+                    LabeledContent("Lieu", value: locationPath)
+                }
+                LabeledContent("Ajouté par", value: addedBy)
             }
 
             if !description.isEmpty {
