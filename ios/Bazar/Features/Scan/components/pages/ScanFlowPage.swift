@@ -1,17 +1,22 @@
 import PhotosUI
 import SwiftUI
 
-struct ScanFlowView: View {
-    var onFlowCompleted: () -> Void = {}
+struct ScanFlowPage: View {
+    let step: ScanStep
+    let errorMessage: String?
+    @Binding var selectedPhoto: PhotosPickerItem?
 
-    @Environment(\.dismiss) private var dismiss
-    @State private var viewModel = ScanViewModel()
-    @State private var selectedPhoto: PhotosPickerItem?
+    let onCapture: (Data) -> Void
+    let onScanAnother: () -> Void
+    let onConfirm: ([ItemPreview], String?) async -> Void
+    let onDismiss: () -> Void
+    let onErrorDismiss: () -> Void
+
     @State private var shouldCapture = false
 
     var body: some View {
         Group {
-            switch viewModel.step {
+            switch step {
             case .camera:
                 cameraStep
 
@@ -19,54 +24,34 @@ struct ScanFlowView: View {
                 AnalyzingView()
                     .transition(.opacity.combined(with: .scale(scale: 0.95)))
 
-            case .preview(let previews, let imageBase64):
+            case .preview(let previews, _):
                 NavigationStack {
                     ScanConfirmationView(
                         previews: previews,
-                        onScanAnother: { viewModel.reset() },
+                        onScanAnother: onScanAnother,
                         onConfirm: { editedPreviews, storageId in
-                            guard await viewModel.confirmItems(editedPreviews, storageId: storageId) else {
-                                return
-                            }
-                            viewModel.reset()
-                            onFlowCompleted()
+                            await onConfirm(editedPreviews, storageId)
                         }
                     )
                 }
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: viewModel.step)
-        .onChange(of: selectedPhoto) {
-            guard let item = selectedPhoto else { return }
-            selectedPhoto = nil
-            viewModel.step = .scanning
-            Task {
-                if let data = try? await item.loadTransferable(type: Data.self),
-                   let image = UIImage(data: data),
-                   let jpeg = image.resized(maxDimension: 800).jpegData(compressionQuality: 0.6) {
-                    viewModel.capturePhoto(jpeg)
-                } else {
-                    viewModel.step = .camera
-                }
-            }
-        }
-        .alert("Erreur", isPresented: .init(
-            get: { viewModel.error != nil },
-            set: { if !$0 { viewModel.error = nil } }
+        .animation(.easeInOut(duration: 0.3), value: step)
+        .alert("Erreur", isPresented: Binding(
+            get: { errorMessage != nil },
+            set: { if !$0 { onErrorDismiss() } }
         )) {
-            Button("OK") { viewModel.error = nil }
+            Button("OK") { onErrorDismiss() }
         } message: {
-            Text(viewModel.error ?? "")
+            Text(errorMessage ?? "")
         }
     }
-
-    // MARK: - Camera Step
 
     @ViewBuilder
     private var cameraStep: some View {
         ZStack {
             CameraView(onCapture: { data in
-                viewModel.capturePhoto(data)
+                onCapture(data)
             }, shouldCapture: $shouldCapture)
                 .ignoresSafeArea()
 
@@ -75,7 +60,7 @@ struct ScanFlowView: View {
             VStack {
                 HStack {
                     Button {
-                        dismiss()
+                        onDismiss()
                     } label: {
                         Image(systemName: "xmark")
                             .font(.title2)
@@ -128,8 +113,6 @@ struct ScanFlowView: View {
     }
 }
 
-// MARK: - Analyzing View
-
 private struct AnalyzingView: View {
     @State private var isPulsing = false
 
@@ -165,6 +148,6 @@ private struct AnalyzingView: View {
     }
 }
 
-#Preview("Analyzing") {
+#Preview("Scanning") {
     AnalyzingView()
 }

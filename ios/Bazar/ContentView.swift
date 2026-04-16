@@ -51,7 +51,7 @@ struct ContentView: View {
             }
         }
         .fullScreenCover(isPresented: $showScanner, onDismiss: { refreshTrigger += 1 }) {
-            ScanFlowView {
+            ScanView {
                 showScanner = false
                 selectedTab = .items
             }
