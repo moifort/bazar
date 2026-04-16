@@ -42,7 +42,6 @@
 		412DFD28FEA7E433D1E5786F /* AsyncToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16FE4F4E06665110128A65CB /* AsyncToolbarButton.swift */; };
 		458904B3B8221843772659B5 /* ItemDetailQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F70548D129AAD2DD699714 /* ItemDetailQuery.graphql.swift */; };
 		45CA8DA10B945B2FE719C72C /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28522A42593FB701C7FA066 /* ItemsView.swift */; };
-		4D95810AC85450E5BD13A148 /* LabeledInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40A411780196473436DEAFE /* LabeledInfoRow.swift */; };
 		4F986D1A5DE3D75179DB2FFD /* UpdateItemInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8795A48B4E16E73895451CA6 /* UpdateItemInput.graphql.swift */; };
 		595BDE75D2C1D42F63CB48CF /* CreateZoneInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = E052F843B5AE8C07BFFBA8E1 /* CreateZoneInput.graphql.swift */; };
 		5A3515096F90377189F3A120 /* AnalyzeItemPhotoMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A26431244AFBE3FA55DDF5 /* AnalyzeItemPhotoMutation.graphql.swift */; };
@@ -76,7 +75,6 @@
 		97167D173210EC8C65AA48E0 /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E7798EA492BA24095B30FCB /* DateTime.swift */; };
 		980EA9F51A7CDE46002E7842 /* ViewfinderOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99829147069424F5CC544BF /* ViewfinderOverlay.swift */; };
 		982CB456388C833107A0164B /* Dashboard.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06400A76AF24005C344DCCE /* Dashboard.graphql.swift */; };
-		9C9849B99644FD59C297D6C0 /* StatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CF26CDAED34FCE76AA38AC /* StatCard.swift */; };
 		9FFDB712BE05BFC831F133E7 /* LocationsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCB31B2AC738ECBD67B0C20 /* LocationsAPI.swift */; };
 		A835412B79FAF1CE8FE76DBB /* CategoryCount.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE5B73E561E13890925AEE1 /* CategoryCount.graphql.swift */; };
 		A90B457DD2D193A3719C0C48 /* Item.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B5B285A857EED7458914F /* Item.graphql.swift */; };
@@ -149,7 +147,6 @@
 		383954842A84FB5B5FADC7F6 /* SearchQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQuery.graphql.swift; sourceTree = "<group>"; };
 		43B2387DADDCD0A802517295 /* CreateStorageMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateStorageMutation.graphql.swift; sourceTree = "<group>"; };
 		44077CB7920080BE5B2B4DDA /* Place.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.graphql.swift; sourceTree = "<group>"; };
-		45CF26CDAED34FCE76AA38AC /* StatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCard.swift; sourceTree = "<group>"; };
 		463FE00C70C09C329A295D39 /* DashboardPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPage.swift; sourceTree = "<group>"; };
 		4C8413BBD0FB4BDACE098D62 /* RoomId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomId.swift; sourceTree = "<group>"; };
 		4CCB31B2AC738ECBD67B0C20 /* LocationsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsAPI.swift; sourceTree = "<group>"; };
@@ -187,7 +184,6 @@
 		9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BazarApp.swift; sourceTree = "<group>"; };
 		9F415C85D4FE275223739444 /* ItemsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsPage.swift; sourceTree = "<group>"; };
 		A3200489BEC8A98F607FFD86 /* ImageId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageId.swift; sourceTree = "<group>"; };
-		A40A411780196473436DEAFE /* LabeledInfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInfoRow.swift; sourceTree = "<group>"; };
 		A910A38DCED5283240940428 /* ConfirmItemInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmItemInput.graphql.swift; sourceTree = "<group>"; };
 		A9CD551E13841DCFE2857EFB /* ScanFlowPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanFlowPage.swift; sourceTree = "<group>"; };
 		AEB367553041712375B3093C /* RoomName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomName.swift; sourceTree = "<group>"; };
@@ -428,8 +424,6 @@
 			children = (
 				16FE4F4E06665110128A65CB /* AsyncToolbarButton.swift */,
 				94463153CCA713A12C3024D4 /* CategoryBadge.swift */,
-				A40A411780196473436DEAFE /* LabeledInfoRow.swift */,
-				45CF26CDAED34FCE76AA38AC /* StatCard.swift */,
 			);
 			path = atoms;
 			sourceTree = "<group>";
@@ -802,7 +796,6 @@
 				29C33B97F2264620867BDD4C /* ItemsPage.swift in Sources */,
 				45CA8DA10B945B2FE719C72C /* ItemsView.swift in Sources */,
 				207794005DDD1AC2B3620BEB /* ItemsViewModel.swift in Sources */,
-				4D95810AC85450E5BD13A148 /* LabeledInfoRow.swift in Sources */,
 				34D47CC1C13577D2F0095908 /* LocationPath.graphql.swift in Sources */,
 				C25CC9B83F128750A3F1E918 /* LocationPicker.swift in Sources */,
 				C973F76E913EC867C84A3A77 /* LocationRow.swift in Sources */,
@@ -836,7 +829,6 @@
 				1F4782FC69FA18A926F87122 /* Secrets.swift in Sources */,
 				253A43685149423288AD1D18 /* SharedConfig.swift in Sources */,
 				789B507546AF14C6B4562E89 /* SortOrder.graphql.swift in Sources */,
-				9C9849B99644FD59C297D6C0 /* StatCard.swift in Sources */,
 				D40E5B5543BBF6A5C796E93C /* Storage.graphql.swift in Sources */,
 				9250191966981EE1D5B75FC3 /* StorageId.swift in Sources */,
 				91C71C1D3544040A7E19A7C9 /* StorageName.swift in Sources */,
