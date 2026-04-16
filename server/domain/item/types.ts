@@ -38,6 +38,9 @@ export type Item = {
   placeId: PlaceId | null
   addedBy: UserTag
   personalNotes: string
+  purchaseDate: Date | null
+  purchaseLocation: string
+  invoiceImageId: ImageId | null
   createdAt: Date
   updatedAt: Date
 }

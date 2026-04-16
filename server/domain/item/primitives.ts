@@ -57,3 +57,11 @@ export const parseItemSort = (value: unknown): ItemSort => {
   if (!itemSorts.includes(v as ItemSort)) throw new Error(`Invalid item sort: ${v}`)
   return v as ItemSort
 }
+
+export const parsePurchaseLocation = (value: unknown): string => {
+  return z.string().max(200).parse(value).trim()
+}
+
+export const parsePurchaseDate = (value: unknown): Date => {
+  return z.coerce.date().parse(value)
+}

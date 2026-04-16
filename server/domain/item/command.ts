@@ -5,7 +5,14 @@ import type { StorageId } from '~/domain/location/types'
 import { UserTag } from '~/domain/shared/primitives'
 import { emit } from '~/system/event-bus'
 import * as repository from './infrastructure/repository'
-import { ItemId, ItemName, parseItemCategory, Quantity } from './primitives'
+import {
+  ItemId,
+  ItemName,
+  parseItemCategory,
+  parsePurchaseDate,
+  parsePurchaseLocation,
+  Quantity,
+} from './primitives'
 import type { Item } from './types'
 
 type AddItemInput = {
@@ -17,6 +24,9 @@ type AddItemInput = {
   storageId?: string | null
   personalNotes?: string | null
   addedBy: string
+  purchaseDate?: Date | string | null
+  purchaseLocation?: string | null
+  invoiceImageBase64?: string | null
 }
 
 const add = async (input: AddItemInput) => {
@@ -24,6 +34,12 @@ const add = async (input: AddItemInput) => {
   if (input.photoBase64) {
     const image = await ImageCommand.save(input.photoBase64, 'image/jpeg')
     photoImageId = image.id
+  }
+
+  let invoiceImageId: Item['invoiceImageId'] = null
+  if (input.invoiceImageBase64) {
+    const image = await ImageCommand.save(input.invoiceImageBase64, 'image/jpeg')
+    invoiceImageId = image.id
   }
 
   let placeId: Item['placeId'] = null
@@ -43,6 +59,9 @@ const add = async (input: AddItemInput) => {
     placeId,
     addedBy: UserTag(input.addedBy),
     personalNotes: input.personalNotes ?? '',
+    purchaseDate: input.purchaseDate ? parsePurchaseDate(input.purchaseDate) : null,
+    purchaseLocation: input.purchaseLocation ? parsePurchaseLocation(input.purchaseLocation) : '',
+    invoiceImageId,
     createdAt: new Date(),
     updatedAt: new Date(),
   }
@@ -58,11 +77,22 @@ type UpdateItemInput = {
   category?: string | null
   quantity?: number | null
   personalNotes?: string | null
+  purchaseDate?: Date | string | null
+  purchaseLocation?: string | null
+  invoiceImageBase64?: string | null
 }
 
 const update = async (id: string, input: UpdateItemInput) => {
   const item = await repository.findBy(id)
   if (!item) return 'not-found' as const
+
+  let invoiceImageId = item.invoiceImageId
+  if (input.invoiceImageBase64 !== undefined) {
+    if (item.invoiceImageId) await ImageCommand.remove(item.invoiceImageId)
+    invoiceImageId = input.invoiceImageBase64
+      ? (await ImageCommand.save(input.invoiceImageBase64, 'image/jpeg')).id
+      : null
+  }
 
   const updated: Item = {
     ...item,
@@ -72,6 +102,17 @@ const update = async (id: string, input: UpdateItemInput) => {
     quantity: input.quantity ? Quantity(input.quantity) : item.quantity,
     personalNotes:
       input.personalNotes !== undefined ? (input.personalNotes ?? '') : item.personalNotes,
+    purchaseDate:
+      input.purchaseDate !== undefined
+        ? input.purchaseDate
+          ? parsePurchaseDate(input.purchaseDate)
+          : null
+        : item.purchaseDate,
+    purchaseLocation:
+      input.purchaseLocation !== undefined
+        ? parsePurchaseLocation(input.purchaseLocation ?? '')
+        : item.purchaseLocation,
+    invoiceImageId,
     updatedAt: new Date(),
   }
 
@@ -86,6 +127,9 @@ const remove = async (id: string) => {
 
   if (item.photoImageId) {
     await ImageCommand.remove(item.photoImageId)
+  }
+  if (item.invoiceImageId) {
+    await ImageCommand.remove(item.invoiceImageId)
   }
 
   await repository.remove(id)

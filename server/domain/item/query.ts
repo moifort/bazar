@@ -72,4 +72,17 @@ const itemsByStorage = async (storageId: string) => {
   return all.filter((item) => item.storageId === storageId)
 }
 
-export const ItemQuery = { allItems, itemById, itemsByStorage }
+const distinctPurchaseLocations = async (): Promise<string[]> => {
+  const all = await repository.findAll()
+  const counts = new Map<string, number>()
+  for (const { purchaseLocation } of all) {
+    const value = purchaseLocation.trim()
+    if (!value) continue
+    counts.set(value, (counts.get(value) ?? 0) + 1)
+  }
+  return [...counts.entries()]
+    .sort(([a, ca], [b, cb]) => cb - ca || a.localeCompare(b, undefined, { sensitivity: 'base' }))
+    .map(([value]) => value)
+}
+
+export const ItemQuery = { allItems, itemById, itemsByStorage, distinctPurchaseLocations }
