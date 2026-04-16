@@ -66,6 +66,7 @@
 		81F411D2B857E719AD699B44 /* SearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C9B0FC268129E8C12E347F /* SearchResultsView.swift */; };
 		86B6F667065BF23263D8B1F5 /* ImageId.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3200489BEC8A98F607FFD86 /* ImageId.swift */; };
 		884A41ECCB5F28070E88DD2A /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6735C526DD16DFF89F7AF631 /* ItemRow.swift */; };
+		8CEE1E6F0254A376B58B3E0F /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146BFC13621C99BD805F4BD /* NotificationManager.swift */; };
 		8D59034163EF2EA2AB51418A /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1639E48F473AD3B55915E2B5 /* ScanView.swift */; };
 		8DCAE5A84AEC2FA68F8CB204 /* LocationsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E90CFF8E8951AAA87F0F017 /* LocationsPage.swift */; };
 		8F574F1B6FEF984B4C22A4AB /* ModelTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB863E4D5364D9EB0FFA99C /* ModelTypes.swift */; };
@@ -230,6 +231,7 @@
 		DC6BD8B0FE59C15DB8DFD1AB /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = wrapper.cfbundle; path = Settings.bundle; sourceTree = "<group>"; };
 		DEF93BA9D7BEFA5078D2E230 /* StorageName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageName.swift; sourceTree = "<group>"; };
 		E052F843B5AE8C07BFFBA8E1 /* CreateZoneInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateZoneInput.graphql.swift; sourceTree = "<group>"; };
+		E146BFC13621C99BD805F4BD /* NotificationManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E1807DD660E989B02096988F /* ErrorReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorReporting.swift; sourceTree = "<group>"; };
 		E4951018B79503D8B0A5E013 /* UpdateReminderInput.graphql.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UpdateReminderInput.graphql.swift; sourceTree = "<group>"; };
 		E79DAD7580B68B4B968C0137 /* DistinctPurchaseLocationsQuery.graphql.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DistinctPurchaseLocationsQuery.graphql.swift; sourceTree = "<group>"; };
@@ -605,6 +607,7 @@
 				8FA181C4DC151F955C391FEB /* SharedConfig.swift */,
 				F29B997D03D63D18EC311DB9 /* UIImage+Resize.swift */,
 				9C8F128F4F2AC2599FCA9D33 /* Components */,
+				E146BFC13621C99BD805F4BD /* NotificationManager.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -884,6 +887,7 @@
 				1203022C95A024FCD414C0E6 /* AddReminderInput.graphql.swift in Sources */,
 				ADEF5CBDC7E3BB834A2F8BFB /* UpdateReminderInput.graphql.swift in Sources */,
 				AEB7BE95B47BDCFCE39FAAFF /* Reminder.graphql.swift in Sources */,
+				8CEE1E6F0254A376B58B3E0F /* NotificationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
