@@ -12,9 +12,6 @@ struct DashboardView: View {
                 if let data = viewModel.data {
                     DashboardPage(
                         totalItems: data.totalItems,
-                        categoryCounts: data.itemsByCategory.map { entry in
-                            .init(category: entry.category, count: entry.count)
-                        },
                         placeCounts: data.itemsByPlace.map { entry in
                             .init(id: entry.placeId, placeName: entry.placeName, count: entry.count)
                         },
