@@ -52,7 +52,7 @@ struct DashboardView: View {
                 onDismiss: { Task { await viewModel.load() } }
             ) { wrapper in
                 NavigationStack {
-                    ItemDetailPage(itemId: wrapper.id)
+                    ItemDetailView(itemId: wrapper.id)
                 }
             }
         }

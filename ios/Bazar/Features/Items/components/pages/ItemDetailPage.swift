@@ -1,72 +1,76 @@
 import SwiftUI
 
 struct ItemDetailPage: View {
-    let itemId: String
-    var onDeleted: () -> Void = {}
-    var onUpdated: () -> Void = {}
+    let id: String
+    let name: String
+    let description: String
+    let category: ItemCategory
+    let quantity: Int
+    let imageURL: URL?
+    let locationPath: String?
+    let addedBy: String
+    let personalNotes: String
+    let createdAt: Date
+    let updatedAt: Date
 
-    @Environment(\.dismiss) private var dismiss
-    @State private var item: Item?
-    @State private var error: String?
+    let onRefresh: () async -> Void
+    let onDelete: () async -> Void
+    let onEditSave: (ItemEditForm.Fields) async throws -> Void
+
     @State private var showDeleteConfirmation = false
     @State private var isEditing = false
 
     var body: some View {
         Group {
-            if let item {
-                if isEditing {
-                    ItemEditForm(
-                        initial: ItemEditForm.Fields(from: item),
-                        onSave: { fields in
-                            // Will be wired to real API later
-                            self.item = try await GraphQLItemsAPI.getDetail(id: itemId)
-                            isEditing = false
-                            onUpdated()
-                        },
-                        onCancel: { isEditing = false }
-                    )
-                } else {
-                    itemContent(item)
-                        .refreshable { await loadDetail() }
-                }
-            } else if let error {
-                ContentUnavailableView(
-                    "Erreur",
-                    systemImage: "exclamationmark.triangle",
-                    description: Text(error)
+            if isEditing {
+                ItemEditForm(
+                    initial: editFields,
+                    onSave: { fields in
+                        try await onEditSave(fields)
+                        isEditing = false
+                    },
+                    onCancel: { isEditing = false }
                 )
             } else {
-                ProgressView("Chargement...")
+                itemContent
+                    .refreshable { await onRefresh() }
             }
         }
-        .navigationTitle(item?.name ?? "")
+        .navigationTitle(name)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(isEditing)
         .toolbar {
-            if item != nil && !isEditing {
+            if !isEditing {
                 readToolbar
             }
         }
-        .task { await loadDetail() }
         .confirmationDialog(
             "Supprimer cet objet ?",
             isPresented: $showDeleteConfirmation,
             titleVisibility: .visible
         ) {
             Button("Supprimer", role: .destructive) {
-                Task { await deleteItem() }
+                Task { await onDelete() }
             }
         }
     }
 
-    // MARK: - Content
+    private var editFields: ItemEditForm.Fields {
+        .init(
+            name: name,
+            description: description,
+            category: category,
+            quantity: quantity,
+            notes: personalNotes
+        )
+    }
 
     @ViewBuilder
-    private func itemContent(_ item: Item) -> some View {
+    private var itemContent: some View {
         List {
-            if let imageId = item.photoImageId {
+            if let imageURL {
                 Section {
-                    AsyncImage(url: imageURL(for: imageId)) { phase in
+                    AsyncImage(url: imageURL) { phase in
                         switch phase {
                         case .success(let image):
                             image
@@ -91,24 +95,24 @@ struct ItemDetailPage: View {
             }
 
             Section("Informations") {
-                LabeledInfoRow(title: "Catégorie", value: item.category.label, icon: item.category.icon)
-                LabeledInfoRow(title: "Quantité", value: "\(item.quantity)", icon: "number")
-                if let location = item.location {
-                    LabeledInfoRow(title: "Lieu", value: location.fullPath, icon: "mappin.and.ellipse")
+                LabeledInfoRow(title: "Catégorie", value: category.label, icon: category.icon)
+                LabeledInfoRow(title: "Quantité", value: "\(quantity)", icon: "number")
+                if let locationPath {
+                    LabeledInfoRow(title: "Lieu", value: locationPath, icon: "mappin.and.ellipse")
                 }
-                LabeledInfoRow(title: "Ajouté par", value: item.addedBy, icon: "person")
+                LabeledInfoRow(title: "Ajouté par", value: addedBy, icon: "person")
             }
 
-            if !item.description.isEmpty {
+            if !description.isEmpty {
                 Section("Description") {
-                    Text(item.description)
+                    Text(description)
                         .font(.body)
                 }
             }
 
-            if !item.personalNotes.isEmpty {
+            if !personalNotes.isEmpty {
                 Section("Notes") {
-                    Text(item.personalNotes)
+                    Text(personalNotes)
                         .font(.body)
                 }
             }
@@ -116,19 +120,17 @@ struct ItemDetailPage: View {
             Section("Dates") {
                 LabeledInfoRow(
                     title: "Ajouté le",
-                    value: item.createdAt.formatted(date: .abbreviated, time: .shortened),
+                    value: createdAt.formatted(date: .abbreviated, time: .shortened),
                     icon: "calendar.badge.plus"
                 )
                 LabeledInfoRow(
                     title: "Modifié le",
-                    value: item.updatedAt.formatted(date: .abbreviated, time: .shortened),
+                    value: updatedAt.formatted(date: .abbreviated, time: .shortened),
                     icon: "calendar.badge.clock"
                 )
             }
         }
     }
-
-    // MARK: - Toolbar
 
     @ToolbarContentBuilder
     private var readToolbar: some ToolbarContent {
@@ -147,35 +149,46 @@ struct ItemDetailPage: View {
             .accessibilityIdentifier("item-detail-menu")
         }
     }
+}
 
-    // MARK: - Helpers
-
-    private func imageURL(for imageId: String) -> URL? {
-        APIClient.shared.baseURL.appendingPathComponent("/images/\(imageId)")
-    }
-
-    private func loadDetail() async {
-        error = nil
-        do {
-            item = try await GraphQLItemsAPI.getDetail(id: itemId)
-        } catch {
-            self.error = reportError(error)
-        }
-    }
-
-    private func deleteItem() async {
-        do {
-            try await GraphQLItemsAPI.delete(id: itemId)
-            onDeleted()
-            dismiss()
-        } catch {
-            self.error = reportError(error)
-        }
+#Preview("Loaded") {
+    NavigationStack {
+        ItemDetailPage(
+            id: "i1",
+            name: "Perceuse Bosch",
+            description: "Perceuse visseuse sans fil 18V, deux batteries incluses.",
+            category: .tools,
+            quantity: 1,
+            imageURL: nil,
+            locationPath: "Maison > Garage > Établi > Tiroir 1",
+            addedBy: "Thibaut",
+            personalNotes: "Batterie à remplacer bientôt",
+            createdAt: .now.addingTimeInterval(-86_400 * 30),
+            updatedAt: .now.addingTimeInterval(-3600),
+            onRefresh: {},
+            onDelete: {},
+            onEditSave: { _ in }
+        )
     }
 }
 
-#Preview {
+#Preview("Minimal") {
     NavigationStack {
-        ItemDetailPage(itemId: "preview-1")
+        ItemDetailPage(
+            id: "i2",
+            name: "Ampoule LED",
+            description: "",
+            category: .electronics,
+            quantity: 12,
+            imageURL: nil,
+            locationPath: nil,
+            addedBy: "Thibaut",
+            personalNotes: "",
+            createdAt: .now,
+            updatedAt: .now,
+            onRefresh: {},
+            onDelete: {},
+            onEditSave: { _ in }
+        )
     }
 }

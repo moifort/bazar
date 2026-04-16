@@ -125,7 +125,7 @@ struct ItemsPage: View {
                 onDismiss: { handleDetailDismiss() }
             ) { wrapper in
                 NavigationStack {
-                    ItemDetailPage(
+                    ItemDetailView(
                         itemId: wrapper.id,
                         onDeleted: { itemDeleted = true },
                         onUpdated: { itemChanged = true }
