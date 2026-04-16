@@ -34,8 +34,10 @@
 		3B3B1F7F7DD574E979E98FFE /* DashboardQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE79855AF193BA16FE55848 /* DashboardQuery.graphql.swift */; };
 		3CABAC0F9055A7A36FD132C0 /* Secrets.swift.example in Resources */ = {isa = PBXBuildFile; fileRef = 6505F1C8C2D8683B3C2D9F42 /* Secrets.swift.example */; };
 		3E0C9DDE6EA5123218851DBF /* LocationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E27539652E637682594971 /* LocationsViewModel.swift */; };
+		3FF9C13B907025F3546F58A3 /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECDD93E6B12712FB2BC1E8C3 /* LocationsView.swift */; };
 		412DFD28FEA7E433D1E5786F /* AsyncToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16FE4F4E06665110128A65CB /* AsyncToolbarButton.swift */; };
 		458904B3B8221843772659B5 /* ItemDetailQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F70548D129AAD2DD699714 /* ItemDetailQuery.graphql.swift */; };
+		45CA8DA10B945B2FE719C72C /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28522A42593FB701C7FA066 /* ItemsView.swift */; };
 		4D95810AC85450E5BD13A148 /* LabeledInfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40A411780196473436DEAFE /* LabeledInfoRow.swift */; };
 		4F986D1A5DE3D75179DB2FFD /* UpdateItemInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8795A48B4E16E73895451CA6 /* UpdateItemInput.graphql.swift */; };
 		595BDE75D2C1D42F63CB48CF /* CreateZoneInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = E052F843B5AE8C07BFFBA8E1 /* CreateZoneInput.graphql.swift */; };
@@ -49,6 +51,8 @@
 		69D3BB9B0ABD54369521E2F8 /* ItemId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747852452BE8F5587C19941B /* ItemId.swift */; };
 		6F6EBD3AEAB996AB7890B415 /* CreatePlaceInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E8D31BB0DB53D36F06E3F2 /* CreatePlaceInput.graphql.swift */; };
 		6F7B3F976CF3D3011DE9CB5A /* RoomName.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEB367553041712375B3093C /* RoomName.swift */; };
+		705A481218439FC2DA393CB3 /* ScanFlowPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CD551E13841DCFE2857EFB /* ScanFlowPage.swift */; };
+		7897296951DAFC820B436357 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152633BC5707BBB9BAF9E17E /* ItemDetailView.swift */; };
 		789B507546AF14C6B4562E89 /* SortOrder.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD94EE70CA1A94CB85E36ABE /* SortOrder.graphql.swift */; };
 		795605CF8F28A2953C9B7B23 /* SearchQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383954842A84FB5B5FADC7F6 /* SearchQuery.graphql.swift */; };
 		7AAD6D8FF6CC353AF92AA50D /* ZoneName.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3DD8001654EF2A9B611767 /* ZoneName.swift */; };
@@ -57,6 +61,7 @@
 		81F411D2B857E719AD699B44 /* SearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C9B0FC268129E8C12E347F /* SearchResultsView.swift */; };
 		86B6F667065BF23263D8B1F5 /* ImageId.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3200489BEC8A98F607FFD86 /* ImageId.swift */; };
 		884A41ECCB5F28070E88DD2A /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6735C526DD16DFF89F7AF631 /* ItemRow.swift */; };
+		8D59034163EF2EA2AB51418A /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1639E48F473AD3B55915E2B5 /* ScanView.swift */; };
 		8DCAE5A84AEC2FA68F8CB204 /* LocationsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E90CFF8E8951AAA87F0F017 /* LocationsPage.swift */; };
 		8F574F1B6FEF984B4C22A4AB /* ModelTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB863E4D5364D9EB0FFA99C /* ModelTypes.swift */; };
 		9159588679D720455E9E899B /* Items.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EEFF5AA7C65A9B8B18AD00 /* Items.graphql.swift */; };
@@ -74,9 +79,9 @@
 		A929CD6285C0553D7153F2D5 /* ItemPreview.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCCF188C36636D1ED20E5A1 /* ItemPreview.graphql.swift */; };
 		AA9323E4530AA37B8EA03CE4 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88A16EAE4E2B7B257416C17 /* APIClient.swift */; };
 		AD0772A744E03A27AC9798EB /* ZoneId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CD57BF36A20BD88D20301E /* ZoneId.swift */; };
+		AE4023993B26A76E9215514A /* ItemIdWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029A0FC3DAF543170A65CCCF /* ItemIdWrapper.swift */; };
 		B2A0BA379ADB5BEFAFFDFDC5 /* BazarGraphQL.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C80DD98112700F01D6829E /* BazarGraphQL.graphql.swift */; };
 		BA209A046E3F8E6C42348630 /* CreateStorageInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11803D072639B81ED576701 /* CreateStorageInput.graphql.swift */; };
-		BB06E1C071DD58AF38142AD3 /* ScanFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D810300EE2D0A9AF6E4043B /* ScanFlowView.swift */; };
 		C25CC9B83F128750A3F1E918 /* LocationPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B72689C24A754DA3BF2AC9 /* LocationPicker.swift */; };
 		C3A7C44B13E0037FF965F113 /* BazarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */; };
 		C49DFDE5AB1F7BBF536EDDFA /* SearchEntry.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46BE2355F083FD3ED6B86D5 /* SearchEntry.graphql.swift */; };
@@ -112,12 +117,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		029A0FC3DAF543170A65CCCF /* ItemIdWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemIdWrapper.swift; sourceTree = "<group>"; };
 		02E27539652E637682594971 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
 		0442967C3927D74B7F6D9A72 /* ItemsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsAPI.swift; sourceTree = "<group>"; };
 		06CD57BF36A20BD88D20301E /* ZoneId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneId.swift; sourceTree = "<group>"; };
 		0853174528A17473F03E8EBE /* Mutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mutation.graphql.swift; sourceTree = "<group>"; };
 		0895467E1212A670A012D166 /* ItemSort.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSort.graphql.swift; sourceTree = "<group>"; };
 		123E45F0A8A5EAF1A4298EDB /* GraphQLClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLClient.swift; sourceTree = "<group>"; };
+		152633BC5707BBB9BAF9E17E /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
+		1639E48F473AD3B55915E2B5 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		16D8772176070DD83C06CFED /* PlaceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceName.swift; sourceTree = "<group>"; };
 		16FE4F4E06665110128A65CB /* AsyncToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncToolbarButton.swift; sourceTree = "<group>"; };
 		17FF66ABC5AD555115A5C582 /* MoveItemMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveItemMutation.graphql.swift; sourceTree = "<group>"; };
@@ -131,7 +139,6 @@
 		32CEDE0B016E9FBEC98CD2D1 /* LocationPath.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPath.graphql.swift; sourceTree = "<group>"; };
 		378F727F6CF2DE9AA6B67801 /* DashboardAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardAPI.swift; sourceTree = "<group>"; };
 		383954842A84FB5B5FADC7F6 /* SearchQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQuery.graphql.swift; sourceTree = "<group>"; };
-		3D810300EE2D0A9AF6E4043B /* ScanFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanFlowView.swift; sourceTree = "<group>"; };
 		43B2387DADDCD0A802517295 /* CreateStorageMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateStorageMutation.graphql.swift; sourceTree = "<group>"; };
 		44077CB7920080BE5B2B4DDA /* Place.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.graphql.swift; sourceTree = "<group>"; };
 		45CF26CDAED34FCE76AA38AC /* StatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCard.swift; sourceTree = "<group>"; };
@@ -174,6 +181,7 @@
 		A3200489BEC8A98F607FFD86 /* ImageId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageId.swift; sourceTree = "<group>"; };
 		A40A411780196473436DEAFE /* LabeledInfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledInfoRow.swift; sourceTree = "<group>"; };
 		A910A38DCED5283240940428 /* ConfirmItemInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmItemInput.graphql.swift; sourceTree = "<group>"; };
+		A9CD551E13841DCFE2857EFB /* ScanFlowPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanFlowPage.swift; sourceTree = "<group>"; };
 		AEB367553041712375B3093C /* RoomName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomName.swift; sourceTree = "<group>"; };
 		B06400A76AF24005C344DCCE /* Dashboard.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.graphql.swift; sourceTree = "<group>"; };
 		B0A6BBB115A19984F10B3C4D /* ScanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewModel.swift; sourceTree = "<group>"; };
@@ -185,6 +193,7 @@
 		C11803D072639B81ED576701 /* CreateStorageInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateStorageInput.graphql.swift; sourceTree = "<group>"; };
 		C1E8206DCD4F6CB15BEA294B /* Quantity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quantity.swift; sourceTree = "<group>"; };
 		C1E8D31BB0DB53D36F06E3F2 /* CreatePlaceInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlaceInput.graphql.swift; sourceTree = "<group>"; };
+		C28522A42593FB701C7FA066 /* ItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsView.swift; sourceTree = "<group>"; };
 		C2C80DD98112700F01D6829E /* BazarGraphQL.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BazarGraphQL.graphql.swift; sourceTree = "<group>"; };
 		C8A58036C3BBCBA2511EB9D9 /* PlaceCount.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceCount.graphql.swift; sourceTree = "<group>"; };
 		CA6151013503448B5F905A1F /* SchemaMetadata.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaMetadata.graphql.swift; sourceTree = "<group>"; };
@@ -203,6 +212,7 @@
 		E99829147069424F5CC544BF /* ViewfinderOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewfinderOverlay.swift; sourceTree = "<group>"; };
 		EBCCF188C36636D1ED20E5A1 /* ItemPreview.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPreview.graphql.swift; sourceTree = "<group>"; };
 		ECB62E818C766845266C402E /* SchemaConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaConfiguration.swift; sourceTree = "<group>"; };
+		ECDD93E6B12712FB2BC1E8C3 /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
 		ED18391D049C0824EDE0A8BE /* ConfirmItemsMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmItemsMutation.graphql.swift; sourceTree = "<group>"; };
 		F1C2AD25FE2EFCE93FA9EAB4 /* DeleteRoomMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteRoomMutation.graphql.swift; sourceTree = "<group>"; };
 		F29B997D03D63D18EC311DB9 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
@@ -232,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				4CCB31B2AC738ECBD67B0C20 /* LocationsAPI.swift */,
+				ECDD93E6B12712FB2BC1E8C3 /* LocationsView.swift */,
 				02E27539652E637682594971 /* LocationsViewModel.swift */,
 				4F4DB7BB5D0149C6CD9541F5 /* components */,
 			);
@@ -345,7 +356,9 @@
 		5504A11AB5D5D4A123ED8A91 /* Items */ = {
 			isa = PBXGroup;
 			children = (
+				152633BC5707BBB9BAF9E17E /* ItemDetailView.swift */,
 				0442967C3927D74B7F6D9A72 /* ItemsAPI.swift */,
+				C28522A42593FB701C7FA066 /* ItemsView.swift */,
 				6BE11C582F11BAFC07B646EC /* ItemsViewModel.swift */,
 				9E2F20E4EFD8063EA0D91B51 /* components */,
 			);
@@ -355,7 +368,7 @@
 		5D0123B25C1F0F531AD13F4B /* pages */ = {
 			isa = PBXGroup;
 			children = (
-				3D810300EE2D0A9AF6E4043B /* ScanFlowView.swift */,
+				A9CD551E13841DCFE2857EFB /* ScanFlowPage.swift */,
 			);
 			path = pages;
 			sourceTree = "<group>";
@@ -525,6 +538,7 @@
 			isa = PBXGroup;
 			children = (
 				2A5C53A615CD60EF4DD65417 /* ScanAPI.swift */,
+				1639E48F473AD3B55915E2B5 /* ScanView.swift */,
 				B0A6BBB115A19984F10B3C4D /* ScanViewModel.swift */,
 				EC402BE785A3EC005DE1E40A /* components */,
 			);
@@ -549,6 +563,7 @@
 				123E45F0A8A5EAF1A4298EDB /* GraphQLClient.swift */,
 				58CA514B286B483D95F72332 /* GraphQLHelpers.swift */,
 				1911253B8CAC43BE05D004AB /* GraphQLLoggingInterceptor.swift */,
+				029A0FC3DAF543170A65CCCF /* ItemIdWrapper.swift */,
 				DBB863E4D5364D9EB0FFA99C /* ModelTypes.swift */,
 				52592BF330FE52B5FB4AED22 /* Secrets.swift */,
 				6505F1C8C2D8683B3C2D9F42 /* Secrets.swift.example */,
@@ -749,8 +764,10 @@
 				1273E60F5283FBB2D986A68F /* ItemCategory.graphql.swift in Sources */,
 				94FEAE6A3CF3DA2C7BF846B3 /* ItemDetailPage.swift in Sources */,
 				458904B3B8221843772659B5 /* ItemDetailQuery.graphql.swift in Sources */,
+				7897296951DAFC820B436357 /* ItemDetailView.swift in Sources */,
 				E5C50BDF9CF3BCA21154C895 /* ItemEditForm.swift in Sources */,
 				69D3BB9B0ABD54369521E2F8 /* ItemId.swift in Sources */,
+				AE4023993B26A76E9215514A /* ItemIdWrapper.swift in Sources */,
 				DB4643B8CAAEC8F7F79715C3 /* ItemListQuery.graphql.swift in Sources */,
 				34AF9027CB95880880353B76 /* ItemName.swift in Sources */,
 				A929CD6285C0553D7153F2D5 /* ItemPreview.graphql.swift in Sources */,
@@ -759,6 +776,7 @@
 				9159588679D720455E9E899B /* Items.graphql.swift in Sources */,
 				1885AF007B567C81FB3E4E46 /* ItemsAPI.swift in Sources */,
 				29C33B97F2264620867BDD4C /* ItemsPage.swift in Sources */,
+				45CA8DA10B945B2FE719C72C /* ItemsView.swift in Sources */,
 				207794005DDD1AC2B3620BEB /* ItemsViewModel.swift in Sources */,
 				4D95810AC85450E5BD13A148 /* LabeledInfoRow.swift in Sources */,
 				34D47CC1C13577D2F0095908 /* LocationPath.graphql.swift in Sources */,
@@ -766,6 +784,7 @@
 				C973F76E913EC867C84A3A77 /* LocationRow.swift in Sources */,
 				9FFDB712BE05BFC831F133E7 /* LocationsAPI.swift in Sources */,
 				8DCAE5A84AEC2FA68F8CB204 /* LocationsPage.swift in Sources */,
+				3FF9C13B907025F3546F58A3 /* LocationsView.swift in Sources */,
 				3E0C9DDE6EA5123218851DBF /* LocationsViewModel.swift in Sources */,
 				8F574F1B6FEF984B4C22A4AB /* ModelTypes.swift in Sources */,
 				62AB6704679F8F77A968F878 /* MoveItemMutation.graphql.swift in Sources */,
@@ -781,7 +800,8 @@
 				6F7B3F976CF3D3011DE9CB5A /* RoomName.swift in Sources */,
 				0EC25C01473967A1F8B5678B /* ScanAPI.swift in Sources */,
 				EB194B2ED66A7B5A54ADF38B /* ScanConfirmationView.swift in Sources */,
-				BB06E1C071DD58AF38142AD3 /* ScanFlowView.swift in Sources */,
+				705A481218439FC2DA393CB3 /* ScanFlowPage.swift in Sources */,
+				8D59034163EF2EA2AB51418A /* ScanView.swift in Sources */,
 				E79D0D41F344EC54BDD6A7E4 /* ScanViewModel.swift in Sources */,
 				E4DFD4F3B4B5966558D2439A /* SchemaConfiguration.swift in Sources */,
 				61B46673F52D0FDC7D755674 /* SchemaMetadata.graphql.swift in Sources */,
