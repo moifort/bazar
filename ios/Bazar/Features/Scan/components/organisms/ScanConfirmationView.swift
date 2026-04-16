@@ -52,14 +52,7 @@ struct ScanConfirmationView: View {
                                 Label("Catégorie", systemImage: "tag")
                             }
 
-                            Stepper(value: $preview.quantity, in: 1...9999) {
-                                Label {
-                                    LabeledContent("Quantité", value: "\(preview.quantity)")
-                                } icon: {
-                                    Image(systemName: "number")
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
+                            Stepper("Quantité : \(preview.quantity)", value: $preview.quantity, in: 1...9999)
                         }
                         .swipeActions(edge: .trailing) {
                             Button(role: .destructive) {

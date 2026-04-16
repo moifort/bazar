@@ -46,14 +46,7 @@ struct ItemEditForm: View {
                     Label("Catégorie", systemImage: "tag")
                 }
 
-                Stepper(value: $quantity, in: 1...9999) {
-                    Label {
-                        LabeledContent("Quantité", value: "\(quantity)")
-                    } icon: {
-                        Image(systemName: "number")
-                            .foregroundStyle(.secondary)
-                    }
-                }
+                Stepper("Quantité : \(quantity)", value: $quantity, in: 1...9999)
             }
 
             Section("Description") {
