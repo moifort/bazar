@@ -6,6 +6,30 @@ final class LocationsViewModel {
     var isLoading = false
     var error: String?
 
+    func place(id: String) -> Place? {
+        places.first { $0.id == id }
+    }
+
+    func room(id: String) -> Room? {
+        for place in places {
+            if let room = place.rooms.first(where: { $0.id == id }) {
+                return room
+            }
+        }
+        return nil
+    }
+
+    func zone(id: String) -> Zone? {
+        for place in places {
+            for room in place.rooms {
+                if let zone = room.zones.first(where: { $0.id == id }) {
+                    return zone
+                }
+            }
+        }
+        return nil
+    }
+
     func load() async {
         isLoading = true
         error = nil

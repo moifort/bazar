@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B001B001B001B001B001B001 /* AddLocationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001A001A001A001A001A001 /* AddLocationSheet.swift */; };
+		B002B002B002B002B002B002 /* PlaceDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A002A002A002A002A002A002 /* PlaceDetailPage.swift */; };
+		B003B003B003B003B003B003 /* RoomDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A003A003A003A003A003A003 /* RoomDetailPage.swift */; };
+		B004B004B004B004B004B004 /* ZoneDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A004A004A004A004A004A004 /* ZoneDetailPage.swift */; };
 		02DFDA746D2511701ADB07A4 /* AddItemInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A35F2F9B44A5331965482D /* AddItemInput.graphql.swift */; };
 		042CA9ED5E86878D3F6AEFB7 /* UserTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F4A49D86BF3B9D8A63341A /* UserTag.swift */; };
 		0E15C0FF0EDA45DB9B96BE43 /* GraphQLClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123E45F0A8A5EAF1A4298EDB /* GraphQLClient.swift */; };
@@ -117,6 +121,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A001A001A001A001A001A001 /* AddLocationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLocationSheet.swift; sourceTree = "<group>"; };
+		A002A002A002A002A002A002 /* PlaceDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailPage.swift; sourceTree = "<group>"; };
+		A003A003A003A003A003A003 /* RoomDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailPage.swift; sourceTree = "<group>"; };
+		A004A004A004A004A004A004 /* ZoneDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneDetailPage.swift; sourceTree = "<group>"; };
 		029A0FC3DAF543170A65CCCF /* ItemIdWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemIdWrapper.swift; sourceTree = "<group>"; };
 		02E27539652E637682594971 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
 		0442967C3927D74B7F6D9A72 /* ItemsAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsAPI.swift; sourceTree = "<group>"; };
@@ -315,10 +323,19 @@
 			path = molecules;
 			sourceTree = "<group>";
 		};
+		D001D001D001D001D001D001 /* organisms */ = {
+			isa = PBXGroup;
+			children = (
+				A001A001A001A001A001A001 /* AddLocationSheet.swift */,
+			);
+			path = organisms;
+			sourceTree = "<group>";
+		};
 		4F4DB7BB5D0149C6CD9541F5 /* components */ = {
 			isa = PBXGroup;
 			children = (
 				A97C4D80AF2F025FF5A32609 /* molecules */,
+				D001D001D001D001D001D001 /* organisms */,
 				96A939C774D40C36217DF09A /* pages */,
 			);
 			path = components;
@@ -442,6 +459,9 @@
 			isa = PBXGroup;
 			children = (
 				4E90CFF8E8951AAA87F0F017 /* LocationsPage.swift */,
+				A002A002A002A002A002A002 /* PlaceDetailPage.swift */,
+				A003A003A003A003A003A003 /* RoomDetailPage.swift */,
+				A004A004A004A004A004A004 /* ZoneDetailPage.swift */,
 			);
 			path = pages;
 			sourceTree = "<group>";
@@ -721,6 +741,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B001B001B001B001B001B001 /* AddLocationSheet.swift in Sources */,
+				B002B002B002B002B002B002 /* PlaceDetailPage.swift in Sources */,
+				B003B003B003B003B003B003 /* RoomDetailPage.swift in Sources */,
+				B004B004B004B004B004B004 /* ZoneDetailPage.swift in Sources */,
 				AA9323E4530AA37B8EA03CE4 /* APIClient.swift in Sources */,
 				02DFDA746D2511701ADB07A4 /* AddItemInput.graphql.swift in Sources */,
 				DF6B428D1B68227D5BC365B3 /* AddItemMutation.graphql.swift in Sources */,
