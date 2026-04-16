@@ -124,7 +124,7 @@ struct LocationsPage: View {
                         .foregroundStyle(.secondary)
                 }
             } label: {
-                LocationRow(name: room.name, icon: room.icon ?? "door.left.hand.open", depth: 1)
+                LocationRow(name: room.name, icon: room.icon ?? "door.left.hand.open")
             }
             .swipeActions(edge: .trailing) {
                 Button(role: .destructive) {
@@ -150,7 +150,7 @@ struct LocationsPage: View {
                         .foregroundStyle(.secondary)
                 }
             } label: {
-                LocationRow(name: zone.name, icon: "rectangle.split.3x1", depth: 2)
+                LocationRow(name: zone.name, icon: "rectangle.split.3x1")
             }
             .swipeActions(edge: .trailing) {
                 Button(role: .destructive) {
@@ -165,7 +165,7 @@ struct LocationsPage: View {
     @ViewBuilder
     private func storagesContent(for zone: Zone) -> some View {
         ForEach(zone.storages) { storage in
-            LocationRow(name: storage.name, icon: "archivebox", depth: 3)
+            LocationRow(name: storage.name, icon: "archivebox")
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
                         Task { await onDeleteStorage(storage.id) }
