@@ -22,6 +22,27 @@ input AddItemInput {
   storageId: StorageId
 }
 
+"""Input for adding a new reminder to an item"""
+input AddReminderInput {
+  """Days between occurrences when frequency is custom_days"""
+  customIntervalDays: Int
+
+  """Next due date"""
+  dueDate: DateTime!
+
+  """Recurrence cadence (omit for one-shot)"""
+  frequency: ReminderFrequency
+
+  """Target item"""
+  itemId: ItemId!
+
+  """Free-form notes"""
+  notes: String
+
+  """Reminder title"""
+  title: ReminderTitle!
+}
+
 """Item count per category"""
 type CategoryCount {
   """Item category"""
@@ -260,11 +281,19 @@ type Mutation {
   """Manually add a new item to the inventory"""
   addItem(input: AddItemInput!): Item!
 
+  """Add a new reminder to an item"""
+  addReminder(input: AddReminderInput!): Reminder!
+
   """Analyze a photo with Gemini AI to identify household items"""
   analyzeItemPhoto(
     """Photo as base64 encoded JPEG"""
     imageBase64: String!
   ): [ItemPreview!]!
+
+  """
+  Mark a reminder as done. Recurring reminders reschedule automatically; one-shot reminders are deleted and null is returned.
+  """
+  completeReminder(id: ReminderId!): Reminder
 
   """Confirm and create items from a scan preview"""
   confirmItems(input: [ConfirmItemInput!]!): [Item!]!
@@ -287,6 +316,9 @@ type Mutation {
   """Delete a place and all its rooms, zones, and storages"""
   deletePlace(id: PlaceId!): Boolean!
 
+  """Delete a reminder"""
+  deleteReminder(id: ReminderId!): Boolean!
+
   """Delete a room and all its zones and storages"""
   deleteRoom(id: RoomId!): Boolean!
 
@@ -304,6 +336,9 @@ type Mutation {
 
   """Update an existing place"""
   updatePlace(id: PlaceId!, input: UpdatePlaceInput!): Place!
+
+  """Update an existing reminder"""
+  updateReminder(id: ReminderId!, input: UpdateReminderInput!): Reminder!
 
   """Update an existing room"""
   updateRoom(id: RoomId!, input: UpdateRoomInput!): Room!
@@ -394,6 +429,12 @@ type Query {
   """All places with nested rooms, zones, and storages"""
   places: [Place!]!
 
+  """Reminders whose dueDate is on or before the given timestamp"""
+  remindersDue(
+    """Upper bound (inclusive)"""
+    before: DateTime!
+  ): [Reminder!]!
+
   """Full-text search across items and locations"""
   search(
     """Maximum results (default 20)"""
@@ -403,6 +444,56 @@ type Query {
     query: String!
   ): [SearchEntry!]!
 }
+
+"""A scheduled reminder attached to an item"""
+type Reminder {
+  """Completion history for this reminder, most recent first"""
+  completions: [ReminderCompletion!]!
+  createdAt: DateTime!
+  customIntervalDays: Int
+  dueDate: DateTime!
+  frequency: ReminderFrequency
+  id: ReminderId!
+  itemId: ItemId!
+  notes: String!
+  title: ReminderTitle!
+  updatedAt: DateTime!
+}
+
+"""A recorded completion of a reminder (historical log)"""
+type ReminderCompletion {
+  completedAt: DateTime!
+  id: ReminderCompletionId!
+  itemId: ItemId!
+  reminderId: ReminderId!
+}
+
+"""Reminder completion unique identifier (UUID)"""
+scalar ReminderCompletionId
+
+"""Recurrence cadence for a reminder"""
+enum ReminderFrequency {
+  """Every year"""
+  annual
+
+  """Every six months"""
+  biannual
+
+  """Custom number of days"""
+  custom_days
+
+  """Every month"""
+  monthly
+
+  """Every three months"""
+  quarterly
+}
+
+"""Reminder unique identifier (UUID)"""
+scalar ReminderId
+
+"""Reminder title (non-empty, max 200 characters)"""
+scalar ReminderTitle
 
 """A room within a place (e.g. Cuisine, Salon)"""
 type Room {
@@ -501,6 +592,24 @@ input UpdatePlaceInput {
 
   """New sort order"""
   order: Int
+}
+
+"""Input for updating an existing reminder"""
+input UpdateReminderInput {
+  """Custom interval in days (only when frequency is custom_days)"""
+  customIntervalDays: Int
+
+  """New due date"""
+  dueDate: DateTime
+
+  """New recurrence cadence (explicit null clears it)"""
+  frequency: ReminderFrequency
+
+  """New notes"""
+  notes: String
+
+  """New title"""
+  title: ReminderTitle
 }
 
 """Input for updating a room"""

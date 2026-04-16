@@ -13,6 +13,7 @@ import type {
   ZoneId,
   ZoneName,
 } from '~/domain/location/types'
+import type { ReminderCompletionId, ReminderId, ReminderTitle } from '~/domain/reminder/types'
 import type { UserTag } from '~/domain/shared/types'
 import type { Loaders } from './loaders'
 
@@ -47,6 +48,9 @@ export const builder = new SchemaBuilder<{
     StorageName: { Input: StorageName; Output: StorageName }
     ImageId: { Input: ImageId; Output: ImageId }
     UserTag: { Input: UserTag; Output: UserTag }
+    ReminderId: { Input: ReminderId; Output: ReminderId }
+    ReminderCompletionId: { Input: ReminderCompletionId; Output: ReminderCompletionId }
+    ReminderTitle: { Input: ReminderTitle; Output: ReminderTitle }
   }
 }>({
   defaultFieldNullability: false,

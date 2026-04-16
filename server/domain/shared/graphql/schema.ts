@@ -20,6 +20,13 @@ import '~/domain/item/infrastructure/graphql/inputs'
 import '~/domain/item/infrastructure/graphql/queries'
 import '~/domain/item/infrastructure/graphql/mutations'
 
+// Reminder domain
+import '~/domain/reminder/infrastructure/graphql/enums'
+import '~/domain/reminder/infrastructure/graphql/types'
+import '~/domain/reminder/infrastructure/graphql/inputs'
+import '~/domain/reminder/infrastructure/graphql/queries'
+import '~/domain/reminder/infrastructure/graphql/mutations'
+
 // Search domain
 import '~/domain/search/infrastructure/graphql/types'
 import '~/domain/search/infrastructure/graphql/queries'

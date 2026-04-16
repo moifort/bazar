@@ -12,6 +12,7 @@ import {
   ZoneId,
   ZoneName,
 } from '~/domain/location/primitives'
+import { ReminderCompletionId, ReminderId, ReminderTitle } from '~/domain/reminder/primitives'
 import { UserTag } from '~/domain/shared/primitives'
 import { builder } from './builder'
 
@@ -111,4 +112,23 @@ builder.scalarType('UserTag', {
   description: 'User identifier tag (e.g. "thibaut")',
   serialize: (value) => value as string,
   parseValue: validatedParse('UserTag', UserTag),
+})
+
+// Reminder domain
+builder.scalarType('ReminderId', {
+  description: 'Reminder unique identifier (UUID)',
+  serialize: (value) => value as string,
+  parseValue: validatedParse('ReminderId', ReminderId),
+})
+
+builder.scalarType('ReminderCompletionId', {
+  description: 'Reminder completion unique identifier (UUID)',
+  serialize: (value) => value as string,
+  parseValue: validatedParse('ReminderCompletionId', ReminderCompletionId),
+})
+
+builder.scalarType('ReminderTitle', {
+  description: 'Reminder title (non-empty, max 200 characters)',
+  serialize: (value) => value as string,
+  parseValue: validatedParse('ReminderTitle', ReminderTitle),
 })
