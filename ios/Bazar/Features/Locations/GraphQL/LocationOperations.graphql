@@ -63,6 +63,43 @@ mutation CreateStorage($input: CreateStorageInput!) {
   }
 }
 
+mutation UpdatePlace($id: PlaceId!, $input: UpdatePlaceInput!) {
+  updatePlace(id: $id, input: $input) {
+    id
+    name
+    icon
+    order
+  }
+}
+
+mutation UpdateRoom($id: RoomId!, $input: UpdateRoomInput!) {
+  updateRoom(id: $id, input: $input) {
+    id
+    placeId
+    name
+    icon
+    order
+  }
+}
+
+mutation UpdateZone($id: ZoneId!, $input: UpdateZoneInput!) {
+  updateZone(id: $id, input: $input) {
+    id
+    roomId
+    name
+    order
+  }
+}
+
+mutation UpdateStorage($id: StorageId!, $input: UpdateStorageInput!) {
+  updateStorage(id: $id, input: $input) {
+    id
+    zoneId
+    name
+    order
+  }
+}
+
 mutation DeletePlace($id: PlaceId!) {
   deletePlace(id: $id)
 }
