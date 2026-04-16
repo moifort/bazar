@@ -10,8 +10,6 @@ struct ItemDetailPage: View {
     let locationPath: String?
     let addedBy: String
     let personalNotes: String
-    let createdAt: Date
-    let updatedAt: Date
 
     let onRefresh: () async -> Void
     let onDelete: () async -> Void
@@ -120,37 +118,22 @@ struct ItemDetailPage: View {
                         .font(.body)
                 }
             }
-
-            Section("Dates") {
-                LabeledInfoRow(
-                    title: "Ajouté le",
-                    value: createdAt.formatted(date: .abbreviated, time: .shortened),
-                    icon: "calendar.badge.plus"
-                )
-                LabeledInfoRow(
-                    title: "Modifié le",
-                    value: updatedAt.formatted(date: .abbreviated, time: .shortened),
-                    icon: "calendar.badge.clock"
-                )
-            }
         }
     }
 
     @ToolbarContentBuilder
     private var readToolbar: some ToolbarContent {
-        ToolbarItemGroup {
-            Menu {
-                Button("Modifier", systemImage: "pencil") {
-                    isEditing = true
-                }
-                Button("Supprimer", systemImage: "trash", role: .destructive) {
-                    showDeleteConfirmation = true
-                }
-                .accessibilityIdentifier("delete-item-button")
-            } label: {
-                Image(systemName: "ellipsis")
+        ToolbarItem(placement: .primaryAction) {
+            Button("Modifier", systemImage: "pencil") {
+                isEditing = true
             }
-            .accessibilityIdentifier("item-detail-menu")
+            .accessibilityIdentifier("edit-item-button")
+        }
+        ToolbarItem(placement: .secondaryAction) {
+            Button("Supprimer", systemImage: "trash", role: .destructive) {
+                showDeleteConfirmation = true
+            }
+            .accessibilityIdentifier("delete-item-button")
         }
     }
 }
@@ -167,8 +150,6 @@ struct ItemDetailPage: View {
             locationPath: "Maison > Garage > Établi > Tiroir 1",
             addedBy: "Thibaut",
             personalNotes: "Batterie à remplacer bientôt",
-            createdAt: .now.addingTimeInterval(-86_400 * 30),
-            updatedAt: .now.addingTimeInterval(-3600),
             onRefresh: {},
             onDelete: {},
             onEditSave: { _ in }
@@ -188,8 +169,6 @@ struct ItemDetailPage: View {
             locationPath: nil,
             addedBy: "Thibaut",
             personalNotes: "",
-            createdAt: .now,
-            updatedAt: .now,
             onRefresh: {},
             onDelete: {},
             onEditSave: { _ in }

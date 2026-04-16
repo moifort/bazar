@@ -22,8 +22,6 @@ struct ItemDetailView: View {
                     locationPath: item.location?.fullPath,
                     addedBy: item.addedBy,
                     personalNotes: item.personalNotes,
-                    createdAt: item.createdAt,
-                    updatedAt: item.updatedAt,
                     onRefresh: { await loadDetail() },
                     onDelete: { await deleteItem() },
                     onEditSave: { _ in
