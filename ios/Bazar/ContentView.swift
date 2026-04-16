@@ -33,7 +33,7 @@ struct ContentView: View {
                 DashboardView(refreshTrigger: $refreshTrigger)
             }
             Tab(TabSelection.items.label, systemImage: TabSelection.items.icon, value: .items) {
-                ItemsPage(refreshTrigger: $refreshTrigger)
+                ItemsView(refreshTrigger: $refreshTrigger)
             }
             Tab(value: .scan, role: .search) {
                 Color.clear

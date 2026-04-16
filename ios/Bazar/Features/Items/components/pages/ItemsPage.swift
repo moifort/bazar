@@ -1,147 +1,138 @@
 import SwiftUI
 
 struct ItemsPage: View {
-    @Binding var refreshTrigger: Int
+    let items: [ItemListItem]
+    let totalCount: Int
+    let hasMore: Bool
+    let isLoading: Bool
+    let errorMessage: String?
+    let navigationSubtitle: String
 
-    @State private var viewModel = ItemsViewModel()
-    @State private var searchViewModel = SearchViewModel()
-    @State private var selectedItemId: String?
-    @State private var lastViewedItemId: String?
-    @State private var itemChanged = false
-    @State private var itemDeleted = false
+    @Binding var categoryFilter: ItemCategory?
+    @Binding var sort: ItemSort
+    @Binding var sortDescending: Bool
+    @Binding var searchText: String
+
+    let isSearching: Bool
+    let searchResults: [SearchEntry]?
+
+    let onRefresh: () async -> Void
+    let onLoadMore: () async -> Void
+    let onPrefetch: (String) -> Void
+    let onItemTap: (String) -> Void
+    let onItemDelete: (String) async -> Void
+    let onSearchTextChanged: () -> Void
+    let onSearchSelectItem: (String) -> Void
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if !viewModel.hasItems && viewModel.isLoading {
-                    ProgressView("Chargement...")
-                } else if let error = viewModel.error {
-                    ContentUnavailableView(
-                        "Erreur",
-                        systemImage: "exclamationmark.triangle",
-                        description: Text(error)
-                    )
-                } else if viewModel.items.isEmpty {
-                    ContentUnavailableView(
-                        "Aucun objet",
-                        systemImage: "archivebox",
-                        description: Text("Scannez des objets pour les ajouter à votre inventaire")
-                    )
-                } else {
-                    List {
-                        ForEach(viewModel.items) { item in
-                            itemButton(item)
-                                .swipeActions(edge: .trailing) {
-                                    Button(role: .destructive) {
-                                        Task { await deleteItem(id: item.id) }
-                                    } label: {
-                                        Label("Supprimer", systemImage: "trash")
-                                    }
+        Group {
+            if items.isEmpty && isLoading {
+                ProgressView("Chargement...")
+            } else if let errorMessage {
+                ContentUnavailableView(
+                    "Erreur",
+                    systemImage: "exclamationmark.triangle",
+                    description: Text(errorMessage)
+                )
+            } else if items.isEmpty {
+                ContentUnavailableView(
+                    "Aucun objet",
+                    systemImage: "archivebox",
+                    description: Text("Scannez des objets pour les ajouter à votre inventaire")
+                )
+            } else {
+                List {
+                    ForEach(items) { item in
+                        itemButton(item)
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    Task { await onItemDelete(item.id) }
+                                } label: {
+                                    Label("Supprimer", systemImage: "trash")
                                 }
-                        }
+                            }
+                    }
 
-                        if viewModel.hasMore {
-                            ProgressView()
-                                .frame(maxWidth: .infinity)
-                                .listRowSeparator(.hidden)
-                                .task { await viewModel.loadMore() }
-                        }
+                    if hasMore {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                            .listRowSeparator(.hidden)
+                            .task { await onLoadMore() }
                     }
                 }
-            }
-            .navigationTitle("Objets")
-            .navigationSubtitle(viewModel.items.isEmpty ? "" : viewModel.navigationSubtitle)
-            .navigationBarTitleDisplayMode(.large)
-            .refreshable { await viewModel.load() }
-            .task(id: "\(viewModel.filterKey)-\(refreshTrigger)") {
-                await viewModel.load()
-            }
-            .toolbar {
-                ToolbarItemGroup {
-                    Menu {
-                        Picker("Catégorie", selection: $viewModel.categoryFilter) {
-                            Text("Toutes").tag(nil as ItemCategory?)
-                            ForEach(ItemCategory.allCases) { category in
-                                Label(category.label, systemImage: category.icon)
-                                    .tag(category as ItemCategory?)
-                            }
-                        }
-                    } label: {
-                        Image(systemName: viewModel.categoryFilter != nil ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
-                    }
-                    .accessibilityIdentifier("items-category-filter")
-                }
-                ToolbarSpacer(.fixed)
-                ToolbarItemGroup {
-                    Menu {
-                        Picker("Tri", selection: $viewModel.sort) {
-                            ForEach(ItemSort.allCases) { sort in
-                                Label(sort.label, systemImage: sort.icon).tag(sort)
-                            }
-                        }
-                        Toggle(
-                            viewModel.sortDescending ? "Décroissant" : "Croissant",
-                            isOn: $viewModel.sortDescending
-                        )
-                    } label: {
-                        Image(systemName: "line.3.horizontal.decrease")
-                    }
-                    .accessibilityIdentifier("items-sort-menu")
-                }
-            }
-            .searchable(text: $searchViewModel.searchText, prompt: "Chercher un objet, un lieu...")
-            .overlay {
-                if searchViewModel.isActive {
-                    if searchViewModel.isSearching {
-                        ProgressView("Recherche...")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(.regularMaterial)
-                    } else if let results = searchViewModel.results {
-                        if results.isEmpty {
-                            ContentUnavailableView(
-                                "Aucun résultat",
-                                systemImage: "magnifyingglass",
-                                description: Text("Aucun résultat pour « \(searchViewModel.searchText) »")
-                            )
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(.regularMaterial)
-                        } else {
-                            SearchResultsView(
-                                results: results,
-                                onSelectItem: { selectedItemId = $0 }
-                            )
-                        }
-                    }
-                }
-            }
-            .onChange(of: searchViewModel.searchText) {
-                searchViewModel.onSearchTextChanged()
-            }
-            .sheet(
-                item: Binding(
-                    get: { selectedItemId.map { ItemIdWrapper(id: $0) } },
-                    set: { selectedItemId = $0?.id }
-                ),
-                onDismiss: { handleDetailDismiss() }
-            ) { wrapper in
-                NavigationStack {
-                    ItemDetailView(
-                        itemId: wrapper.id,
-                        onDeleted: { itemDeleted = true },
-                        onUpdated: { itemChanged = true }
-                    )
-                }
-                .onAppear { lastViewedItemId = wrapper.id }
             }
         }
+        .navigationTitle("Objets")
+        .navigationSubtitle(items.isEmpty ? "" : navigationSubtitle)
+        .navigationBarTitleDisplayMode(.large)
+        .refreshable { await onRefresh() }
+        .toolbar {
+            ToolbarItemGroup {
+                Menu {
+                    Picker("Catégorie", selection: $categoryFilter) {
+                        Text("Toutes").tag(nil as ItemCategory?)
+                        ForEach(ItemCategory.allCases) { category in
+                            Label(category.label, systemImage: category.icon)
+                                .tag(category as ItemCategory?)
+                        }
+                    }
+                } label: {
+                    Image(systemName: categoryFilter != nil ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                }
+                .accessibilityIdentifier("items-category-filter")
+            }
+            ToolbarSpacer(.fixed)
+            ToolbarItemGroup {
+                Menu {
+                    Picker("Tri", selection: $sort) {
+                        ForEach(ItemSort.allCases) { sortOption in
+                            Label(sortOption.label, systemImage: sortOption.icon).tag(sortOption)
+                        }
+                    }
+                    Toggle(
+                        sortDescending ? "Décroissant" : "Croissant",
+                        isOn: $sortDescending
+                    )
+                } label: {
+                    Image(systemName: "line.3.horizontal.decrease")
+                }
+                .accessibilityIdentifier("items-sort-menu")
+            }
+        }
+        .searchable(text: $searchText, prompt: "Chercher un objet, un lieu...")
+        .overlay {
+            if !searchText.isEmpty {
+                if isSearching {
+                    ProgressView("Recherche...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(.regularMaterial)
+                } else if let searchResults {
+                    if searchResults.isEmpty {
+                        ContentUnavailableView(
+                            "Aucun résultat",
+                            systemImage: "magnifyingglass",
+                            description: Text("Aucun résultat pour « \(searchText) »")
+                        )
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(.regularMaterial)
+                    } else {
+                        SearchResultsView(
+                            results: searchResults,
+                            onSelectItem: onSearchSelectItem
+                        )
+                    }
+                }
+            }
+        }
+        .onChange(of: searchText) {
+            onSearchTextChanged()
+        }
     }
-
-    // MARK: - Helpers
 
     @ViewBuilder
     private func itemButton(_ item: ItemListItem) -> some View {
         Button {
-            selectedItemId = item.id
+            onItemTap(item.id)
         } label: {
             ItemRow(
                 name: item.name,
@@ -152,35 +143,106 @@ struct ItemsPage: View {
             )
         }
         .tint(.primary)
-        .onAppear { viewModel.prefetchIfNeeded(for: item.id) }
-    }
-
-    private func handleDetailDismiss() {
-        guard let itemId = lastViewedItemId else { return }
-        if itemDeleted {
-            viewModel.removeItem(id: itemId)
-        } else if itemChanged {
-            Task { await viewModel.updateItem(id: itemId) }
-        }
-        itemChanged = false
-        itemDeleted = false
-        lastViewedItemId = nil
-    }
-
-    private func deleteItem(id: String) async {
-        do {
-            try await GraphQLItemsAPI.delete(id: id)
-            viewModel.removeItem(id: id)
-        } catch {
-            viewModel.error = reportError(error)
-        }
+        .onAppear { onPrefetch(item.id) }
     }
 }
 
-struct ItemIdWrapper: Identifiable {
-    let id: String
+#Preview("Loaded") {
+    @Previewable @State var categoryFilter: ItemCategory?
+    @Previewable @State var sort: ItemSort = .createdAt
+    @Previewable @State var sortDescending = true
+    @Previewable @State var searchText = ""
+
+    NavigationStack {
+        ItemsPage(
+            items: [
+                ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", addedBy: "Thibaut", createdAt: .now),
+                ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, photoImageId: nil, locationFullPath: "Maison > Cellier", addedBy: "Thibaut", createdAt: .now),
+            ],
+            totalCount: 2,
+            hasMore: false,
+            isLoading: false,
+            errorMessage: nil,
+            navigationSubtitle: "2 objets",
+            categoryFilter: $categoryFilter,
+            sort: $sort,
+            sortDescending: $sortDescending,
+            searchText: $searchText,
+            isSearching: false,
+            searchResults: nil,
+            onRefresh: {},
+            onLoadMore: {},
+            onPrefetch: { _ in },
+            onItemTap: { _ in },
+            onItemDelete: { _ in },
+            onSearchTextChanged: {},
+            onSearchSelectItem: { _ in }
+        )
+    }
 }
 
-#Preview {
-    ItemsPage(refreshTrigger: .constant(0))
+#Preview("Empty") {
+    @Previewable @State var categoryFilter: ItemCategory?
+    @Previewable @State var sort: ItemSort = .createdAt
+    @Previewable @State var sortDescending = true
+    @Previewable @State var searchText = ""
+
+    NavigationStack {
+        ItemsPage(
+            items: [],
+            totalCount: 0,
+            hasMore: false,
+            isLoading: false,
+            errorMessage: nil,
+            navigationSubtitle: "",
+            categoryFilter: $categoryFilter,
+            sort: $sort,
+            sortDescending: $sortDescending,
+            searchText: $searchText,
+            isSearching: false,
+            searchResults: nil,
+            onRefresh: {},
+            onLoadMore: {},
+            onPrefetch: { _ in },
+            onItemTap: { _ in },
+            onItemDelete: { _ in },
+            onSearchTextChanged: {},
+            onSearchSelectItem: { _ in }
+        )
+    }
+}
+
+#Preview("Searching") {
+    @Previewable @State var categoryFilter: ItemCategory?
+    @Previewable @State var sort: ItemSort = .createdAt
+    @Previewable @State var sortDescending = true
+    @Previewable @State var searchText = "perceuse"
+
+    NavigationStack {
+        ItemsPage(
+            items: [
+                ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", addedBy: "Thibaut", createdAt: .now),
+            ],
+            totalCount: 1,
+            hasMore: false,
+            isLoading: false,
+            errorMessage: nil,
+            navigationSubtitle: "1 objet",
+            categoryFilter: $categoryFilter,
+            sort: $sort,
+            sortDescending: $sortDescending,
+            searchText: $searchText,
+            isSearching: false,
+            searchResults: [
+                SearchEntry(type: "item", entityId: "1", text: "Perceuse Bosch"),
+            ],
+            onRefresh: {},
+            onLoadMore: {},
+            onPrefetch: { _ in },
+            onItemTap: { _ in },
+            onItemDelete: { _ in },
+            onSearchTextChanged: {},
+            onSearchSelectItem: { _ in }
+        )
+    }
 }
