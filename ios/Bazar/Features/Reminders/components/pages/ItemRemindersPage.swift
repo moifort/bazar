@@ -2,15 +2,15 @@ import SwiftUI
 
 struct ItemRemindersPage: View {
     let itemName: String
-    let reminders: [Reminder]
+    let reminders: [ReminderRow.Model]
     let isLoading: Bool
     let errorMessage: String?
 
     let onRefresh: () async -> Void
     let onAdd: () -> Void
-    let onEdit: (Reminder) -> Void
-    let onComplete: (Reminder) async -> Void
-    let onDelete: (Reminder) async -> Void
+    let onEdit: (String) -> Void
+    let onComplete: (String) async -> Void
+    let onDelete: (String) async -> Void
 
     var body: some View {
         List {
@@ -22,22 +22,30 @@ struct ItemRemindersPage: View {
                 )
             } else {
                 ForEach(reminders) { reminder in
-                    ReminderRow(reminder: reminder, showsOverdueBadge: true)
-                        .contentShape(.rect)
-                        .onTapGesture { onEdit(reminder) }
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                Task { await onDelete(reminder) }
-                            } label: {
-                                Label("Supprimer", systemImage: "trash")
-                            }
-                            Button {
-                                Task { await onComplete(reminder) }
-                            } label: {
-                                Label("Fait", systemImage: "checkmark")
-                            }
-                            .tint(.green)
+                    ReminderRow(
+                        title: reminder.title,
+                        notes: reminder.notes,
+                        dueDate: reminder.dueDate,
+                        isRecurring: reminder.isRecurring,
+                        frequencyLabel: reminder.frequencyLabel,
+                        isOverdue: reminder.isOverdue,
+                        showsOverdueBadge: true
+                    )
+                    .contentShape(.rect)
+                    .onTapGesture { onEdit(reminder.id) }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            Task { await onDelete(reminder.id) }
+                        } label: {
+                            Label("Supprimer", systemImage: "trash")
                         }
+                        Button {
+                            Task { await onComplete(reminder.id) }
+                        } label: {
+                            Label("Fait", systemImage: "checkmark")
+                        }
+                        .tint(.green)
+                    }
                 }
             }
         }
@@ -70,16 +78,14 @@ struct ItemRemindersPage: View {
         ItemRemindersPage(
             itemName: "Cafetière",
             reminders: [
-                Reminder(
+                .init(
                     id: "1",
-                    itemId: "i1",
                     title: "Détartrer",
                     notes: "",
                     dueDate: Date(timeIntervalSinceNow: 86_400 * 5),
-                    frequency: .quarterly,
-                    customIntervalDays: nil,
-                    createdAt: .now,
-                    updatedAt: .now
+                    isRecurring: true,
+                    frequencyLabel: "Tous les 3 mois",
+                    isOverdue: false
                 )
             ],
             isLoading: false,

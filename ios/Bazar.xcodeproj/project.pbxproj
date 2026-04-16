@@ -66,6 +66,7 @@
 		7C3DD736025788600A472ACF /* GraphQLLoggingInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1911253B8CAC43BE05D004AB /* GraphQLLoggingInterceptor.swift */; };
 		7D466F795614C93B49C33C84 /* RoomId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8413BBD0FB4BDACE098D62 /* RoomId.swift */; };
 		81F411D2B857E719AD699B44 /* SearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C9B0FC268129E8C12E347F /* SearchResultsView.swift */; };
+		8673194963190EF72156ABA5 /* ReminderRowMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372DC3BC7BA27DBF19DDDEDF /* ReminderRowMapper.swift */; };
 		86B6F667065BF23263D8B1F5 /* ImageId.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3200489BEC8A98F607FFD86 /* ImageId.swift */; };
 		884A41ECCB5F28070E88DD2A /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6735C526DD16DFF89F7AF631 /* ItemRow.swift */; };
 		8CEE1E6F0254A376B58B3E0F /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E146BFC13621C99BD805F4BD /* NotificationManager.swift */; };
@@ -158,6 +159,7 @@
 		2F3B5B285A857EED7458914F /* Item.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.graphql.swift; sourceTree = "<group>"; };
 		2F89DA0FC114FDBA9B8B4719 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		32CEDE0B016E9FBEC98CD2D1 /* LocationPath.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPath.graphql.swift; sourceTree = "<group>"; };
+		372DC3BC7BA27DBF19DDDEDF /* ReminderRowMapper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReminderRowMapper.swift; sourceTree = "<group>"; };
 		378F727F6CF2DE9AA6B67801 /* DashboardAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardAPI.swift; sourceTree = "<group>"; };
 		383700F3E43728CA8300F1CB /* AddReminderInput.graphql.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AddReminderInput.graphql.swift; sourceTree = "<group>"; };
 		383954842A84FB5B5FADC7F6 /* SearchQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQuery.graphql.swift; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 				DEA894DB67E4EF8FBFC97F9E /* RemindersAPI.swift */,
 				A2B63061A311BDCA19E13CAB /* ItemRemindersView.swift */,
 				EBCB813B6E213EAEB17D8FA6 /* components */,
+				372DC3BC7BA27DBF19DDDEDF /* ReminderRowMapper.swift */,
 			);
 			name = Reminders;
 			path = Reminders;
@@ -953,6 +956,7 @@
 				39106BC1C6AF56DF87D4CA80 /* ItemRemindersPage.swift in Sources */,
 				E2687994A4756783F9A6CF76 /* ReminderEditSheet.swift in Sources */,
 				FAC969760B12F95EA11ECEB2 /* ReminderRow.swift in Sources */,
+				8673194963190EF72156ABA5 /* ReminderRowMapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

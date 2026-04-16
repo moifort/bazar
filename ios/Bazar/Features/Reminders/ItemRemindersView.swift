@@ -13,14 +13,18 @@ struct ItemRemindersView: View {
     var body: some View {
         ItemRemindersPage(
             itemName: itemName,
-            reminders: reminders,
+            reminders: reminders.map(ReminderRowMapper.map),
             isLoading: isLoading,
             errorMessage: errorMessage,
             onRefresh: { await load() },
             onAdd: { sheet = .new },
-            onEdit: { sheet = .edit($0) },
-            onComplete: { await complete($0) },
-            onDelete: { await delete($0) }
+            onEdit: { id in
+                if let reminder = reminders.first(where: { $0.id == id }) {
+                    sheet = .edit(reminder)
+                }
+            },
+            onComplete: { id in await complete(id: id) },
+            onDelete: { id in await delete(id: id) }
         )
         .task { await load() }
         .sheet(item: $sheet) { target in
@@ -39,7 +43,13 @@ struct ItemRemindersView: View {
                     .navigationBarTitleDisplayMode(.inline)
                 case .edit(let reminder):
                     ReminderEditSheet(
-                        initial: .init(from: reminder),
+                        initial: .init(
+                            title: reminder.title,
+                            notes: reminder.notes,
+                            dueDate: reminder.dueDate,
+                            frequency: reminder.frequency,
+                            customIntervalDays: reminder.customIntervalDays
+                        ),
                         onSave: { fields in
                             try await update(id: reminder.id, fields: fields)
                             sheet = nil
@@ -105,12 +115,12 @@ struct ItemRemindersView: View {
         onChanged()
     }
 
-    private func complete(_ reminder: Reminder) async {
+    private func complete(id: String) async {
         do {
-            try await GraphQLRemindersAPI.complete(id: reminder.id)
-            await NotificationManager.cancelReminder(id: reminder.id)
+            try await GraphQLRemindersAPI.complete(id: id)
+            await NotificationManager.cancelReminder(id: id)
             await load()
-            if let updated = reminders.first(where: { $0.id == reminder.id }) {
+            if let updated = reminders.first(where: { $0.id == id }) {
                 await NotificationManager.scheduleReminder(updated, itemName: itemName)
             }
             onChanged()
@@ -119,10 +129,10 @@ struct ItemRemindersView: View {
         }
     }
 
-    private func delete(_ reminder: Reminder) async {
+    private func delete(id: String) async {
         do {
-            try await GraphQLRemindersAPI.delete(id: reminder.id)
-            await NotificationManager.cancelReminder(id: reminder.id)
+            try await GraphQLRemindersAPI.delete(id: id)
+            await NotificationManager.cancelReminder(id: id)
             await load()
             onChanged()
         } catch {

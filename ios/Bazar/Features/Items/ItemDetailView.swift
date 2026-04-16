@@ -30,7 +30,7 @@ struct ItemDetailView: View {
                     purchaseLocation: item.purchaseLocation,
                     invoiceImageURL: item.invoiceImageId.flatMap(imageURL(for:)),
                     purchaseLocationSuggestions: purchaseLocationSuggestions,
-                    reminders: item.reminders,
+                    reminders: item.reminders.map(ReminderRowMapper.map),
                     onRefresh: { await loadDetail() },
                     onDelete: { await deleteItem() },
                     onEditSave: { fields in

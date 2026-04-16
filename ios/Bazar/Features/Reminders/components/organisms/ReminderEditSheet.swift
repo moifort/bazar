@@ -125,15 +125,6 @@ extension ReminderEditSheet {
             self.customIntervalDays = customIntervalDays
         }
 
-        init(from reminder: Reminder) {
-            self.init(
-                title: reminder.title,
-                notes: reminder.notes,
-                dueDate: reminder.dueDate,
-                frequency: reminder.frequency,
-                customIntervalDays: reminder.customIntervalDays
-            )
-        }
     }
 }
 

@@ -1,21 +1,26 @@
 import SwiftUI
 
 struct ReminderRow: View {
-    let reminder: Reminder
+    let title: String
+    let notes: String
+    let dueDate: Date
+    let isRecurring: Bool
+    let frequencyLabel: String?
+    let isOverdue: Bool
     let showsOverdueBadge: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 8) {
-                Text(reminder.title)
+                Text(title)
                     .font(.headline)
-                if reminder.frequency != nil {
+                if isRecurring {
                     Image(systemName: "arrow.triangle.2.circlepath")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                if showsOverdueBadge && reminder.isOverdue {
+                if showsOverdueBadge && isOverdue {
                     Text("en retard")
                         .font(.caption2.weight(.semibold))
                         .foregroundStyle(.red)
@@ -28,17 +33,17 @@ struct ReminderRow: View {
                 Image(systemName: "calendar")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text(formatted(dueDate: reminder.dueDate))
+                Text(formatted(dueDate: dueDate))
                     .font(.caption)
-                    .foregroundStyle(reminder.isOverdue ? .red : .secondary)
-                if let freq = reminder.frequency {
-                    Text("· \(freq.label)")
+                    .foregroundStyle(isOverdue ? .red : .secondary)
+                if let frequencyLabel {
+                    Text("· \(frequencyLabel)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }
-            if !reminder.notes.isEmpty {
-                Text(reminder.notes)
+            if !notes.isEmpty {
+                Text(notes)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
@@ -55,34 +60,36 @@ struct ReminderRow: View {
     }
 }
 
+extension ReminderRow {
+    struct Model: Identifiable, Sendable {
+        let id: String
+        let title: String
+        let notes: String
+        let dueDate: Date
+        let isRecurring: Bool
+        let frequencyLabel: String?
+        let isOverdue: Bool
+    }
+}
+
 #Preview {
     List {
         ReminderRow(
-            reminder: Reminder(
-                id: "1",
-                itemId: "i1",
-                title: "Détartrer",
-                notes: "Utiliser le détartrant liquide",
-                dueDate: Date(timeIntervalSinceNow: 86_400 * 3),
-                frequency: .quarterly,
-                customIntervalDays: nil,
-                createdAt: .now,
-                updatedAt: .now
-            ),
+            title: "Détartrer",
+            notes: "Utiliser le détartrant liquide",
+            dueDate: Date(timeIntervalSinceNow: 86_400 * 3),
+            isRecurring: true,
+            frequencyLabel: "Tous les 3 mois",
+            isOverdue: false,
             showsOverdueBadge: true
         )
         ReminderRow(
-            reminder: Reminder(
-                id: "2",
-                itemId: "i1",
-                title: "Changer la pile",
-                notes: "",
-                dueDate: Date(timeIntervalSinceNow: -86_400),
-                frequency: nil,
-                customIntervalDays: nil,
-                createdAt: .now,
-                updatedAt: .now
-            ),
+            title: "Changer la pile",
+            notes: "",
+            dueDate: Date(timeIntervalSinceNow: -86_400),
+            isRecurring: false,
+            frequencyLabel: nil,
+            isOverdue: true,
             showsOverdueBadge: true
         )
     }

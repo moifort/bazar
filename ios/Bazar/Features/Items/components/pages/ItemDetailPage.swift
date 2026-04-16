@@ -14,7 +14,7 @@ struct ItemDetailPage: View {
     let purchaseLocation: String
     let invoiceImageURL: URL?
     let purchaseLocationSuggestions: [String]
-    let reminders: [Reminder]
+    let reminders: [ReminderRow.Model]
 
     let onRefresh: () async -> Void
     let onDelete: () async -> Void
@@ -118,7 +118,15 @@ struct ItemDetailPage: View {
 
             Section {
                 ForEach(reminders.prefix(3)) { reminder in
-                    ReminderRow(reminder: reminder, showsOverdueBadge: true)
+                    ReminderRow(
+                        title: reminder.title,
+                        notes: reminder.notes,
+                        dueDate: reminder.dueDate,
+                        isRecurring: reminder.isRecurring,
+                        frequencyLabel: reminder.frequencyLabel,
+                        isOverdue: reminder.isOverdue,
+                        showsOverdueBadge: true
+                    )
                 }
                 Button {
                     onOpenReminders()
