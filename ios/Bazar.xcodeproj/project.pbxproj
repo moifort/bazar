@@ -27,12 +27,14 @@
 		207794005DDD1AC2B3620BEB /* ItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE11C582F11BAFC07B646EC /* ItemsViewModel.swift */; };
 		253A43685149423288AD1D18 /* SharedConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA181C4DC151F955C391FEB /* SharedConfig.swift */; };
 		25C379CB9FF9B4CB71C37FBF /* ErrorReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1807DD660E989B02096988F /* ErrorReporting.swift */; };
+		28BA11DF2867A05F74044915 /* ItemRemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B63061A311BDCA19E13CAB /* ItemRemindersView.swift */; };
 		29A392795F4F70E4BD9A8AF6 /* ReminderTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58865CB13C414D47FE7791CA /* ReminderTitle.swift */; };
 		29C33B97F2264620867BDD4C /* ItemsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F415C85D4FE275223739444 /* ItemsPage.swift */; };
 		2DC9411DC962AAD705BDF319 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E912516B096BA0433315E77D /* DashboardViewModel.swift */; };
 		31E298054F5FE4BA8191C8A2 /* DeleteRoomMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C2AD25FE2EFCE93FA9EAB4 /* DeleteRoomMutation.graphql.swift */; };
 		34AF9027CB95880880353B76 /* ItemName.swift in Sources */ = {isa = PBXBuildFile; fileRef = D894786302504830B5C0FD8C /* ItemName.swift */; };
 		34D47CC1C13577D2F0095908 /* LocationPath.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CEDE0B016E9FBEC98CD2D1 /* LocationPath.graphql.swift */; };
+		39106BC1C6AF56DF87D4CA80 /* ItemRemindersPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81386C0BEFAE6AB6871C23DF /* ItemRemindersPage.swift */; };
 		3ABAFDAF64A8E1C0407B5DAA /* UpdateItemMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1BAC47263C29C7FAA508C6 /* UpdateItemMutation.graphql.swift */; };
 		3B3B1F7F7DD574E979E98FFE /* DashboardQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE79855AF193BA16FE55848 /* DashboardQuery.graphql.swift */; };
 		3CABAC0F9055A7A36FD132C0 /* Secrets.swift.example in Resources */ = {isa = PBXBuildFile; fileRef = 6505F1C8C2D8683B3C2D9F42 /* Secrets.swift.example */; };
@@ -80,6 +82,7 @@
 		982CB456388C833107A0164B /* Dashboard.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06400A76AF24005C344DCCE /* Dashboard.graphql.swift */; };
 		9FFDB712BE05BFC831F133E7 /* LocationsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCB31B2AC738ECBD67B0C20 /* LocationsAPI.swift */; };
 		A24C39991ADD2F05AC12CF70 /* DistinctPurchaseLocationsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79DAD7580B68B4B968C0137 /* DistinctPurchaseLocationsQuery.graphql.swift */; };
+		A7C6E001801967CCB85F8709 /* RemindersAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEA894DB67E4EF8FBFC97F9E /* RemindersAPI.swift */; };
 		A835412B79FAF1CE8FE76DBB /* CategoryCount.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE5B73E561E13890925AEE1 /* CategoryCount.graphql.swift */; };
 		A90B457DD2D193A3719C0C48 /* Item.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B5B285A857EED7458914F /* Item.graphql.swift */; };
 		A929CD6285C0553D7153F2D5 /* ItemPreview.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCCF188C36636D1ED20E5A1 /* ItemPreview.graphql.swift */; };
@@ -111,6 +114,7 @@
 		DEA2EE40F2114AAB73818859 /* DeleteStorageMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7CE050E23A05E065096D0E /* DeleteStorageMutation.graphql.swift */; };
 		DF6B428D1B68227D5BC365B3 /* AddItemMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6285FBBFB04FD9DC5C872CE1 /* AddItemMutation.graphql.swift */; };
 		E055544EDADABEC6E9E4C3DB /* ConfirmItemsMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED18391D049C0824EDE0A8BE /* ConfirmItemsMutation.graphql.swift */; };
+		E2687994A4756783F9A6CF76 /* ReminderEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF81EACA5CE8FC64F2C2BBAF /* ReminderEditSheet.swift */; };
 		E4DFD4F3B4B5966558D2439A /* SchemaConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB62E818C766845266C402E /* SchemaConfiguration.swift */; };
 		E4ED5C61032BF5E8706C841E /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F89DA0FC114FDBA9B8B4719 /* SearchViewModel.swift */; };
 		E5543B06E87579DEAF625EED /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD071B0FF14446D867771D9 /* DashboardView.swift */; };
@@ -127,6 +131,7 @@
 		F3F7DCE687681077E835CF69 /* PlaceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D8772176070DD83C06CFED /* PlaceName.swift */; };
 		F93898F1A48DF7AD1C0B7036 /* CreateRoomMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F3D2F0AF5C4C86FAE93678 /* CreateRoomMutation.graphql.swift */; };
 		F9C45FE93B2FC161E2945AB0 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968127786CBDC82DFB27D923 /* CameraView.swift */; };
+		FAC969760B12F95EA11ECEB2 /* ReminderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E42F3FF349C834E7FCCE756 /* ReminderRow.swift */; };
 		FF7AF39B8E5C2CE2571ABA09 /* PlaceId.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD701F055909C265F3B69723 /* PlaceId.swift */; };
 /* End PBXBuildFile section */
 
@@ -188,9 +193,11 @@
 		75F70548D129AAD2DD699714 /* ItemDetailQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailQuery.graphql.swift; sourceTree = "<group>"; };
 		7CE5B73E561E13890925AEE1 /* CategoryCount.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCount.graphql.swift; sourceTree = "<group>"; };
 		7DD071B0FF14446D867771D9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		81386C0BEFAE6AB6871C23DF /* ItemRemindersPage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemRemindersPage.swift; sourceTree = "<group>"; };
 		8795A48B4E16E73895451CA6 /* UpdateItemInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateItemInput.graphql.swift; sourceTree = "<group>"; };
 		89B72689C24A754DA3BF2AC9 /* LocationPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPicker.swift; sourceTree = "<group>"; };
 		8C287E4E1711FFF3CB73ECC7 /* Storage.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.graphql.swift; sourceTree = "<group>"; };
+		8E42F3FF349C834E7FCCE756 /* ReminderRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReminderRow.swift; sourceTree = "<group>"; };
 		8FA181C4DC151F955C391FEB /* SharedConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConfig.swift; sourceTree = "<group>"; };
 		91BAC7F26D2161B9FFDAA1E0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		946321010B1D7E79EB3B35E4 /* CreateRoomInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomInput.graphql.swift; sourceTree = "<group>"; };
@@ -202,6 +209,7 @@
 		A002A002A002A002A002A002 /* PlaceDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailPage.swift; sourceTree = "<group>"; };
 		A003A003A003A003A003A003 /* RoomDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailPage.swift; sourceTree = "<group>"; };
 		A004A004A004A004A004A004 /* ZoneDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneDetailPage.swift; sourceTree = "<group>"; };
+		A2B63061A311BDCA19E13CAB /* ItemRemindersView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ItemRemindersView.swift; sourceTree = "<group>"; };
 		A3200489BEC8A98F607FFD86 /* ImageId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageId.swift; sourceTree = "<group>"; };
 		A910A38DCED5283240940428 /* ConfirmItemInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmItemInput.graphql.swift; sourceTree = "<group>"; };
 		A9CD551E13841DCFE2857EFB /* ScanFlowPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanFlowPage.swift; sourceTree = "<group>"; };
@@ -229,7 +237,9 @@
 		D894786302504830B5C0FD8C /* ItemName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemName.swift; sourceTree = "<group>"; };
 		DBB863E4D5364D9EB0FFA99C /* ModelTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTypes.swift; sourceTree = "<group>"; };
 		DC6BD8B0FE59C15DB8DFD1AB /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = wrapper.cfbundle; path = Settings.bundle; sourceTree = "<group>"; };
+		DEA894DB67E4EF8FBFC97F9E /* RemindersAPI.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RemindersAPI.swift; sourceTree = "<group>"; };
 		DEF93BA9D7BEFA5078D2E230 /* StorageName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageName.swift; sourceTree = "<group>"; };
+		DF81EACA5CE8FC64F2C2BBAF /* ReminderEditSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReminderEditSheet.swift; sourceTree = "<group>"; };
 		E052F843B5AE8C07BFFBA8E1 /* CreateZoneInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateZoneInput.graphql.swift; sourceTree = "<group>"; };
 		E146BFC13621C99BD805F4BD /* NotificationManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E1807DD660E989B02096988F /* ErrorReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorReporting.swift; sourceTree = "<group>"; };
@@ -298,6 +308,7 @@
 				0B4CDD5451EFB63E03B2BF45 /* Locations */,
 				B392C1B957257D82E06561C4 /* Scan */,
 				C73CBCB2C83EF2BEA9B1B6C6 /* Search */,
+				B68B852E355C8AF6114E21A6 /* Reminders */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -427,6 +438,15 @@
 				C626DCBEABF10CF3E2233A0F /* Shared */,
 			);
 			path = Bazar;
+			sourceTree = "<group>";
+		};
+		7F035395AA97BD4F248666BE /* molecules */ = {
+			isa = PBXGroup;
+			children = (
+				8E42F3FF349C834E7FCCE756 /* ReminderRow.swift */,
+			);
+			name = molecules;
+			path = molecules;
 			sourceTree = "<group>";
 		};
 		82CB429B18B191E00428F8CB /* Enums */ = {
@@ -582,6 +602,17 @@
 			path = Scan;
 			sourceTree = "<group>";
 		};
+		B68B852E355C8AF6114E21A6 /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				DEA894DB67E4EF8FBFC97F9E /* RemindersAPI.swift */,
+				A2B63061A311BDCA19E13CAB /* ItemRemindersView.swift */,
+				EBCB813B6E213EAEB17D8FA6 /* components */,
+			);
+			name = Reminders;
+			path = Reminders;
+			sourceTree = "<group>";
+		};
 		BB165AE2682E9D6C1BA751A5 /* GraphQL */ = {
 			isa = PBXGroup;
 			children = (
@@ -656,6 +687,15 @@
 			path = Dashboard;
 			sourceTree = "<group>";
 		};
+		D9930F15EA4260BFDD358EAC /* organisms */ = {
+			isa = PBXGroup;
+			children = (
+				DF81EACA5CE8FC64F2C2BBAF /* ReminderEditSheet.swift */,
+			);
+			name = organisms;
+			path = organisms;
+			sourceTree = "<group>";
+		};
 		DBD08FC203A576DDB3EF9AF8 /* InputObjects */ = {
 			isa = PBXGroup;
 			children = (
@@ -686,6 +726,17 @@
 			path = Queries;
 			sourceTree = "<group>";
 		};
+		EBCB813B6E213EAEB17D8FA6 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				FC6DB5E73907A86DDE58F9F2 /* pages */,
+				D9930F15EA4260BFDD358EAC /* organisms */,
+				7F035395AA97BD4F248666BE /* molecules */,
+			);
+			name = components;
+			path = components;
+			sourceTree = "<group>";
+		};
 		EC402BE785A3EC005DE1E40A /* components */ = {
 			isa = PBXGroup;
 			children = (
@@ -695,6 +746,15 @@
 				5D0123B25C1F0F531AD13F4B /* pages */,
 			);
 			path = components;
+			sourceTree = "<group>";
+		};
+		FC6DB5E73907A86DDE58F9F2 /* pages */ = {
+			isa = PBXGroup;
+			children = (
+				81386C0BEFAE6AB6871C23DF /* ItemRemindersPage.swift */,
+			);
+			name = pages;
+			path = pages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -888,6 +948,11 @@
 				ADEF5CBDC7E3BB834A2F8BFB /* UpdateReminderInput.graphql.swift in Sources */,
 				AEB7BE95B47BDCFCE39FAAFF /* Reminder.graphql.swift in Sources */,
 				8CEE1E6F0254A376B58B3E0F /* NotificationManager.swift in Sources */,
+				A7C6E001801967CCB85F8709 /* RemindersAPI.swift in Sources */,
+				28BA11DF2867A05F74044915 /* ItemRemindersView.swift in Sources */,
+				39106BC1C6AF56DF87D4CA80 /* ItemRemindersPage.swift in Sources */,
+				E2687994A4756783F9A6CF76 /* ReminderEditSheet.swift in Sources */,
+				FAC969760B12F95EA11ECEB2 /* ReminderRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
