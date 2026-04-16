@@ -64,6 +64,7 @@ struct ItemEditForm: View {
                 Button("Annuler", systemImage: "xmark") {
                     onCancel()
                 }
+                .labelStyle(.iconOnly)
                 .disabled(isSaving)
             }
             ToolbarItem(placement: .confirmationAction) {
@@ -73,6 +74,7 @@ struct ItemEditForm: View {
                     Button("Enregistrer", systemImage: "checkmark") {
                         Task { await save() }
                     }
+                    .labelStyle(.iconOnly)
                     .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }

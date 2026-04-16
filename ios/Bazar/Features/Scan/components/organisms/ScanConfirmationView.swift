@@ -81,9 +81,10 @@ struct ScanConfirmationView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Scanner", systemImage: "camera") {
+                Button("Scanner à nouveau", systemImage: "camera") {
                     onScanAnother()
                 }
+                .labelStyle(.iconOnly)
                 .accessibilityIdentifier("scan-another-button")
             }
 
@@ -91,9 +92,10 @@ struct ScanConfirmationView: View {
                 if isConfirming {
                     ProgressView()
                 } else {
-                    Button("Confirmer") {
+                    Button("Confirmer", systemImage: "checkmark") {
                         Task { await confirm() }
                     }
+                    .labelStyle(.iconOnly)
                     .disabled(editablePreviews.isEmpty)
                     .accessibilityIdentifier("confirm-items-button")
                 }

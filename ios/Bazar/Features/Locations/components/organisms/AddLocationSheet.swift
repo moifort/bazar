@@ -22,15 +22,19 @@ struct AddLocationSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Annuler") { dismiss() }
+                    Button("Annuler", systemImage: "xmark") { dismiss() }
+                        .labelStyle(.iconOnly)
                         .disabled(isSaving)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     if isSaving {
                         ProgressView()
                     } else {
-                        Button("Ajouter") { Task { await save() } }
-                            .disabled(trimmed.isEmpty)
+                        Button("Ajouter", systemImage: "checkmark") {
+                            Task { await save() }
+                        }
+                        .labelStyle(.iconOnly)
+                        .disabled(trimmed.isEmpty)
                     }
                 }
             }
