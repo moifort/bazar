@@ -1,84 +1,88 @@
 import SwiftUI
 
 struct LocationsPage: View {
-    @Binding var refreshTrigger: Int
+    let places: [Place]
+    let isLoading: Bool
+    let errorMessage: String?
+    let onRefresh: () async -> Void
+    let onAddPlace: (String) async -> Void
+    let onAddRoom: (String, String) async -> Void
+    let onAddZone: (String, String) async -> Void
+    let onAddStorage: (String, String) async -> Void
+    let onDeletePlace: (String) async -> Void
+    let onDeleteRoom: (String) async -> Void
+    let onDeleteZone: (String) async -> Void
+    let onDeleteStorage: (String) async -> Void
 
-    @State private var viewModel = LocationsViewModel()
     @State private var newPlaceName = ""
     @State private var showAddPlace = false
     @State private var addTarget: AddTarget?
     @State private var addName = ""
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if viewModel.isLoading && viewModel.places.isEmpty {
-                    ProgressView("Chargement...")
-                } else if let error = viewModel.error, viewModel.places.isEmpty {
-                    ContentUnavailableView(
-                        "Erreur",
-                        systemImage: "exclamationmark.triangle",
-                        description: Text(error)
-                    )
-                } else if viewModel.places.isEmpty {
-                    ContentUnavailableView(
-                        "Aucun lieu",
-                        systemImage: "mappin.and.ellipse",
-                        description: Text("Ajoutez un lieu pour organiser vos objets")
-                    )
-                } else {
-                    locationsList
-                }
+        Group {
+            if isLoading && places.isEmpty {
+                ProgressView("Chargement...")
+            } else if let errorMessage, places.isEmpty {
+                ContentUnavailableView(
+                    "Erreur",
+                    systemImage: "exclamationmark.triangle",
+                    description: Text(errorMessage)
+                )
+            } else if places.isEmpty {
+                ContentUnavailableView(
+                    "Aucun lieu",
+                    systemImage: "mappin.and.ellipse",
+                    description: Text("Ajoutez un lieu pour organiser vos objets")
+                )
+            } else {
+                locationsList
             }
-            .navigationTitle("Lieux")
-            .navigationBarTitleDisplayMode(.large)
-            .refreshable { await viewModel.load() }
-            .task(id: refreshTrigger) {
-                await viewModel.load()
-            }
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showAddPlace = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                    .accessibilityIdentifier("add-place-button")
+        }
+        .navigationTitle("Lieux")
+        .navigationBarTitleDisplayMode(.large)
+        .refreshable { await onRefresh() }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showAddPlace = true
+                } label: {
+                    Image(systemName: "plus")
                 }
+                .accessibilityIdentifier("add-place-button")
             }
-            .alert("Nouveau lieu", isPresented: $showAddPlace) {
-                TextField("Nom du lieu", text: $newPlaceName)
-                Button("Annuler", role: .cancel) { newPlaceName = "" }
-                Button("Ajouter") {
-                    let name = newPlaceName.trimmingCharacters(in: .whitespaces)
-                    guard !name.isEmpty else { return }
-                    Task { await viewModel.createPlace(name: name, icon: nil) }
-                    newPlaceName = ""
-                }
+        }
+        .alert("Nouveau lieu", isPresented: $showAddPlace) {
+            TextField("Nom du lieu", text: $newPlaceName)
+            Button("Annuler", role: .cancel) { newPlaceName = "" }
+            Button("Ajouter") {
+                let name = newPlaceName.trimmingCharacters(in: .whitespaces)
+                newPlaceName = ""
+                guard !name.isEmpty else { return }
+                Task { await onAddPlace(name) }
             }
-            .alert(addTarget?.alertTitle ?? "", isPresented: Binding(
-                get: { addTarget != nil },
-                set: { if !$0 { addTarget = nil; addName = "" } }
-            )) {
-                TextField("Nom", text: $addName)
-                Button("Annuler", role: .cancel) { addTarget = nil; addName = "" }
-                Button("Ajouter") {
-                    let name = addName.trimmingCharacters(in: .whitespaces)
-                    guard !name.isEmpty, let target = addTarget else { return }
-                    addTarget = nil
-                    addName = ""
-                    Task { await handleAdd(target: target, name: name) }
-                }
+        }
+        .alert(addTarget?.alertTitle ?? "", isPresented: Binding(
+            get: { addTarget != nil },
+            set: { if !$0 { addTarget = nil; addName = "" } }
+        )) {
+            TextField("Nom", text: $addName)
+            Button("Annuler", role: .cancel) { addTarget = nil; addName = "" }
+            Button("Ajouter") {
+                let name = addName.trimmingCharacters(in: .whitespaces)
+                let target = addTarget
+                addTarget = nil
+                addName = ""
+                guard !name.isEmpty, let target else { return }
+                Task { await handleAdd(target: target, name: name) }
             }
         }
     }
 
-    // MARK: - List
-
     @ViewBuilder
     private var locationsList: some View {
         List {
-            ForEach(viewModel.places) { place in
+            ForEach(places) { place in
                 Section {
                     roomsContent(for: place)
 
@@ -97,7 +101,7 @@ struct LocationsPage: View {
                 }
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
-                        Task { await viewModel.deletePlace(id: place.id) }
+                        Task { await onDeletePlace(place.id) }
                     } label: {
                         Label("Supprimer", systemImage: "trash")
                     }
@@ -124,7 +128,7 @@ struct LocationsPage: View {
             }
             .swipeActions(edge: .trailing) {
                 Button(role: .destructive) {
-                    Task { await viewModel.deleteRoom(id: room.id) }
+                    Task { await onDeleteRoom(room.id) }
                 } label: {
                     Label("Supprimer", systemImage: "trash")
                 }
@@ -150,7 +154,7 @@ struct LocationsPage: View {
             }
             .swipeActions(edge: .trailing) {
                 Button(role: .destructive) {
-                    Task { await viewModel.deleteZone(id: zone.id) }
+                    Task { await onDeleteZone(zone.id) }
                 } label: {
                     Label("Supprimer", systemImage: "trash")
                 }
@@ -164,7 +168,7 @@ struct LocationsPage: View {
             LocationRow(name: storage.name, icon: "archivebox", depth: 3)
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
-                        Task { await viewModel.deleteStorage(id: storage.id) }
+                        Task { await onDeleteStorage(storage.id) }
                     } label: {
                         Label("Supprimer", systemImage: "trash")
                     }
@@ -172,21 +176,14 @@ struct LocationsPage: View {
         }
     }
 
-    // MARK: - Add Helpers
-
     private func handleAdd(target: AddTarget, name: String) async {
         switch target {
-        case .room(let placeId):
-            await viewModel.createRoom(placeId: placeId, name: name)
-        case .zone(let roomId):
-            await viewModel.createZone(roomId: roomId, name: name)
-        case .storage(let zoneId):
-            await viewModel.createStorage(zoneId: zoneId, name: name)
+        case .room(let placeId): await onAddRoom(placeId, name)
+        case .zone(let roomId): await onAddZone(roomId, name)
+        case .storage(let zoneId): await onAddStorage(zoneId, name)
         }
     }
 }
-
-// MARK: - Add Target
 
 private enum AddTarget {
     case room(placeId: String)
@@ -202,6 +199,99 @@ private enum AddTarget {
     }
 }
 
-#Preview {
-    LocationsPage(refreshTrigger: .constant(0))
+#Preview("Loaded") {
+    NavigationStack {
+        LocationsPage(
+            places: [
+                Place(
+                    id: "p1",
+                    name: "Maison",
+                    icon: "house",
+                    order: 0,
+                    rooms: [
+                        Room(
+                            id: "r1",
+                            placeId: "p1",
+                            name: "Garage",
+                            icon: "car",
+                            order: 0,
+                            zones: [
+                                Zone(id: "z1", roomId: "r1", name: "Établi", order: 0, storages: [
+                                    Storage(id: "s1", zoneId: "z1", name: "Tiroir 1", order: 0),
+                                ]),
+                            ]
+                        ),
+                    ]
+                ),
+            ],
+            isLoading: false,
+            errorMessage: nil,
+            onRefresh: {},
+            onAddPlace: { _ in },
+            onAddRoom: { _, _ in },
+            onAddZone: { _, _ in },
+            onAddStorage: { _, _ in },
+            onDeletePlace: { _ in },
+            onDeleteRoom: { _ in },
+            onDeleteZone: { _ in },
+            onDeleteStorage: { _ in }
+        )
+    }
+}
+
+#Preview("Empty") {
+    NavigationStack {
+        LocationsPage(
+            places: [],
+            isLoading: false,
+            errorMessage: nil,
+            onRefresh: {},
+            onAddPlace: { _ in },
+            onAddRoom: { _, _ in },
+            onAddZone: { _, _ in },
+            onAddStorage: { _, _ in },
+            onDeletePlace: { _ in },
+            onDeleteRoom: { _ in },
+            onDeleteZone: { _ in },
+            onDeleteStorage: { _ in }
+        )
+    }
+}
+
+#Preview("Loading") {
+    NavigationStack {
+        LocationsPage(
+            places: [],
+            isLoading: true,
+            errorMessage: nil,
+            onRefresh: {},
+            onAddPlace: { _ in },
+            onAddRoom: { _, _ in },
+            onAddZone: { _, _ in },
+            onAddStorage: { _, _ in },
+            onDeletePlace: { _ in },
+            onDeleteRoom: { _ in },
+            onDeleteZone: { _ in },
+            onDeleteStorage: { _ in }
+        )
+    }
+}
+
+#Preview("Error") {
+    NavigationStack {
+        LocationsPage(
+            places: [],
+            isLoading: false,
+            errorMessage: "Connexion impossible",
+            onRefresh: {},
+            onAddPlace: { _ in },
+            onAddRoom: { _, _ in },
+            onAddZone: { _, _ in },
+            onAddStorage: { _, _ in },
+            onDeletePlace: { _ in },
+            onDeleteRoom: { _ in },
+            onDeleteZone: { _ in },
+            onDeleteStorage: { _ in }
+        )
+    }
 }

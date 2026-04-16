@@ -41,7 +41,7 @@ struct ContentView: View {
                 Label(TabSelection.scan.label, systemImage: TabSelection.scan.icon)
             }
             Tab(TabSelection.locations.label, systemImage: TabSelection.locations.icon, value: .locations) {
-                LocationsPage(refreshTrigger: $refreshTrigger)
+                LocationsView(refreshTrigger: $refreshTrigger)
             }
         }
         .onChange(of: selectedTab) { oldValue, newValue in
