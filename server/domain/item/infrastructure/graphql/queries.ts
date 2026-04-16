@@ -32,3 +32,11 @@ builder.queryField('item', (t) =>
     resolve: (_root, { id }) => ItemQuery.itemById(id),
   }),
 )
+
+builder.queryField('distinctPurchaseLocations', (t) =>
+  t.field({
+    type: ['String'],
+    description: 'Distinct non-empty purchase locations, ordered by frequency desc',
+    resolve: () => ItemQuery.distinctPurchaseLocations(),
+  }),
+)

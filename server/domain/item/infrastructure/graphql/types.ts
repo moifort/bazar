@@ -1,5 +1,7 @@
 import type { LocationPath } from '~/domain/location/query'
 import { LocationQuery } from '~/domain/location/query'
+import { ReminderType } from '~/domain/reminder/infrastructure/graphql/types'
+import { ReminderQuery } from '~/domain/reminder/query'
 import { builder } from '~/domain/shared/graphql/builder'
 import type { Item } from '../../types'
 import { ItemCategoryEnum } from './enums'
@@ -36,6 +38,24 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
     }),
     addedBy: t.expose('addedBy', { type: 'UserTag', description: 'User who added this item' }),
     personalNotes: t.exposeString('personalNotes', { description: 'Personal notes' }),
+    purchaseDate: t.expose('purchaseDate', {
+      type: 'DateTime',
+      nullable: true,
+      description: 'Date this item was purchased',
+    }),
+    purchaseLocation: t.exposeString('purchaseLocation', {
+      description: 'Where the item was purchased (e.g. "Amazon", "Leroy Merlin")',
+    }),
+    invoiceImageId: t.expose('invoiceImageId', {
+      type: 'ImageId',
+      nullable: true,
+      description: 'Invoice photo image identifier',
+    }),
+    reminders: t.field({
+      type: [ReminderType],
+      description: 'Reminders attached to this item, sorted by dueDate asc',
+      resolve: (item) => ReminderQuery.byItem(item.id),
+    }),
     createdAt: t.expose('createdAt', { type: 'DateTime', description: 'Creation date' }),
     updatedAt: t.expose('updatedAt', { type: 'DateTime', description: 'Last update date' }),
     location: t.field({

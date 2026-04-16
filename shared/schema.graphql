@@ -6,6 +6,9 @@ input AddItemInput {
   """Item description"""
   description: String
 
+  """Invoice photo as base64 encoded string"""
+  invoiceImageBase64: String
+
   """Item name"""
   name: ItemName!
 
@@ -14,6 +17,12 @@ input AddItemInput {
 
   """Photo as base64 encoded string"""
   photoBase64: String
+
+  """Date the item was purchased"""
+  purchaseDate: DateTime
+
+  """Where the item was purchased"""
+  purchaseLocation: String
 
   """Quantity (default 1)"""
   quantity: Quantity
@@ -150,6 +159,9 @@ type Item {
   """Item unique identifier"""
   id: ItemId!
 
+  """Invoice photo image identifier"""
+  invoiceImageId: ImageId
+
   """Resolved location path"""
   location: LocationPath
 
@@ -162,8 +174,17 @@ type Item {
   """Photo image identifier"""
   photoImageId: ImageId
 
+  """Date this item was purchased"""
+  purchaseDate: DateTime
+
+  """Where the item was purchased (e.g. "Amazon", "Leroy Merlin")"""
+  purchaseLocation: String!
+
   """Number of identical items"""
   quantity: Quantity!
+
+  """Reminders attached to this item, sorted by dueDate asc"""
+  reminders: [Reminder!]!
 
   """Last update date"""
   updatedAt: DateTime!
@@ -393,6 +414,9 @@ type Query {
   """Dashboard with inventory statistics"""
   dashboard: Dashboard!
 
+  """Distinct non-empty purchase locations, ordered by frequency desc"""
+  distinctPurchaseLocations: [String!]!
+
   """Get a single item by ID"""
   item(
     """Item identifier"""
@@ -564,7 +588,9 @@ scalar StorageId
 """Storage name (non-empty, max 200 characters)"""
 scalar StorageName
 
-"""Input for updating an existing item"""
+"""
+Input for updating an existing item. Absent fields preserve the current value; for invoiceImageBase64 pass an empty string to clear the existing invoice.
+"""
 input UpdateItemInput {
   """New category"""
   category: ItemCategory
@@ -572,11 +598,22 @@ input UpdateItemInput {
   """New description"""
   description: String
 
+  """
+  Invoice photo as base64. Non-empty replaces the existing invoice; empty string clears it.
+  """
+  invoiceImageBase64: String
+
   """New item name"""
   name: ItemName
 
   """New personal notes"""
   personalNotes: String
+
+  """New purchase date (null to clear)"""
+  purchaseDate: DateTime
+
+  """New purchase location (empty string to clear)"""
+  purchaseLocation: String
 
   """New quantity"""
   quantity: Quantity
