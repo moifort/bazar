@@ -1,3 +1,4 @@
+import Apollo
 import SwiftUI
 
 struct ItemDetailView: View {
@@ -8,6 +9,7 @@ struct ItemDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var item: Item?
     @State private var errorMessage: String?
+    @State private var purchaseLocationSuggestions: [String] = []
 
     var body: some View {
         Group {
@@ -22,10 +24,14 @@ struct ItemDetailView: View {
                     locationPath: item.location?.fullPath,
                     addedBy: item.addedBy,
                     personalNotes: item.personalNotes,
+                    purchaseDate: item.purchaseDate,
+                    purchaseLocation: item.purchaseLocation,
+                    invoiceImageURL: item.invoiceImageId.flatMap(imageURL(for:)),
+                    purchaseLocationSuggestions: purchaseLocationSuggestions,
                     onRefresh: { await loadDetail() },
                     onDelete: { await deleteItem() },
-                    onEditSave: { _ in
-                        try await saveItem()
+                    onEditSave: { fields in
+                        try await saveItem(fields)
                         onUpdated()
                     }
                 )
@@ -39,7 +45,10 @@ struct ItemDetailView: View {
                 ProgressView("Chargement...")
             }
         }
-        .task { await loadDetail() }
+        .task {
+            await loadDetail()
+            await loadSuggestions()
+        }
     }
 
     private func imageURL(for imageId: String) -> URL? {
@@ -55,6 +64,10 @@ struct ItemDetailView: View {
         }
     }
 
+    private func loadSuggestions() async {
+        purchaseLocationSuggestions = (try? await GraphQLItemsAPI.distinctPurchaseLocations()) ?? []
+    }
+
     private func deleteItem() async {
         do {
             try await GraphQLItemsAPI.delete(id: itemId)
@@ -65,7 +78,20 @@ struct ItemDetailView: View {
         }
     }
 
-    private func saveItem() async throws {
+    private func saveItem(_ fields: ItemEditForm.Fields) async throws {
+        let iso = ISO8601DateFormatter()
+        iso.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        nonisolated(unsafe) let input = BazarGraphQL.UpdateItemInput(
+            category: .some(.case(BazarGraphQL.ItemCategory(rawValue: fields.category.rawValue) ?? .other)),
+            description: .some(fields.description),
+            invoiceImageBase64: fields.invoiceImageBase64Update.map { .some($0) } ?? .none,
+            name: .some(fields.name),
+            personalNotes: .some(fields.notes),
+            purchaseDate: fields.purchaseDate.map { .some(iso.string(from: $0)) } ?? .null,
+            purchaseLocation: .some(fields.purchaseLocation),
+            quantity: .some(String(fields.quantity))
+        )
+        try await GraphQLItemsAPI.update(id: itemId, input: input)
         item = try await GraphQLItemsAPI.getDetail(id: itemId)
     }
 }

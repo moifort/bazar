@@ -10,6 +10,10 @@ struct ItemDetailPage: View {
     let locationPath: String?
     let addedBy: String
     let personalNotes: String
+    let purchaseDate: Date?
+    let purchaseLocation: String
+    let invoiceImageURL: URL?
+    let purchaseLocationSuggestions: [String]
 
     let onRefresh: () async -> Void
     let onDelete: () async -> Void
@@ -23,6 +27,8 @@ struct ItemDetailPage: View {
             if isEditing {
                 ItemEditForm(
                     initial: editFields,
+                    existingInvoiceImageURL: invoiceImageURL,
+                    purchaseLocationSuggestions: purchaseLocationSuggestions,
                     onSave: { fields in
                         try await onEditSave(fields)
                         isEditing = false
@@ -59,7 +65,10 @@ struct ItemDetailPage: View {
             description: description,
             category: category,
             quantity: quantity,
-            notes: personalNotes
+            notes: personalNotes,
+            purchaseDate: purchaseDate,
+            purchaseLocation: purchaseLocation,
+            invoiceImageBase64Update: nil
         )
     }
 
@@ -105,6 +114,28 @@ struct ItemDetailPage: View {
                 LabeledContent("Ajouté par", value: addedBy)
             }
 
+            if purchaseDate != nil || !purchaseLocation.isEmpty || invoiceImageURL != nil {
+                Section("Achat") {
+                    if let purchaseDate {
+                        LabeledContent("Date", value: purchaseDate.formatted(date: .abbreviated, time: .omitted))
+                    }
+                    if !purchaseLocation.isEmpty {
+                        if let url = locationURL(from: purchaseLocation) {
+                            LabeledContent("Lieu") {
+                                Link(purchaseLocation, destination: url)
+                            }
+                        } else {
+                            LabeledContent("Lieu", value: purchaseLocation)
+                        }
+                    }
+                    if let invoiceImageURL {
+                        Link(destination: invoiceImageURL) {
+                            Label("Voir la facture", systemImage: "doc.text.magnifyingglass")
+                        }
+                    }
+                }
+            }
+
             if !description.isEmpty {
                 Section("Description") {
                     Text(description)
@@ -119,6 +150,16 @@ struct ItemDetailPage: View {
                 }
             }
         }
+    }
+
+    private func locationURL(from text: String) -> URL? {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        guard trimmed.contains("http") || trimmed.contains(".") && !trimmed.contains(" ") else {
+            return nil
+        }
+        let candidate = trimmed.hasPrefix("http") ? trimmed : "https://\(trimmed)"
+        guard let url = URL(string: candidate), url.host != nil else { return nil }
+        return url
     }
 
     @ToolbarContentBuilder
@@ -150,6 +191,10 @@ struct ItemDetailPage: View {
             locationPath: "Maison > Garage > Établi > Tiroir 1",
             addedBy: "Thibaut",
             personalNotes: "Batterie à remplacer bientôt",
+            purchaseDate: Date(timeIntervalSinceNow: -86_400 * 120),
+            purchaseLocation: "amazon.fr",
+            invoiceImageURL: nil,
+            purchaseLocationSuggestions: ["Amazon", "Leroy Merlin"],
             onRefresh: {},
             onDelete: {},
             onEditSave: { _ in }
@@ -169,6 +214,10 @@ struct ItemDetailPage: View {
             locationPath: nil,
             addedBy: "Thibaut",
             personalNotes: "",
+            purchaseDate: nil,
+            purchaseLocation: "",
+            invoiceImageURL: nil,
+            purchaseLocationSuggestions: [],
             onRefresh: {},
             onDelete: {},
             onEditSave: { _ in }

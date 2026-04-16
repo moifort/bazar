@@ -1,7 +1,10 @@
+import PhotosUI
 import SwiftUI
 
 struct ItemEditForm: View {
     let initial: Fields
+    let existingInvoiceImageURL: URL?
+    let purchaseLocationSuggestions: [String]
     let onSave: (Fields) async throws -> Void
     let onCancel: () -> Void
 
@@ -10,15 +13,25 @@ struct ItemEditForm: View {
     @State private var category: ItemCategory
     @State private var quantity: Int
     @State private var notes: String
+    @State private var hasPurchaseDate: Bool
+    @State private var purchaseDate: Date
+    @State private var purchaseLocation: String
+    @State private var invoicePhotoItem: PhotosPickerItem?
+    @State private var pendingInvoiceBase64: String?
+    @State private var invoiceCleared: Bool = false
     @State private var isSaving = false
     @State private var saveError: String?
 
     init(
         initial: Fields,
+        existingInvoiceImageURL: URL? = nil,
+        purchaseLocationSuggestions: [String] = [],
         onSave: @escaping (Fields) async throws -> Void,
         onCancel: @escaping () -> Void
     ) {
         self.initial = initial
+        self.existingInvoiceImageURL = existingInvoiceImageURL
+        self.purchaseLocationSuggestions = purchaseLocationSuggestions
         self.onSave = onSave
         self.onCancel = onCancel
         _name = State(initialValue: initial.name)
@@ -26,6 +39,9 @@ struct ItemEditForm: View {
         _category = State(initialValue: initial.category)
         _quantity = State(initialValue: initial.quantity)
         _notes = State(initialValue: initial.notes)
+        _hasPurchaseDate = State(initialValue: initial.purchaseDate != nil)
+        _purchaseDate = State(initialValue: initial.purchaseDate ?? Date())
+        _purchaseLocation = State(initialValue: initial.purchaseLocation)
     }
 
     var body: some View {
@@ -52,6 +68,43 @@ struct ItemEditForm: View {
             Section("Description") {
                 TextField("Description de l'objet", text: $description, axis: .vertical)
                     .lineLimit(3...8)
+            }
+
+            Section("Achat") {
+                Toggle(isOn: $hasPurchaseDate) {
+                    Label("Date d'achat", systemImage: "calendar")
+                }
+                if hasPurchaseDate {
+                    DatePicker(
+                        "Date d'achat",
+                        selection: $purchaseDate,
+                        displayedComponents: .date
+                    )
+                    .labelsHidden()
+                }
+
+                LabeledContent {
+                    TextField("Amazon, Leroy Merlin…", text: $purchaseLocation)
+                        .multilineTextAlignment(.trailing)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.words)
+                } label: {
+                    Label("Lieu", systemImage: "bag")
+                }
+
+                if !suggestionsToShow.isEmpty {
+                    ForEach(suggestionsToShow, id: \.self) { suggestion in
+                        Button {
+                            purchaseLocation = suggestion
+                        } label: {
+                            Label(suggestion, systemImage: "arrow.up.left")
+                                .labelStyle(.titleAndIcon)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+
+                invoiceRow
             }
 
             Section("Notes") {
@@ -87,16 +140,86 @@ struct ItemEditForm: View {
         } message: {
             Text(saveError ?? "")
         }
+        .onChange(of: invoicePhotoItem) { _, newItem in
+            Task { await loadInvoiceData(from: newItem) }
+        }
+    }
+
+    private var suggestionsToShow: [String] {
+        guard purchaseLocation.count < 30 else { return [] }
+        let trimmed = purchaseLocation.trimmingCharacters(in: .whitespaces)
+        return purchaseLocationSuggestions
+            .filter { $0 != trimmed && (trimmed.isEmpty || $0.localizedCaseInsensitiveContains(trimmed)) }
+            .prefix(3)
+            .map { $0 }
+    }
+
+    @ViewBuilder
+    private var invoiceRow: some View {
+        if pendingInvoiceBase64 != nil {
+            LabeledContent {
+                Button("Annuler", role: .destructive) {
+                    pendingInvoiceBase64 = nil
+                    invoicePhotoItem = nil
+                }
+            } label: {
+                Label("Nouvelle facture prête", systemImage: "doc.badge.plus")
+                    .foregroundStyle(.green)
+            }
+        } else if let existingInvoiceImageURL, !invoiceCleared {
+            LabeledContent {
+                HStack {
+                    AsyncImage(url: existingInvoiceImageURL) { phase in
+                        if case .success(let image) = phase {
+                            image.resizable().aspectRatio(contentMode: .fit).frame(height: 32)
+                        } else {
+                            Image(systemName: "doc").foregroundStyle(.secondary)
+                        }
+                    }
+                    Button("Supprimer", role: .destructive) { invoiceCleared = true }
+                        .buttonStyle(.borderless)
+                }
+            } label: {
+                Label("Facture", systemImage: "doc.text")
+            }
+        } else {
+            PhotosPicker(
+                selection: $invoicePhotoItem,
+                matching: .images,
+                photoLibrary: .shared()
+            ) {
+                Label("Ajouter une photo de la facture", systemImage: "doc.badge.plus")
+            }
+        }
+    }
+
+    private func loadInvoiceData(from item: PhotosPickerItem?) async {
+        guard let item else { return }
+        if let data = try? await item.loadTransferable(type: Data.self) {
+            pendingInvoiceBase64 = data.base64EncodedString()
+            invoiceCleared = false
+        }
     }
 
     private func save() async {
         isSaving = true
+        let invoiceUpdate: String?
+        if let pendingInvoiceBase64 {
+            invoiceUpdate = pendingInvoiceBase64
+        } else if invoiceCleared {
+            invoiceUpdate = ""
+        } else {
+            invoiceUpdate = nil
+        }
         let fields = Fields(
             name: name.trimmingCharacters(in: .whitespaces),
             description: description.trimmingCharacters(in: .whitespaces),
             category: category,
             quantity: quantity,
-            notes: notes.trimmingCharacters(in: .whitespaces)
+            notes: notes.trimmingCharacters(in: .whitespaces),
+            purchaseDate: hasPurchaseDate ? purchaseDate : nil,
+            purchaseLocation: purchaseLocation.trimmingCharacters(in: .whitespaces),
+            invoiceImageBase64Update: invoiceUpdate
         )
         do {
             try await onSave(fields)
@@ -114,19 +237,29 @@ extension ItemEditForm {
         var category: ItemCategory
         var quantity: Int
         var notes: String
+        var purchaseDate: Date?
+        var purchaseLocation: String
+        /// nil = no change, "" = clear, non-empty = replace with this base64 photo.
+        var invoiceImageBase64Update: String?
 
         init(
             name: String,
             description: String,
             category: ItemCategory,
             quantity: Int,
-            notes: String
+            notes: String,
+            purchaseDate: Date? = nil,
+            purchaseLocation: String = "",
+            invoiceImageBase64Update: String? = nil
         ) {
             self.name = name
             self.description = description
             self.category = category
             self.quantity = quantity
             self.notes = notes
+            self.purchaseDate = purchaseDate
+            self.purchaseLocation = purchaseLocation
+            self.invoiceImageBase64Update = invoiceImageBase64Update
         }
 
         init(from item: Item) {
@@ -135,7 +268,10 @@ extension ItemEditForm {
                 description: item.description,
                 category: item.category,
                 quantity: item.quantity,
-                notes: item.personalNotes
+                notes: item.personalNotes,
+                purchaseDate: item.purchaseDate,
+                purchaseLocation: item.purchaseLocation,
+                invoiceImageBase64Update: nil
             )
         }
     }
@@ -149,8 +285,12 @@ extension ItemEditForm {
                 description: "Perceuse visseuse sans fil 18V",
                 category: .tools,
                 quantity: 1,
-                notes: "Batterie à remplacer"
+                notes: "Batterie à remplacer",
+                purchaseDate: Date(timeIntervalSinceNow: -86_400 * 30),
+                purchaseLocation: "Amazon"
             ),
+            existingInvoiceImageURL: nil,
+            purchaseLocationSuggestions: ["Amazon", "Leroy Merlin", "Castorama"],
             onSave: { _ in },
             onCancel: {}
         )
