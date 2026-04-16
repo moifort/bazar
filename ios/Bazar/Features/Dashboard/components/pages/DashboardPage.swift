@@ -31,7 +31,8 @@ struct DashboardPage: View {
                                 category: item.category,
                                 quantity: item.quantity,
                                 locationPath: item.locationPath,
-                                addedBy: item.addedBy
+                                addedBy: item.addedBy,
+                                overdueReminderCount: item.overdueReminderCount
                             )
                         }
                         .tint(.primary)
@@ -77,6 +78,7 @@ extension DashboardPage {
         let quantity: Int
         let locationPath: String?
         let addedBy: String
+        let overdueReminderCount: Int
     }
 }
 
@@ -89,8 +91,8 @@ extension DashboardPage {
                 .init(id: "p2", placeName: "Garage", count: 32),
             ],
             recentItems: [
-                .init(id: "i1", name: "Perceuse Bosch", category: .tools, quantity: 1, locationPath: "Maison > Garage", addedBy: "Thibaut"),
-                .init(id: "i2", name: "Ampoules LED", category: .electronics, quantity: 12, locationPath: "Maison > Cellier", addedBy: "Thibaut"),
+                .init(id: "i1", name: "Perceuse Bosch", category: .tools, quantity: 1, locationPath: "Maison > Garage", addedBy: "Thibaut", overdueReminderCount: 0),
+                .init(id: "i2", name: "Ampoules LED", category: .electronics, quantity: 12, locationPath: "Maison > Cellier", addedBy: "Thibaut", overdueReminderCount: 1),
             ],
             onRefresh: {},
             onItemTap: { _ in }

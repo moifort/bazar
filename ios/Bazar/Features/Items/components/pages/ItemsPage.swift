@@ -140,7 +140,8 @@ struct ItemsPage: View {
                 category: item.category,
                 quantity: item.quantity,
                 locationPath: item.locationFullPath,
-                addedBy: item.addedBy
+                addedBy: item.addedBy,
+                overdueReminderCount: item.overdueReminderCount
             )
         }
         .tint(.primary)

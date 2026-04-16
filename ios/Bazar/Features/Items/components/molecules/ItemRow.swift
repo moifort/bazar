@@ -6,6 +6,7 @@ struct ItemRow: View {
     let quantity: Int
     let locationPath: String?
     let addedBy: String
+    let overdueReminderCount: Int
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
@@ -22,6 +23,12 @@ struct ItemRow: View {
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
                             .background(Color.secondary.opacity(0.15), in: .capsule)
+                    }
+                    if overdueReminderCount > 0 {
+                        Image(systemName: "bell.badge.fill")
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                            .accessibilityLabel("\(overdueReminderCount) rappel en retard")
                     }
                 }
                 if let subtitle = buildSubtitle() {
@@ -67,21 +74,24 @@ private struct CategoryIcon: View {
             category: .tools,
             quantity: 1,
             locationPath: "Maison > Garage > Établi > Tiroir 1",
-            addedBy: "Thibaut"
+            addedBy: "Thibaut",
+            overdueReminderCount: 0
         )
         ItemRow(
             name: "Ampoules LED",
             category: .electronics,
             quantity: 12,
             locationPath: "Maison > Cellier",
-            addedBy: "Thibaut"
+            addedBy: "Thibaut",
+            overdueReminderCount: 1
         )
         ItemRow(
             name: "Coussin décoratif",
             category: .decor,
             quantity: 1,
             locationPath: nil,
-            addedBy: "Alice"
+            addedBy: "Alice",
+            overdueReminderCount: 0
         )
     }
 }

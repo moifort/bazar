@@ -7,9 +7,11 @@ struct ItemDetailView: View {
     var onUpdated: () -> Void = {}
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
     @State private var item: Item?
     @State private var errorMessage: String?
     @State private var purchaseLocationSuggestions: [String] = []
+    @State private var showReminders = false
 
     var body: some View {
         Group {
@@ -28,12 +30,14 @@ struct ItemDetailView: View {
                     purchaseLocation: item.purchaseLocation,
                     invoiceImageURL: item.invoiceImageId.flatMap(imageURL(for:)),
                     purchaseLocationSuggestions: purchaseLocationSuggestions,
+                    reminders: item.reminders,
                     onRefresh: { await loadDetail() },
                     onDelete: { await deleteItem() },
                     onEditSave: { fields in
                         try await saveItem(fields)
                         onUpdated()
-                    }
+                    },
+                    onOpenReminders: { showReminders = true }
                 )
             } else if let errorMessage {
                 ContentUnavailableView(
@@ -49,6 +53,36 @@ struct ItemDetailView: View {
             await loadDetail()
             await loadSuggestions()
         }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                Task { await syncNotifications() }
+            }
+        }
+        .sheet(isPresented: $showReminders) {
+            if let item {
+                NavigationStack {
+                    ItemRemindersView(
+                        itemId: item.id,
+                        itemName: item.name,
+                        onChanged: { Task { await loadDetail() } }
+                    )
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Fermer", systemImage: "xmark") { showReminders = false }
+                                .labelStyle(.iconOnly)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func syncNotifications() async {
+        guard let item else { return }
+        await NotificationManager.syncAll(
+            reminders: item.reminders,
+            itemNames: [item.id: item.name]
+        )
     }
 
     private func imageURL(for imageId: String) -> URL? {

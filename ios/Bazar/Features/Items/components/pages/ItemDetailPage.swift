@@ -14,10 +14,12 @@ struct ItemDetailPage: View {
     let purchaseLocation: String
     let invoiceImageURL: URL?
     let purchaseLocationSuggestions: [String]
+    let reminders: [Reminder]
 
     let onRefresh: () async -> Void
     let onDelete: () async -> Void
     let onEditSave: (ItemEditForm.Fields) async throws -> Void
+    let onOpenReminders: () -> Void
 
     @State private var showDeleteConfirmation = false
     @State private var isEditing = false
@@ -114,6 +116,29 @@ struct ItemDetailPage: View {
                 LabeledContent("Ajouté par", value: addedBy)
             }
 
+            Section {
+                ForEach(reminders.prefix(3)) { reminder in
+                    ReminderRow(reminder: reminder, showsOverdueBadge: true)
+                }
+                Button {
+                    onOpenReminders()
+                } label: {
+                    HStack {
+                        Label(reminders.isEmpty ? "Ajouter un rappel" : "Voir tous les rappels", systemImage: "bell.badge")
+                        Spacer()
+                        if reminders.count > 3 {
+                            Text("\(reminders.count)")
+                                .foregroundStyle(.secondary)
+                        }
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.secondary)
+                            .font(.caption.weight(.semibold))
+                    }
+                }
+            } header: {
+                Text("Rappels")
+            }
+
             if purchaseDate != nil || !purchaseLocation.isEmpty || invoiceImageURL != nil {
                 Section("Achat") {
                     if let purchaseDate {
@@ -195,9 +220,11 @@ struct ItemDetailPage: View {
             purchaseLocation: "amazon.fr",
             invoiceImageURL: nil,
             purchaseLocationSuggestions: ["Amazon", "Leroy Merlin"],
+            reminders: [],
             onRefresh: {},
             onDelete: {},
-            onEditSave: { _ in }
+            onEditSave: { _ in },
+            onOpenReminders: {}
         )
     }
 }
@@ -218,9 +245,11 @@ struct ItemDetailPage: View {
             purchaseLocation: "",
             invoiceImageURL: nil,
             purchaseLocationSuggestions: [],
+            reminders: [],
             onRefresh: {},
             onDelete: {},
-            onEditSave: { _ in }
+            onEditSave: { _ in },
+            onOpenReminders: {}
         )
     }
 }
