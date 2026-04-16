@@ -1,0 +1,51 @@
+query RemindersDue($before: DateTime!) {
+  remindersDue(before: $before) {
+    id
+    itemId
+    title
+    notes
+    dueDate
+    frequency
+    customIntervalDays
+    createdAt
+    updatedAt
+  }
+}
+
+mutation AddReminder($input: AddReminderInput!) {
+  addReminder(input: $input) {
+    id
+    itemId
+    title
+    notes
+    dueDate
+    frequency
+    customIntervalDays
+    createdAt
+    updatedAt
+  }
+}
+
+mutation UpdateReminder($id: ReminderId!, $input: UpdateReminderInput!) {
+  updateReminder(id: $id, input: $input) {
+    id
+    title
+    notes
+    dueDate
+    frequency
+    customIntervalDays
+    updatedAt
+  }
+}
+
+mutation CompleteReminder($id: ReminderId!) {
+  completeReminder(id: $id) {
+    id
+    dueDate
+    updatedAt
+  }
+}
+
+mutation DeleteReminder($id: ReminderId!) {
+  deleteReminder(id: $id)
+}

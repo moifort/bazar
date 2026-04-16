@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "ItemList"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query ItemList($category: ItemCategory, $placeId: PlaceId, $roomId: RoomId, $search: String, $sort: ItemSort, $order: SortOrder, $offset: Int, $limit: Int) { items( category: $category placeId: $placeId roomId: $roomId search: $search sort: $sort order: $order offset: $offset limit: $limit ) { __typename items { __typename id name category quantity photoImageId addedBy createdAt location { __typename fullPath placeId placeName roomId roomName } } totalCount hasMore } }"#
+        #"query ItemList($category: ItemCategory, $placeId: PlaceId, $roomId: RoomId, $search: String, $sort: ItemSort, $order: SortOrder, $offset: Int, $limit: Int) { items( category: $category placeId: $placeId roomId: $roomId search: $search sort: $sort order: $order offset: $offset limit: $limit ) { __typename items { __typename id name category quantity photoImageId addedBy createdAt location { __typename fullPath placeId placeName roomId roomName } reminders { __typename id dueDate } } totalCount hasMore } }"#
       ))
 
     public var category: GraphQLNullable<GraphQLEnum<ItemCategory>>
@@ -111,6 +111,7 @@ extension BazarGraphQL {
             .field("addedBy", BazarGraphQL.UserTag.self),
             .field("createdAt", BazarGraphQL.DateTime.self),
             .field("location", Location?.self),
+            .field("reminders", [Reminder].self),
           ] }
 
           /// Item unique identifier
@@ -129,6 +130,8 @@ extension BazarGraphQL {
           var createdAt: BazarGraphQL.DateTime { __data["createdAt"] }
           /// Resolved location path
           var location: Location? { __data["location"] }
+          /// Reminders attached to this item, sorted by dueDate asc
+          var reminders: [Reminder] { __data["reminders"] }
 
           /// Items.Item.Location
           ///
@@ -153,6 +156,24 @@ extension BazarGraphQL {
             var placeName: BazarGraphQL.PlaceName { __data["placeName"] }
             var roomId: BazarGraphQL.RoomId { __data["roomId"] }
             var roomName: BazarGraphQL.RoomName { __data["roomName"] }
+          }
+
+          /// Items.Item.Reminder
+          ///
+          /// Parent Type: `Reminder`
+          struct Reminder: BazarGraphQL.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
+
+            static var __parentType: any ApolloAPI.ParentType { BazarGraphQL.Objects.Reminder }
+            static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
+              .field("id", BazarGraphQL.ReminderId.self),
+              .field("dueDate", BazarGraphQL.DateTime.self),
+            ] }
+
+            var id: BazarGraphQL.ReminderId { __data["id"] }
+            var dueDate: BazarGraphQL.DateTime { __data["dueDate"] }
           }
         }
       }

@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "ItemDetail"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description category quantity photoImageId addedBy personalNotes createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } } }"#
+        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description category quantity photoImageId addedBy personalNotes purchaseDate purchaseLocation invoiceImageId createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } reminders { __typename id title notes dueDate frequency customIntervalDays createdAt updatedAt } } }"#
       ))
 
     public var id: ItemId
@@ -49,9 +49,13 @@ extension BazarGraphQL {
           .field("photoImageId", BazarGraphQL.ImageId?.self),
           .field("addedBy", BazarGraphQL.UserTag.self),
           .field("personalNotes", String.self),
+          .field("purchaseDate", BazarGraphQL.DateTime?.self),
+          .field("purchaseLocation", String.self),
+          .field("invoiceImageId", BazarGraphQL.ImageId?.self),
           .field("createdAt", BazarGraphQL.DateTime.self),
           .field("updatedAt", BazarGraphQL.DateTime.self),
           .field("location", Location?.self),
+          .field("reminders", [Reminder].self),
         ] }
 
         /// Item unique identifier
@@ -70,12 +74,20 @@ extension BazarGraphQL {
         var addedBy: BazarGraphQL.UserTag { __data["addedBy"] }
         /// Personal notes
         var personalNotes: String { __data["personalNotes"] }
+        /// Date this item was purchased
+        var purchaseDate: BazarGraphQL.DateTime? { __data["purchaseDate"] }
+        /// Where the item was purchased (e.g. "Amazon", "Leroy Merlin")
+        var purchaseLocation: String { __data["purchaseLocation"] }
+        /// Invoice photo image identifier
+        var invoiceImageId: BazarGraphQL.ImageId? { __data["invoiceImageId"] }
         /// Creation date
         var createdAt: BazarGraphQL.DateTime { __data["createdAt"] }
         /// Last update date
         var updatedAt: BazarGraphQL.DateTime { __data["updatedAt"] }
         /// Resolved location path
         var location: Location? { __data["location"] }
+        /// Reminders attached to this item, sorted by dueDate asc
+        var reminders: [Reminder] { __data["reminders"] }
 
         /// Item.Location
         ///
@@ -108,6 +120,36 @@ extension BazarGraphQL {
           var zoneName: BazarGraphQL.ZoneName { __data["zoneName"] }
           var storageId: BazarGraphQL.StorageId { __data["storageId"] }
           var storageName: BazarGraphQL.StorageName { __data["storageName"] }
+        }
+
+        /// Item.Reminder
+        ///
+        /// Parent Type: `Reminder`
+        struct Reminder: BazarGraphQL.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: any ApolloAPI.ParentType { BazarGraphQL.Objects.Reminder }
+          static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
+            .field("id", BazarGraphQL.ReminderId.self),
+            .field("title", BazarGraphQL.ReminderTitle.self),
+            .field("notes", String.self),
+            .field("dueDate", BazarGraphQL.DateTime.self),
+            .field("frequency", GraphQLEnum<BazarGraphQL.ReminderFrequency>?.self),
+            .field("customIntervalDays", Int?.self),
+            .field("createdAt", BazarGraphQL.DateTime.self),
+            .field("updatedAt", BazarGraphQL.DateTime.self),
+          ] }
+
+          var id: BazarGraphQL.ReminderId { __data["id"] }
+          var title: BazarGraphQL.ReminderTitle { __data["title"] }
+          var notes: String { __data["notes"] }
+          var dueDate: BazarGraphQL.DateTime { __data["dueDate"] }
+          var frequency: GraphQLEnum<BazarGraphQL.ReminderFrequency>? { __data["frequency"] }
+          var customIntervalDays: Int? { __data["customIntervalDays"] }
+          var createdAt: BazarGraphQL.DateTime { __data["createdAt"] }
+          var updatedAt: BazarGraphQL.DateTime { __data["updatedAt"] }
         }
       }
     }

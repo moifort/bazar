@@ -39,6 +39,7 @@ extension BazarGraphQL {
       case "Place": return BazarGraphQL.Objects.Place
       case "PlaceCount": return BazarGraphQL.Objects.PlaceCount
       case "Query": return BazarGraphQL.Objects.Query
+      case "Reminder": return BazarGraphQL.Objects.Reminder
       case "Room": return BazarGraphQL.Objects.Room
       case "SearchEntry": return BazarGraphQL.Objects.SearchEntry
       case "Storage": return BazarGraphQL.Objects.Storage

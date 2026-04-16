@@ -33,6 +33,10 @@ query ItemList(
         roomId
         roomName
       }
+      reminders {
+        id
+        dueDate
+      }
     }
     totalCount
     hasMore

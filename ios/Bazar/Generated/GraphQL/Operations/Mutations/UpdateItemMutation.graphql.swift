@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "UpdateItem"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"mutation UpdateItem($id: ItemId!, $input: UpdateItemInput!) { updateItem(id: $id, input: $input) { __typename id name category quantity updatedAt } }"#
+        #"mutation UpdateItem($id: ItemId!, $input: UpdateItemInput!) { updateItem(id: $id, input: $input) { __typename id name category quantity purchaseDate purchaseLocation invoiceImageId updatedAt } }"#
       ))
 
     public var id: ItemId
@@ -56,6 +56,9 @@ extension BazarGraphQL {
           .field("name", BazarGraphQL.ItemName.self),
           .field("category", GraphQLEnum<BazarGraphQL.ItemCategory>.self),
           .field("quantity", BazarGraphQL.Quantity.self),
+          .field("purchaseDate", BazarGraphQL.DateTime?.self),
+          .field("purchaseLocation", String.self),
+          .field("invoiceImageId", BazarGraphQL.ImageId?.self),
           .field("updatedAt", BazarGraphQL.DateTime.self),
         ] }
 
@@ -67,6 +70,12 @@ extension BazarGraphQL {
         var category: GraphQLEnum<BazarGraphQL.ItemCategory> { __data["category"] }
         /// Number of identical items
         var quantity: BazarGraphQL.Quantity { __data["quantity"] }
+        /// Date this item was purchased
+        var purchaseDate: BazarGraphQL.DateTime? { __data["purchaseDate"] }
+        /// Where the item was purchased (e.g. "Amazon", "Leroy Merlin")
+        var purchaseLocation: String { __data["purchaseLocation"] }
+        /// Invoice photo image identifier
+        var invoiceImageId: BazarGraphQL.ImageId? { __data["invoiceImageId"] }
         /// Last update date
         var updatedAt: BazarGraphQL.DateTime { __data["updatedAt"] }
       }

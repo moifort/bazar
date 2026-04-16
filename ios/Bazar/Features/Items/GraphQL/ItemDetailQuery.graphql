@@ -8,6 +8,9 @@ query ItemDetail($id: ItemId!) {
     photoImageId
     addedBy
     personalNotes
+    purchaseDate
+    purchaseLocation
+    invoiceImageId
     createdAt
     updatedAt
     location {
@@ -20,6 +23,16 @@ query ItemDetail($id: ItemId!) {
       zoneName
       storageId
       storageName
+    }
+    reminders {
+      id
+      title
+      notes
+      dueDate
+      frequency
+      customIntervalDays
+      createdAt
+      updatedAt
     }
   }
 }
