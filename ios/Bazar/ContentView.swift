@@ -30,7 +30,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab(TabSelection.home.label, systemImage: TabSelection.home.icon, value: .home) {
-                DashboardPage(refreshTrigger: $refreshTrigger)
+                DashboardView(refreshTrigger: $refreshTrigger)
             }
             Tab(TabSelection.items.label, systemImage: TabSelection.items.icon, value: .items) {
                 ItemsPage(refreshTrigger: $refreshTrigger)

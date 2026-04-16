@@ -94,6 +94,7 @@
 		E055544EDADABEC6E9E4C3DB /* ConfirmItemsMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED18391D049C0824EDE0A8BE /* ConfirmItemsMutation.graphql.swift */; };
 		E4DFD4F3B4B5966558D2439A /* SchemaConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB62E818C766845266C402E /* SchemaConfiguration.swift */; };
 		E4ED5C61032BF5E8706C841E /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F89DA0FC114FDBA9B8B4719 /* SearchViewModel.swift */; };
+		E5543B06E87579DEAF625EED /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD071B0FF14446D867771D9 /* DashboardView.swift */; };
 		E5A8D7A496AE97A141BA69DB /* ConfirmItemInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = A910A38DCED5283240940428 /* ConfirmItemInput.graphql.swift */; };
 		E5C50BDF9CF3BCA21154C895 /* ItemEditForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4C7AB2E7FAAD8B2EBE41C2 /* ItemEditForm.swift */; };
 		E79D0D41F344EC54BDD6A7E4 /* ScanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A6BBB115A19984F10B3C4D /* ScanViewModel.swift */; };
@@ -158,6 +159,7 @@
 		747852452BE8F5587C19941B /* ItemId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemId.swift; sourceTree = "<group>"; };
 		75F70548D129AAD2DD699714 /* ItemDetailQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailQuery.graphql.swift; sourceTree = "<group>"; };
 		7CE5B73E561E13890925AEE1 /* CategoryCount.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCount.graphql.swift; sourceTree = "<group>"; };
+		7DD071B0FF14446D867771D9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		8795A48B4E16E73895451CA6 /* UpdateItemInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateItemInput.graphql.swift; sourceTree = "<group>"; };
 		89B72689C24A754DA3BF2AC9 /* LocationPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPicker.swift; sourceTree = "<group>"; };
 		8C287E4E1711FFF3CB73ECC7 /* Storage.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.graphql.swift; sourceTree = "<group>"; };
@@ -586,6 +588,7 @@
 			isa = PBXGroup;
 			children = (
 				378F727F6CF2DE9AA6B67801 /* DashboardAPI.swift */,
+				7DD071B0FF14446D867771D9 /* DashboardView.swift */,
 				E912516B096BA0433315E77D /* DashboardViewModel.swift */,
 				B17B6BEE140457D9D730688E /* components */,
 			);
@@ -729,6 +732,7 @@
 				1A522CA2FC67E687D2525C2C /* DashboardAPI.swift in Sources */,
 				DC41FB3E6CE08646F9975145 /* DashboardPage.swift in Sources */,
 				3B3B1F7F7DD574E979E98FFE /* DashboardQuery.graphql.swift in Sources */,
+				E5543B06E87579DEAF625EED /* DashboardView.swift in Sources */,
 				2DC9411DC962AAD705BDF319 /* DashboardViewModel.swift in Sources */,
 				97167D173210EC8C65AA48E0 /* DateTime.swift in Sources */,
 				F3EB9ACE1FC263402A04337D /* DeleteItemMutation.graphql.swift in Sources */,
