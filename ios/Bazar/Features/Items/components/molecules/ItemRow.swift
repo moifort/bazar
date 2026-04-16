@@ -9,24 +9,10 @@ struct ItemRow: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-            Image(systemName: category.icon)
-                .font(.caption)
-                .foregroundStyle(category.color)
-
             VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 6) {
-                    Text(name)
-                        .font(.headline)
-                        .lineLimit(2)
-                    if quantity > 1 {
-                        Text("×\(quantity)")
-                            .font(.caption.weight(.semibold))
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .foregroundStyle(.white)
-                            .background(category.color, in: .capsule)
-                    }
-                }
+                Text(name)
+                    .font(.headline)
+                    .lineLimit(2)
                 if let subtitle = buildSubtitle() {
                     Text(subtitle)
                         .font(.subheadline)
@@ -36,6 +22,13 @@ struct ItemRow: View {
             }
 
             Spacer()
+
+            if quantity > 1 {
+                Text("×\(quantity)")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+                    .monospacedDigit()
+            }
 
             CategoryBadge(label: category.label, icon: category.icon, color: category.color)
         }
