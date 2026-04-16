@@ -5,7 +5,14 @@ struct LocationRow: View {
     let icon: String
 
     var body: some View {
-        Label(name, systemImage: icon)
+        Label {
+            Text(name)
+        } icon: {
+            Image(systemName: icon)
+                .imageScale(.small)
+                .foregroundStyle(.secondary)
+                .frame(width: 22)
+        }
     }
 }
 
