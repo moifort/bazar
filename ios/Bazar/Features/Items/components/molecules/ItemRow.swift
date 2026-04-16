@@ -8,11 +8,22 @@ struct ItemRow: View {
     let addedBy: String
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline) {
+        HStack(alignment: .center, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(name)
-                    .font(.headline)
-                    .lineLimit(2)
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(name)
+                        .font(.headline)
+                        .lineLimit(2)
+                    if quantity > 1 {
+                        Text("×\(quantity)")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                            .monospacedDigit()
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.secondary.opacity(0.15), in: .capsule)
+                    }
+                }
                 if let subtitle = buildSubtitle() {
                     Text(subtitle)
                         .font(.subheadline)
@@ -21,16 +32,9 @@ struct ItemRow: View {
                 }
             }
 
-            Spacer()
+            Spacer(minLength: 0)
 
-            if quantity > 1 {
-                Text("×\(quantity)")
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.secondary)
-                    .monospacedDigit()
-            }
-
-            CategoryBadge(label: category.label, icon: category.icon, color: category.color)
+            CategoryIcon(icon: category.icon, color: category.color)
         }
         .padding(.vertical, 2)
     }
@@ -39,6 +43,20 @@ struct ItemRow: View {
         let parts: [String?] = [locationPath, addedBy]
         let filtered = parts.compactMap { $0 }.filter { !$0.isEmpty }
         return filtered.isEmpty ? nil : filtered.joined(separator: " · ")
+    }
+}
+
+private struct CategoryIcon: View {
+    let icon: String
+    let color: Color
+
+    var body: some View {
+        Image(systemName: icon)
+            .font(.callout)
+            .foregroundStyle(color)
+            .frame(width: 18, height: 18)
+            .padding(10)
+            .background(color.opacity(0.15), in: .circle)
     }
 }
 

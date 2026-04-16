@@ -112,7 +112,6 @@
 		F30205EEFC588B2229556AFF /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 1B9694779345AF99DBDB271E /* Apollo */; };
 		F3EB9ACE1FC263402A04337D /* DeleteItemMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F68249AE93774CCF1D5B1678 /* DeleteItemMutation.graphql.swift */; };
 		F3F7DCE687681077E835CF69 /* PlaceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D8772176070DD83C06CFED /* PlaceName.swift */; };
-		F5827C6F22272330F7FE9F9D /* CategoryBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94463153CCA713A12C3024D4 /* CategoryBadge.swift */; };
 		F93898F1A48DF7AD1C0B7036 /* CreateRoomMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F3D2F0AF5C4C86FAE93678 /* CreateRoomMutation.graphql.swift */; };
 		F9C45FE93B2FC161E2945AB0 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 968127786CBDC82DFB27D923 /* CameraView.swift */; };
 		FF7AF39B8E5C2CE2571ABA09 /* PlaceId.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD701F055909C265F3B69723 /* PlaceId.swift */; };
@@ -177,7 +176,6 @@
 		8C287E4E1711FFF3CB73ECC7 /* Storage.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.graphql.swift; sourceTree = "<group>"; };
 		8FA181C4DC151F955C391FEB /* SharedConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConfig.swift; sourceTree = "<group>"; };
 		91BAC7F26D2161B9FFDAA1E0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		94463153CCA713A12C3024D4 /* CategoryBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBadge.swift; sourceTree = "<group>"; };
 		946321010B1D7E79EB3B35E4 /* CreateRoomInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomInput.graphql.swift; sourceTree = "<group>"; };
 		968127786CBDC82DFB27D923 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		9CE79855AF193BA16FE55848 /* DashboardQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardQuery.graphql.swift; sourceTree = "<group>"; };
@@ -423,7 +421,6 @@
 			isa = PBXGroup;
 			children = (
 				16FE4F4E06665110128A65CB /* AsyncToolbarButton.swift */,
-				94463153CCA713A12C3024D4 /* CategoryBadge.swift */,
 			);
 			path = atoms;
 			sourceTree = "<group>";
@@ -748,7 +745,6 @@
 				C3A7C44B13E0037FF965F113 /* BazarApp.swift in Sources */,
 				B2A0BA379ADB5BEFAFFDFDC5 /* BazarGraphQL.graphql.swift in Sources */,
 				F9C45FE93B2FC161E2945AB0 /* CameraView.swift in Sources */,
-				F5827C6F22272330F7FE9F9D /* CategoryBadge.swift in Sources */,
 				A835412B79FAF1CE8FE76DBB /* CategoryCount.graphql.swift in Sources */,
 				E5A8D7A496AE97A141BA69DB /* ConfirmItemInput.graphql.swift in Sources */,
 				E055544EDADABEC6E9E4C3DB /* ConfirmItemsMutation.graphql.swift in Sources */,
