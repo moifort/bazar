@@ -7,8 +7,10 @@ struct LocationsPage: View {
     let onRefresh: () async -> Void
     let onAddPlace: (String) async -> Void
     let onDeletePlace: (String) async -> Void
+    let onEditPlace: (_ id: String, _ name: String, _ icon: String?) async -> Void
 
     @State private var showAddSheet = false
+    @State private var placeToEdit: Place?
 
     var body: some View {
         Group {
@@ -50,6 +52,16 @@ struct LocationsPage: View {
                 onSave: { name in await onAddPlace(name) }
             )
         }
+        .sheet(item: $placeToEdit) { place in
+            EditLocationSheet(
+                title: "Modifier le lieu",
+                placeholder: "Nom du lieu",
+                initialName: place.name,
+                initialIcon: place.icon,
+                showIconField: true,
+                onSave: { name, icon in await onEditPlace(place.id, name, icon) }
+            )
+        }
     }
 
     @ViewBuilder
@@ -58,6 +70,14 @@ struct LocationsPage: View {
             ForEach(places) { place in
                 NavigationLink(value: LocationDestination.place(place.id)) {
                     LocationRow(name: place.name, icon: place.icon ?? "house")
+                }
+                .swipeActions(edge: .leading) {
+                    Button {
+                        placeToEdit = place
+                    } label: {
+                        Label("Modifier", systemImage: "pencil")
+                    }
+                    .tint(.orange)
                 }
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
@@ -94,7 +114,8 @@ struct LocationsPage: View {
             errorMessage: nil,
             onRefresh: {},
             onAddPlace: { _ in },
-            onDeletePlace: { _ in }
+            onDeletePlace: { _ in },
+            onEditPlace: { _, _, _ in }
         )
     }
 }
@@ -107,7 +128,8 @@ struct LocationsPage: View {
             errorMessage: nil,
             onRefresh: {},
             onAddPlace: { _ in },
-            onDeletePlace: { _ in }
+            onDeletePlace: { _ in },
+            onEditPlace: { _, _, _ in }
         )
     }
 }

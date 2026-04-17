@@ -4,8 +4,12 @@ struct PlaceDetailPage: View {
     let place: Place
     let onAddRoom: (String) async -> Void
     let onDeleteRoom: (String) async -> Void
+    let onEditPlace: (_ name: String, _ icon: String?) async -> Void
+    let onEditRoom: (_ id: String, _ name: String, _ icon: String?) async -> Void
 
     @State private var showAddSheet = false
+    @State private var showEditPlaceSheet = false
+    @State private var roomToEdit: Room?
 
     var body: some View {
         List {
@@ -21,6 +25,14 @@ struct PlaceDetailPage: View {
                     NavigationLink(value: LocationDestination.room(room.id)) {
                         LocationRow(name: room.name, icon: room.icon ?? "door.left.hand.open")
                     }
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            roomToEdit = room
+                        } label: {
+                            Label("Modifier", systemImage: "pencil")
+                        }
+                        .tint(.orange)
+                    }
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
                             Task { await onDeleteRoom(room.id) }
@@ -34,6 +46,14 @@ struct PlaceDetailPage: View {
         .navigationTitle(place.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .secondaryAction) {
+                Button {
+                    showEditPlaceSheet = true
+                } label: {
+                    Label("Modifier", systemImage: "pencil")
+                }
+                .accessibilityIdentifier("edit-place-button")
+            }
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     showAddSheet = true
@@ -48,6 +68,26 @@ struct PlaceDetailPage: View {
                 title: "Nouvelle pièce",
                 placeholder: "Nom de la pièce",
                 onSave: { name in await onAddRoom(name) }
+            )
+        }
+        .sheet(isPresented: $showEditPlaceSheet) {
+            EditLocationSheet(
+                title: "Modifier le lieu",
+                placeholder: "Nom du lieu",
+                initialName: place.name,
+                initialIcon: place.icon,
+                showIconField: true,
+                onSave: { name, icon in await onEditPlace(name, icon) }
+            )
+        }
+        .sheet(item: $roomToEdit) { room in
+            EditLocationSheet(
+                title: "Modifier la pièce",
+                placeholder: "Nom de la pièce",
+                initialName: room.name,
+                initialIcon: room.icon,
+                showIconField: true,
+                onSave: { name, icon in await onEditRoom(room.id, name, icon) }
             )
         }
     }
@@ -67,7 +107,9 @@ struct PlaceDetailPage: View {
                 ]
             ),
             onAddRoom: { _ in },
-            onDeleteRoom: { _ in }
+            onDeleteRoom: { _ in },
+            onEditPlace: { _, _ in },
+            onEditRoom: { _, _, _ in }
         )
     }
 }

@@ -4,8 +4,12 @@ struct RoomDetailPage: View {
     let room: Room
     let onAddZone: (String) async -> Void
     let onDeleteZone: (String) async -> Void
+    let onEditRoom: (_ name: String, _ icon: String?) async -> Void
+    let onEditZone: (_ id: String, _ name: String) async -> Void
 
     @State private var showAddSheet = false
+    @State private var showEditRoomSheet = false
+    @State private var zoneToEdit: Zone?
 
     var body: some View {
         List {
@@ -21,6 +25,14 @@ struct RoomDetailPage: View {
                     NavigationLink(value: LocationDestination.zone(zone.id)) {
                         LocationRow(name: zone.name, icon: "rectangle.split.3x1")
                     }
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            zoneToEdit = zone
+                        } label: {
+                            Label("Modifier", systemImage: "pencil")
+                        }
+                        .tint(.orange)
+                    }
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
                             Task { await onDeleteZone(zone.id) }
@@ -34,6 +46,14 @@ struct RoomDetailPage: View {
         .navigationTitle(room.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .secondaryAction) {
+                Button {
+                    showEditRoomSheet = true
+                } label: {
+                    Label("Modifier", systemImage: "pencil")
+                }
+                .accessibilityIdentifier("edit-room-button")
+            }
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     showAddSheet = true
@@ -48,6 +68,24 @@ struct RoomDetailPage: View {
                 title: "Nouvelle zone",
                 placeholder: "Nom de la zone",
                 onSave: { name in await onAddZone(name) }
+            )
+        }
+        .sheet(isPresented: $showEditRoomSheet) {
+            EditLocationSheet(
+                title: "Modifier la pièce",
+                placeholder: "Nom de la pièce",
+                initialName: room.name,
+                initialIcon: room.icon,
+                showIconField: true,
+                onSave: { name, icon in await onEditRoom(name, icon) }
+            )
+        }
+        .sheet(item: $zoneToEdit) { zone in
+            EditLocationSheet(
+                title: "Modifier la zone",
+                placeholder: "Nom de la zone",
+                initialName: zone.name,
+                onSave: { name, _ in await onEditZone(zone.id, name) }
             )
         }
     }
@@ -68,7 +106,9 @@ struct RoomDetailPage: View {
                 ]
             ),
             onAddZone: { _ in },
-            onDeleteZone: { _ in }
+            onDeleteZone: { _ in },
+            onEditRoom: { _, _ in },
+            onEditZone: { _, _ in }
         )
     }
 }

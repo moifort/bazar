@@ -20,7 +20,10 @@ struct LocationsView: View {
                 errorMessage: viewModel.error,
                 onRefresh: { await viewModel.load() },
                 onAddPlace: { name in await viewModel.createPlace(name: name, icon: nil) },
-                onDeletePlace: { id in await viewModel.deletePlace(id: id) }
+                onDeletePlace: { id in await viewModel.deletePlace(id: id) },
+                onEditPlace: { id, name, icon in
+                    await viewModel.updatePlace(id: id, name: name, icon: icon)
+                }
             )
             .task(id: refreshTrigger) {
                 await viewModel.load()
@@ -39,7 +42,13 @@ struct LocationsView: View {
                 PlaceDetailPage(
                     place: place,
                     onAddRoom: { name in await viewModel.createRoom(placeId: id, name: name) },
-                    onDeleteRoom: { roomId in await viewModel.deleteRoom(id: roomId) }
+                    onDeleteRoom: { roomId in await viewModel.deleteRoom(id: roomId) },
+                    onEditPlace: { name, icon in
+                        await viewModel.updatePlace(id: id, name: name, icon: icon)
+                    },
+                    onEditRoom: { roomId, name, icon in
+                        await viewModel.updateRoom(id: roomId, name: name, icon: icon)
+                    }
                 )
             } else {
                 missingLocation
@@ -50,7 +59,13 @@ struct LocationsView: View {
                 RoomDetailPage(
                     room: room,
                     onAddZone: { name in await viewModel.createZone(roomId: id, name: name) },
-                    onDeleteZone: { zoneId in await viewModel.deleteZone(id: zoneId) }
+                    onDeleteZone: { zoneId in await viewModel.deleteZone(id: zoneId) },
+                    onEditRoom: { name, icon in
+                        await viewModel.updateRoom(id: id, name: name, icon: icon)
+                    },
+                    onEditZone: { zoneId, name in
+                        await viewModel.updateZone(id: zoneId, name: name)
+                    }
                 )
             } else {
                 missingLocation
@@ -61,7 +76,13 @@ struct LocationsView: View {
                 ZoneDetailPage(
                     zone: zone,
                     onAddStorage: { name in await viewModel.createStorage(zoneId: id, name: name) },
-                    onDeleteStorage: { storageId in await viewModel.deleteStorage(id: storageId) }
+                    onDeleteStorage: { storageId in await viewModel.deleteStorage(id: storageId) },
+                    onEditZone: { name in
+                        await viewModel.updateZone(id: id, name: name)
+                    },
+                    onEditStorage: { storageId, name in
+                        await viewModel.updateStorage(id: storageId, name: name)
+                    }
                 )
             } else {
                 missingLocation
