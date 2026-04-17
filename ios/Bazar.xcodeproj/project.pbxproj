@@ -91,6 +91,7 @@
 		9FFDB712BE05BFC831F133E7 /* LocationsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCB31B2AC738ECBD67B0C20 /* LocationsAPI.swift */; };
 		A70751C2B29BC1D03601071D /* UpdateStorageInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B6AD8CF8B2576DB7B5061 /* UpdateStorageInput.graphql.swift */; };
 		A835412B79FAF1CE8FE76DBB /* CategoryCount.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE5B73E561E13890925AEE1 /* CategoryCount.graphql.swift */; };
+		A86B6BC7D11759F4F35FB355 /* EditLocationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C6674033E209C505D19B79 /* EditLocationSheet.swift */; };
 		A90B457DD2D193A3719C0C48 /* Item.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3B5B285A857EED7458914F /* Item.graphql.swift */; };
 		A929CD6285C0553D7153F2D5 /* ItemPreview.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCCF188C36636D1ED20E5A1 /* ItemPreview.graphql.swift */; };
 		AA9323E4530AA37B8EA03CE4 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88A16EAE4E2B7B257416C17 /* APIClient.swift */; };
@@ -271,6 +272,7 @@
 		F1C2AD25FE2EFCE93FA9EAB4 /* DeleteRoomMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteRoomMutation.graphql.swift; sourceTree = "<group>"; };
 		F21914AC05AE2FD0217F7065 /* UpdateRoomInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRoomInput.graphql.swift; sourceTree = "<group>"; };
 		F29B997D03D63D18EC311DB9 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
+		F2C6674033E209C505D19B79 /* EditLocationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLocationSheet.swift; sourceTree = "<group>"; };
 		F68249AE93774CCF1D5B1678 /* DeleteItemMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteItemMutation.graphql.swift; sourceTree = "<group>"; };
 		F9CA88E3D631CB45896462DC /* ScanConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationView.swift; sourceTree = "<group>"; };
 		FB6EA8100D8F6B381E529A86 /* ReminderTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTitle.swift; sourceTree = "<group>"; };
@@ -423,6 +425,7 @@
 			isa = PBXGroup;
 			children = (
 				C6C2B5EBA56613DAF0EDF1A6 /* AddLocationSheet.swift */,
+				F2C6674033E209C505D19B79 /* EditLocationSheet.swift */,
 			);
 			path = organisms;
 			sourceTree = "<group>";
@@ -892,6 +895,7 @@
 				DEA2EE40F2114AAB73818859 /* DeleteStorageMutation.graphql.swift in Sources */,
 				E91724671DA41390150FCCE5 /* DeleteZoneMutation.graphql.swift in Sources */,
 				D3D564F83A278B1584CF314C /* DistinctPurchaseLocationsQuery.graphql.swift in Sources */,
+				A86B6BC7D11759F4F35FB355 /* EditLocationSheet.swift in Sources */,
 				25C379CB9FF9B4CB71C37FBF /* ErrorReporting.swift in Sources */,
 				0E15C0FF0EDA45DB9B96BE43 /* GraphQLClient.swift in Sources */,
 				DAC19910FC0549DCB22C8EE1 /* GraphQLHelpers.swift in Sources */,
