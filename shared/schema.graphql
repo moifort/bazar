@@ -1,292 +1,486 @@
-"""Input for manually adding a new item"""
+"""
+Input for manually adding a new item
+"""
 input AddItemInput {
-  """Item category"""
+  """
+  Item category
+  """
   category: ItemCategory!
 
-  """Item description"""
+  """
+  Item description
+  """
   description: String
 
-  """Invoice photo as base64 encoded string"""
+  """
+  Invoice photo as base64 encoded string
+  """
   invoiceImageBase64: String
 
-  """Item name"""
+  """
+  Item name
+  """
   name: ItemName!
 
-  """Personal notes"""
+  """
+  Personal notes
+  """
   personalNotes: String
 
-  """Photo as base64 encoded string"""
+  """
+  Photo as base64 encoded string
+  """
   photoBase64: String
 
-  """Date the item was purchased"""
+  """
+  Date the item was purchased
+  """
   purchaseDate: DateTime
 
-  """Where the item was purchased"""
+  """
+  Where the item was purchased
+  """
   purchaseLocation: String
 
-  """Quantity (default 1)"""
+  """
+  Quantity (default 1)
+  """
   quantity: Quantity
 
-  """Storage location"""
+  """
+  Storage location
+  """
   storageId: StorageId
 }
 
-"""Input for adding a new reminder to an item"""
+"""
+Input for adding a new reminder to an item
+"""
 input AddReminderInput {
-  """Days between occurrences when frequency is custom_days"""
+  """
+  Days between occurrences when frequency is custom_days
+  """
   customIntervalDays: Int
 
-  """Next due date"""
+  """
+  Next due date
+  """
   dueDate: DateTime!
 
-  """Recurrence cadence (omit for one-shot)"""
+  """
+  Recurrence cadence (omit for one-shot)
+  """
   frequency: ReminderFrequency
 
-  """Target item"""
+  """
+  Target item
+  """
   itemId: ItemId!
 
-  """Free-form notes"""
+  """
+  Free-form notes
+  """
   notes: String
 
-  """Reminder title"""
+  """
+  Reminder title
+  """
   title: ReminderTitle!
 }
 
-"""Item count per category"""
+"""
+Item count per category
+"""
 type CategoryCount {
-  """Item category"""
+  """
+  Item category
+  """
   category: ItemCategory!
 
-  """Number of items in this category"""
+  """
+  Number of items in this category
+  """
   count: Int!
 }
 
-"""Input for confirming a scanned item"""
+"""
+Input for confirming a scanned item
+"""
 input ConfirmItemInput {
-  """Item category"""
+  """
+  Item category
+  """
   category: ItemCategory!
 
-  """Item description"""
+  """
+  Item description
+  """
   description: String
 
-  """Item name"""
+  """
+  Item name
+  """
   name: ItemName!
 
-  """Photo from scan preview as base64"""
+  """
+  Photo from scan preview as base64
+  """
   previewImageBase64: String
 
-  """Quantity (default 1)"""
+  """
+  Quantity (default 1)
+  """
   quantity: Quantity
 
-  """Storage location"""
+  """
+  Storage location
+  """
   storageId: StorageId
 }
 
-"""Input for creating a new place"""
+"""
+Input for creating a new place
+"""
 input CreatePlaceInput {
-  """Optional emoji icon"""
+  """
+  Optional emoji icon
+  """
   icon: String
 
-  """Place name"""
+  """
+  Place name
+  """
   name: PlaceName!
 }
 
-"""Input for creating a new room"""
+"""
+Input for creating a new room
+"""
 input CreateRoomInput {
-  """Optional emoji icon"""
+  """
+  Optional emoji icon
+  """
   icon: String
 
-  """Room name"""
+  """
+  Room name
+  """
   name: RoomName!
 
-  """Parent place"""
+  """
+  Parent place
+  """
   placeId: PlaceId!
 }
 
-"""Input for creating a new storage spot"""
+"""
+Input for creating a new storage spot
+"""
 input CreateStorageInput {
-  """Storage name"""
+  """
+  Storage name
+  """
   name: StorageName!
 
-  """Parent zone"""
+  """
+  Parent zone
+  """
   zoneId: ZoneId!
 }
 
-"""Input for creating a new zone"""
+"""
+Input for creating a new zone
+"""
 input CreateZoneInput {
-  """Zone name"""
+  """
+  Zone name
+  """
   name: ZoneName!
 
-  """Parent room"""
+  """
+  Parent room
+  """
   roomId: RoomId!
 }
 
-"""Dashboard with inventory statistics"""
+"""
+Dashboard with inventory statistics
+"""
 type Dashboard {
-  """Item counts grouped by category"""
+  """
+  Item counts grouped by category
+  """
   itemsByCategory: [CategoryCount!]!
 
-  """Item counts grouped by place"""
+  """
+  Item counts grouped by place
+  """
   itemsByPlace: [PlaceCount!]!
 
-  """Most recently added items"""
+  """
+  Most recently added items
+  """
   recentItems: [Item!]!
 
-  """Total number of items"""
+  """
+  Total number of items
+  """
   totalItems: Int!
 }
 
-"""ISO 8601 date-time string"""
+"""
+ISO 8601 date-time string
+"""
 scalar DateTime
 
-"""Image unique identifier (UUID)"""
+"""
+Image unique identifier (UUID)
+"""
 scalar ImageId
 
-"""A household item stored in the inventory"""
+"""
+A household item stored in the inventory
+"""
 type Item {
-  """User who added this item"""
+  """
+  User who added this item
+  """
   addedBy: UserTag!
 
-  """Item category"""
+  """
+  Item category
+  """
   category: ItemCategory!
 
-  """Creation date"""
+  """
+  Creation date
+  """
   createdAt: DateTime!
 
-  """Item description"""
+  """
+  Item description
+  """
   description: String!
 
-  """Item unique identifier"""
+  """
+  Item unique identifier
+  """
   id: ItemId!
 
-  """Invoice photo image identifier"""
+  """
+  Invoice photo image identifier
+  """
   invoiceImageId: ImageId
 
-  """Resolved location path"""
+  """
+  Resolved location path
+  """
   location: LocationPath
 
-  """Item display name"""
+  """
+  Item display name
+  """
   name: ItemName!
 
-  """Personal notes"""
+  """
+  Personal notes
+  """
   personalNotes: String!
 
-  """Photo image identifier"""
+  """
+  Photo image identifier
+  """
   photoImageId: ImageId
 
-  """Date this item was purchased"""
+  """
+  Date this item was purchased
+  """
   purchaseDate: DateTime
 
-  """Where the item was purchased (e.g. "Amazon", "Leroy Merlin")"""
+  """
+  Where the item was purchased (e.g. "Amazon", "Leroy Merlin")
+  """
   purchaseLocation: String!
 
-  """Number of identical items"""
+  """
+  Number of identical items
+  """
   quantity: Quantity!
 
-  """Reminders attached to this item, sorted by dueDate asc"""
+  """
+  Reminders attached to this item, sorted by dueDate asc
+  """
   reminders: [Reminder!]!
 
-  """Last update date"""
+  """
+  Last update date
+  """
   updatedAt: DateTime!
 }
 
-"""Category of household item"""
+"""
+Category of household item
+"""
 enum ItemCategory {
-  """Home appliances"""
+  """
+  Home appliances
+  """
   appliances
 
-  """Books and magazines"""
+  """
+  Books and magazines
+  """
   books
 
-  """Clothing and accessories"""
+  """
+  Clothing and accessories
+  """
   clothing
 
-  """Decoration and art"""
+  """
+  Decoration and art
+  """
   decor
 
-  """Documents and paperwork"""
+  """
+  Documents and paperwork
+  """
   documents
 
-  """Electronics and gadgets"""
+  """
+  Electronics and gadgets
+  """
   electronics
 
-  """Food and beverages"""
+  """
+  Food and beverages
+  """
   food
 
-  """Furniture"""
+  """
+  Furniture
+  """
   furniture
 
-  """Hygiene and personal care"""
+  """
+  Hygiene and personal care
+  """
   hygiene
 
-  """Kitchen items and utensils"""
+  """
+  Kitchen items and utensils
+  """
   kitchenware
 
-  """Bed linen, towels, curtains"""
+  """
+  Bed linen, towels, curtains
+  """
   linen
 
-  """CDs, DVDs, vinyl records"""
+  """
+  CDs, DVDs, vinyl records
+  """
   media
 
-  """Uncategorized items"""
+  """
+  Uncategorized items
+  """
   other
 
-  """Sports and outdoor equipment"""
+  """
+  Sports and outdoor equipment
+  """
   sports
 
-  """Tools and hardware"""
+  """
+  Tools and hardware
+  """
   tools
 
-  """Toys and games"""
+  """
+  Toys and games
+  """
   toys
 }
 
-"""Item unique identifier (UUID)"""
+"""
+Item unique identifier (UUID)
+"""
 scalar ItemId
 
-"""Item name (non-empty, max 500 characters)"""
+"""
+Item name (non-empty, max 500 characters)
+"""
 scalar ItemName
 
-"""Preview of an item identified by AI from a photo"""
+"""
+Preview of an item identified by AI from a photo
+"""
 type ItemPreview {
-  """Suggested category"""
+  """
+  Suggested category
+  """
   category: String
 
-  """Item description"""
+  """
+  Item description
+  """
   description: String!
 
-  """Identified item name"""
+  """
+  Identified item name
+  """
   name: String!
 
-  """Preview identifier"""
+  """
+  Preview identifier
+  """
   previewId: String!
 
-  """Number of identical items"""
+  """
+  Number of identical items
+  """
   quantity: Int!
 }
 
-"""Sort field for item listing"""
+"""
+Sort field for item listing
+"""
 enum ItemSort {
-  """Sort by category"""
+  """
+  Sort by category
+  """
   category
 
-  """Sort by item name"""
+  """
+  Sort by item name
+  """
   name
 }
 
-"""Paginated list of items"""
+"""
+Paginated list of items
+"""
 type Items {
-  """Whether more items are available"""
+  """
+  Whether more items are available
+  """
   hasMore: Boolean!
   items: [Item!]!
 
-  """Total number of matching items"""
+  """
+  Total number of matching items
+  """
   totalCount: Int!
 }
 
-"""Full resolved location path for an item"""
+"""
+Full resolved location path for an item
+"""
 type LocationPath {
-  """Full path string (e.g. "Appartement > Cuisine > Placard > Etagere 2")"""
+  """
+  Full path string (e.g. "Appartement > Cuisine > Placard > Etagere 2")
+  """
   fullPath: String!
   placeId: PlaceId!
   placeName: PlaceName!
@@ -299,15 +493,23 @@ type LocationPath {
 }
 
 type Mutation {
-  """Manually add a new item to the inventory"""
+  """
+  Manually add a new item to the inventory
+  """
   addItem(input: AddItemInput!): Item!
 
-  """Add a new reminder to an item"""
+  """
+  Add a new reminder to an item
+  """
   addReminder(input: AddReminderInput!): Reminder!
 
-  """Analyze a photo with Gemini AI to identify household items"""
+  """
+  Analyze a photo with Gemini AI to identify household items
+  """
   analyzeItemPhoto(
-    """Photo as base64 encoded JPEG"""
+    """
+    Photo as base64 encoded JPEG
+    """
     imageBase64: String!
   ): [ItemPreview!]!
 
@@ -316,162 +518,266 @@ type Mutation {
   """
   completeReminder(id: ReminderId!): Reminder
 
-  """Confirm and create items from a scan preview"""
+  """
+  Confirm and create items from a scan preview
+  """
   confirmItems(input: [ConfirmItemInput!]!): [Item!]!
 
-  """Create a new place (e.g. Appartement, Cave)"""
+  """
+  Create a new place (e.g. Appartement, Cave)
+  """
   createPlace(input: CreatePlaceInput!): Place!
 
-  """Create a new room in a place"""
+  """
+  Create a new room in a place
+  """
   createRoom(input: CreateRoomInput!): Room!
 
-  """Create a new storage spot in a zone"""
+  """
+  Create a new storage spot in a zone
+  """
   createStorage(input: CreateStorageInput!): Storage!
 
-  """Create a new zone in a room"""
+  """
+  Create a new zone in a room
+  """
   createZone(input: CreateZoneInput!): Zone!
 
-  """Delete an item and its photo"""
+  """
+  Delete an item and its photo
+  """
   deleteItem(id: ItemId!): Boolean!
 
-  """Delete a place and all its rooms, zones, and storages"""
+  """
+  Delete a place and all its rooms, zones, and storages
+  """
   deletePlace(id: PlaceId!): Boolean!
 
-  """Delete a reminder"""
+  """
+  Delete a reminder
+  """
   deleteReminder(id: ReminderId!): Boolean!
 
-  """Delete a room and all its zones and storages"""
+  """
+  Delete a room and all its zones and storages
+  """
   deleteRoom(id: RoomId!): Boolean!
 
-  """Delete a storage spot"""
+  """
+  Delete a storage spot
+  """
   deleteStorage(id: StorageId!): Boolean!
 
-  """Delete a zone and all its storages"""
+  """
+  Delete a zone and all its storages
+  """
   deleteZone(id: ZoneId!): Boolean!
 
-  """Move an item to a different storage location"""
+  """
+  Move an item to a different storage location
+  """
   moveItem(id: ItemId!, storageId: StorageId!): Item!
 
-  """Update an existing item"""
+  """
+  Update an existing item
+  """
   updateItem(id: ItemId!, input: UpdateItemInput!): Item!
 
-  """Update an existing place"""
+  """
+  Update an existing place
+  """
   updatePlace(id: PlaceId!, input: UpdatePlaceInput!): Place!
 
-  """Update an existing reminder"""
+  """
+  Update an existing reminder
+  """
   updateReminder(id: ReminderId!, input: UpdateReminderInput!): Reminder!
 
-  """Update an existing room"""
+  """
+  Update an existing room
+  """
   updateRoom(id: RoomId!, input: UpdateRoomInput!): Room!
 
-  """Update an existing storage spot"""
+  """
+  Update an existing storage spot
+  """
   updateStorage(id: StorageId!, input: UpdateStorageInput!): Storage!
 
-  """Update an existing zone"""
+  """
+  Update an existing zone
+  """
   updateZone(id: ZoneId!, input: UpdateZoneInput!): Zone!
 }
 
-"""A physical location (e.g. Appartement, Cave)"""
+"""
+A physical location (e.g. Appartement, Cave)
+"""
 type Place {
-  """Optional emoji icon"""
+  """
+  Optional emoji icon
+  """
   icon: String
 
-  """Place unique identifier"""
+  """
+  Place unique identifier
+  """
   id: PlaceId!
 
-  """Place display name"""
+  """
+  Place display name
+  """
   name: PlaceName!
 
-  """Sort order"""
+  """
+  Sort order
+  """
   order: Int!
 
-  """Rooms in this place"""
+  """
+  Rooms in this place
+  """
   rooms: [Room!]!
 }
 
-"""Item count per place"""
+"""
+Item count per place
+"""
 type PlaceCount {
-  """Number of items in this place"""
+  """
+  Number of items in this place
+  """
   count: Int!
 
-  """Place identifier"""
+  """
+  Place identifier
+  """
   placeId: String!
 
-  """Place display name"""
+  """
+  Place display name
+  """
   placeName: PlaceName!
 }
 
-"""Place unique identifier (UUID)"""
+"""
+Place unique identifier (UUID)
+"""
 scalar PlaceId
 
-"""Place name (non-empty, max 200 characters)"""
+"""
+Place name (non-empty, max 200 characters)
+"""
 scalar PlaceName
 
-"""Item quantity (positive integer)"""
+"""
+Item quantity (positive integer)
+"""
 scalar Quantity
 
 type Query {
-  """Dashboard with inventory statistics"""
+  """
+  Dashboard with inventory statistics
+  """
   dashboard: Dashboard!
 
-  """Distinct non-empty purchase locations, ordered by frequency desc"""
+  """
+  Distinct non-empty purchase locations, ordered by frequency desc
+  """
   distinctPurchaseLocations: [String!]!
 
-  """Get a single item by ID"""
+  """
+  Get a single item by ID
+  """
   item(
-    """Item identifier"""
+    """
+    Item identifier
+    """
     id: ItemId!
   ): Item
 
-  """List items with optional filters and pagination"""
+  """
+  List items with optional filters and pagination
+  """
   items(
-    """Filter by category"""
+    """
+    Filter by category
+    """
     category: ItemCategory
 
-    """Pagination limit (default 40)"""
+    """
+    Pagination limit (default 40)
+    """
     limit: Int
 
-    """Pagination offset"""
+    """
+    Pagination offset
+    """
     offset: Int
 
-    """Sort direction"""
+    """
+    Sort direction
+    """
     order: SortOrder
 
-    """Filter by place"""
+    """
+    Filter by place
+    """
     placeId: PlaceId
 
-    """Filter by room"""
+    """
+    Filter by room
+    """
     roomId: RoomId
 
-    """Search in name, description, notes"""
+    """
+    Search in name, description, notes
+    """
     search: String
 
-    """Sort field"""
+    """
+    Sort field
+    """
     sort: ItemSort
   ): Items!
 
-  """All places with nested rooms, zones, and storages"""
+  """
+  All places with nested rooms, zones, and storages
+  """
   places: [Place!]!
 
-  """Reminders whose dueDate is on or before the given timestamp"""
+  """
+  Reminders whose dueDate is on or before the given timestamp
+  """
   remindersDue(
-    """Upper bound (inclusive)"""
+    """
+    Upper bound (inclusive)
+    """
     before: DateTime!
   ): [Reminder!]!
 
-  """Full-text search across items and locations"""
+  """
+  Full-text search across items and locations
+  """
   search(
-    """Maximum results (default 20)"""
+    """
+    Maximum results (default 20)
+    """
     limit: Int
 
-    """Search query"""
+    """
+    Search query
+    """
     query: String!
   ): [SearchEntry!]!
 }
 
-"""A scheduled reminder attached to an item"""
+"""
+A scheduled reminder attached to an item
+"""
 type Reminder {
-  """Completion history for this reminder, most recent first"""
+  """
+  Completion history for this reminder, most recent first
+  """
   completions: [ReminderCompletion!]!
   createdAt: DateTime!
   customIntervalDays: Int
@@ -484,7 +790,9 @@ type Reminder {
   updatedAt: DateTime!
 }
 
-"""A recorded completion of a reminder (historical log)"""
+"""
+A recorded completion of a reminder (historical log)
+"""
 type ReminderCompletion {
   completedAt: DateTime!
   id: ReminderCompletionId!
@@ -492,110 +800,178 @@ type ReminderCompletion {
   reminderId: ReminderId!
 }
 
-"""Reminder completion unique identifier (UUID)"""
+"""
+Reminder completion unique identifier (UUID)
+"""
 scalar ReminderCompletionId
 
-"""Recurrence cadence for a reminder"""
+"""
+Recurrence cadence for a reminder
+"""
 enum ReminderFrequency {
-  """Every year"""
+  """
+  Every year
+  """
   annual
 
-  """Every six months"""
+  """
+  Every six months
+  """
   biannual
 
-  """Custom number of days"""
+  """
+  Custom number of days
+  """
   custom_days
 
-  """Every month"""
+  """
+  Every month
+  """
   monthly
 
-  """Every three months"""
+  """
+  Every three months
+  """
   quarterly
 }
 
-"""Reminder unique identifier (UUID)"""
+"""
+Reminder unique identifier (UUID)
+"""
 scalar ReminderId
 
-"""Reminder title (non-empty, max 200 characters)"""
+"""
+Reminder title (non-empty, max 200 characters)
+"""
 scalar ReminderTitle
 
-"""A room within a place (e.g. Cuisine, Salon)"""
+"""
+A room within a place (e.g. Cuisine, Salon)
+"""
 type Room {
-  """Optional emoji icon"""
+  """
+  Optional emoji icon
+  """
   icon: String
 
-  """Room unique identifier"""
+  """
+  Room unique identifier
+  """
   id: RoomId!
 
-  """Room display name"""
+  """
+  Room display name
+  """
   name: RoomName!
 
-  """Sort order"""
+  """
+  Sort order
+  """
   order: Int!
 
-  """Parent place identifier"""
+  """
+  Parent place identifier
+  """
   placeId: PlaceId!
 
-  """Zones in this room"""
+  """
+  Zones in this room
+  """
   zones: [Zone!]!
 }
 
-"""Room unique identifier (UUID)"""
+"""
+Room unique identifier (UUID)
+"""
 scalar RoomId
 
-"""Room name (non-empty, max 200 characters)"""
+"""
+Room name (non-empty, max 200 characters)
+"""
 scalar RoomName
 
-"""A search result entry"""
+"""
+A search result entry
+"""
 type SearchEntry {
-  """ID of the matched entity"""
+  """
+  ID of the matched entity
+  """
   entityId: String!
 
-  """Matched text content"""
+  """
+  Matched text content
+  """
   text: String!
 
-  """Entry type (item, place, room)"""
+  """
+  Entry type (item, place, room)
+  """
   type: String!
 }
 
-"""Sort direction"""
+"""
+Sort direction
+"""
 enum SortOrder {
-  """Ascending"""
+  """
+  Ascending
+  """
   asc
 
-  """Descending"""
+  """
+  Descending
+  """
   desc
 }
 
-"""A specific storage spot (e.g. Etagere 2, Tiroir 3)"""
+"""
+A specific storage spot (e.g. Etagere 2, Tiroir 3)
+"""
 type Storage {
-  """Storage unique identifier"""
+  """
+  Storage unique identifier
+  """
   id: StorageId!
 
-  """Storage display name"""
+  """
+  Storage display name
+  """
   name: StorageName!
 
-  """Sort order"""
+  """
+  Sort order
+  """
   order: Int!
 
-  """Parent zone identifier"""
+  """
+  Parent zone identifier
+  """
   zoneId: ZoneId!
 }
 
-"""Storage unique identifier (UUID)"""
+"""
+Storage unique identifier (UUID)
+"""
 scalar StorageId
 
-"""Storage name (non-empty, max 200 characters)"""
+"""
+Storage name (non-empty, max 200 characters)
+"""
 scalar StorageName
 
 """
 Input for updating an existing item. Absent fields preserve the current value; for invoiceImageBase64 pass an empty string to clear the existing invoice.
 """
 input UpdateItemInput {
-  """New category"""
+  """
+  New category
+  """
   category: ItemCategory
 
-  """New description"""
+  """
+  New description
+  """
   description: String
 
   """
@@ -603,105 +979,178 @@ input UpdateItemInput {
   """
   invoiceImageBase64: String
 
-  """New item name"""
+  """
+  New item name
+  """
   name: ItemName
 
-  """New personal notes"""
+  """
+  New personal notes
+  """
   personalNotes: String
 
-  """New purchase date (null to clear)"""
+  """
+  New purchase date (null to clear)
+  """
   purchaseDate: DateTime
 
-  """New purchase location (empty string to clear)"""
+  """
+  New purchase location (empty string to clear)
+  """
   purchaseLocation: String
 
-  """New quantity"""
+  """
+  New quantity
+  """
   quantity: Quantity
 }
 
-"""Input for updating a place"""
+"""
+Input for updating a place
+"""
 input UpdatePlaceInput {
-  """New emoji icon"""
+  """
+  New emoji icon
+  """
   icon: String
 
-  """New place name"""
+  """
+  New place name
+  """
   name: PlaceName
 
-  """New sort order"""
+  """
+  New sort order
+  """
   order: Int
 }
 
-"""Input for updating an existing reminder"""
+"""
+Input for updating an existing reminder
+"""
 input UpdateReminderInput {
-  """Custom interval in days (only when frequency is custom_days)"""
+  """
+  Custom interval in days (only when frequency is custom_days)
+  """
   customIntervalDays: Int
 
-  """New due date"""
+  """
+  New due date
+  """
   dueDate: DateTime
 
-  """New recurrence cadence (explicit null clears it)"""
+  """
+  New recurrence cadence (explicit null clears it)
+  """
   frequency: ReminderFrequency
 
-  """New notes"""
+  """
+  New notes
+  """
   notes: String
 
-  """New title"""
+  """
+  New title
+  """
   title: ReminderTitle
 }
 
-"""Input for updating a room"""
+"""
+Input for updating a room
+"""
 input UpdateRoomInput {
-  """New emoji icon"""
+  """
+  New emoji icon
+  """
   icon: String
 
-  """New room name"""
+  """
+  New room name
+  """
   name: RoomName
 
-  """New sort order"""
+  """
+  New sort order
+  """
   order: Int
 }
 
-"""Input for updating a storage spot"""
+"""
+Input for updating a storage spot
+"""
 input UpdateStorageInput {
-  """New storage name"""
+  """
+  New storage name
+  """
   name: StorageName
 
-  """New sort order"""
+  """
+  New sort order
+  """
   order: Int
 }
 
-"""Input for updating a zone"""
+"""
+Input for updating a zone
+"""
 input UpdateZoneInput {
-  """New zone name"""
+  """
+  New zone name
+  """
   name: ZoneName
 
-  """New sort order"""
+  """
+  New sort order
+  """
   order: Int
 }
 
-"""User identifier tag (e.g. "thibaut")"""
+"""
+User identifier tag (e.g. "thibaut")
+"""
 scalar UserTag
 
-"""A zone within a room (e.g. Placard haut, Etagere metallique)"""
+"""
+A zone within a room (e.g. Placard haut, Etagere metallique)
+"""
 type Zone {
-  """Zone unique identifier"""
+  """
+  Zone unique identifier
+  """
   id: ZoneId!
 
-  """Zone display name"""
+  """
+  Total number of items stored in any storage of this zone
+  """
+  itemCount: Int!
+
+  """
+  Zone display name
+  """
   name: ZoneName!
 
-  """Sort order"""
+  """
+  Sort order
+  """
   order: Int!
 
-  """Parent room identifier"""
+  """
+  Parent room identifier
+  """
   roomId: RoomId!
 
-  """Storage spots in this zone"""
+  """
+  Storage spots in this zone
+  """
   storages: [Storage!]!
 }
 
-"""Zone unique identifier (UUID)"""
+"""
+Zone unique identifier (UUID)
+"""
 scalar ZoneId
 
-"""Zone name (non-empty, max 200 characters)"""
+"""
+Zone name (non-empty, max 200 characters)
+"""
 scalar ZoneName

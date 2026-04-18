@@ -1,5 +1,7 @@
 import { sortBy } from 'lodash-es'
 import { match } from 'ts-pattern'
+import { LocationQuery } from '~/domain/location/query'
+import type { ZoneId } from '~/domain/location/types'
 import * as repository from './infrastructure/repository'
 import type { ItemCategory, ItemId, ItemSort } from './types'
 
@@ -85,4 +87,21 @@ const distinctPurchaseLocations = async (): Promise<string[]> => {
     .map(([value]) => value)
 }
 
-export const ItemQuery = { allItems, itemById, itemsByStorage, distinctPurchaseLocations }
+const countByZone = async (zoneId: ZoneId): Promise<number> => {
+  const storages = await LocationQuery.storagesByZone(zoneId)
+  if (storages.length === 0) return 0
+  const storageIds = new Set<string>(storages.map(({ id }) => id))
+  const items = await repository.findAll()
+  return items.reduce(
+    (count, { storageId }) => (storageId !== null && storageIds.has(storageId) ? count + 1 : count),
+    0,
+  )
+}
+
+export const ItemQuery = {
+  allItems,
+  itemById,
+  itemsByStorage,
+  distinctPurchaseLocations,
+  countByZone,
+}

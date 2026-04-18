@@ -1,3 +1,4 @@
+import { ItemQuery } from '~/domain/item/query'
 import { builder } from '~/domain/shared/graphql/builder'
 import { LocationQuery } from '../../query'
 import type { Place, Room, Storage, Zone } from '../../types'
@@ -44,6 +45,10 @@ export const ZoneType = builder.objectRef<Zone>('Zone').implement({
       type: [StorageType],
       description: 'Storage spots in this zone',
       resolve: (zone) => LocationQuery.storagesByZone(zone.id),
+    }),
+    itemCount: t.int({
+      description: 'Total number of items stored in any storage of this zone',
+      resolve: (zone) => ItemQuery.countByZone(zone.id),
     }),
   }),
 })

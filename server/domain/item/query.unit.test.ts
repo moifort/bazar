@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test'
+import { LocationCommand } from '~/domain/location/command'
 import { ReminderCommand } from '~/domain/reminder/command'
 import { ReminderQuery } from '~/domain/reminder/query'
 import { ItemCommand } from './command'
@@ -104,5 +105,68 @@ describe('ItemCommand.remove', () => {
     await ItemCommand.remove(item.id)
 
     expect(await ReminderQuery.byItem(item.id)).toHaveLength(0)
+  })
+})
+
+describe('ItemQuery.countByZone', () => {
+  const setupZoneWithStorages = async (zoneName: string, storageNames: string[]) => {
+    const place = await LocationCommand.createPlace({ name: `Maison-${zoneName}` })
+    const roomResult = await LocationCommand.createRoom({
+      placeId: place.id,
+      name: `Room-${zoneName}`,
+    })
+    if (roomResult === 'place-not-found') throw new Error('unexpected place-not-found')
+    const zoneResult = await LocationCommand.createZone({
+      roomId: roomResult.room.id,
+      name: zoneName,
+    })
+    if (zoneResult === 'room-not-found') throw new Error('unexpected room-not-found')
+    const storages = await Promise.all(
+      storageNames.map(async (name) => {
+        const result = await LocationCommand.createStorage({
+          zoneId: zoneResult.zone.id,
+          name,
+        })
+        if (result === 'zone-not-found') throw new Error('unexpected zone-not-found')
+        return result.storage
+      }),
+    )
+    return { zone: zoneResult.zone, storages }
+  }
+
+  test('returns 0 when the zone has no storages', async () => {
+    const { zone } = await setupZoneWithStorages('Empty', [])
+    expect(await ItemQuery.countByZone(zone.id)).toBe(0)
+  })
+
+  test('returns 0 when storages exist but hold no items', async () => {
+    const { zone } = await setupZoneWithStorages('Quiet', ['Etagere 1', 'Etagere 2'])
+    expect(await ItemQuery.countByZone(zone.id)).toBe(0)
+  })
+
+  test('counts items across every storage of the zone', async () => {
+    const { zone, storages } = await setupZoneWithStorages('Busy', ['A', 'B'])
+    await addItem({ storageId: storages[0]?.id })
+    await addItem({ storageId: storages[0]?.id })
+    await addItem({ storageId: storages[1]?.id })
+    expect(await ItemQuery.countByZone(zone.id)).toBe(3)
+  })
+
+  test('ignores items whose storage belongs to a different zone', async () => {
+    const zoneA = await setupZoneWithStorages('ZoneA', ['SA'])
+    const zoneB = await setupZoneWithStorages('ZoneB', ['SB'])
+    await addItem({ storageId: zoneA.storages[0]?.id })
+    await addItem({ storageId: zoneB.storages[0]?.id })
+    await addItem({ storageId: zoneB.storages[0]?.id })
+
+    expect(await ItemQuery.countByZone(zoneA.zone.id)).toBe(1)
+    expect(await ItemQuery.countByZone(zoneB.zone.id)).toBe(2)
+  })
+
+  test('ignores items with no storage assigned', async () => {
+    const { zone, storages } = await setupZoneWithStorages('Mixed', ['S'])
+    await addItem({ storageId: storages[0]?.id })
+    await addItem() // no storageId
+    expect(await ItemQuery.countByZone(zone.id)).toBe(1)
   })
 })
