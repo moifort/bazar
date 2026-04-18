@@ -68,6 +68,7 @@ struct ItemRemindersPage: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Ajouter", systemImage: "plus") { onAdd() }
+                    .labelStyle(.iconOnly)
             }
         }
     }

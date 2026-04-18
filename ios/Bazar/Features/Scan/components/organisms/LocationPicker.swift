@@ -35,7 +35,8 @@ struct LocationPicker: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Fermer") { dismiss() }
+                    Button("Fermer", systemImage: "xmark") { dismiss() }
+                        .labelStyle(.iconOnly)
                 }
                 ToolbarItem(placement: .primaryAction) {
                     Button("Aucun") {
