@@ -12,6 +12,10 @@ struct LocationsPage: View {
 
     @State private var showAddSheet = false
     @State private var placeToEdit: Place?
+    // Presence in these sets means the corresponding node is collapsed.
+    // Empty set = everything expanded by default.
+    @State private var collapsedPlaces: Set<String> = []
+    @State private var collapsedRooms: Set<String> = []
 
     var body: some View {
         Group {
@@ -73,24 +77,22 @@ struct LocationsPage: View {
     private var placesList: some View {
         List {
             ForEach(places) { place in
-                NavigationLink(value: LocationDestination.place(place.id)) {
-                    LocationRow(name: place.name, icon: place.icon ?? "house")
-                }
-                .swipeActions(edge: .leading) {
-                    Button {
-                        placeToEdit = place
-                    } label: {
-                        Label("Modifier", systemImage: "pencil")
+                placeDisclosure(for: place)
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            placeToEdit = place
+                        } label: {
+                            Label("Modifier", systemImage: "pencil")
+                        }
+                        .tint(.orange)
                     }
-                    .tint(.orange)
-                }
-                .swipeActions(edge: .trailing) {
-                    Button(role: .destructive) {
-                        Task { await onDeletePlace(place.id) }
-                    } label: {
-                        Label("Supprimer", systemImage: "trash")
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            Task { await onDeletePlace(place.id) }
+                        } label: {
+                            Label("Supprimer", systemImage: "trash")
+                        }
                     }
-                }
             }
             .onMove { from, to in
                 Task { await onReorderPlaces(from, to) }
@@ -103,6 +105,64 @@ struct LocationsPage: View {
             }
         }
     }
+
+    @ViewBuilder
+    private func placeDisclosure(for place: Place) -> some View {
+        DisclosureGroup(isExpanded: placeExpansionBinding(for: place.id)) {
+            ForEach(place.rooms) { room in
+                roomDisclosure(for: room)
+            }
+        } label: {
+            NavigationLink(value: LocationDestination.place(place.id)) {
+                LocationRow(name: place.name, icon: place.icon ?? "house")
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func roomDisclosure(for room: Room) -> some View {
+        DisclosureGroup(isExpanded: roomExpansionBinding(for: room.id)) {
+            ForEach(sortedZones(in: room)) { zone in
+                NavigationLink(value: LocationDestination.zone(zone.id)) {
+                    LocationRow(name: zone.name, icon: "rectangle.split.3x1")
+                }
+            }
+        } label: {
+            NavigationLink(value: LocationDestination.room(room.id)) {
+                LocationRow(name: room.name, icon: room.icon ?? "door.left.hand.open")
+            }
+        }
+    }
+
+    private func sortedZones(in room: Room) -> [Zone] {
+        room.zones.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+
+    private func placeExpansionBinding(for id: String) -> Binding<Bool> {
+        Binding(
+            get: { !collapsedPlaces.contains(id) },
+            set: { isExpanded in
+                if isExpanded {
+                    collapsedPlaces.remove(id)
+                } else {
+                    collapsedPlaces.insert(id)
+                }
+            }
+        )
+    }
+
+    private func roomExpansionBinding(for id: String) -> Binding<Bool> {
+        Binding(
+            get: { !collapsedRooms.contains(id) },
+            set: { isExpanded in
+                if isExpanded {
+                    collapsedRooms.remove(id)
+                } else {
+                    collapsedRooms.insert(id)
+                }
+            }
+        )
+    }
 }
 
 #Preview("Loaded") {
@@ -114,14 +174,45 @@ struct LocationsPage: View {
                     name: "Maison",
                     icon: "house",
                     order: 0,
-                    rooms: []
+                    rooms: [
+                        Room(
+                            id: "r1",
+                            placeId: "p1",
+                            name: "Salon",
+                            icon: "sofa",
+                            order: 0,
+                            zones: [
+                                Zone(id: "z1", roomId: "r1", name: "Meuble TV", order: 0, storages: []),
+                                Zone(id: "z2", roomId: "r1", name: "Bibliothèque", order: 1, storages: []),
+                            ]
+                        ),
+                        Room(
+                            id: "r2",
+                            placeId: "p1",
+                            name: "Cuisine",
+                            icon: "fork.knife",
+                            order: 1,
+                            zones: []
+                        ),
+                    ]
                 ),
                 Place(
                     id: "p2",
                     name: "Garage",
                     icon: "car",
                     order: 1,
-                    rooms: []
+                    rooms: [
+                        Room(
+                            id: "r3",
+                            placeId: "p2",
+                            name: "Atelier",
+                            icon: "hammer",
+                            order: 0,
+                            zones: [
+                                Zone(id: "z3", roomId: "r3", name: "Établi", order: 0, storages: []),
+                            ]
+                        ),
+                    ]
                 ),
             ],
             isLoading: false,
