@@ -1,8 +1,9 @@
 import SwiftUI
 
 /// Displays the four-level location hierarchy (place → room → zone → storage)
-/// as a vertically-stacked breadcrumb. The storage row is emphasized because
-/// it is the actual spot where the item lives.
+/// as a compact two-line Apple-style breadcrumb:
+/// - Line 1: `Place › Room`  (primary, emphasized)
+/// - Line 2: `Zone › Storage` (secondary, supporting path)
 struct LocationCard: View {
     let location: LocationPath?
     let onTap: () -> Void
@@ -11,7 +12,23 @@ struct LocationCard: View {
         Button(action: onTap) {
             HStack(alignment: .center, spacing: 12) {
                 if let location {
-                    levels(for: location)
+                    Image(systemName: "mappin.and.ellipse")
+                        .font(.body)
+                        .foregroundStyle(Color.accentColor)
+                        .frame(width: 24)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("\(location.placeName) › \(location.roomName)")
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(.primary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                        Text("\(location.zoneName) › \(location.storageName)")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                    }
+                    .accessibilityElement(children: .combine)
                 } else {
                     emptyState
                 }
@@ -24,16 +41,13 @@ struct LocationCard: View {
         }
         .tint(.primary)
         .accessibilityIdentifier("move-item-row")
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint("Touchez pour déplacer l'objet")
     }
 
-    @ViewBuilder
-    private func levels(for location: LocationPath) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            level(icon: "house", name: location.placeName, level: .place)
-            level(icon: "door.left.hand.open", name: location.roomName, level: .room)
-            level(icon: "rectangle.split.3x1", name: location.zoneName, level: .zone)
-            level(icon: "archivebox", name: location.storageName, level: .storage)
-        }
+    private var accessibilityLabel: String {
+        guard let location else { return "Lieu non défini" }
+        return "Lieu : \(location.placeName), \(location.roomName), \(location.zoneName), \(location.storageName)"
     }
 
     @ViewBuilder
@@ -45,27 +59,6 @@ struct LocationCard: View {
                 .foregroundStyle(.secondary)
         }
     }
-
-    @ViewBuilder
-    private func level(icon: String, name: String, level: Level) -> some View {
-        HStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.caption)
-                .foregroundStyle(level == .storage ? Color.accentColor : .secondary)
-                .frame(width: 16)
-            Text(name)
-                .font(level == .storage ? .body.weight(.semibold) : .subheadline)
-                .foregroundStyle(level == .storage ? Color.primary : .secondary)
-                .lineLimit(1)
-        }
-    }
-
-    private enum Level {
-        case place
-        case room
-        case zone
-        case storage
-    }
 }
 
 #Preview("With location") {
@@ -73,15 +66,15 @@ struct LocationCard: View {
         Section("Lieu") {
             LocationCard(
                 location: LocationPath(
-                    fullPath: "Maison > Garage > Établi > Tiroir 1",
+                    fullPath: "Maison > Salon > Étagère > Boîte 3",
                     placeId: "p1",
                     placeName: "Maison",
                     roomId: "r1",
-                    roomName: "Garage",
+                    roomName: "Salon",
                     zoneId: "z1",
-                    zoneName: "Établi",
+                    zoneName: "Étagère",
                     storageId: "s1",
-                    storageName: "Tiroir 1"
+                    storageName: "Boîte 3"
                 ),
                 onTap: {}
             )
@@ -93,6 +86,27 @@ struct LocationCard: View {
     List {
         Section("Lieu") {
             LocationCard(location: nil, onTap: {})
+        }
+    }
+}
+
+#Preview("Long names") {
+    List {
+        Section("Lieu") {
+            LocationCard(
+                location: LocationPath(
+                    fullPath: "Résidence secondaire > Chambre d'amis du rez-de-chaussée > Armoire Louis XV > Tiroir du milieu à gauche",
+                    placeId: "p1",
+                    placeName: "Résidence secondaire",
+                    roomId: "r1",
+                    roomName: "Chambre d'amis du rez-de-chaussée",
+                    zoneId: "z1",
+                    zoneName: "Armoire Louis XV",
+                    storageId: "s1",
+                    storageName: "Tiroir du milieu à gauche"
+                ),
+                onTap: {}
+            )
         }
     }
 }
