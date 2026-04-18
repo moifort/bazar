@@ -134,9 +134,9 @@
 		E5543B06E87579DEAF625EED /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD071B0FF14446D867771D9 /* DashboardView.swift */; };
 		E5A8D7A496AE97A141BA69DB /* ConfirmItemInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = A910A38DCED5283240940428 /* ConfirmItemInput.graphql.swift */; };
 		E5C50BDF9CF3BCA21154C895 /* ItemEditForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4C7AB2E7FAAD8B2EBE41C2 /* ItemEditForm.swift */; };
+		E6613F8BEBCA6ABE3F569F1E /* ScanConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA10914CA60E237567382D29 /* ScanConfirmationView.swift */; };
 		E79D0D41F344EC54BDD6A7E4 /* ScanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A6BBB115A19984F10B3C4D /* ScanViewModel.swift */; };
 		E91724671DA41390150FCCE5 /* DeleteZoneMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BAF202AF06BF200DCF6D27 /* DeleteZoneMutation.graphql.swift */; };
-		EB194B2ED66A7B5A54ADF38B /* ScanConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CA88E3D631CB45896462DC /* ScanConfirmationView.swift */; };
 		EE63D27B7451A50655DE1444 /* Quantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E8206DCD4F6CB15BEA294B /* Quantity.swift */; };
 		F0257F58EE5D0880926EA08E /* UpdateZoneMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2387F105D387AAF91F574FC7 /* UpdateZoneMutation.graphql.swift */; };
 		F29020770C979EE1B6C47647 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = DC6BD8B0FE59C15DB8DFD1AB /* Settings.bundle */; };
@@ -285,7 +285,7 @@
 		F29B997D03D63D18EC311DB9 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 		F2C6674033E209C505D19B79 /* EditLocationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLocationSheet.swift; sourceTree = "<group>"; };
 		F68249AE93774CCF1D5B1678 /* DeleteItemMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteItemMutation.graphql.swift; sourceTree = "<group>"; };
-		F9CA88E3D631CB45896462DC /* ScanConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationView.swift; sourceTree = "<group>"; };
+		FA10914CA60E237567382D29 /* ScanConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationView.swift; sourceTree = "<group>"; };
 		FB6EA8100D8F6B381E529A86 /* ReminderTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTitle.swift; sourceTree = "<group>"; };
 		FB7999FAE68C76B5527FA793 /* Zone.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zone.graphql.swift; sourceTree = "<group>"; };
 		FC3DD8001654EF2A9B611767 /* ZoneName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneName.swift; sourceTree = "<group>"; };
@@ -631,7 +631,6 @@
 			isa = PBXGroup;
 			children = (
 				89B72689C24A754DA3BF2AC9 /* LocationPicker.swift */,
-				F9CA88E3D631CB45896462DC /* ScanConfirmationView.swift */,
 			);
 			path = organisms;
 			sourceTree = "<group>";
@@ -649,6 +648,7 @@
 			children = (
 				969E5557F84D0D44EF3F8EC2 /* EditablePreview.swift */,
 				2A5C53A615CD60EF4DD65417 /* ScanAPI.swift */,
+				FA10914CA60E237567382D29 /* ScanConfirmationView.swift */,
 				1639E48F473AD3B55915E2B5 /* ScanView.swift */,
 				B0A6BBB115A19984F10B3C4D /* ScanViewModel.swift */,
 				EC402BE785A3EC005DE1E40A /* components */,
@@ -984,7 +984,7 @@
 				6F7B3F976CF3D3011DE9CB5A /* RoomName.swift in Sources */,
 				0EC25C01473967A1F8B5678B /* ScanAPI.swift in Sources */,
 				CA5D0E5E72C7FB5F8A2BAF09 /* ScanConfirmationPage.swift in Sources */,
-				EB194B2ED66A7B5A54ADF38B /* ScanConfirmationView.swift in Sources */,
+				E6613F8BEBCA6ABE3F569F1E /* ScanConfirmationView.swift in Sources */,
 				705A481218439FC2DA393CB3 /* ScanFlowPage.swift in Sources */,
 				8D59034163EF2EA2AB51418A /* ScanView.swift in Sources */,
 				E79D0D41F344EC54BDD6A7E4 /* ScanViewModel.swift in Sources */,
