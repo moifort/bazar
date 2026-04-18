@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "AllPlaces"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query AllPlaces { places { __typename id name icon order rooms { __typename id placeId name icon order zones { __typename id roomId name order storages { __typename id zoneId name order } } } } }"#
+        #"query AllPlaces { places { __typename id name icon order rooms { __typename id placeId name icon order zones { __typename id roomId name order itemCount storages { __typename id zoneId name order } } } } }"#
       ))
 
     public init() {}
@@ -98,6 +98,7 @@ extension BazarGraphQL {
               .field("roomId", BazarGraphQL.RoomId.self),
               .field("name", BazarGraphQL.ZoneName.self),
               .field("order", Int.self),
+              .field("itemCount", Int.self),
               .field("storages", [Storage].self),
             ] }
 
@@ -109,6 +110,8 @@ extension BazarGraphQL {
             var name: BazarGraphQL.ZoneName { __data["name"] }
             /// Sort order
             var order: Int { __data["order"] }
+            /// Total number of items stored in any storage of this zone
+            var itemCount: Int { __data["itemCount"] }
             /// Storage spots in this zone
             var storages: [Storage] { __data["storages"] }
 

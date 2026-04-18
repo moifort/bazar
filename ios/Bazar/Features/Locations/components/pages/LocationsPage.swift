@@ -158,8 +158,15 @@ struct LocationsPage: View {
         }
     }
 
+    /// Sorts zones so the busiest ones surface first; ties fall back to alphabetical order
+    /// to keep the ordering stable when counts match (e.g. all zeros for a brand new room).
     private func sortedZones(in room: Room) -> [Zone] {
-        room.zones.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        room.zones.sorted { lhs, rhs in
+            if lhs.itemCount != rhs.itemCount {
+                return lhs.itemCount > rhs.itemCount
+            }
+            return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+        }
     }
 
     private func placeExpansionBinding(for id: String) -> Binding<Bool> {
@@ -206,8 +213,8 @@ struct LocationsPage: View {
                             icon: "sofa",
                             order: 0,
                             zones: [
-                                Zone(id: "z1", roomId: "r1", name: "Meuble TV", order: 0, storages: []),
-                                Zone(id: "z2", roomId: "r1", name: "Bibliothèque", order: 1, storages: []),
+                                Zone(id: "z1", roomId: "r1", name: "Meuble TV", order: 0, itemCount: 4, storages: []),
+                                Zone(id: "z2", roomId: "r1", name: "Bibliothèque", order: 1, itemCount: 12, storages: []),
                             ]
                         ),
                         Room(
@@ -233,11 +240,11 @@ struct LocationsPage: View {
                             icon: "hammer",
                             order: 0,
                             zones: [
-                                Zone(id: "z3", roomId: "r3", name: "Établi", order: 0, storages: []),
-                                Zone(id: "z4", roomId: "r3", name: "Étagère droite", order: 1, storages: []),
-                                Zone(id: "z5", roomId: "r3", name: "Étagère gauche", order: 2, storages: []),
-                                Zone(id: "z6", roomId: "r3", name: "Mur arrière", order: 3, storages: []),
-                                Zone(id: "z7", roomId: "r3", name: "Tiroirs", order: 4, storages: []),
+                                Zone(id: "z3", roomId: "r3", name: "Établi", order: 0, itemCount: 8, storages: []),
+                                Zone(id: "z4", roomId: "r3", name: "Étagère droite", order: 1, itemCount: 15, storages: []),
+                                Zone(id: "z5", roomId: "r3", name: "Étagère gauche", order: 2, itemCount: 3, storages: []),
+                                Zone(id: "z6", roomId: "r3", name: "Mur arrière", order: 3, itemCount: 0, storages: []),
+                                Zone(id: "z7", roomId: "r3", name: "Tiroirs", order: 4, itemCount: 6, storages: []),
                             ]
                         ),
                     ]

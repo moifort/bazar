@@ -110,6 +110,7 @@ struct ZoneDetailPage: View {
                 roomId: "r1",
                 name: "Établi",
                 order: 0,
+                itemCount: 7,
                 storages: [
                     Storage(id: "s1", zoneId: "z1", name: "Tiroir 1", order: 0),
                     Storage(id: "s2", zoneId: "z1", name: "Tiroir 2", order: 1),

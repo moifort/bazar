@@ -15,6 +15,7 @@ query AllPlaces {
         roomId
         name
         order
+        itemCount
         storages {
           id
           zoneId

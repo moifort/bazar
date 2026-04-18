@@ -25,6 +25,7 @@ enum GraphQLLocationsAPI {
                                 roomId: zone.roomId,
                                 name: zone.name,
                                 order: zone.order,
+                                itemCount: zone.itemCount,
                                 storages: zone.storages.map { storage in
                                     Storage(
                                         id: storage.id,
@@ -109,7 +110,7 @@ enum GraphQLLocationsAPI {
         let mutation = BazarGraphQL.CreateZoneMutation(input: input)
         let data = try await GraphQLHelpers.perform(client, mutation: mutation)
         let z = data.createZone
-        return Zone(id: z.id, roomId: z.roomId, name: z.name, order: z.order, storages: [])
+        return Zone(id: z.id, roomId: z.roomId, name: z.name, order: z.order, itemCount: 0, storages: [])
     }
 
     static func updateZone(id: String, name: String) async throws -> String {

@@ -116,8 +116,8 @@ struct RoomDetailPage: View {
                 icon: "car",
                 order: 0,
                 zones: [
-                    Zone(id: "z1", roomId: "r1", name: "Établi", order: 0, storages: []),
-                    Zone(id: "z2", roomId: "r1", name: "Étagère droite", order: 1, storages: []),
+                    Zone(id: "z1", roomId: "r1", name: "Établi", order: 0, itemCount: 0, storages: []),
+                    Zone(id: "z2", roomId: "r1", name: "Étagère droite", order: 1, itemCount: 0, storages: []),
                 ]
             ),
             onAddZone: { _ in },

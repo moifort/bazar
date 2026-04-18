@@ -122,6 +122,7 @@ struct Zone: Identifiable, Sendable {
     let roomId: String
     var name: String
     var order: Int
+    var itemCount: Int
     var storages: [Storage]
 }
 
