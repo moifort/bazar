@@ -112,6 +112,7 @@
 		C71C0C218EC5DE5699AF9CC6 /* EditablePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969E5557F84D0D44EF3F8EC2 /* EditablePreview.swift */; };
 		C75BBCE50F2C3778B4D90FD3 /* Zone.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB7999FAE68C76B5527FA793 /* Zone.graphql.swift */; };
 		C973F76E913EC867C84A3A77 /* LocationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F61A9C9FAF06B35F4D03584 /* LocationRow.swift */; };
+		CA5D0E5E72C7FB5F8A2BAF09 /* ScanConfirmationPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D120BA760CF0AF22C458182F /* ScanConfirmationPage.swift */; };
 		CC31A8DB85926BBD5751E4A8 /* Query.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72040D9143BBFF7FF0CF08AA /* Query.graphql.swift */; };
 		CFFAF06E12BBFA5CFD012B3E /* AddReminderMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AE44F189A422C0F52B77A2 /* AddReminderMutation.graphql.swift */; };
 		D2084765C552602B44617769 /* AllPlacesQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553E53662DE2917B8EAEAADB /* AllPlacesQuery.graphql.swift */; };
@@ -259,6 +260,7 @@
 		CD65AEFD7E5B951537B69C93 /* RemindersDueQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersDueQuery.graphql.swift; sourceTree = "<group>"; };
 		CD701F055909C265F3B69723 /* PlaceId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceId.swift; sourceTree = "<group>"; };
 		D1026D885285E83036E0066E /* CreatePlaceMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlaceMutation.graphql.swift; sourceTree = "<group>"; };
+		D120BA760CF0AF22C458182F /* ScanConfirmationPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationPage.swift; sourceTree = "<group>"; };
 		D5F4A49D86BF3B9D8A63341A /* UserTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTag.swift; sourceTree = "<group>"; };
 		D6F1D6C9D984E61C530C7AB6 /* RoomDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailPage.swift; sourceTree = "<group>"; };
 		D894786302504830B5C0FD8C /* ItemName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemName.swift; sourceTree = "<group>"; };
@@ -471,6 +473,7 @@
 		5D0123B25C1F0F531AD13F4B /* pages */ = {
 			isa = PBXGroup;
 			children = (
+				D120BA760CF0AF22C458182F /* ScanConfirmationPage.swift */,
 				A9CD551E13841DCFE2857EFB /* ScanFlowPage.swift */,
 			);
 			path = pages;
@@ -980,6 +983,7 @@
 				7D466F795614C93B49C33C84 /* RoomId.swift in Sources */,
 				6F7B3F976CF3D3011DE9CB5A /* RoomName.swift in Sources */,
 				0EC25C01473967A1F8B5678B /* ScanAPI.swift in Sources */,
+				CA5D0E5E72C7FB5F8A2BAF09 /* ScanConfirmationPage.swift in Sources */,
 				EB194B2ED66A7B5A54ADF38B /* ScanConfirmationView.swift in Sources */,
 				705A481218439FC2DA393CB3 /* ScanFlowPage.swift in Sources */,
 				8D59034163EF2EA2AB51418A /* ScanView.swift in Sources */,
