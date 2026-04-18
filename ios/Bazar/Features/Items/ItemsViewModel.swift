@@ -87,6 +87,9 @@ final class ItemsViewModel {
                 quantity: detail.quantity,
                 photoImageId: detail.photoImageId,
                 locationFullPath: detail.location?.fullPath,
+                placeId: detail.location?.placeId,
+                placeName: detail.location?.placeName,
+                roomName: detail.location?.roomName,
                 addedBy: detail.addedBy,
                 createdAt: detail.createdAt,
                 overdueReminderCount: detail.reminders.filter { $0.dueDate <= now }.count

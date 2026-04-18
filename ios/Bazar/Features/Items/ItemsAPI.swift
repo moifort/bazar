@@ -37,6 +37,9 @@ enum GraphQLItemsAPI {
                     quantity: Int(item.quantity) ?? 1,
                     photoImageId: item.photoImageId,
                     locationFullPath: item.location?.fullPath,
+                    placeId: item.location?.placeId,
+                    placeName: item.location?.placeName,
+                    roomName: item.location?.roomName,
                     addedBy: item.addedBy,
                     createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date(),
                     overdueReminderCount: overdue

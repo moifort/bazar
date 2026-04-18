@@ -31,6 +31,9 @@ enum GraphQLDashboardAPI {
                     quantity: Int(item.quantity) ?? 1,
                     photoImageId: item.photoImageId,
                     locationFullPath: item.location?.fullPath,
+                    placeId: nil,
+                    placeName: nil,
+                    roomName: nil,
                     addedBy: item.addedBy,
                     createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date(),
                     overdueReminderCount: 0

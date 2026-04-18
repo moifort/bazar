@@ -27,6 +27,9 @@ struct ItemListItem: Identifiable, Sendable {
     let quantity: Int
     var photoImageId: String?
     var locationFullPath: String?
+    var placeId: String?
+    var placeName: String?
+    var roomName: String?
     var addedBy: String
     let createdAt: Date
     var overdueReminderCount: Int
