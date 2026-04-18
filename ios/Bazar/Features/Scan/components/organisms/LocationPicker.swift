@@ -52,10 +52,11 @@ struct LocationPicker: View {
                 TextField("Nom", text: $addName)
                 Button("Annuler", role: .cancel) { addTarget = nil; addName = "" }
                 Button("Ajouter") {
+                    guard let target = addTarget else { return }
                     let name = addName.trimmingCharacters(in: .whitespaces)
                     guard !name.isEmpty else { return }
                     Task {
-                        await handleAdd(name: name)
+                        await handleAdd(target: target, name: name)
                         addTarget = nil
                         addName = ""
                     }
@@ -146,8 +147,7 @@ struct LocationPicker: View {
         isLoading = false
     }
 
-    private func handleAdd(name: String) async {
-        guard let target = addTarget else { return }
+    private func handleAdd(target: AddTarget, name: String) async {
         do {
             switch target {
             case .room(let placeId):
