@@ -104,7 +104,7 @@ struct Place: Identifiable, Sendable {
     let id: String
     var name: String
     var icon: String?
-    let order: Int
+    var order: Int
     var rooms: [Room]
 }
 
@@ -113,7 +113,7 @@ struct Room: Identifiable, Sendable {
     let placeId: String
     var name: String
     var icon: String?
-    let order: Int
+    var order: Int
     var zones: [Zone]
 }
 
@@ -121,7 +121,7 @@ struct Zone: Identifiable, Sendable {
     let id: String
     let roomId: String
     var name: String
-    let order: Int
+    var order: Int
     var storages: [Storage]
 }
 
@@ -129,7 +129,7 @@ struct Storage: Identifiable, Sendable {
     let id: String
     let zoneId: String
     var name: String
-    let order: Int
+    var order: Int
 }
 
 // MARK: - Dashboard

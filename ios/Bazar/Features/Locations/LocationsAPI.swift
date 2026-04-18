@@ -68,6 +68,12 @@ enum GraphQLLocationsAPI {
         _ = try await GraphQLHelpers.perform(client, mutation: mutation)
     }
 
+    static func reorderPlace(id: String, order: Int) async throws {
+        let input = BazarGraphQL.UpdatePlaceInput(order: .some(order))
+        let mutation = BazarGraphQL.UpdatePlaceMutation(id: id, input: input)
+        _ = try await GraphQLHelpers.perform(client, mutation: mutation)
+    }
+
     static func createRoom(placeId: String, name: String) async throws -> Room {
         let input = BazarGraphQL.CreateRoomInput(name: name, placeId: placeId)
         let mutation = BazarGraphQL.CreateRoomMutation(input: input)
@@ -92,6 +98,12 @@ enum GraphQLLocationsAPI {
         _ = try await GraphQLHelpers.perform(client, mutation: mutation)
     }
 
+    static func reorderRoom(id: String, order: Int) async throws {
+        let input = BazarGraphQL.UpdateRoomInput(order: .some(order))
+        let mutation = BazarGraphQL.UpdateRoomMutation(id: id, input: input)
+        _ = try await GraphQLHelpers.perform(client, mutation: mutation)
+    }
+
     static func createZone(roomId: String, name: String) async throws -> Zone {
         let input = BazarGraphQL.CreateZoneInput(name: name, roomId: roomId)
         let mutation = BazarGraphQL.CreateZoneMutation(input: input)
@@ -112,6 +124,12 @@ enum GraphQLLocationsAPI {
         _ = try await GraphQLHelpers.perform(client, mutation: mutation)
     }
 
+    static func reorderZone(id: String, order: Int) async throws {
+        let input = BazarGraphQL.UpdateZoneInput(order: .some(order))
+        let mutation = BazarGraphQL.UpdateZoneMutation(id: id, input: input)
+        _ = try await GraphQLHelpers.perform(client, mutation: mutation)
+    }
+
     static func createStorage(zoneId: String, name: String) async throws -> Storage {
         let input = BazarGraphQL.CreateStorageInput(name: name, zoneId: zoneId)
         let mutation = BazarGraphQL.CreateStorageMutation(input: input)
@@ -129,6 +147,12 @@ enum GraphQLLocationsAPI {
 
     static func deleteStorage(id: String) async throws {
         let mutation = BazarGraphQL.DeleteStorageMutation(id: id)
+        _ = try await GraphQLHelpers.perform(client, mutation: mutation)
+    }
+
+    static func reorderStorage(id: String, order: Int) async throws {
+        let input = BazarGraphQL.UpdateStorageInput(order: .some(order))
+        let mutation = BazarGraphQL.UpdateStorageMutation(id: id, input: input)
         _ = try await GraphQLHelpers.perform(client, mutation: mutation)
     }
 }
