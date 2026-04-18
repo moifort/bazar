@@ -215,6 +215,7 @@ struct ItemDetailPage: View {
             Button("Modifier", systemImage: "pencil") {
                 isEditing = true
             }
+            .labelStyle(.iconOnly)
             .accessibilityIdentifier("edit-item-button")
         }
         ToolbarItem(placement: .secondaryAction) {
@@ -227,6 +228,7 @@ struct ItemDetailPage: View {
             Button("Supprimer", systemImage: "trash", role: .destructive) {
                 showDeleteConfirmation = true
             }
+            .labelStyle(.iconOnly)
             .accessibilityIdentifier("delete-item-button")
         }
     }
