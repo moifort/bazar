@@ -22,7 +22,6 @@ struct DashboardView: View {
                                 category: item.category,
                                 quantity: item.quantity,
                                 locationPath: item.locationFullPath,
-                                addedBy: item.addedBy,
                                 overdueReminderCount: item.overdueReminderCount
                             )
                         },

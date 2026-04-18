@@ -5,7 +5,6 @@ struct ItemRow: View {
     let category: ItemCategory
     let quantity: Int
     let locationPath: String?
-    let addedBy: String
     let overdueReminderCount: Int
 
     var body: some View {
@@ -31,8 +30,8 @@ struct ItemRow: View {
                             .accessibilityLabel("\(overdueReminderCount) rappel en retard")
                     }
                 }
-                if let subtitle = buildSubtitle() {
-                    Text(subtitle)
+                if let locationPath, !locationPath.isEmpty {
+                    Text(locationPath)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -46,11 +45,6 @@ struct ItemRow: View {
         .padding(.vertical, 2)
     }
 
-    private func buildSubtitle() -> String? {
-        let parts: [String?] = [locationPath, addedBy]
-        let filtered = parts.compactMap { $0 }.filter { !$0.isEmpty }
-        return filtered.isEmpty ? nil : filtered.joined(separator: " · ")
-    }
 }
 
 private struct CategoryIcon: View {
@@ -74,7 +68,6 @@ private struct CategoryIcon: View {
             category: .tools,
             quantity: 1,
             locationPath: "Maison > Garage > Établi > Tiroir 1",
-            addedBy: "Thibaut",
             overdueReminderCount: 0
         )
         ItemRow(
@@ -82,7 +75,6 @@ private struct CategoryIcon: View {
             category: .electronics,
             quantity: 12,
             locationPath: "Maison > Cellier",
-            addedBy: "Thibaut",
             overdueReminderCount: 1
         )
         ItemRow(
@@ -90,7 +82,6 @@ private struct CategoryIcon: View {
             category: .decor,
             quantity: 1,
             locationPath: nil,
-            addedBy: "Alice",
             overdueReminderCount: 0
         )
     }

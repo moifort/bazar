@@ -8,7 +8,6 @@ struct ItemDetailPage: View {
     let quantity: Int
     let imageURL: URL?
     let locationPath: String?
-    let addedBy: String
     let personalNotes: String
     let purchaseDate: Date?
     let purchaseLocation: String
@@ -113,7 +112,6 @@ struct ItemDetailPage: View {
                 if let locationPath {
                     LabeledContent("Lieu", value: locationPath)
                 }
-                LabeledContent("Ajouté par", value: addedBy)
             }
 
             Section {
@@ -222,7 +220,6 @@ struct ItemDetailPage: View {
             quantity: 1,
             imageURL: nil,
             locationPath: "Maison > Garage > Établi > Tiroir 1",
-            addedBy: "Thibaut",
             personalNotes: "Batterie à remplacer bientôt",
             purchaseDate: Date(timeIntervalSinceNow: -86_400 * 120),
             purchaseLocation: "amazon.fr",
@@ -247,7 +244,6 @@ struct ItemDetailPage: View {
             quantity: 12,
             imageURL: nil,
             locationPath: nil,
-            addedBy: "Thibaut",
             personalNotes: "",
             purchaseDate: nil,
             purchaseLocation: "",
