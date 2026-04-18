@@ -108,38 +108,12 @@ struct ScanConfirmationView: View {
 
     private func confirm() async {
         isConfirming = true
-        let items = editablePreviews.map { editable in
-            ItemPreview(
-                previewId: editable.id,
-                name: editable.name,
-                category: editable.category,
-                description: editable.description,
-                quantity: editable.quantity
-            )
-        }
+        let items = editablePreviews.map { $0.toPreview() }
         if let storageId = selectedStorageId {
             UserDefaults.standard.set(storageId, forKey: "lastStorageId")
         }
         await onConfirm(items, selectedStorageId)
         isConfirming = false
-    }
-}
-
-// MARK: - Editable Preview
-
-private struct EditablePreview: Identifiable {
-    let id: String
-    var name: String
-    var category: ItemCategory?
-    var description: String
-    var quantity: Int
-
-    init(from preview: ItemPreview) {
-        self.id = preview.previewId
-        self.name = preview.name
-        self.category = preview.category
-        self.description = preview.description
-        self.quantity = preview.quantity
     }
 }
 

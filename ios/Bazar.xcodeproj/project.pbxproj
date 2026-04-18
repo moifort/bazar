@@ -105,6 +105,7 @@
 		C25CC9B83F128750A3F1E918 /* LocationPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B72689C24A754DA3BF2AC9 /* LocationPicker.swift */; };
 		C3A7C44B13E0037FF965F113 /* BazarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */; };
 		C49DFDE5AB1F7BBF536EDDFA /* SearchEntry.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46BE2355F083FD3ED6B86D5 /* SearchEntry.graphql.swift */; };
+		C71C0C218EC5DE5699AF9CC6 /* EditablePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969E5557F84D0D44EF3F8EC2 /* EditablePreview.swift */; };
 		C75BBCE50F2C3778B4D90FD3 /* Zone.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB7999FAE68C76B5527FA793 /* Zone.graphql.swift */; };
 		C973F76E913EC867C84A3A77 /* LocationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F61A9C9FAF06B35F4D03584 /* LocationRow.swift */; };
 		CC31A8DB85926BBD5751E4A8 /* Query.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72040D9143BBFF7FF0CF08AA /* Query.graphql.swift */; };
@@ -217,6 +218,7 @@
 		946321010B1D7E79EB3B35E4 /* CreateRoomInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomInput.graphql.swift; sourceTree = "<group>"; };
 		94F2C72013021C59F88BEB58 /* ItemRemindersPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRemindersPage.swift; sourceTree = "<group>"; };
 		968127786CBDC82DFB27D923 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		969E5557F84D0D44EF3F8EC2 /* EditablePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditablePreview.swift; sourceTree = "<group>"; };
 		9CE79855AF193BA16FE55848 /* DashboardQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardQuery.graphql.swift; sourceTree = "<group>"; };
 		9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BazarApp.swift; sourceTree = "<group>"; };
 		9F415C85D4FE275223739444 /* ItemsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsPage.swift; sourceTree = "<group>"; };
@@ -634,6 +636,7 @@
 		B392C1B957257D82E06561C4 /* Scan */ = {
 			isa = PBXGroup;
 			children = (
+				969E5557F84D0D44EF3F8EC2 /* EditablePreview.swift */,
 				2A5C53A615CD60EF4DD65417 /* ScanAPI.swift */,
 				1639E48F473AD3B55915E2B5 /* ScanView.swift */,
 				B0A6BBB115A19984F10B3C4D /* ScanViewModel.swift */,
@@ -896,6 +899,7 @@
 				E91724671DA41390150FCCE5 /* DeleteZoneMutation.graphql.swift in Sources */,
 				D3D564F83A278B1584CF314C /* DistinctPurchaseLocationsQuery.graphql.swift in Sources */,
 				A86B6BC7D11759F4F35FB355 /* EditLocationSheet.swift in Sources */,
+				C71C0C218EC5DE5699AF9CC6 /* EditablePreview.swift in Sources */,
 				25C379CB9FF9B4CB71C37FBF /* ErrorReporting.swift in Sources */,
 				0E15C0FF0EDA45DB9B96BE43 /* GraphQLClient.swift in Sources */,
 				DAC19910FC0549DCB22C8EE1 /* GraphQLHelpers.swift in Sources */,
