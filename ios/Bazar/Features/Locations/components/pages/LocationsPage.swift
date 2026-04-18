@@ -10,12 +10,17 @@ struct LocationsPage: View {
     let onEditPlace: (_ id: String, _ name: String, _ icon: String?) async -> Void
     let onReorderPlaces: (_ from: IndexSet, _ to: Int) async -> Void
 
+    /// Initial cap on zones shown per room before the user expands the list.
+    private static let zonesInitialLimit = 3
+
     @State private var showAddSheet = false
     @State private var placeToEdit: Place?
     // Presence in these sets means the corresponding node is collapsed.
     // Empty set = everything expanded by default.
     @State private var collapsedPlaces: Set<String> = []
     @State private var collapsedRooms: Set<String> = []
+    // Rooms for which the user tapped "Voir toutes les zones".
+    @State private var roomsWithAllZones: Set<String> = []
 
     var body: some View {
         Group {
@@ -121,11 +126,30 @@ struct LocationsPage: View {
 
     @ViewBuilder
     private func roomDisclosure(for room: Room) -> some View {
+        let allZones = sortedZones(in: room)
+        let showingAll = roomsWithAllZones.contains(room.id)
+        let displayedZones = showingAll ? allZones : Array(allZones.prefix(Self.zonesInitialLimit))
+        let hiddenCount = allZones.count - displayedZones.count
+
         DisclosureGroup(isExpanded: roomExpansionBinding(for: room.id)) {
-            ForEach(sortedZones(in: room)) { zone in
+            ForEach(displayedZones) { zone in
                 NavigationLink(value: LocationDestination.zone(zone.id)) {
                     LocationRow(name: zone.name, icon: "rectangle.split.3x1")
                 }
+            }
+
+            if hiddenCount > 0 {
+                Button {
+                    roomsWithAllZones.insert(room.id)
+                } label: {
+                    Label(
+                        "Voir toutes les zones (\(allZones.count))",
+                        systemImage: "chevron.down"
+                    )
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                }
+                .accessibilityIdentifier("show-all-zones-\(room.id)")
             }
         } label: {
             NavigationLink(value: LocationDestination.room(room.id)) {
@@ -210,6 +234,10 @@ struct LocationsPage: View {
                             order: 0,
                             zones: [
                                 Zone(id: "z3", roomId: "r3", name: "Établi", order: 0, storages: []),
+                                Zone(id: "z4", roomId: "r3", name: "Étagère droite", order: 1, storages: []),
+                                Zone(id: "z5", roomId: "r3", name: "Étagère gauche", order: 2, storages: []),
+                                Zone(id: "z6", roomId: "r3", name: "Mur arrière", order: 3, storages: []),
+                                Zone(id: "z7", roomId: "r3", name: "Tiroirs", order: 4, storages: []),
                             ]
                         ),
                     ]
