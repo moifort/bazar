@@ -28,6 +28,7 @@ struct ItemDetailView: View {
                     imageURL: item.photoImageId.flatMap(imageURL(for:)),
                     locationPath: item.location?.fullPath,
                     personalNotes: item.personalNotes,
+                    createdAt: item.createdAt,
                     purchaseDate: item.purchaseDate,
                     purchaseLocation: item.purchaseLocation,
                     invoiceImageURL: item.invoiceImageId.flatMap(imageURL(for:)),

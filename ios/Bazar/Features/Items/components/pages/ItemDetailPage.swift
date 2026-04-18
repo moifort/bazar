@@ -9,6 +9,7 @@ struct ItemDetailPage: View {
     let imageURL: URL?
     let locationPath: String?
     let personalNotes: String
+    let createdAt: Date
     let purchaseDate: Date?
     let purchaseLocation: String
     let invoiceImageURL: URL?
@@ -111,6 +112,10 @@ struct ItemDetailPage: View {
                         .labelStyle(.titleAndIcon)
                 }
                 LabeledContent("Quantité", value: "\(quantity)")
+                LabeledContent(
+                    "Ajouté le",
+                    value: createdAt.formatted(date: .abbreviated, time: .omitted)
+                )
                 Button {
                     onOpenMove()
                 } label: {
@@ -253,6 +258,7 @@ struct ItemDetailPage: View {
             imageURL: nil,
             locationPath: "Maison > Garage > Établi > Tiroir 1",
             personalNotes: "Batterie à remplacer bientôt",
+            createdAt: Date(timeIntervalSinceNow: -86_400 * 365),
             purchaseDate: Date(timeIntervalSinceNow: -86_400 * 120),
             purchaseLocation: "amazon.fr",
             invoiceImageURL: nil,
@@ -279,6 +285,7 @@ struct ItemDetailPage: View {
             imageURL: nil,
             locationPath: nil,
             personalNotes: "",
+            createdAt: Date(),
             purchaseDate: nil,
             purchaseLocation: "",
             invoiceImageURL: nil,
