@@ -52,6 +52,7 @@
 		5A3515096F90377189F3A120 /* AnalyzeItemPhotoMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A26431244AFBE3FA55DDF5 /* AnalyzeItemPhotoMutation.graphql.swift */; };
 		5B0AE83B7306C1E3E7CFA8BB /* CreateStorageMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B2387DADDCD0A802517295 /* CreateStorageMutation.graphql.swift */; };
 		5CCBBA21CD623CCDD6B18C0A /* UpdateRoomInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21914AC05AE2FD0217F7065 /* UpdateRoomInput.graphql.swift */; };
+		5CDF1755681EB314B72A673F /* ItemPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC514B5238BC2B43181B6970 /* ItemPreviewCard.swift */; };
 		5FB75218EB295642954B9BC9 /* ItemSort.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0895467E1212A670A012D166 /* ItemSort.graphql.swift */; };
 		61B46673F52D0FDC7D755674 /* SchemaMetadata.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6151013503448B5F905A1F /* SchemaMetadata.graphql.swift */; };
 		62AB6704679F8F77A968F878 /* MoveItemMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FF66ABC5AD555115A5C582 /* MoveItemMutation.graphql.swift */; };
@@ -287,6 +288,7 @@
 		FB7999FAE68C76B5527FA793 /* Zone.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zone.graphql.swift; sourceTree = "<group>"; };
 		FC3DD8001654EF2A9B611767 /* ZoneName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneName.swift; sourceTree = "<group>"; };
 		FC4140C78390F6597A2E644A /* CreateZoneMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateZoneMutation.graphql.swift; sourceTree = "<group>"; };
+		FC514B5238BC2B43181B6970 /* ItemPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPreviewCard.swift; sourceTree = "<group>"; };
 		FD1974320F66AA4BBF4AA270 /* DeletePlaceMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletePlaceMutation.graphql.swift; sourceTree = "<group>"; };
 		FD4C7AB2E7FAAD8B2EBE41C2 /* ItemEditForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEditForm.swift; sourceTree = "<group>"; };
 		FD94EE70CA1A94CB85E36ABE /* SortOrder.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOrder.graphql.swift; sourceTree = "<group>"; };
@@ -666,6 +668,7 @@
 			isa = PBXGroup;
 			children = (
 				9A437D505EA942552D9B2B57 /* ItemCategoryMenu.swift */,
+				FC514B5238BC2B43181B6970 /* ItemPreviewCard.swift */,
 				87AD49AA6F4FEB4376218A76 /* QuantityStepper.swift */,
 				41DF495FD53EF5751F57B90C /* StorageHeaderCard.swift */,
 			);
@@ -934,6 +937,7 @@
 				DB4643B8CAAEC8F7F79715C3 /* ItemListQuery.graphql.swift in Sources */,
 				34AF9027CB95880880353B76 /* ItemName.swift in Sources */,
 				A929CD6285C0553D7153F2D5 /* ItemPreview.graphql.swift in Sources */,
+				5CDF1755681EB314B72A673F /* ItemPreviewCard.swift in Sources */,
 				709395E1B516271262E2C5A5 /* ItemRemindersPage.swift in Sources */,
 				FB9AC2F3C395DFF4A263E560 /* ItemRemindersView.swift in Sources */,
 				884A41ECCB5F28070E88DD2A /* ItemRow.swift in Sources */,
