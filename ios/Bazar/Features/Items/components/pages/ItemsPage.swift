@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ItemsPage: View {
-    let items: [ItemListItem]
+    let groups: [ItemPlaceGroup]
     let totalCount: Int
     let hasMore: Bool
     let isLoading: Bool
@@ -28,7 +28,7 @@ struct ItemsPage: View {
         Group {
             if !searchText.isEmpty {
                 searchContent
-            } else if items.isEmpty && isLoading {
+            } else if groups.isEmpty && isLoading {
                 ProgressView("Chargement...")
             } else if let errorMessage {
                 ContentUnavailableView(
@@ -36,7 +36,7 @@ struct ItemsPage: View {
                     systemImage: "exclamationmark.triangle",
                     description: Text(errorMessage)
                 )
-            } else if items.isEmpty {
+            } else if groups.isEmpty {
                 ContentUnavailableView(
                     "Aucun objet",
                     systemImage: "archivebox",
@@ -47,7 +47,7 @@ struct ItemsPage: View {
             }
         }
         .navigationTitle("Objets")
-        .navigationSubtitle(items.isEmpty ? "" : navigationSubtitle)
+        .navigationSubtitle(groups.isEmpty ? "" : navigationSubtitle)
         .navigationBarTitleDisplayMode(.large)
         .refreshable { await onRefresh() }
         .toolbar {
@@ -64,15 +64,19 @@ struct ItemsPage: View {
     @ViewBuilder
     private var itemsList: some View {
         List {
-            ForEach(items) { item in
-                itemButton(item)
-                    .swipeActions(edge: .trailing) {
-                        Button(role: .destructive) {
-                            Task { await onItemDelete(item.id) }
-                        } label: {
-                            Label("Supprimer", systemImage: "trash")
-                        }
+            ForEach(groups) { group in
+                Section(group.placeName) {
+                    ForEach(group.items) { item in
+                        itemButton(item)
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    Task { await onItemDelete(item.id) }
+                                } label: {
+                                    Label("Supprimer", systemImage: "trash")
+                                }
+                            }
                     }
+                }
             }
 
             if hasMore {
@@ -156,9 +160,15 @@ struct ItemsPage: View {
 
     NavigationStack {
         ItemsPage(
-            items: [
-                ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", placeId: "p1", placeName: "Maison", roomName: "Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
-                ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, photoImageId: nil, locationFullPath: "Maison > Cellier", placeId: "p1", placeName: "Maison", roomName: "Cellier", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+            groups: [
+                ItemPlaceGroup(
+                    id: "p1",
+                    placeName: "Maison",
+                    items: [
+                        ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", placeId: "p1", placeName: "Maison", roomName: "Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                        ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, photoImageId: nil, locationFullPath: "Maison > Cellier", placeId: "p1", placeName: "Maison", roomName: "Cellier", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                    ]
+                ),
             ],
             totalCount: 2,
             hasMore: false,
@@ -190,7 +200,7 @@ struct ItemsPage: View {
 
     NavigationStack {
         ItemsPage(
-            items: [],
+            groups: [],
             totalCount: 0,
             hasMore: false,
             isLoading: false,
@@ -221,8 +231,14 @@ struct ItemsPage: View {
 
     NavigationStack {
         ItemsPage(
-            items: [
-                ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", placeId: "p1", placeName: "Maison", roomName: "Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+            groups: [
+                ItemPlaceGroup(
+                    id: "p1",
+                    placeName: "Maison",
+                    items: [
+                        ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", placeId: "p1", placeName: "Maison", roomName: "Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                    ]
+                ),
             ],
             totalCount: 1,
             hasMore: false,
@@ -237,6 +253,53 @@ struct ItemsPage: View {
             searchResults: [
                 SearchEntry(type: "item", entityId: "1", text: "Perceuse Bosch"),
             ],
+            onRefresh: {},
+            onLoadMore: {},
+            onPrefetch: { _ in },
+            onItemTap: { _ in },
+            onItemDelete: { _ in },
+            onSearchTextChanged: {},
+            onSearchSelectItem: { _ in }
+        )
+    }
+}
+
+#Preview("Multiple places") {
+    @Previewable @State var categoryFilter: ItemCategory?
+    @Previewable @State var sort: ItemSort = .createdAt
+    @Previewable @State var sortDescending = true
+    @Previewable @State var searchText = ""
+
+    NavigationStack {
+        ItemsPage(
+            groups: [
+                ItemPlaceGroup(
+                    id: "p1",
+                    placeName: "Appartement",
+                    items: [
+                        ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Appartement > Cuisine > Placard > Étagère 2", placeId: "p1", placeName: "Appartement", roomName: "Cuisine", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                        ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, photoImageId: nil, locationFullPath: "Appartement > Salon", placeId: "p1", placeName: "Appartement", roomName: "Salon", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                    ]
+                ),
+                ItemPlaceGroup(
+                    id: "p2",
+                    placeName: "Cave",
+                    items: [
+                        ItemListItem(id: "3", name: "Ski de fond", category: .sports, quantity: 1, photoImageId: nil, locationFullPath: "Cave > Entrepôt > Étagère A", placeId: "p2", placeName: "Cave", roomName: "Entrepôt", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                    ]
+                ),
+            ],
+            totalCount: 3,
+            hasMore: false,
+            isLoading: false,
+            errorMessage: nil,
+            navigationSubtitle: "3 objets",
+            categoryFilter: $categoryFilter,
+            sort: $sort,
+            sortDescending: $sortDescending,
+            searchText: $searchText,
+            isSearching: false,
+            searchResults: nil,
             onRefresh: {},
             onLoadMore: {},
             onPrefetch: { _ in },

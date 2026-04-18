@@ -13,7 +13,7 @@ struct ItemsView: View {
     var body: some View {
         NavigationStack {
             ItemsPage(
-                items: viewModel.items,
+                groups: viewModel.groupedItems,
                 totalCount: viewModel.totalCount,
                 hasMore: viewModel.hasMore,
                 isLoading: viewModel.isLoading,

@@ -1,5 +1,16 @@
 import Foundation
 
+struct ItemPlaceGroup: Identifiable {
+    /// `placeId` when the place is known, else the sentinel `"__no_place__"`.
+    let id: String
+    /// Display label — `placeName`, or `"Sans lieu"` for the orphan bucket.
+    let placeName: String
+    let items: [ItemListItem]
+
+    static let noPlaceKey = "__no_place__"
+    static let noPlaceLabel = "Sans lieu"
+}
+
 @MainActor @Observable
 final class ItemsViewModel {
     var items: [ItemListItem] = []
@@ -21,6 +32,28 @@ final class ItemsViewModel {
         let category = categoryFilter?.rawValue ?? "all"
         let place = placeFilter?.id ?? "all"
         return "\(sort.rawValue)-\(sortDescending)-\(category)-\(place)"
+    }
+
+    /// Items bucketed by place, preserving the flat `items` order within each bucket.
+    /// Between-section order = first appearance in `items`; the "Sans lieu" group
+    /// is always pushed to the end.
+    var groupedItems: [ItemPlaceGroup] {
+        var buckets: [String: (placeName: String, items: [ItemListItem])] = [:]
+        var order: [String] = []
+        for item in items {
+            let key = item.placeId ?? ItemPlaceGroup.noPlaceKey
+            let label = item.placeName ?? ItemPlaceGroup.noPlaceLabel
+            if buckets[key] == nil {
+                buckets[key] = (label, [])
+                order.append(key)
+            }
+            buckets[key]?.items.append(item)
+        }
+        let placed = order.filter { $0 != ItemPlaceGroup.noPlaceKey }
+        let finalOrder = placed + (order.contains(ItemPlaceGroup.noPlaceKey) ? [ItemPlaceGroup.noPlaceKey] : [])
+        return finalOrder.compactMap { key in
+            buckets[key].map { ItemPlaceGroup(id: key, placeName: $0.placeName, items: $0.items) }
+        }
     }
 
     var navigationSubtitle: String {
