@@ -105,6 +105,7 @@
 		C25CC9B83F128750A3F1E918 /* LocationPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B72689C24A754DA3BF2AC9 /* LocationPicker.swift */; };
 		C3A7C44B13E0037FF965F113 /* BazarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */; };
 		C49DFDE5AB1F7BBF536EDDFA /* SearchEntry.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46BE2355F083FD3ED6B86D5 /* SearchEntry.graphql.swift */; };
+		C6B38C53C2EAF48CDBE344E5 /* QuantityStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AD49AA6F4FEB4376218A76 /* QuantityStepper.swift */; };
 		C71C0C218EC5DE5699AF9CC6 /* EditablePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969E5557F84D0D44EF3F8EC2 /* EditablePreview.swift */; };
 		C75BBCE50F2C3778B4D90FD3 /* Zone.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB7999FAE68C76B5527FA793 /* Zone.graphql.swift */; };
 		C973F76E913EC867C84A3A77 /* LocationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F61A9C9FAF06B35F4D03584 /* LocationRow.swift */; };
@@ -211,6 +212,7 @@
 		7DD071B0FF14446D867771D9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		81334A0DEFD62EC2FAB4F5D2 /* AddReminderInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReminderInput.graphql.swift; sourceTree = "<group>"; };
 		8795A48B4E16E73895451CA6 /* UpdateItemInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateItemInput.graphql.swift; sourceTree = "<group>"; };
+		87AD49AA6F4FEB4376218A76 /* QuantityStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityStepper.swift; sourceTree = "<group>"; };
 		89B72689C24A754DA3BF2AC9 /* LocationPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPicker.swift; sourceTree = "<group>"; };
 		8C287E4E1711FFF3CB73ECC7 /* Storage.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.graphql.swift; sourceTree = "<group>"; };
 		8FA181C4DC151F955C391FEB /* SharedConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConfig.swift; sourceTree = "<group>"; };
@@ -656,6 +658,14 @@
 			path = Reminders;
 			sourceTree = "<group>";
 		};
+		B8912FBC08223A38F053E6D8 /* molecules */ = {
+			isa = PBXGroup;
+			children = (
+				87AD49AA6F4FEB4376218A76 /* QuantityStepper.swift */,
+			);
+			path = molecules;
+			sourceTree = "<group>";
+		};
 		BB165AE2682E9D6C1BA751A5 /* GraphQL */ = {
 			isa = PBXGroup;
 			children = (
@@ -771,6 +781,7 @@
 			children = (
 				30BB3B5E136859E07BCFC1F5 /* atoms */,
 				A7C7BAB76276787F8B78C818 /* infrastructure */,
+				B8912FBC08223A38F053E6D8 /* molecules */,
 				AF1AE8A084C530A3874774A8 /* organisms */,
 				5D0123B25C1F0F531AD13F4B /* pages */,
 			);
@@ -942,6 +953,7 @@
 				FF7AF39B8E5C2CE2571ABA09 /* PlaceId.swift in Sources */,
 				F3F7DCE687681077E835CF69 /* PlaceName.swift in Sources */,
 				EE63D27B7451A50655DE1444 /* Quantity.swift in Sources */,
+				C6B38C53C2EAF48CDBE344E5 /* QuantityStepper.swift in Sources */,
 				CC31A8DB85926BBD5751E4A8 /* Query.graphql.swift in Sources */,
 				4CE299E49A86E738B46E67AE /* Reminder.graphql.swift in Sources */,
 				49013A7ABF2D6A9FD49C9378 /* ReminderEditSheet.swift in Sources */,
