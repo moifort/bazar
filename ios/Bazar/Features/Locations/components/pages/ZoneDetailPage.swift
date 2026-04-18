@@ -54,17 +54,18 @@ struct ZoneDetailPage: View {
         .navigationTitle(zone.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                EditButton()
-                    .accessibilityIdentifier("edit-storages-button")
-            }
-            ToolbarItem(placement: .secondaryAction) {
-                Button {
-                    showEditZoneSheet = true
-                } label: {
-                    Label("Modifier", systemImage: "pencil")
+            if !zone.storages.isEmpty {
+                ToolbarItem(placement: .topBarLeading) {
+                    EditButton()
+                        .accessibilityIdentifier("edit-storages-button")
                 }
-                .accessibilityIdentifier("edit-zone-button")
+                ToolbarItem(placement: .secondaryAction) {
+                    Button("Modifier", systemImage: "pencil") {
+                        showEditZoneSheet = true
+                    }
+                    .labelStyle(.iconOnly)
+                    .accessibilityIdentifier("edit-zone-button")
+                }
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {

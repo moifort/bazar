@@ -56,17 +56,18 @@ struct PlaceDetailPage: View {
         .navigationTitle(place.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                EditButton()
-                    .accessibilityIdentifier("edit-rooms-button")
-            }
-            ToolbarItem(placement: .secondaryAction) {
-                Button {
-                    showEditPlaceSheet = true
-                } label: {
-                    Label("Modifier", systemImage: "pencil")
+            if !place.rooms.isEmpty {
+                ToolbarItem(placement: .topBarLeading) {
+                    EditButton()
+                        .accessibilityIdentifier("edit-rooms-button")
                 }
-                .accessibilityIdentifier("edit-place-button")
+                ToolbarItem(placement: .secondaryAction) {
+                    Button("Modifier", systemImage: "pencil") {
+                        showEditPlaceSheet = true
+                    }
+                    .labelStyle(.iconOnly)
+                    .accessibilityIdentifier("edit-place-button")
+                }
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {

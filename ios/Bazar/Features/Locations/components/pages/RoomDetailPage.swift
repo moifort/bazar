@@ -56,17 +56,18 @@ struct RoomDetailPage: View {
         .navigationTitle(room.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                EditButton()
-                    .accessibilityIdentifier("edit-zones-button")
-            }
-            ToolbarItem(placement: .secondaryAction) {
-                Button {
-                    showEditRoomSheet = true
-                } label: {
-                    Label("Modifier", systemImage: "pencil")
+            if !room.zones.isEmpty {
+                ToolbarItem(placement: .topBarLeading) {
+                    EditButton()
+                        .accessibilityIdentifier("edit-zones-button")
                 }
-                .accessibilityIdentifier("edit-room-button")
+                ToolbarItem(placement: .secondaryAction) {
+                    Button("Modifier", systemImage: "pencil") {
+                        showEditRoomSheet = true
+                    }
+                    .labelStyle(.iconOnly)
+                    .accessibilityIdentifier("edit-room-button")
+                }
             }
             ToolbarItem(placement: .primaryAction) {
                 Button {
