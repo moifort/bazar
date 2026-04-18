@@ -101,6 +101,7 @@
 		AD0772A744E03A27AC9798EB /* ZoneId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CD57BF36A20BD88D20301E /* ZoneId.swift */; };
 		AE4023993B26A76E9215514A /* ItemIdWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029A0FC3DAF543170A65CCCF /* ItemIdWrapper.swift */; };
 		B2A0BA379ADB5BEFAFFDFDC5 /* BazarGraphQL.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C80DD98112700F01D6829E /* BazarGraphQL.graphql.swift */; };
+		B7CFBC1E926F064F548C529F /* LocationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EADE8E29558F3A0BD2AAD340 /* LocationCard.swift */; };
 		B91211F2E06A8854CAF9859D /* ReminderRowMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A53D13E8EFDEE9BEAD6D55 /* ReminderRowMapper.swift */; };
 		BA209A046E3F8E6C42348630 /* CreateStorageInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11803D072639B81ED576701 /* CreateStorageInput.graphql.swift */; };
 		BB92E293F47C9CD16C023695 /* AddLocationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C2B5EBA56613DAF0EDF1A6 /* AddLocationSheet.swift */; };
@@ -275,6 +276,7 @@
 		E88A16EAE4E2B7B257416C17 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		E912516B096BA0433315E77D /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		E99829147069424F5CC544BF /* ViewfinderOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewfinderOverlay.swift; sourceTree = "<group>"; };
+		EADE8E29558F3A0BD2AAD340 /* LocationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCard.swift; sourceTree = "<group>"; };
 		EBCCF188C36636D1ED20E5A1 /* ItemPreview.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemPreview.graphql.swift; sourceTree = "<group>"; };
 		EC97A6AF0D1D933F6B082505 /* CompleteReminderMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteReminderMutation.graphql.swift; sourceTree = "<group>"; };
 		ECB62E818C766845266C402E /* SchemaConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaConfiguration.swift; sourceTree = "<group>"; };
@@ -382,6 +384,7 @@
 			isa = PBXGroup;
 			children = (
 				6735C526DD16DFF89F7AF631 /* ItemRow.swift */,
+				EADE8E29558F3A0BD2AAD340 /* LocationCard.swift */,
 			);
 			path = molecules;
 			sourceTree = "<group>";
@@ -950,6 +953,7 @@
 				29C33B97F2264620867BDD4C /* ItemsPage.swift in Sources */,
 				45CA8DA10B945B2FE719C72C /* ItemsView.swift in Sources */,
 				207794005DDD1AC2B3620BEB /* ItemsViewModel.swift in Sources */,
+				B7CFBC1E926F064F548C529F /* LocationCard.swift in Sources */,
 				34D47CC1C13577D2F0095908 /* LocationPath.graphql.swift in Sources */,
 				C25CC9B83F128750A3F1E918 /* LocationPicker.swift in Sources */,
 				C973F76E913EC867C84A3A77 /* LocationRow.swift in Sources */,

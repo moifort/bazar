@@ -7,7 +7,7 @@ struct ItemDetailPage: View {
     let category: ItemCategory
     let quantity: Int
     let imageURL: URL?
-    let locationPath: String?
+    let location: LocationPath?
     let personalNotes: String
     let createdAt: Date
     let purchaseDate: Date?
@@ -116,24 +116,10 @@ struct ItemDetailPage: View {
                     "Ajouté le",
                     value: createdAt.formatted(date: .abbreviated, time: .omitted)
                 )
-                Button {
-                    onOpenMove()
-                } label: {
-                    HStack(spacing: 8) {
-                        Text("Lieu")
-                            .foregroundStyle(.primary)
-                        Spacer(minLength: 8)
-                        Text(locationPath ?? "Non défini")
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.trailing)
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.tertiary)
-                            .font(.caption.weight(.semibold))
-                    }
-                    .contentShape(.rect)
-                }
-                .tint(.primary)
-                .accessibilityIdentifier("move-item-row")
+            }
+
+            Section("Lieu") {
+                LocationCard(location: location, onTap: onOpenMove)
             }
 
             Section {
@@ -256,7 +242,17 @@ struct ItemDetailPage: View {
             category: .tools,
             quantity: 1,
             imageURL: nil,
-            locationPath: "Maison > Garage > Établi > Tiroir 1",
+            location: LocationPath(
+                fullPath: "Maison > Garage > Établi > Tiroir 1",
+                placeId: "p1",
+                placeName: "Maison",
+                roomId: "r1",
+                roomName: "Garage",
+                zoneId: "z1",
+                zoneName: "Établi",
+                storageId: "s1",
+                storageName: "Tiroir 1"
+            ),
             personalNotes: "Batterie à remplacer bientôt",
             createdAt: Date(timeIntervalSinceNow: -86_400 * 365),
             purchaseDate: Date(timeIntervalSinceNow: -86_400 * 120),
@@ -283,7 +279,7 @@ struct ItemDetailPage: View {
             category: .electronics,
             quantity: 12,
             imageURL: nil,
-            locationPath: nil,
+            location: nil,
             personalNotes: "",
             createdAt: Date(),
             purchaseDate: nil,
