@@ -20,7 +20,10 @@ struct ScanView: View {
                 viewModel.reset()
                 onFlowCompleted()
             },
-            onDismiss: { dismiss() },
+            onDismiss: {
+                viewModel.reset()
+                dismiss()
+            },
             onErrorDismiss: { viewModel.error = nil }
         )
         .onChange(of: selectedPhoto) {

@@ -17,6 +17,9 @@ struct ScanConfirmationPage: View {
     let onDelete: (String) -> Void
     let onScanAnother: () -> Void
     let onConfirm: () -> Void
+    let onClose: () -> Void
+
+    @State private var showCloseConfirmation = false
 
     var body: some View {
         ScrollView {
@@ -67,7 +70,19 @@ struct ScanConfirmationPage: View {
         .navigationTitle("Vérifier les objets")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
-        .toolbar { keyboardToolbar }
+        .toolbar {
+            closeToolbar
+            keyboardToolbar
+        }
+        .confirmationDialog(
+            "Fermer sans enregistrer ?",
+            isPresented: $showCloseConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Fermer", role: .destructive) { onClose() }
+        } message: {
+            Text("Tous les objets détectés seront perdus.")
+        }
     }
 
     // MARK: - Sub-views
@@ -148,6 +163,17 @@ struct ScanConfirmationPage: View {
     }
 
     @ToolbarContentBuilder
+    private var closeToolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Fermer", systemImage: "xmark") {
+                showCloseConfirmation = true
+            }
+            .labelStyle(.iconOnly)
+            .accessibilityIdentifier("close-scan-button")
+        }
+    }
+
+    @ToolbarContentBuilder
     private var keyboardToolbar: some ToolbarContent {
         ToolbarItem(placement: .keyboard) {
             HStack {
@@ -205,7 +231,8 @@ struct ScanConfirmationPage: View {
             onDuplicate: { _ in },
             onDelete: { id in previews.removeAll { $0.id == id } },
             onScanAnother: {},
-            onConfirm: {}
+            onConfirm: {},
+            onClose: {}
         )
     }
 }

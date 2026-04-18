@@ -8,6 +8,7 @@ struct ScanConfirmationView: View {
     let previews: [ItemPreview]
     let onScanAnother: () -> Void
     let onConfirm: ([ItemPreview], String?) async -> Void
+    let onClose: () -> Void
 
     @State private var editablePreviews: [EditablePreview]
     @State private var selectedStorageId: String?
@@ -19,11 +20,13 @@ struct ScanConfirmationView: View {
     init(
         previews: [ItemPreview],
         onScanAnother: @escaping () -> Void,
-        onConfirm: @escaping ([ItemPreview], String?) async -> Void
+        onConfirm: @escaping ([ItemPreview], String?) async -> Void,
+        onClose: @escaping () -> Void
     ) {
         self.previews = previews
         self.onScanAnother = onScanAnother
         self.onConfirm = onConfirm
+        self.onClose = onClose
         _editablePreviews = State(initialValue: previews.map { EditablePreview(from: $0) })
         _selectedStorageId = State(
             initialValue: UserDefaults.standard.string(forKey: "lastStorageId")
@@ -42,7 +45,8 @@ struct ScanConfirmationView: View {
             onDuplicate: duplicate(id:),
             onDelete: delete(id:),
             onScanAnother: onScanAnother,
-            onConfirm: { Task { await confirm() } }
+            onConfirm: { Task { await confirm() } },
+            onClose: onClose
         )
         .sheet(isPresented: $showLocationPicker) {
             LocationPicker(selectedStorageId: $selectedStorageId)
@@ -155,7 +159,8 @@ struct ScanConfirmationView: View {
                 ),
             ],
             onScanAnother: {},
-            onConfirm: { _, _ in }
+            onConfirm: { _, _ in },
+            onClose: {}
         )
     }
 }

@@ -31,7 +31,8 @@ struct ScanFlowPage: View {
                         onScanAnother: onScanAnother,
                         onConfirm: { editedPreviews, storageId in
                             await onConfirm(editedPreviews, storageId)
-                        }
+                        },
+                        onClose: onDismiss
                     )
                 }
             }
