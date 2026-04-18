@@ -20,6 +20,7 @@ struct ItemDetailPage: View {
     let onEditSave: (ItemEditForm.Fields) async throws -> Void
     let onOpenReminders: () -> Void
     let onOpenMove: () -> Void
+    let onClose: () -> Void
 
     @State private var showDeleteConfirmation = false
     @State private var isEditing = false
@@ -211,6 +212,13 @@ struct ItemDetailPage: View {
 
     @ToolbarContentBuilder
     private var readToolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Fermer", systemImage: "xmark") {
+                onClose()
+            }
+            .labelStyle(.iconOnly)
+            .accessibilityIdentifier("close-item-button")
+        }
         ToolbarItem(placement: .primaryAction) {
             Button("Modifier", systemImage: "pencil") {
                 isEditing = true
@@ -254,7 +262,8 @@ struct ItemDetailPage: View {
             onDelete: {},
             onEditSave: { _ in },
             onOpenReminders: {},
-            onOpenMove: {}
+            onOpenMove: {},
+            onClose: {}
         )
     }
 }
@@ -279,7 +288,8 @@ struct ItemDetailPage: View {
             onDelete: {},
             onEditSave: { _ in },
             onOpenReminders: {},
-            onOpenMove: {}
+            onOpenMove: {},
+            onClose: {}
         )
     }
 }

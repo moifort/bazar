@@ -43,7 +43,8 @@ struct ItemDetailView: View {
                     onOpenMove: {
                         pendingStorageId = item.location?.storageId
                         showMovePicker = true
-                    }
+                    },
+                    onClose: { dismiss() }
                 )
             } else if let errorMessage {
                 ContentUnavailableView(
