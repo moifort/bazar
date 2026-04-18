@@ -13,6 +13,7 @@ struct ItemDetailView: View {
     @State private var purchaseLocationSuggestions: [String] = []
     @State private var showReminders = false
     @State private var showMovePicker = false
+    @State private var showPurchaseEdit = false
     @State private var pendingStorageId: String?
     @State private var isMoving = false
 
@@ -45,6 +46,7 @@ struct ItemDetailView: View {
                         pendingStorageId = item.location?.storageId
                         showMovePicker = true
                     },
+                    onOpenPurchaseEdit: { showPurchaseEdit = true },
                     onClose: { dismiss() }
                 )
             } else if let errorMessage {
@@ -90,6 +92,27 @@ struct ItemDetailView: View {
             }
         }) {
             LocationPicker(selectedStorageId: $pendingStorageId)
+        }
+        .sheet(isPresented: $showPurchaseEdit) {
+            if let item {
+                NavigationStack {
+                    PurchaseEditForm(
+                        initial: .init(
+                            purchaseDate: item.purchaseDate,
+                            purchaseLocation: item.purchaseLocation,
+                            invoiceImageBase64Update: nil
+                        ),
+                        existingInvoiceImageURL: item.invoiceImageId.flatMap(imageURL(for:)),
+                        purchaseLocationSuggestions: purchaseLocationSuggestions,
+                        onSave: { fields in
+                            try await savePurchase(fields)
+                            showPurchaseEdit = false
+                            onUpdated()
+                        },
+                        onCancel: { showPurchaseEdit = false }
+                    )
+                }
+            }
         }
         .overlay {
             if isMoving {
@@ -164,6 +187,23 @@ struct ItemDetailView: View {
             purchaseDate: fields.purchaseDate.map { .some(iso.string(from: $0)) } ?? .null,
             purchaseLocation: .some(fields.purchaseLocation),
             quantity: .some(String(fields.quantity))
+        )
+        try await GraphQLItemsAPI.update(id: itemId, input: input)
+        item = try await GraphQLItemsAPI.getDetail(id: itemId)
+    }
+
+    private func savePurchase(_ fields: PurchaseEditForm.Fields) async throws {
+        let iso = ISO8601DateFormatter()
+        iso.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        nonisolated(unsafe) let input = BazarGraphQL.UpdateItemInput(
+            category: .none,
+            description: .none,
+            invoiceImageBase64: fields.invoiceImageBase64Update.map { .some($0) } ?? .none,
+            name: .none,
+            personalNotes: .none,
+            purchaseDate: fields.purchaseDate.map { .some(iso.string(from: $0)) } ?? .null,
+            purchaseLocation: .some(fields.purchaseLocation),
+            quantity: .none
         )
         try await GraphQLItemsAPI.update(id: itemId, input: input)
         item = try await GraphQLItemsAPI.getDetail(id: itemId)

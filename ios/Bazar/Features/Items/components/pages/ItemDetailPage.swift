@@ -21,6 +21,7 @@ struct ItemDetailPage: View {
     let onEditSave: (ItemEditForm.Fields) async throws -> Void
     let onOpenReminders: () -> Void
     let onOpenMove: () -> Void
+    let onOpenPurchaseEdit: () -> Void
     let onClose: () -> Void
 
     @State private var showDeleteConfirmation = false
@@ -153,26 +154,36 @@ struct ItemDetailPage: View {
                 Text("Rappels")
             }
 
-            if purchaseDate != nil || !purchaseLocation.isEmpty || invoiceImageURL != nil {
-                Section("Achat") {
-                    if let purchaseDate {
-                        LabeledContent("Date", value: purchaseDate.formatted(date: .abbreviated, time: .omitted))
-                    }
-                    if !purchaseLocation.isEmpty {
-                        if let url = locationURL(from: purchaseLocation) {
-                            LabeledContent("Lieu") {
-                                Link(purchaseLocation, destination: url)
-                            }
-                        } else {
-                            LabeledContent("Lieu", value: purchaseLocation)
+            Section("Achat") {
+                if let purchaseDate {
+                    LabeledContent("Date", value: purchaseDate.formatted(date: .abbreviated, time: .omitted))
+                }
+                if !purchaseLocation.isEmpty {
+                    if let url = locationURL(from: purchaseLocation) {
+                        LabeledContent("Lieu") {
+                            Link(purchaseLocation, destination: url)
                         }
-                    }
-                    if let invoiceImageURL {
-                        Link(destination: invoiceImageURL) {
-                            Label("Voir la facture", systemImage: "doc.text.magnifyingglass")
-                        }
+                    } else {
+                        LabeledContent("Lieu", value: purchaseLocation)
                     }
                 }
+                if let invoiceImageURL {
+                    Link(destination: invoiceImageURL) {
+                        Label("Voir la facture", systemImage: "doc.text.magnifyingglass")
+                    }
+                }
+                Button {
+                    onOpenPurchaseEdit()
+                } label: {
+                    HStack {
+                        Label(hasPurchaseInfo ? "Modifier l'achat" : "Ajouter un achat", systemImage: "bag.badge.plus")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.secondary)
+                            .font(.caption.weight(.semibold))
+                    }
+                }
+                .accessibilityIdentifier("edit-purchase-button")
             }
 
             if !description.isEmpty {
@@ -189,6 +200,10 @@ struct ItemDetailPage: View {
                 }
             }
         }
+    }
+
+    private var hasPurchaseInfo: Bool {
+        purchaseDate != nil || !purchaseLocation.isEmpty || invoiceImageURL != nil
     }
 
     private func locationURL(from text: String) -> URL? {
@@ -265,6 +280,7 @@ struct ItemDetailPage: View {
             onEditSave: { _ in },
             onOpenReminders: {},
             onOpenMove: {},
+            onOpenPurchaseEdit: {},
             onClose: {}
         )
     }
@@ -292,6 +308,7 @@ struct ItemDetailPage: View {
             onEditSave: { _ in },
             onOpenReminders: {},
             onOpenMove: {},
+            onOpenPurchaseEdit: {},
             onClose: {}
         )
     }

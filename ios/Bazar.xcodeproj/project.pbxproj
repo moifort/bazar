@@ -45,6 +45,7 @@
 		458904B3B8221843772659B5 /* ItemDetailQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F70548D129AAD2DD699714 /* ItemDetailQuery.graphql.swift */; };
 		45CA8DA10B945B2FE719C72C /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28522A42593FB701C7FA066 /* ItemsView.swift */; };
 		49013A7ABF2D6A9FD49C9378 /* ReminderEditSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE219CC11056D9883F0C67F /* ReminderEditSheet.swift */; };
+		4B5F6A118EDAA18BDE7E9F69 /* PurchaseEditForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74201AD560736044676C56BD /* PurchaseEditForm.swift */; };
 		4C592CB92B30370B888220DC /* UpdateReminderMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A828467120D1E5009DCAF0 /* UpdateReminderMutation.graphql.swift */; };
 		4CE299E49A86E738B46E67AE /* Reminder.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0884C1CDEDF9C347B8A3D934 /* Reminder.graphql.swift */; };
 		4F986D1A5DE3D75179DB2FFD /* UpdateItemInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8795A48B4E16E73895451CA6 /* UpdateItemInput.graphql.swift */; };
@@ -212,6 +213,7 @@
 		6A9B10A5BD25D44043BE0515 /* UpdateRoomMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRoomMutation.graphql.swift; sourceTree = "<group>"; };
 		6BE11C582F11BAFC07B646EC /* ItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsViewModel.swift; sourceTree = "<group>"; };
 		72040D9143BBFF7FF0CF08AA /* Query.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.graphql.swift; sourceTree = "<group>"; };
+		74201AD560736044676C56BD /* PurchaseEditForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseEditForm.swift; sourceTree = "<group>"; };
 		747852452BE8F5587C19941B /* ItemId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemId.swift; sourceTree = "<group>"; };
 		75F70548D129AAD2DD699714 /* ItemDetailQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailQuery.graphql.swift; sourceTree = "<group>"; };
 		7CE5B73E561E13890925AEE1 /* CategoryCount.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCount.graphql.swift; sourceTree = "<group>"; };
@@ -432,6 +434,7 @@
 			isa = PBXGroup;
 			children = (
 				FD4C7AB2E7FAAD8B2EBE41C2 /* ItemEditForm.swift */,
+				74201AD560736044676C56BD /* PurchaseEditForm.swift */,
 			);
 			path = organisms;
 			sourceTree = "<group>";
@@ -970,6 +973,7 @@
 				DAB01BFBA833B6665EF2608D /* PlaceDetailPage.swift in Sources */,
 				FF7AF39B8E5C2CE2571ABA09 /* PlaceId.swift in Sources */,
 				F3F7DCE687681077E835CF69 /* PlaceName.swift in Sources */,
+				4B5F6A118EDAA18BDE7E9F69 /* PurchaseEditForm.swift in Sources */,
 				EE63D27B7451A50655DE1444 /* Quantity.swift in Sources */,
 				C6B38C53C2EAF48CDBE344E5 /* QuantityStepper.swift in Sources */,
 				CC31A8DB85926BBD5751E4A8 /* Query.graphql.swift in Sources */,
