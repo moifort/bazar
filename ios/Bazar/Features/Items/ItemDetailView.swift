@@ -12,6 +12,9 @@ struct ItemDetailView: View {
     @State private var errorMessage: String?
     @State private var purchaseLocationSuggestions: [String] = []
     @State private var showReminders = false
+    @State private var showMovePicker = false
+    @State private var pendingStorageId: String?
+    @State private var isMoving = false
 
     var body: some View {
         Group {
@@ -36,7 +39,11 @@ struct ItemDetailView: View {
                         try await saveItem(fields)
                         onUpdated()
                     },
-                    onOpenReminders: { showReminders = true }
+                    onOpenReminders: { showReminders = true },
+                    onOpenMove: {
+                        pendingStorageId = item.location?.storageId
+                        showMovePicker = true
+                    }
                 )
             } else if let errorMessage {
                 ContentUnavailableView(
@@ -74,6 +81,26 @@ struct ItemDetailView: View {
                 }
             }
         }
+        .sheet(isPresented: $showMovePicker, onDismiss: {
+            let currentId = item?.location?.storageId
+            if let newId = pendingStorageId, newId != currentId {
+                Task { await moveItem(to: newId) }
+            }
+        }) {
+            LocationPicker(selectedStorageId: $pendingStorageId)
+        }
+        .overlay {
+            if isMoving {
+                ZStack {
+                    Color.black.opacity(0.2).ignoresSafeArea()
+                    ProgressView("Déplacement…")
+                        .padding(24)
+                        .background(.regularMaterial, in: .rect(cornerRadius: 12))
+                }
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.15), value: isMoving)
     }
 
     private func syncNotifications() async {
@@ -106,6 +133,18 @@ struct ItemDetailView: View {
             try await GraphQLItemsAPI.delete(id: itemId)
             onDeleted()
             dismiss()
+        } catch {
+            errorMessage = reportError(error)
+        }
+    }
+
+    private func moveItem(to storageId: String) async {
+        isMoving = true
+        defer { isMoving = false }
+        do {
+            try await GraphQLItemsAPI.move(id: itemId, storageId: storageId)
+            item = try await GraphQLItemsAPI.getDetail(id: itemId)
+            onUpdated()
         } catch {
             errorMessage = reportError(error)
         }

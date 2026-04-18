@@ -19,6 +19,7 @@ struct ItemDetailPage: View {
     let onDelete: () async -> Void
     let onEditSave: (ItemEditForm.Fields) async throws -> Void
     let onOpenReminders: () -> Void
+    let onOpenMove: () -> Void
 
     @State private var showDeleteConfirmation = false
     @State private var isEditing = false
@@ -109,9 +110,24 @@ struct ItemDetailPage: View {
                         .labelStyle(.titleAndIcon)
                 }
                 LabeledContent("Quantité", value: "\(quantity)")
-                if let locationPath {
-                    LabeledContent("Lieu", value: locationPath)
+                Button {
+                    onOpenMove()
+                } label: {
+                    HStack(spacing: 8) {
+                        Text("Lieu")
+                            .foregroundStyle(.primary)
+                        Spacer(minLength: 8)
+                        Text(locationPath ?? "Non défini")
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.trailing)
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.tertiary)
+                            .font(.caption.weight(.semibold))
+                    }
+                    .contentShape(.rect)
                 }
+                .tint(.primary)
+                .accessibilityIdentifier("move-item-row")
             }
 
             Section {
@@ -202,6 +218,12 @@ struct ItemDetailPage: View {
             .accessibilityIdentifier("edit-item-button")
         }
         ToolbarItem(placement: .secondaryAction) {
+            Button("Déplacer", systemImage: "shippingbox.and.arrow.forward") {
+                onOpenMove()
+            }
+            .accessibilityIdentifier("move-item-button")
+        }
+        ToolbarItem(placement: .secondaryAction) {
             Button("Supprimer", systemImage: "trash", role: .destructive) {
                 showDeleteConfirmation = true
             }
@@ -229,7 +251,8 @@ struct ItemDetailPage: View {
             onRefresh: {},
             onDelete: {},
             onEditSave: { _ in },
-            onOpenReminders: {}
+            onOpenReminders: {},
+            onOpenMove: {}
         )
     }
 }
@@ -253,7 +276,8 @@ struct ItemDetailPage: View {
             onRefresh: {},
             onDelete: {},
             onEditSave: { _ in },
-            onOpenReminders: {}
+            onOpenReminders: {},
+            onOpenMove: {}
         )
     }
 }
