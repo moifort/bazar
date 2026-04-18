@@ -8,6 +8,7 @@ struct LocationsPage: View {
     let onAddPlace: (String) async -> Void
     let onDeletePlace: (String) async -> Void
     let onEditPlace: (_ id: String, _ name: String, _ icon: String?) async -> Void
+    let onReorderPlaces: (_ from: IndexSet, _ to: Int) async -> Void
 
     @State private var showAddSheet = false
     @State private var placeToEdit: Place?
@@ -36,6 +37,10 @@ struct LocationsPage: View {
         .navigationBarTitleDisplayMode(.large)
         .refreshable { await onRefresh() }
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                EditButton()
+                    .accessibilityIdentifier("edit-places-button")
+            }
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     showAddSheet = true
@@ -87,6 +92,15 @@ struct LocationsPage: View {
                     }
                 }
             }
+            .onMove { from, to in
+                Task { await onReorderPlaces(from, to) }
+            }
+            .onDelete { indexSet in
+                let ids = indexSet.map { places[$0].id }
+                Task {
+                    for id in ids { await onDeletePlace(id) }
+                }
+            }
         }
     }
 }
@@ -115,7 +129,8 @@ struct LocationsPage: View {
             onRefresh: {},
             onAddPlace: { _ in },
             onDeletePlace: { _ in },
-            onEditPlace: { _, _, _ in }
+            onEditPlace: { _, _, _ in },
+            onReorderPlaces: { _, _ in }
         )
     }
 }
@@ -129,7 +144,8 @@ struct LocationsPage: View {
             onRefresh: {},
             onAddPlace: { _ in },
             onDeletePlace: { _ in },
-            onEditPlace: { _, _, _ in }
+            onEditPlace: { _, _, _ in },
+            onReorderPlaces: { _, _ in }
         )
     }
 }

@@ -6,6 +6,7 @@ struct ZoneDetailPage: View {
     let onDeleteStorage: (String) async -> Void
     let onEditZone: (_ name: String) async -> Void
     let onEditStorage: (_ id: String, _ name: String) async -> Void
+    let onReorderStorages: (_ from: IndexSet, _ to: Int) async -> Void
 
     @State private var showAddSheet = false
     @State private var showEditZoneSheet = false
@@ -39,11 +40,24 @@ struct ZoneDetailPage: View {
                             }
                         }
                 }
+                .onMove { from, to in
+                    Task { await onReorderStorages(from, to) }
+                }
+                .onDelete { indexSet in
+                    let ids = indexSet.map { zone.storages[$0].id }
+                    Task {
+                        for id in ids { await onDeleteStorage(id) }
+                    }
+                }
             }
         }
         .navigationTitle(zone.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                EditButton()
+                    .accessibilityIdentifier("edit-storages-button")
+            }
             ToolbarItem(placement: .secondaryAction) {
                 Button {
                     showEditZoneSheet = true
@@ -103,7 +117,8 @@ struct ZoneDetailPage: View {
             onAddStorage: { _ in },
             onDeleteStorage: { _ in },
             onEditZone: { _ in },
-            onEditStorage: { _, _ in }
+            onEditStorage: { _, _ in },
+            onReorderStorages: { _, _ in }
         )
     }
 }

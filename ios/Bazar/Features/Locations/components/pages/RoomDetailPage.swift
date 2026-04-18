@@ -6,6 +6,7 @@ struct RoomDetailPage: View {
     let onDeleteZone: (String) async -> Void
     let onEditRoom: (_ name: String, _ icon: String?) async -> Void
     let onEditZone: (_ id: String, _ name: String) async -> Void
+    let onReorderZones: (_ from: IndexSet, _ to: Int) async -> Void
 
     @State private var showAddSheet = false
     @State private var showEditRoomSheet = false
@@ -41,11 +42,24 @@ struct RoomDetailPage: View {
                         }
                     }
                 }
+                .onMove { from, to in
+                    Task { await onReorderZones(from, to) }
+                }
+                .onDelete { indexSet in
+                    let ids = indexSet.map { room.zones[$0].id }
+                    Task {
+                        for id in ids { await onDeleteZone(id) }
+                    }
+                }
             }
         }
         .navigationTitle(room.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                EditButton()
+                    .accessibilityIdentifier("edit-zones-button")
+            }
             ToolbarItem(placement: .secondaryAction) {
                 Button {
                     showEditRoomSheet = true
@@ -108,7 +122,8 @@ struct RoomDetailPage: View {
             onAddZone: { _ in },
             onDeleteZone: { _ in },
             onEditRoom: { _, _ in },
-            onEditZone: { _, _ in }
+            onEditZone: { _, _ in },
+            onReorderZones: { _, _ in }
         )
     }
 }

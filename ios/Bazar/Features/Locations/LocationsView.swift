@@ -23,6 +23,9 @@ struct LocationsView: View {
                 onDeletePlace: { id in await viewModel.deletePlace(id: id) },
                 onEditPlace: { id, name, icon in
                     await viewModel.updatePlace(id: id, name: name, icon: icon)
+                },
+                onReorderPlaces: { from, to in
+                    await viewModel.reorderPlaces(from: from, to: to)
                 }
             )
             .task(id: refreshTrigger) {
@@ -48,6 +51,9 @@ struct LocationsView: View {
                     },
                     onEditRoom: { roomId, name, icon in
                         await viewModel.updateRoom(id: roomId, name: name, icon: icon)
+                    },
+                    onReorderRooms: { from, to in
+                        await viewModel.reorderRooms(placeId: id, from: from, to: to)
                     }
                 )
             } else {
@@ -65,6 +71,9 @@ struct LocationsView: View {
                     },
                     onEditZone: { zoneId, name in
                         await viewModel.updateZone(id: zoneId, name: name)
+                    },
+                    onReorderZones: { from, to in
+                        await viewModel.reorderZones(roomId: id, from: from, to: to)
                     }
                 )
             } else {
@@ -82,6 +91,9 @@ struct LocationsView: View {
                     },
                     onEditStorage: { storageId, name in
                         await viewModel.updateStorage(id: storageId, name: name)
+                    },
+                    onReorderStorages: { from, to in
+                        await viewModel.reorderStorages(zoneId: id, from: from, to: to)
                     }
                 )
             } else {

@@ -6,6 +6,7 @@ struct PlaceDetailPage: View {
     let onDeleteRoom: (String) async -> Void
     let onEditPlace: (_ name: String, _ icon: String?) async -> Void
     let onEditRoom: (_ id: String, _ name: String, _ icon: String?) async -> Void
+    let onReorderRooms: (_ from: IndexSet, _ to: Int) async -> Void
 
     @State private var showAddSheet = false
     @State private var showEditPlaceSheet = false
@@ -41,11 +42,24 @@ struct PlaceDetailPage: View {
                         }
                     }
                 }
+                .onMove { from, to in
+                    Task { await onReorderRooms(from, to) }
+                }
+                .onDelete { indexSet in
+                    let ids = indexSet.map { place.rooms[$0].id }
+                    Task {
+                        for id in ids { await onDeleteRoom(id) }
+                    }
+                }
             }
         }
         .navigationTitle(place.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                EditButton()
+                    .accessibilityIdentifier("edit-rooms-button")
+            }
             ToolbarItem(placement: .secondaryAction) {
                 Button {
                     showEditPlaceSheet = true
@@ -109,7 +123,8 @@ struct PlaceDetailPage: View {
             onAddRoom: { _ in },
             onDeleteRoom: { _ in },
             onEditPlace: { _, _ in },
-            onEditRoom: { _, _, _ in }
+            onEditRoom: { _, _, _ in },
+            onReorderRooms: { _, _ in }
         )
     }
 }
