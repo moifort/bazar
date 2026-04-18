@@ -15,10 +15,10 @@ struct LocationsPage: View {
 
     @State private var showAddSheet = false
     @State private var placeToEdit: Place?
-    // Presence in these sets means the corresponding node is collapsed.
-    // Empty set = everything expanded by default.
+    // Place expansion: presence in the set means collapsed (empty = all expanded).
     @State private var collapsedPlaces: Set<String> = []
-    @State private var collapsedRooms: Set<String> = []
+    // Room expansion: presence in the set means expanded (empty = all collapsed).
+    @State private var expandedRooms: Set<String> = []
     // Rooms for which the user tapped "Voir toutes les zones".
     @State private var roomsWithAllZones: Set<String> = []
 
@@ -184,12 +184,12 @@ struct LocationsPage: View {
 
     private func roomExpansionBinding(for id: String) -> Binding<Bool> {
         Binding(
-            get: { !collapsedRooms.contains(id) },
+            get: { expandedRooms.contains(id) },
             set: { isExpanded in
                 if isExpanded {
-                    collapsedRooms.remove(id)
+                    expandedRooms.insert(id)
                 } else {
-                    collapsedRooms.insert(id)
+                    expandedRooms.remove(id)
                 }
             }
         )
