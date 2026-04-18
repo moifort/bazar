@@ -9,6 +9,8 @@ struct LocationPicker: View {
     @State private var error: String?
     @State private var addTarget: AddTarget?
     @State private var addName = ""
+    @State private var collapsedRoomIds: Set<String> = []
+    @State private var collapsedZoneIds: Set<String> = []
 
     var body: some View {
         NavigationStack {
@@ -74,9 +76,9 @@ struct LocationPicker: View {
             ForEach(places) { place in
                 Section {
                     ForEach(place.rooms) { room in
-                        DisclosureGroup {
+                        DisclosureGroup(isExpanded: roomExpansion(room.id)) {
                             ForEach(room.zones) { zone in
-                                DisclosureGroup {
+                                DisclosureGroup(isExpanded: zoneExpansion(zone.id)) {
                                     ForEach(zone.storages) { storage in
                                         Button {
                                             selectedStorageId = storage.id
@@ -133,6 +135,34 @@ struct LocationPicker: View {
                 }
             }
         }
+    }
+
+    // MARK: - Expansion
+
+    private func roomExpansion(_ roomId: String) -> Binding<Bool> {
+        Binding(
+            get: { !collapsedRoomIds.contains(roomId) },
+            set: { isExpanded in
+                if isExpanded {
+                    collapsedRoomIds.remove(roomId)
+                } else {
+                    collapsedRoomIds.insert(roomId)
+                }
+            }
+        )
+    }
+
+    private func zoneExpansion(_ zoneId: String) -> Binding<Bool> {
+        Binding(
+            get: { !collapsedZoneIds.contains(zoneId) },
+            set: { isExpanded in
+                if isExpanded {
+                    collapsedZoneIds.remove(zoneId)
+                } else {
+                    collapsedZoneIds.insert(zoneId)
+                }
+            }
+        )
     }
 
     // MARK: - Actions
