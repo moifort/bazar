@@ -35,7 +35,7 @@ const itemSchema = z.object({
 })
 
 const responseSchema = z.object({
-  items: z.array(itemSchema).min(1),
+  items: z.array(itemSchema),
 })
 
 const cleanGeminiJson = (raw: string) =>
@@ -64,13 +64,19 @@ const parseGeminiJson = (text: string) => {
   }
 }
 
-const PROMPT = `Analyse cette photo et identifie tous les objets domestiques visibles.
-Pour chaque objet distinct, extrais :
+const PROMPT = `Analyse cette photo et identifie les objets domestiques qui sont le sujet principal de la prise de vue.
+
+Concentre-toi uniquement sur les objets clairement visibles au centre du cadre, nets et au premier plan.
+Ignore les objets en arriere-plan, flous, partiellement coupes par le bord de l'image, ou en peripherie.
+En cas de doute sur un objet, ne l'inclus pas.
+
+Pour chaque objet retenu, extrais :
 - name : nom de l'objet en francais
 - category : une parmi tools, appliances, decor, clothing, documents, food, electronics, furniture, kitchenware, linen, sports, toys, books, media, hygiene, other
 - description : breve description en francais (1-2 phrases)
 - quantity : nombre d'exemplaires identiques visibles (defaut 1)
 
+Si aucun objet ne satisfait ces criteres, reponds avec une liste vide.
 Reponds en JSON avec le schema : { "items": [{ "name", "category", "description", "quantity" }] }`
 
 export const analyzeImage = async (imageBase64: string) => {
