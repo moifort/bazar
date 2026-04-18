@@ -219,7 +219,7 @@ struct ItemDetailPage: View {
             .accessibilityIdentifier("edit-item-button")
         }
         ToolbarItem(placement: .secondaryAction) {
-            Button("Déplacer", systemImage: "shippingbox.and.arrow.forward") {
+            Button("Déplacer", systemImage: "arrow.left.arrow.right") {
                 onOpenMove()
             }
             .accessibilityIdentifier("move-item-button")
