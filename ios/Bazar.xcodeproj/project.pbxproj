@@ -31,6 +31,7 @@
 		2DC9411DC962AAD705BDF319 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E912516B096BA0433315E77D /* DashboardViewModel.swift */; };
 		30C9B92E5703C82A91042461 /* UpdateRoomMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9B10A5BD25D44043BE0515 /* UpdateRoomMutation.graphql.swift */; };
 		31E298054F5FE4BA8191C8A2 /* DeleteRoomMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C2AD25FE2EFCE93FA9EAB4 /* DeleteRoomMutation.graphql.swift */; };
+		34445592BE514E73D302B0B7 /* ItemCategoryMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A437D505EA942552D9B2B57 /* ItemCategoryMenu.swift */; };
 		34AF9027CB95880880353B76 /* ItemName.swift in Sources */ = {isa = PBXBuildFile; fileRef = D894786302504830B5C0FD8C /* ItemName.swift */; };
 		34D47CC1C13577D2F0095908 /* LocationPath.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CEDE0B016E9FBEC98CD2D1 /* LocationPath.graphql.swift */; };
 		3ABAFDAF64A8E1C0407B5DAA /* UpdateItemMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1BAC47263C29C7FAA508C6 /* UpdateItemMutation.graphql.swift */; };
@@ -221,6 +222,7 @@
 		94F2C72013021C59F88BEB58 /* ItemRemindersPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRemindersPage.swift; sourceTree = "<group>"; };
 		968127786CBDC82DFB27D923 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		969E5557F84D0D44EF3F8EC2 /* EditablePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditablePreview.swift; sourceTree = "<group>"; };
+		9A437D505EA942552D9B2B57 /* ItemCategoryMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCategoryMenu.swift; sourceTree = "<group>"; };
 		9CE79855AF193BA16FE55848 /* DashboardQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardQuery.graphql.swift; sourceTree = "<group>"; };
 		9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BazarApp.swift; sourceTree = "<group>"; };
 		9F415C85D4FE275223739444 /* ItemsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsPage.swift; sourceTree = "<group>"; };
@@ -661,6 +663,7 @@
 		B8912FBC08223A38F053E6D8 /* molecules */ = {
 			isa = PBXGroup;
 			children = (
+				9A437D505EA942552D9B2B57 /* ItemCategoryMenu.swift */,
 				87AD49AA6F4FEB4376218A76 /* QuantityStepper.swift */,
 			);
 			path = molecules;
@@ -918,6 +921,7 @@
 				86B6F667065BF23263D8B1F5 /* ImageId.swift in Sources */,
 				A90B457DD2D193A3719C0C48 /* Item.graphql.swift in Sources */,
 				1273E60F5283FBB2D986A68F /* ItemCategory.graphql.swift in Sources */,
+				34445592BE514E73D302B0B7 /* ItemCategoryMenu.swift in Sources */,
 				94FEAE6A3CF3DA2C7BF846B3 /* ItemDetailPage.swift in Sources */,
 				458904B3B8221843772659B5 /* ItemDetailQuery.graphql.swift in Sources */,
 				7897296951DAFC820B436357 /* ItemDetailView.swift in Sources */,
