@@ -67,14 +67,14 @@ private struct CategoryIcon: View {
             name: "Perceuse Bosch",
             category: .tools,
             quantity: 1,
-            locationPath: "Maison > Garage > Établi > Tiroir 1",
+            locationPath: "Garage > Établi > Tiroir 1",
             overdueReminderCount: 0
         )
         ItemRow(
             name: "Ampoules LED",
             category: .electronics,
             quantity: 12,
-            locationPath: "Maison > Cellier",
+            locationPath: "Cellier",
             overdueReminderCount: 1
         )
         ItemRow(

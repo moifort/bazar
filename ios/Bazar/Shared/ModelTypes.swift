@@ -35,6 +35,18 @@ struct ItemListItem: Identifiable, Sendable {
     var overdueReminderCount: Int
 }
 
+extension ItemListItem {
+    /// Location path without the leading place segment.
+    /// `"Maison > Garage > Établi > Tiroir 1"` → `"Garage > Établi > Tiroir 1"`.
+    /// Returns `nil` when there is no path, or when the path contains only the place.
+    var shortLocationPath: String? {
+        guard let full = locationFullPath, !full.isEmpty else { return nil }
+        let parts = full.components(separatedBy: " > ")
+        guard parts.count > 1 else { return nil }
+        return parts.dropFirst().joined(separator: " > ")
+    }
+}
+
 struct ItemListPage: Sendable {
     let items: [ItemListItem]
     let totalCount: Int

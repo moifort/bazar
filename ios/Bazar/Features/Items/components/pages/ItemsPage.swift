@@ -143,7 +143,7 @@ struct ItemsPage: View {
                 name: item.name,
                 category: item.category,
                 quantity: item.quantity,
-                locationPath: item.locationFullPath,
+                locationPath: item.shortLocationPath,
                 overdueReminderCount: item.overdueReminderCount
             )
         }
