@@ -20,8 +20,6 @@ final class ItemsViewModel {
     var hasMore = false
     var totalCount = 0
     var error: String?
-    var sort: ItemSort = .createdAt
-    var sortDescending = true
     var categoryFilter: ItemCategory?
     var placeFilter: (id: String, name: String)?
 
@@ -31,7 +29,7 @@ final class ItemsViewModel {
     var filterKey: String {
         let category = categoryFilter?.rawValue ?? "all"
         let place = placeFilter?.id ?? "all"
-        return "\(sort.rawValue)-\(sortDescending)-\(category)-\(place)"
+        return "\(category)-\(place)"
     }
 
     /// Items bucketed by place, preserving the flat `items` order within each bucket.
@@ -141,8 +139,8 @@ final class ItemsViewModel {
         try await GraphQLItemsAPI.list(
             category: categoryFilter?.rawValue,
             placeId: placeFilter?.id,
-            sort: sort.rawValue,
-            order: sortDescending ? "desc" : "asc",
+            sort: ItemSort.createdAt.rawValue,
+            order: "desc",
             offset: offset,
             limit: pageSize
         )

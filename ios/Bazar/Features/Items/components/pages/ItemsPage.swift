@@ -9,8 +9,6 @@ struct ItemsPage: View {
     let navigationSubtitle: String
 
     @Binding var categoryFilter: ItemCategory?
-    @Binding var sort: ItemSort
-    @Binding var sortDescending: Bool
     @Binding var searchText: String
 
     let isSearching: Bool
@@ -52,7 +50,7 @@ struct ItemsPage: View {
         .refreshable { await onRefresh() }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                filterAndSortMenu
+                filterMenu
             }
         }
         .searchable(text: $searchText, prompt: "Chercher un objet, un lieu...")
@@ -107,31 +105,21 @@ struct ItemsPage: View {
         }
     }
 
-    private var filterAndSortMenu: some View {
+    private var filterMenu: some View {
         Menu {
-            Section("Filtrer") {
-                Picker("Catégorie", selection: $categoryFilter) {
-                    Text("Toutes les catégories").tag(nil as ItemCategory?)
-                    ForEach(ItemCategory.allCases) { category in
-                        Label(category.label, systemImage: category.icon)
-                            .tag(category as ItemCategory?)
-                    }
+            Picker("Catégorie", selection: $categoryFilter) {
+                Text("Toutes les catégories").tag(nil as ItemCategory?)
+                ForEach(ItemCategory.allCases) { category in
+                    Label(category.label, systemImage: category.icon)
+                        .tag(category as ItemCategory?)
                 }
-            }
-            Section("Trier") {
-                Picker("Trier par", selection: $sort) {
-                    ForEach(ItemSort.allCases) { sortOption in
-                        Label(sortOption.label, systemImage: sortOption.icon).tag(sortOption)
-                    }
-                }
-                Toggle(sortDescending ? "Décroissant" : "Croissant", isOn: $sortDescending)
             }
         } label: {
             Image(systemName: categoryFilter != nil
                 ? "line.3.horizontal.decrease.circle.fill"
                 : "line.3.horizontal.decrease.circle")
         }
-        .accessibilityIdentifier("items-filter-sort-menu")
+        .accessibilityIdentifier("items-filter-menu")
     }
 
     @ViewBuilder
@@ -154,8 +142,6 @@ struct ItemsPage: View {
 
 #Preview("Loaded") {
     @Previewable @State var categoryFilter: ItemCategory?
-    @Previewable @State var sort: ItemSort = .createdAt
-    @Previewable @State var sortDescending = true
     @Previewable @State var searchText = ""
 
     NavigationStack {
@@ -176,8 +162,6 @@ struct ItemsPage: View {
             errorMessage: nil,
             navigationSubtitle: "2 objets",
             categoryFilter: $categoryFilter,
-            sort: $sort,
-            sortDescending: $sortDescending,
             searchText: $searchText,
             isSearching: false,
             searchResults: nil,
@@ -194,8 +178,6 @@ struct ItemsPage: View {
 
 #Preview("Empty") {
     @Previewable @State var categoryFilter: ItemCategory?
-    @Previewable @State var sort: ItemSort = .createdAt
-    @Previewable @State var sortDescending = true
     @Previewable @State var searchText = ""
 
     NavigationStack {
@@ -207,8 +189,6 @@ struct ItemsPage: View {
             errorMessage: nil,
             navigationSubtitle: "",
             categoryFilter: $categoryFilter,
-            sort: $sort,
-            sortDescending: $sortDescending,
             searchText: $searchText,
             isSearching: false,
             searchResults: nil,
@@ -225,8 +205,6 @@ struct ItemsPage: View {
 
 #Preview("Searching") {
     @Previewable @State var categoryFilter: ItemCategory?
-    @Previewable @State var sort: ItemSort = .createdAt
-    @Previewable @State var sortDescending = true
     @Previewable @State var searchText = "perceuse"
 
     NavigationStack {
@@ -246,8 +224,6 @@ struct ItemsPage: View {
             errorMessage: nil,
             navigationSubtitle: "1 objet",
             categoryFilter: $categoryFilter,
-            sort: $sort,
-            sortDescending: $sortDescending,
             searchText: $searchText,
             isSearching: false,
             searchResults: [
@@ -266,8 +242,6 @@ struct ItemsPage: View {
 
 #Preview("Multiple places") {
     @Previewable @State var categoryFilter: ItemCategory?
-    @Previewable @State var sort: ItemSort = .createdAt
-    @Previewable @State var sortDescending = true
     @Previewable @State var searchText = ""
 
     NavigationStack {
@@ -295,8 +269,6 @@ struct ItemsPage: View {
             errorMessage: nil,
             navigationSubtitle: "3 objets",
             categoryFilter: $categoryFilter,
-            sort: $sort,
-            sortDescending: $sortDescending,
             searchText: $searchText,
             isSearching: false,
             searchResults: nil,

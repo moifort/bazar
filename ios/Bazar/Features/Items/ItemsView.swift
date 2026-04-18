@@ -20,8 +20,6 @@ struct ItemsView: View {
                 errorMessage: viewModel.hasItems ? nil : viewModel.error,
                 navigationSubtitle: viewModel.navigationSubtitle,
                 categoryFilter: $viewModel.categoryFilter,
-                sort: $viewModel.sort,
-                sortDescending: $viewModel.sortDescending,
                 searchText: $searchViewModel.searchText,
                 isSearching: searchViewModel.isSearching,
                 searchResults: searchViewModel.results,
