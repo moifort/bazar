@@ -117,10 +117,25 @@ struct ItemDetailPage: View {
                     "Ajouté le",
                     value: createdAt.formatted(date: .abbreviated, time: .omitted)
                 )
-            }
-
-            Section("Lieu") {
-                LocationCard(location: location, onTap: onOpenMove)
+                Button(action: onOpenMove) {
+                    HStack {
+                        Text("Lieu")
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Text(location?.fullPath ?? "Non défini")
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.trailing)
+                            .lineLimit(2)
+                            .truncationMode(.middle)
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.tertiary)
+                            .font(.caption.weight(.semibold))
+                    }
+                    .contentShape(.rect)
+                }
+                .accessibilityIdentifier("move-item-row")
+                .accessibilityLabel(locationAccessibilityLabel)
+                .accessibilityHint("Touchez pour déplacer l'objet")
             }
 
             Section {
@@ -204,6 +219,11 @@ struct ItemDetailPage: View {
 
     private var hasPurchaseInfo: Bool {
         purchaseDate != nil || !purchaseLocation.isEmpty || invoiceImageURL != nil
+    }
+
+    private var locationAccessibilityLabel: String {
+        guard let location else { return "Lieu non défini" }
+        return "Lieu : \(location.placeName), \(location.roomName), \(location.zoneName), \(location.storageName)"
     }
 
     private func locationURL(from text: String) -> URL? {
