@@ -1,25 +1,27 @@
 import { randomUUID } from 'node:crypto'
+import type { UserId } from '~/domain/shared/types'
 import { emit } from '~/system/event-bus'
 import { nextOrder } from './business-rules'
 import * as repository from './infrastructure/repository'
 import {
-  PlaceId,
+  PlaceId as makePlaceId,
+  RoomId as makeRoomId,
+  StorageId as makeStorageId,
+  ZoneId as makeZoneId,
   PlaceName,
-  RoomId,
   RoomName,
-  StorageId,
   StorageName,
-  ZoneId,
   ZoneName,
 } from './primitives'
-import type { Place, Room, Storage, Zone } from './types'
+import type { Place, PlaceId, Room, RoomId, Storage, StorageId, Zone, ZoneId } from './types'
 
 // Places
 
-const createPlace = async (input: { name: string; icon?: string | null }) => {
-  const existing = await repository.findAllPlaces()
+const createPlace = async (userId: UserId, input: { name: string; icon?: string | null }) => {
+  const existing = await repository.findAllPlaces(userId)
   const place: Place = {
-    id: PlaceId(randomUUID()),
+    id: makePlaceId(randomUUID()),
+    userId,
     name: PlaceName(input.name),
     icon: input.icon ?? null,
     order: nextOrder(existing),
@@ -30,10 +32,11 @@ const createPlace = async (input: { name: string; icon?: string | null }) => {
 }
 
 const updatePlace = async (
-  id: string,
+  userId: UserId,
+  id: PlaceId,
   input: { name?: string | null; icon?: string | null; order?: number | null },
 ) => {
-  const place = await repository.findPlaceBy(id)
+  const place = await repository.findPlaceBy(userId, id)
   if (!place) return 'not-found' as const
   const updated: Place = {
     ...place,
@@ -45,11 +48,11 @@ const updatePlace = async (
   return { tag: 'updated' as const, place: updated }
 }
 
-const deletePlace = async (id: string) => {
-  const place = await repository.findPlaceBy(id)
+const deletePlace = async (userId: UserId, id: PlaceId) => {
+  const place = await repository.findPlaceBy(userId, id)
   if (!place) return 'not-found' as const
-  const rooms = await repository.findRoomsByPlace(id)
-  await Promise.all(rooms.map(({ id }) => deleteRoom(id)))
+  const rooms = await repository.findRoomsByPlace(userId, id)
+  await Promise.all(rooms.map((r) => deleteRoom(userId, r.id)))
   await repository.removePlace(id)
   await emit('location-changed', { type: 'place-deleted' as const, placeId: id })
   return 'deleted' as const
@@ -57,13 +60,17 @@ const deletePlace = async (id: string) => {
 
 // Rooms
 
-const createRoom = async (input: { placeId: string; name: string; icon?: string | null }) => {
-  const place = await repository.findPlaceBy(input.placeId)
+const createRoom = async (
+  userId: UserId,
+  input: { placeId: PlaceId; name: string; icon?: string | null },
+) => {
+  const place = await repository.findPlaceBy(userId, input.placeId)
   if (!place) return 'place-not-found' as const
-  const existing = await repository.findRoomsByPlace(input.placeId)
+  const existing = await repository.findRoomsByPlace(userId, input.placeId)
   const room: Room = {
-    id: RoomId(randomUUID()),
-    placeId: PlaceId(input.placeId),
+    id: makeRoomId(randomUUID()),
+    userId,
+    placeId: input.placeId,
     name: RoomName(input.name),
     icon: input.icon ?? null,
     order: nextOrder(existing),
@@ -74,10 +81,11 @@ const createRoom = async (input: { placeId: string; name: string; icon?: string 
 }
 
 const updateRoom = async (
-  id: string,
+  userId: UserId,
+  id: RoomId,
   input: { name?: string | null; icon?: string | null; order?: number | null },
 ) => {
-  const room = await repository.findRoomBy(id)
+  const room = await repository.findRoomBy(userId, id)
   if (!room) return 'not-found' as const
   const updated: Room = {
     ...room,
@@ -89,24 +97,25 @@ const updateRoom = async (
   return { tag: 'updated' as const, room: updated }
 }
 
-const deleteRoom = async (id: string) => {
-  const room = await repository.findRoomBy(id)
+const deleteRoom = async (userId: UserId, id: RoomId) => {
+  const room = await repository.findRoomBy(userId, id)
   if (!room) return 'not-found' as const
-  const zones = await repository.findZonesByRoom(id)
-  await Promise.all(zones.map(({ id }) => deleteZone(id)))
+  const zones = await repository.findZonesByRoom(userId, id)
+  await Promise.all(zones.map((z) => deleteZone(userId, z.id)))
   await repository.removeRoom(id)
   return 'deleted' as const
 }
 
 // Zones
 
-const createZone = async (input: { roomId: string; name: string }) => {
-  const room = await repository.findRoomBy(input.roomId)
+const createZone = async (userId: UserId, input: { roomId: RoomId; name: string }) => {
+  const room = await repository.findRoomBy(userId, input.roomId)
   if (!room) return 'room-not-found' as const
-  const existing = await repository.findZonesByRoom(input.roomId)
+  const existing = await repository.findZonesByRoom(userId, input.roomId)
   const zone: Zone = {
-    id: ZoneId(randomUUID()),
-    roomId: RoomId(input.roomId),
+    id: makeZoneId(randomUUID()),
+    userId,
+    roomId: input.roomId,
     name: ZoneName(input.name),
     order: nextOrder(existing),
   }
@@ -115,8 +124,12 @@ const createZone = async (input: { roomId: string; name: string }) => {
   return { tag: 'created' as const, zone }
 }
 
-const updateZone = async (id: string, input: { name?: string | null; order?: number | null }) => {
-  const zone = await repository.findZoneBy(id)
+const updateZone = async (
+  userId: UserId,
+  id: ZoneId,
+  input: { name?: string | null; order?: number | null },
+) => {
+  const zone = await repository.findZoneBy(userId, id)
   if (!zone) return 'not-found' as const
   const updated: Zone = {
     ...zone,
@@ -127,24 +140,25 @@ const updateZone = async (id: string, input: { name?: string | null; order?: num
   return { tag: 'updated' as const, zone: updated }
 }
 
-const deleteZone = async (id: string) => {
-  const zone = await repository.findZoneBy(id)
+const deleteZone = async (userId: UserId, id: ZoneId) => {
+  const zone = await repository.findZoneBy(userId, id)
   if (!zone) return 'not-found' as const
-  const storages = await repository.findStoragesByZone(id)
-  await Promise.all(storages.map(({ id }) => deleteStorage(id)))
+  const storages = await repository.findStoragesByZone(userId, id)
+  await Promise.all(storages.map((s) => deleteStorage(userId, s.id)))
   await repository.removeZone(id)
   return 'deleted' as const
 }
 
 // Storages
 
-const createStorage = async (input: { zoneId: string; name: string }) => {
-  const zone = await repository.findZoneBy(input.zoneId)
+const createStorage = async (userId: UserId, input: { zoneId: ZoneId; name: string }) => {
+  const zone = await repository.findZoneBy(userId, input.zoneId)
   if (!zone) return 'zone-not-found' as const
-  const existing = await repository.findStoragesByZone(input.zoneId)
+  const existing = await repository.findStoragesByZone(userId, input.zoneId)
   const storage: Storage = {
-    id: StorageId(randomUUID()),
-    zoneId: ZoneId(input.zoneId),
+    id: makeStorageId(randomUUID()),
+    userId,
+    zoneId: input.zoneId,
     name: StorageName(input.name),
     order: nextOrder(existing),
   }
@@ -154,10 +168,11 @@ const createStorage = async (input: { zoneId: string; name: string }) => {
 }
 
 const updateStorage = async (
-  id: string,
+  userId: UserId,
+  id: StorageId,
   input: { name?: string | null; order?: number | null },
 ) => {
-  const storage = await repository.findStorageBy(id)
+  const storage = await repository.findStorageBy(userId, id)
   if (!storage) return 'not-found' as const
   const updated: Storage = {
     ...storage,
@@ -168,8 +183,8 @@ const updateStorage = async (
   return { tag: 'updated' as const, storage: updated }
 }
 
-const deleteStorage = async (id: string) => {
-  const storage = await repository.findStorageBy(id)
+const deleteStorage = async (userId: UserId, id: StorageId) => {
+  const storage = await repository.findStorageBy(userId, id)
   if (!storage) return 'not-found' as const
   await repository.removeStorage(id)
   return 'deleted' as const

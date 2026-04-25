@@ -2,6 +2,7 @@ import { sortBy } from 'lodash-es'
 import { match } from 'ts-pattern'
 import { LocationQuery } from '~/domain/location/query'
 import type { ZoneId } from '~/domain/location/types'
+import type { UserId } from '~/domain/shared/types'
 import * as repository from './infrastructure/repository'
 import type { ItemCategory, ItemId, ItemSort } from './types'
 
@@ -18,8 +19,8 @@ type ItemFilters = {
   limit?: number | null
 }
 
-const allItems = async (filters: ItemFilters = {}) => {
-  let items = await repository.findAll()
+const allItems = async (userId: UserId, filters: ItemFilters = {}) => {
+  let items = await repository.findAllByUser(userId)
 
   if (filters.category) {
     items = items.filter((item) => item.category === filters.category)
@@ -67,15 +68,15 @@ const allItems = async (filters: ItemFilters = {}) => {
   }
 }
 
-const itemById = (id: ItemId) => repository.findBy(id)
+const itemById = (userId: UserId, id: ItemId) => repository.findBy(userId, id)
 
-const itemsByStorage = async (storageId: string) => {
-  const all = await repository.findAll()
+const itemsByStorage = async (userId: UserId, storageId: string) => {
+  const all = await repository.findAllByUser(userId)
   return all.filter((item) => item.storageId === storageId)
 }
 
-const distinctPurchaseLocations = async (): Promise<string[]> => {
-  const all = await repository.findAll()
+const distinctPurchaseLocations = async (userId: UserId): Promise<string[]> => {
+  const all = await repository.findAllByUser(userId)
   const counts = new Map<string, number>()
   for (const { purchaseLocation } of all) {
     const value = purchaseLocation.trim()
@@ -87,11 +88,11 @@ const distinctPurchaseLocations = async (): Promise<string[]> => {
     .map(([value]) => value)
 }
 
-const countByZone = async (zoneId: ZoneId): Promise<number> => {
-  const storages = await LocationQuery.storagesByZone(zoneId)
+const countByZone = async (userId: UserId, zoneId: ZoneId): Promise<number> => {
+  const storages = await LocationQuery.storagesByZone(userId, zoneId)
   if (storages.length === 0) return 0
   const storageIds = new Set<string>(storages.map(({ id }) => id))
-  const items = await repository.findAll()
+  const items = await repository.findAllByUser(userId)
   return items.reduce(
     (count, { storageId }) => (storageId !== null && storageIds.has(storageId) ? count + 1 : count),
     0,

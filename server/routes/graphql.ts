@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
         body: undefined,
         search: searchParams.toString(),
       },
-      context: async () => ({ event, loaders: createLoaders(), userId }),
+      context: async () => ({ event, loaders: createLoaders(userId), userId }),
     })
 
     return sendApolloResponse(event, response)
@@ -71,7 +71,7 @@ export default defineEventHandler(async (event) => {
       body,
       search: '',
     },
-    context: async () => ({ event, loaders: createLoaders(), userId }),
+    context: async () => ({ event, loaders: createLoaders(userId), userId }),
   })
 
   if (response.body.kind === 'complete') {

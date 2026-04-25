@@ -44,7 +44,7 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
     reminders: t.field({
       type: [ReminderType],
       description: 'Reminders attached to this item, sorted by dueDate asc',
-      resolve: (item) => ReminderQuery.byItem(item.id),
+      resolve: (item, _args, ctx) => ReminderQuery.byItem(ctx.userId, item.id),
     }),
     createdAt: t.expose('createdAt', { type: 'DateTime', description: 'Creation date' }),
     updatedAt: t.expose('updatedAt', { type: 'DateTime', description: 'Last update date' }),
@@ -52,8 +52,8 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
       type: LocationPathType,
       nullable: true,
       description: 'Resolved location path',
-      resolve: (item) =>
-        item.storageId ? LocationQuery.resolveLocationPath(item.storageId) : null,
+      resolve: (item, _args, ctx) =>
+        item.storageId ? LocationQuery.resolveLocationPath(ctx.userId, item.storageId) : null,
     }),
   }),
 })

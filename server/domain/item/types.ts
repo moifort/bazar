@@ -28,6 +28,7 @@ export type ItemSort = 'name' | 'category' | 'created-at' | 'updated-at'
 
 export type Item = {
   id: ItemId
+  userId: UserId
   name: ItemName
   description: string
   category: ItemCategory

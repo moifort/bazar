@@ -6,6 +6,6 @@ builder.queryField('dashboard', (t) =>
   t.field({
     type: DashboardType,
     description: 'Dashboard with inventory statistics',
-    resolve: () => buildDashboard(),
+    resolve: (_root, _args, ctx) => buildDashboard(ctx.userId),
   }),
 )

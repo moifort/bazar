@@ -6,6 +6,6 @@ builder.queryField('places', (t) =>
   t.field({
     type: [PlaceType],
     description: 'All places with nested rooms, zones, and storages',
-    resolve: () => LocationQuery.allPlaces(),
+    resolve: (_root, _args, ctx) => LocationQuery.allPlaces(ctx.userId),
   }),
 )

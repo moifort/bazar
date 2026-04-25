@@ -1,5 +1,6 @@
 import type { Brand } from 'ts-brand'
 import type { ItemId } from '~/domain/item/types'
+import type { UserId } from '~/domain/shared/types'
 
 export type ReminderId = Brand<string, 'ReminderId'>
 export type ReminderCompletionId = Brand<string, 'ReminderCompletionId'>
@@ -9,6 +10,7 @@ export type ReminderFrequency = 'monthly' | 'quarterly' | 'biannual' | 'annual' 
 
 export type Reminder = {
   id: ReminderId
+  userId: UserId
   itemId: ItemId
   title: ReminderTitle
   notes: string
@@ -21,6 +23,7 @@ export type Reminder = {
 
 export type ReminderCompletion = {
   id: ReminderCompletionId
+  userId: UserId
   reminderId: ReminderId
   itemId: ItemId
   completedAt: Date

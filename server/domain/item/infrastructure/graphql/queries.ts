@@ -17,7 +17,7 @@ builder.queryField('items', (t) =>
       offset: t.arg.int({ description: 'Pagination offset' }),
       limit: t.arg.int({ description: 'Pagination limit (default 40)' }),
     },
-    resolve: (_root, args) => ItemQuery.allItems(args),
+    resolve: (_root, args, ctx) => ItemQuery.allItems(ctx.userId, args),
   }),
 )
 
@@ -29,7 +29,7 @@ builder.queryField('item', (t) =>
     args: {
       id: t.arg({ type: 'ItemId', required: true, description: 'Item identifier' }),
     },
-    resolve: (_root, { id }) => ItemQuery.itemById(id),
+    resolve: (_root, { id }, ctx) => ItemQuery.itemById(ctx.userId, id),
   }),
 )
 
@@ -37,6 +37,6 @@ builder.queryField('distinctPurchaseLocations', (t) =>
   t.field({
     type: ['String'],
     description: 'Distinct non-empty purchase locations, ordered by frequency desc',
-    resolve: () => ItemQuery.distinctPurchaseLocations(),
+    resolve: (_root, _args, ctx) => ItemQuery.distinctPurchaseLocations(ctx.userId),
   }),
 )

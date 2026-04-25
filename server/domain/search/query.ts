@@ -1,6 +1,10 @@
+import type { UserId } from '~/domain/shared/types'
 import { searchEntries } from './business-rules'
-import { getEntries } from './index'
+import { buildEntries } from './index'
 
-const search = (query: string, limit = 20) => searchEntries(getEntries(), query, limit)
+const search = async (userId: UserId, query: string, limit = 20) => {
+  const entries = await buildEntries(userId)
+  return searchEntries(entries, query, limit)
+}
 
 export const SearchQuery = { search }

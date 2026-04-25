@@ -1,10 +1,19 @@
-import { createTypedStorage } from '~/system/storage'
-import type { ScanResult } from '../types'
+import { db } from '~/system/firebase'
+import { genericDataConverter } from '~/utils/firestore'
+import type { PreviewId, ScanResult } from '../types'
 
-const scanCacheStorage = () => createTypedStorage<ScanResult>('scan-cache')
+const scans = () => db().collection('scan-cache').withConverter(genericDataConverter<ScanResult>())
 
-export const findBy = (id: string) => scanCacheStorage().getItem(id)
+export const findBy = async (id: PreviewId): Promise<ScanResult | null> => {
+  const snap = await scans().doc(id).get()
+  return snap.data() ?? null
+}
 
-export const save = (result: ScanResult) => scanCacheStorage().setItem(result.previewId, result)
+export const save = async (result: ScanResult): Promise<ScanResult> => {
+  await scans().doc(result.previewId).set(result)
+  return result
+}
 
-export const remove = (id: string) => scanCacheStorage().removeItem(id)
+export const remove = async (id: PreviewId): Promise<void> => {
+  await scans().doc(id).delete()
+}

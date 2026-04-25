@@ -1,26 +1,15 @@
-import { sortBy } from 'lodash-es'
 import type { ItemId } from '~/domain/item/types'
+import type { UserId } from '~/domain/shared/types'
 import * as repository from './infrastructure/repository'
 import type { ReminderId } from './types'
 
-const byItem = async (itemId: ItemId) => {
-  const all = await repository.findAll()
-  return sortBy(
-    all.filter((r) => r.itemId === itemId),
-    ({ dueDate }) => dueDate,
-  )
-}
+const byItem = (userId: UserId, itemId: ItemId) => repository.findByItem(userId, itemId)
 
-const byId = (id: ReminderId) => repository.findBy(id)
+const byId = (userId: UserId, id: ReminderId) => repository.findBy(userId, id)
 
-const remindersDue = async (before: Date) => {
-  const all = await repository.findAll()
-  return sortBy(
-    all.filter((r) => r.dueDate.getTime() <= before.getTime()),
-    ({ dueDate }) => dueDate,
-  )
-}
+const remindersDue = (userId: UserId, before: Date) => repository.findDueBefore(userId, before)
 
-const completionsByReminder = (id: ReminderId) => repository.findCompletionsByReminder(id)
+const completionsByReminder = (userId: UserId, id: ReminderId) =>
+  repository.findCompletionsByReminder(userId, id)
 
 export const ReminderQuery = { byItem, byId, remindersDue, completionsByReminder }

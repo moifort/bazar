@@ -20,17 +20,10 @@ export default defineNitroConfig({
     },
   },
   runtimeConfig: {
-    apiToken: '',
     adminToken: '',
     googleApiKey: '',
   },
   storage: {
     'migration-meta': { driver: 'fs', base: './.data/db/migration-meta' },
-    items: { driver: 'fs', base: './.data/db/items' },
-    places: { driver: 'fs', base: './.data/db/places' },
-    rooms: { driver: 'fs', base: './.data/db/rooms' },
-    zones: { driver: 'fs', base: './.data/db/zones' },
-    storages: { driver: 'fs', base: './.data/db/storages' },
-    'scan-cache': { driver: 'fs', base: './.data/db/scan-cache' },
   },
 })

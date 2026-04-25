@@ -1,22 +1,22 @@
 import { randomUUID } from 'node:crypto'
-import { ItemId } from '~/domain/item/primitives'
 import { ItemQuery } from '~/domain/item/query'
+import type { ItemId } from '~/domain/item/types'
+import type { UserId } from '~/domain/shared/types'
 import { emit } from '~/system/event-bus'
 import { computeNextDueDate, isOneShot } from './business-rules'
 import * as repository from './infrastructure/repository'
 import {
+  ReminderCompletionId as makeReminderCompletionId,
+  ReminderId as makeReminderId,
   parseCustomIntervalDays,
   parseDueDate,
   parseReminderFrequency,
-  ReminderCompletionId,
-  ReminderId,
   ReminderTitle,
 } from './primitives'
-import { ReminderQuery } from './query'
-import type { Reminder, ReminderCompletion, ReminderFrequency } from './types'
+import type { Reminder, ReminderCompletion, ReminderFrequency, ReminderId } from './types'
 
 type AddReminderInput = {
-  itemId: string
+  itemId: ItemId
   title: string
   notes?: string | null
   dueDate: Date | string
@@ -52,9 +52,8 @@ const resolveFrequency = (
   return { frequency: parsed, customIntervalDays: null }
 }
 
-const add = async (input: AddReminderInput) => {
-  const itemId = ItemId(input.itemId)
-  const item = await ItemQuery.itemById(itemId)
+const add = async (userId: UserId, input: AddReminderInput) => {
+  const item = await ItemQuery.itemById(userId, input.itemId)
   if (!item) return 'item-not-found' as const
 
   const { frequency, customIntervalDays } = resolveFrequency(
@@ -63,8 +62,9 @@ const add = async (input: AddReminderInput) => {
   )
 
   const reminder: Reminder = {
-    id: ReminderId(randomUUID()),
-    itemId,
+    id: makeReminderId(randomUUID()),
+    userId,
+    itemId: input.itemId,
     title: ReminderTitle(input.title),
     notes: input.notes ?? '',
     dueDate: parseDueDate(input.dueDate),
@@ -79,9 +79,8 @@ const add = async (input: AddReminderInput) => {
   return { tag: 'added' as const, reminder }
 }
 
-const update = async (id: string, input: UpdateReminderInput) => {
-  const reminderId = ReminderId(id)
-  const reminder = await repository.findBy(reminderId)
+const update = async (userId: UserId, id: ReminderId, input: UpdateReminderInput) => {
+  const reminder = await repository.findBy(userId, id)
   if (!reminder) return 'not-found' as const
 
   const nextFrequency =
@@ -109,13 +108,13 @@ const update = async (id: string, input: UpdateReminderInput) => {
   return { tag: 'updated' as const, reminder: updated }
 }
 
-const complete = async (id: string, completedAt: Date = new Date()) => {
-  const reminderId = ReminderId(id)
-  const reminder = await repository.findBy(reminderId)
+const complete = async (userId: UserId, id: ReminderId, completedAt: Date = new Date()) => {
+  const reminder = await repository.findBy(userId, id)
   if (!reminder) return 'not-found' as const
 
   const completion: ReminderCompletion = {
-    id: ReminderCompletionId(randomUUID()),
+    id: makeReminderCompletionId(randomUUID()),
+    userId,
     reminderId: reminder.id,
     itemId: reminder.itemId,
     completedAt,
@@ -153,18 +152,17 @@ const complete = async (id: string, completedAt: Date = new Date()) => {
   return { tag: 'rescheduled' as const, reminder: rescheduled, completion }
 }
 
-const remove = async (id: string) => {
-  const reminderId = ReminderId(id)
-  const reminder = await repository.findBy(reminderId)
+const remove = async (userId: UserId, id: ReminderId) => {
+  const reminder = await repository.findBy(userId, id)
   if (!reminder) return 'not-found' as const
 
-  await repository.remove(reminderId)
-  await emit('reminder-changed', { type: 'reminder-deleted' as const, reminderId })
+  await repository.remove(id)
+  await emit('reminder-changed', { type: 'reminder-deleted' as const, reminderId: id })
   return 'deleted' as const
 }
 
-const removeByItem = async (itemId: string) => {
-  const reminders = await ReminderQuery.byItem(ItemId(itemId))
+const removeByItem = async (userId: UserId, itemId: ItemId) => {
+  const reminders = await repository.findByItem(userId, itemId)
   await Promise.all(
     reminders.map(async (r) => {
       await repository.remove(r.id)

@@ -28,7 +28,8 @@ export const ReminderType = builder.objectRef<Reminder>('Reminder').implement({
     completions: t.field({
       type: [ReminderCompletionType],
       description: 'Completion history for this reminder, most recent first',
-      resolve: (reminder) => ReminderQuery.completionsByReminder(reminder.id),
+      resolve: (reminder, _args, ctx) =>
+        ReminderQuery.completionsByReminder(ctx.userId, reminder.id),
     }),
     createdAt: t.expose('createdAt', { type: 'DateTime' }),
     updatedAt: t.expose('updatedAt', { type: 'DateTime' }),

@@ -10,6 +10,6 @@ builder.queryField('search', (t) =>
       query: t.arg.string({ required: true, description: 'Search query' }),
       limit: t.arg.int({ description: 'Maximum results (default 20)' }),
     },
-    resolve: (_root, { query, limit }) => SearchQuery.search(query, limit ?? 20),
+    resolve: (_root, { query, limit }, ctx) => SearchQuery.search(ctx.userId, query, limit ?? 20),
   }),
 )

@@ -1,20 +1,16 @@
 import * as itemRepository from '~/domain/item/infrastructure/repository'
 import * as locationRepository from '~/domain/location/infrastructure/repository'
-import { createLogger } from '~/system/logger'
+import type { UserId } from '~/domain/shared/types'
 import type { SearchEntry } from './types'
 
-const log = createLogger('search-index')
+export const buildEntries = async (userId: UserId): Promise<SearchEntry[]> => {
+  const [items, places, rooms] = await Promise.all([
+    itemRepository.findAllByUser(userId),
+    locationRepository.findAllPlaces(userId),
+    locationRepository.findAllRooms(userId),
+  ])
 
-let entries: SearchEntry[] = []
-
-export const getEntries = () => entries
-
-export const rebuildIndex = async () => {
-  const items = await itemRepository.findAll()
-  const places = await locationRepository.findAllPlaces()
-  const rooms = await locationRepository.findAllRooms()
-
-  entries = [
+  return [
     ...items.map((item) => ({
       type: 'item' as const,
       entityId: item.id,
@@ -31,6 +27,4 @@ export const rebuildIndex = async () => {
       text: room.name,
     })),
   ]
-
-  log.info(`Search index rebuilt with ${entries.length} entries`)
 }

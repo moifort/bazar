@@ -1,4 +1,5 @@
 import type { Brand } from 'ts-brand'
+import type { UserId } from '~/domain/shared/types'
 
 export type PlaceId = Brand<string, 'PlaceId'>
 export type PlaceName = Brand<string, 'PlaceName'>
@@ -11,6 +12,7 @@ export type StorageName = Brand<string, 'StorageName'>
 
 export type Place = {
   id: PlaceId
+  userId: UserId
   name: PlaceName
   icon: string | null
   order: number
@@ -18,6 +20,7 @@ export type Place = {
 
 export type Room = {
   id: RoomId
+  userId: UserId
   placeId: PlaceId
   name: RoomName
   icon: string | null
@@ -26,6 +29,7 @@ export type Room = {
 
 export type Zone = {
   id: ZoneId
+  userId: UserId
   roomId: RoomId
   name: ZoneName
   order: number
@@ -33,6 +37,7 @@ export type Zone = {
 
 export type Storage = {
   id: StorageId
+  userId: UserId
   zoneId: ZoneId
   name: StorageName
   order: number

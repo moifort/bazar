@@ -9,6 +9,6 @@ builder.queryField('remindersDue', (t) =>
     args: {
       before: t.arg({ type: 'DateTime', required: true, description: 'Upper bound (inclusive)' }),
     },
-    resolve: (_root, { before }) => ReminderQuery.remindersDue(before),
+    resolve: (_root, { before }, ctx) => ReminderQuery.remindersDue(ctx.userId, before),
   }),
 )

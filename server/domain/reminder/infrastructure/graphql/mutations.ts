@@ -9,8 +9,8 @@ builder.mutationField('addReminder', (t) =>
     type: ReminderType,
     description: 'Add a new reminder to an item',
     args: { input: t.arg({ type: AddReminderInput, required: true }) },
-    resolve: async (_root, { input }) => {
-      const result = await ReminderCommand.add(input)
+    resolve: async (_root, { input }, ctx) => {
+      const result = await ReminderCommand.add(ctx.userId, input)
       if (result === 'item-not-found')
         throw new GraphQLError('Item not found', { extensions: { code: 'NOT_FOUND' } })
       return result.reminder
@@ -26,8 +26,8 @@ builder.mutationField('updateReminder', (t) =>
       id: t.arg({ type: 'ReminderId', required: true }),
       input: t.arg({ type: UpdateReminderInput, required: true }),
     },
-    resolve: async (_root, { id, input }) => {
-      const result = await ReminderCommand.update(id, input)
+    resolve: async (_root, { id, input }, ctx) => {
+      const result = await ReminderCommand.update(ctx.userId, id, input)
       if (result === 'not-found')
         throw new GraphQLError('Reminder not found', { extensions: { code: 'NOT_FOUND' } })
       return result.reminder
@@ -42,8 +42,8 @@ builder.mutationField('completeReminder', (t) =>
     description:
       'Mark a reminder as done. Recurring reminders reschedule automatically; one-shot reminders are deleted and null is returned.',
     args: { id: t.arg({ type: 'ReminderId', required: true }) },
-    resolve: async (_root, { id }) => {
-      const result = await ReminderCommand.complete(id)
+    resolve: async (_root, { id }, ctx) => {
+      const result = await ReminderCommand.complete(ctx.userId, id)
       if (result === 'not-found')
         throw new GraphQLError('Reminder not found', { extensions: { code: 'NOT_FOUND' } })
       if (result.tag === 'done') return null
@@ -57,8 +57,8 @@ builder.mutationField('deleteReminder', (t) =>
     type: 'Boolean',
     description: 'Delete a reminder',
     args: { id: t.arg({ type: 'ReminderId', required: true }) },
-    resolve: async (_root, { id }) => {
-      const result = await ReminderCommand.remove(id)
+    resolve: async (_root, { id }, ctx) => {
+      const result = await ReminderCommand.remove(ctx.userId, id)
       if (result === 'not-found')
         throw new GraphQLError('Reminder not found', { extensions: { code: 'NOT_FOUND' } })
       return true

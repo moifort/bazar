@@ -1,6 +1,7 @@
+import type { UserId } from '~/domain/shared/types'
 import { fullPath } from './business-rules'
 import * as repository from './infrastructure/repository'
-import type { Place, PlaceId, Room, Storage, StorageId, Zone } from './types'
+import type { Place, PlaceId, Room, RoomId, Storage, StorageId, Zone, ZoneId } from './types'
 
 export type LocationPath = {
   place: Place
@@ -10,29 +11,34 @@ export type LocationPath = {
   fullPath: string
 }
 
-const allPlaces = () => repository.findAllPlaces()
+const allPlaces = (userId: UserId) => repository.findAllPlaces(userId)
 
-const placeById = (id: PlaceId) => repository.findPlaceBy(id)
+const placeById = (userId: UserId, id: PlaceId) => repository.findPlaceBy(userId, id)
 
-const roomsByPlace = (placeId: PlaceId) => repository.findRoomsByPlace(placeId)
+const roomsByPlace = (userId: UserId, placeId: PlaceId) =>
+  repository.findRoomsByPlace(userId, placeId)
 
-const zonesByRoom = (roomId: string) => repository.findZonesByRoom(roomId)
+const zonesByRoom = (userId: UserId, roomId: RoomId) => repository.findZonesByRoom(userId, roomId)
 
-const storagesByZone = (zoneId: string) => repository.findStoragesByZone(zoneId)
+const storagesByZone = (userId: UserId, zoneId: ZoneId) =>
+  repository.findStoragesByZone(userId, zoneId)
 
-const storageById = (id: StorageId) => repository.findStorageBy(id)
+const storageById = (userId: UserId, id: StorageId) => repository.findStorageBy(userId, id)
 
-const resolveLocationPath = async (storageId: StorageId): Promise<LocationPath | null> => {
-  const storage = await repository.findStorageBy(storageId)
+const resolveLocationPath = async (
+  userId: UserId,
+  storageId: StorageId,
+): Promise<LocationPath | null> => {
+  const storage = await repository.findStorageBy(userId, storageId)
   if (!storage) return null
 
-  const zone = await repository.findZoneBy(storage.zoneId)
+  const zone = await repository.findZoneBy(userId, storage.zoneId)
   if (!zone) return null
 
-  const room = await repository.findRoomBy(zone.roomId)
+  const room = await repository.findRoomBy(userId, zone.roomId)
   if (!room) return null
 
-  const place = await repository.findPlaceBy(room.placeId)
+  const place = await repository.findPlaceBy(userId, room.placeId)
   if (!place) return null
 
   return {

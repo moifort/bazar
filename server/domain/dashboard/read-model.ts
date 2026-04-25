@@ -3,11 +3,12 @@ import * as itemRepository from '~/domain/item/infrastructure/repository'
 import type { ItemCategory } from '~/domain/item/types'
 import * as locationRepository from '~/domain/location/infrastructure/repository'
 import type { PlaceName } from '~/domain/location/types'
+import type { UserId } from '~/domain/shared/types'
 import type { CategoryCount, Dashboard, PlaceCount } from './types'
 
-export const buildDashboard = async (): Promise<Dashboard> => {
-  const items = await itemRepository.findAll()
-  const places = await locationRepository.findAllPlaces()
+export const buildDashboard = async (userId: UserId): Promise<Dashboard> => {
+  const items = await itemRepository.findAllByUser(userId)
+  const places = await locationRepository.findAllPlaces(userId)
 
   const categoryCounts = countBy(items, ({ category }) => category)
   const itemsByCategory: CategoryCount[] = sortBy(

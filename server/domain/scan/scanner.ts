@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import type { ItemCategory } from '~/domain/item/types'
+import type { UserId } from '~/domain/shared/types'
 import { createLogger } from '~/system/logger'
 import { analyzeImage } from './infrastructure/gemini'
 import { PreviewId } from './primitives'
@@ -7,7 +8,7 @@ import type { ItemPreview, ScanResult } from './types'
 
 const log = createLogger('scanner')
 
-export const analyzePhoto = async (imageBase64: string): Promise<ScanResult> => {
+export const analyzePhoto = async (userId: UserId, imageBase64: string): Promise<ScanResult> => {
   log.info('Analyzing photo with Gemini 2.5 Flash')
 
   const items = await analyzeImage(imageBase64)
@@ -24,6 +25,7 @@ export const analyzePhoto = async (imageBase64: string): Promise<ScanResult> => 
 
   return {
     previewId: PreviewId(randomUUID()),
+    userId,
     previews,
     createdAt: new Date(),
   }

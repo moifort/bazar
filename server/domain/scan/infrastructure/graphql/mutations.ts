@@ -13,8 +13,8 @@ builder.mutationField('analyzeItemPhoto', (t) =>
         description: 'Photo as base64 encoded JPEG',
       }),
     },
-    resolve: async (_root, { imageBase64 }) => {
-      const result = await analyzePhoto(imageBase64)
+    resolve: async (_root, { imageBase64 }, ctx) => {
+      const result = await analyzePhoto(ctx.userId, imageBase64)
       await scanRepository.save(result)
       return result.previews
     },

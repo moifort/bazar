@@ -2,27 +2,27 @@ import { randomUUID } from 'node:crypto'
 import { LocationQuery } from '~/domain/location/query'
 import type { StorageId } from '~/domain/location/types'
 import { ReminderCommand } from '~/domain/reminder/command'
-import { UserId } from '~/domain/shared/primitives'
+import type { UserId } from '~/domain/shared/types'
 import { emit } from '~/system/event-bus'
 import * as repository from './infrastructure/repository'
 import {
-  ItemId,
   ItemName,
+  ItemId as makeItemId,
   parseItemCategory,
   parsePurchaseDate,
   parsePurchaseLocation,
   Quantity,
 } from './primitives'
-import type { Item } from './types'
+import type { Item, ItemId } from './types'
 
 type AddItemInput = {
+  userId: UserId
   name: string
   description?: string | null
   category: string
   quantity?: number | null
   storageId?: string | null
   personalNotes?: string | null
-  addedBy: string
   purchaseDate?: Date | string | null
   purchaseLocation?: string | null
 }
@@ -30,19 +30,20 @@ type AddItemInput = {
 const add = async (input: AddItemInput) => {
   let placeId: Item['placeId'] = null
   if (input.storageId) {
-    const path = await LocationQuery.resolveLocationPath(input.storageId as StorageId)
+    const path = await LocationQuery.resolveLocationPath(input.userId, input.storageId as StorageId)
     if (path) placeId = path.place.id
   }
 
   const item: Item = {
-    id: ItemId(randomUUID()),
+    id: makeItemId(randomUUID()),
+    userId: input.userId,
     name: ItemName(input.name),
     description: input.description ?? '',
     category: parseItemCategory(input.category),
     quantity: Quantity(input.quantity ?? 1),
     storageId: input.storageId ? (input.storageId as StorageId) : null,
     placeId,
-    addedBy: UserId(input.addedBy),
+    addedBy: input.userId,
     personalNotes: input.personalNotes ?? '',
     purchaseDate: input.purchaseDate ? parsePurchaseDate(input.purchaseDate) : null,
     purchaseLocation: input.purchaseLocation ? parsePurchaseLocation(input.purchaseLocation) : '',
@@ -65,8 +66,8 @@ type UpdateItemInput = {
   purchaseLocation?: string | null
 }
 
-const update = async (id: string, input: UpdateItemInput) => {
-  const item = await repository.findBy(id)
+const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
+  const item = await repository.findBy(userId, id)
   if (!item) return 'not-found' as const
 
   const updated: Item = {
@@ -95,26 +96,26 @@ const update = async (id: string, input: UpdateItemInput) => {
   return { tag: 'updated' as const, item: updated }
 }
 
-const remove = async (id: string) => {
-  const item = await repository.findBy(id)
+const remove = async (userId: UserId, id: ItemId) => {
+  const item = await repository.findBy(userId, id)
   if (!item) return 'not-found' as const
 
-  await ReminderCommand.removeByItem(id)
+  await ReminderCommand.removeByItem(userId, id)
   await repository.remove(id)
   await emit('item-changed', { type: 'item-removed' as const, itemId: id })
   return 'deleted' as const
 }
 
-const move = async (id: string, storageId: string) => {
-  const item = await repository.findBy(id)
+const move = async (userId: UserId, id: ItemId, storageId: StorageId) => {
+  const item = await repository.findBy(userId, id)
   if (!item) return 'not-found' as const
 
-  const path = await LocationQuery.resolveLocationPath(storageId as StorageId)
+  const path = await LocationQuery.resolveLocationPath(userId, storageId)
   if (!path) return 'storage-not-found' as const
 
   const updated: Item = {
     ...item,
-    storageId: storageId as StorageId,
+    storageId,
     placeId: path.place.id,
     updatedAt: new Date(),
   }
@@ -130,22 +131,9 @@ type ConfirmItemInput = {
   category: string
   quantity?: number | null
   storageId?: string | null
-  addedBy: string
 }
 
-const confirmItems = async (inputs: ConfirmItemInput[]) =>
-  Promise.all(
-    inputs.map((input) =>
-      add({
-        name: input.name,
-        description: input.description,
-        category: input.category,
-        quantity: input.quantity,
-        storageId: input.storageId,
-        personalNotes: null,
-        addedBy: input.addedBy,
-      }),
-    ),
-  )
+const confirmItems = async (userId: UserId, inputs: ConfirmItemInput[]) =>
+  Promise.all(inputs.map((input) => add({ ...input, userId, personalNotes: null })))
 
 export const ItemCommand = { add, update, remove, move, confirmItems }

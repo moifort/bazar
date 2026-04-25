@@ -20,7 +20,7 @@ builder.mutationField('createPlace', (t) =>
     type: PlaceType,
     description: 'Create a new place (e.g. Appartement, Cave)',
     args: { input: t.arg({ type: CreatePlaceInput, required: true }) },
-    resolve: (_root, { input }) => LocationCommand.createPlace(input),
+    resolve: (_root, { input }, ctx) => LocationCommand.createPlace(ctx.userId, input),
   }),
 )
 
@@ -32,8 +32,8 @@ builder.mutationField('updatePlace', (t) =>
       id: t.arg({ type: 'PlaceId', required: true }),
       input: t.arg({ type: UpdatePlaceInput, required: true }),
     },
-    resolve: async (_root, { id, input }) => {
-      const result = await LocationCommand.updatePlace(id, input)
+    resolve: async (_root, { id, input }, ctx) => {
+      const result = await LocationCommand.updatePlace(ctx.userId, id, input)
       if (result === 'not-found')
         throw new GraphQLError('Place not found', { extensions: { code: 'NOT_FOUND' } })
       return result.place
@@ -46,8 +46,8 @@ builder.mutationField('deletePlace', (t) =>
     type: 'Boolean',
     description: 'Delete a place and all its rooms, zones, and storages',
     args: { id: t.arg({ type: 'PlaceId', required: true }) },
-    resolve: async (_root, { id }) => {
-      const result = await LocationCommand.deletePlace(id)
+    resolve: async (_root, { id }, ctx) => {
+      const result = await LocationCommand.deletePlace(ctx.userId, id)
       if (result === 'not-found')
         throw new GraphQLError('Place not found', { extensions: { code: 'NOT_FOUND' } })
       return true
@@ -62,8 +62,8 @@ builder.mutationField('createRoom', (t) =>
     type: RoomType,
     description: 'Create a new room in a place',
     args: { input: t.arg({ type: CreateRoomInput, required: true }) },
-    resolve: async (_root, { input }) => {
-      const result = await LocationCommand.createRoom(input)
+    resolve: async (_root, { input }, ctx) => {
+      const result = await LocationCommand.createRoom(ctx.userId, input)
       if (result === 'place-not-found')
         throw new GraphQLError('Place not found', { extensions: { code: 'NOT_FOUND' } })
       return result.room
@@ -79,8 +79,8 @@ builder.mutationField('updateRoom', (t) =>
       id: t.arg({ type: 'RoomId', required: true }),
       input: t.arg({ type: UpdateRoomInput, required: true }),
     },
-    resolve: async (_root, { id, input }) => {
-      const result = await LocationCommand.updateRoom(id, input)
+    resolve: async (_root, { id, input }, ctx) => {
+      const result = await LocationCommand.updateRoom(ctx.userId, id, input)
       if (result === 'not-found')
         throw new GraphQLError('Room not found', { extensions: { code: 'NOT_FOUND' } })
       return result.room
@@ -93,8 +93,8 @@ builder.mutationField('deleteRoom', (t) =>
     type: 'Boolean',
     description: 'Delete a room and all its zones and storages',
     args: { id: t.arg({ type: 'RoomId', required: true }) },
-    resolve: async (_root, { id }) => {
-      const result = await LocationCommand.deleteRoom(id)
+    resolve: async (_root, { id }, ctx) => {
+      const result = await LocationCommand.deleteRoom(ctx.userId, id)
       if (result === 'not-found')
         throw new GraphQLError('Room not found', { extensions: { code: 'NOT_FOUND' } })
       return true
@@ -109,8 +109,8 @@ builder.mutationField('createZone', (t) =>
     type: ZoneType,
     description: 'Create a new zone in a room',
     args: { input: t.arg({ type: CreateZoneInput, required: true }) },
-    resolve: async (_root, { input }) => {
-      const result = await LocationCommand.createZone(input)
+    resolve: async (_root, { input }, ctx) => {
+      const result = await LocationCommand.createZone(ctx.userId, input)
       if (result === 'room-not-found')
         throw new GraphQLError('Room not found', { extensions: { code: 'NOT_FOUND' } })
       return result.zone
@@ -126,8 +126,8 @@ builder.mutationField('updateZone', (t) =>
       id: t.arg({ type: 'ZoneId', required: true }),
       input: t.arg({ type: UpdateZoneInput, required: true }),
     },
-    resolve: async (_root, { id, input }) => {
-      const result = await LocationCommand.updateZone(id, input)
+    resolve: async (_root, { id, input }, ctx) => {
+      const result = await LocationCommand.updateZone(ctx.userId, id, input)
       if (result === 'not-found')
         throw new GraphQLError('Zone not found', { extensions: { code: 'NOT_FOUND' } })
       return result.zone
@@ -140,8 +140,8 @@ builder.mutationField('deleteZone', (t) =>
     type: 'Boolean',
     description: 'Delete a zone and all its storages',
     args: { id: t.arg({ type: 'ZoneId', required: true }) },
-    resolve: async (_root, { id }) => {
-      const result = await LocationCommand.deleteZone(id)
+    resolve: async (_root, { id }, ctx) => {
+      const result = await LocationCommand.deleteZone(ctx.userId, id)
       if (result === 'not-found')
         throw new GraphQLError('Zone not found', { extensions: { code: 'NOT_FOUND' } })
       return true
@@ -156,8 +156,8 @@ builder.mutationField('createStorage', (t) =>
     type: StorageType,
     description: 'Create a new storage spot in a zone',
     args: { input: t.arg({ type: CreateStorageInput, required: true }) },
-    resolve: async (_root, { input }) => {
-      const result = await LocationCommand.createStorage(input)
+    resolve: async (_root, { input }, ctx) => {
+      const result = await LocationCommand.createStorage(ctx.userId, input)
       if (result === 'zone-not-found')
         throw new GraphQLError('Zone not found', { extensions: { code: 'NOT_FOUND' } })
       return result.storage
@@ -173,8 +173,8 @@ builder.mutationField('updateStorage', (t) =>
       id: t.arg({ type: 'StorageId', required: true }),
       input: t.arg({ type: UpdateStorageInput, required: true }),
     },
-    resolve: async (_root, { id, input }) => {
-      const result = await LocationCommand.updateStorage(id, input)
+    resolve: async (_root, { id, input }, ctx) => {
+      const result = await LocationCommand.updateStorage(ctx.userId, id, input)
       if (result === 'not-found')
         throw new GraphQLError('Storage not found', { extensions: { code: 'NOT_FOUND' } })
       return result.storage
@@ -187,8 +187,8 @@ builder.mutationField('deleteStorage', (t) =>
     type: 'Boolean',
     description: 'Delete a storage spot',
     args: { id: t.arg({ type: 'StorageId', required: true }) },
-    resolve: async (_root, { id }) => {
-      const result = await LocationCommand.deleteStorage(id)
+    resolve: async (_root, { id }, ctx) => {
+      const result = await LocationCommand.deleteStorage(ctx.userId, id)
       if (result === 'not-found')
         throw new GraphQLError('Storage not found', { extensions: { code: 'NOT_FOUND' } })
       return true

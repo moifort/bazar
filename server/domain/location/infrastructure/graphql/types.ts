@@ -13,7 +13,7 @@ export const PlaceType = builder.objectRef<Place>('Place').implement({
     rooms: t.field({
       type: [RoomType],
       description: 'Rooms in this place',
-      resolve: (place) => LocationQuery.roomsByPlace(place.id),
+      resolve: (place, _args, ctx) => LocationQuery.roomsByPlace(ctx.userId, place.id),
     }),
   }),
 })
@@ -29,7 +29,7 @@ export const RoomType = builder.objectRef<Room>('Room').implement({
     zones: t.field({
       type: [ZoneType],
       description: 'Zones in this room',
-      resolve: (room) => LocationQuery.zonesByRoom(room.id),
+      resolve: (room, _args, ctx) => LocationQuery.zonesByRoom(ctx.userId, room.id),
     }),
   }),
 })
@@ -44,11 +44,11 @@ export const ZoneType = builder.objectRef<Zone>('Zone').implement({
     storages: t.field({
       type: [StorageType],
       description: 'Storage spots in this zone',
-      resolve: (zone) => LocationQuery.storagesByZone(zone.id),
+      resolve: (zone, _args, ctx) => LocationQuery.storagesByZone(ctx.userId, zone.id),
     }),
     itemCount: t.int({
       description: 'Total number of items stored in any storage of this zone',
-      resolve: (zone) => ItemQuery.countByZone(zone.id),
+      resolve: (zone, _args, ctx) => ItemQuery.countByZone(ctx.userId, zone.id),
     }),
   }),
 })
