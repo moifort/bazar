@@ -41,7 +41,8 @@ The following skills cover coding conventions for this project. Invoke them when
 ## Environment Variables
 
 Authentication:
-- `NITRO_API_TOKEN` — API Bearer token (required)
+- User auth uses Firebase Auth ID tokens (Apple Sign-In on iOS). The middleware verifies tokens via `firebase-admin` and exposes `event.context.userId` (Firebase UID).
+- `NITRO_ADMIN_TOKEN` — Bearer token gating `/admin/*` routes (e.g. `/admin/migrate`)
 
 External APIs:
 - `NITRO_GOOGLE_API_KEY` — Gemini API key for photo analysis (item identification)

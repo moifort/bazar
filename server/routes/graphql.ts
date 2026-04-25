@@ -33,7 +33,8 @@ const logErrorsFromResponseBody = (operation: string, responseBody: string) => {
 export default defineEventHandler(async (event) => {
   const apollo = useApollo()
   const method = event.method
-  const userTag = getHeader(event, 'x-user') ?? 'anonymous'
+  const userId = event.context.userId
+  if (!userId) throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   const headerMap = new HeaderMap()
   Object.entries(getHeaders(event)).forEach(([key, value]) => {
     if (value !== undefined) headerMap.set(key, value)
@@ -53,7 +54,7 @@ export default defineEventHandler(async (event) => {
         body: undefined,
         search: searchParams.toString(),
       },
-      context: async () => ({ event, loaders: createLoaders(), userTag }),
+      context: async () => ({ event, loaders: createLoaders(), userId }),
     })
 
     return sendApolloResponse(event, response)
@@ -61,7 +62,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readBody(event)
   const operation = extractOperationName(body)
-  log.info(`→ ${operation} from ${userTag}`)
+  log.info(`→ ${operation} from ${userId}`)
 
   const response = await apollo.executeHTTPGraphQLRequest({
     httpGraphQLRequest: {
@@ -70,7 +71,7 @@ export default defineEventHandler(async (event) => {
       body,
       search: '',
     },
-    context: async () => ({ event, loaders: createLoaders(), userTag }),
+    context: async () => ({ event, loaders: createLoaders(), userId }),
   })
 
   if (response.body.kind === 'complete') {

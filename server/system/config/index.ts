@@ -1,12 +1,12 @@
 import type { Brand } from 'ts-brand'
 
-type ApiToken = Brand<string, 'ApiToken'>
+type AdminToken = Brand<string, 'AdminToken'>
 type GoogleApiKey = Brand<string, 'GoogleApiKey'>
 
 export const config = () => {
   const runtimeConfig = useRuntimeConfig()
   return {
-    apiToken: runtimeConfig.apiToken as ApiToken,
+    adminToken: runtimeConfig.adminToken as AdminToken,
     googleApiKey: runtimeConfig.googleApiKey as GoogleApiKey,
   }
 }

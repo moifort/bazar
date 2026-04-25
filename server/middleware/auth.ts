@@ -1,10 +1,36 @@
-import { config } from '~/system/config/index'
+import { getAuth } from 'firebase-admin/auth'
+import { UserId } from '~/domain/shared/primitives'
+// Side-effect import: ensures firebase-admin is initialized before verifyIdToken.
+import '~/system/firebase'
+import { config } from '~/system/config'
 
-export default defineEventHandler((event) => {
-  if (event.path === '/health') return
-  const { apiToken } = config()
-  if (!apiToken) return
+export default defineEventHandler(async (event) => {
+  const path = event.path ?? ''
+
+  if (path === '/health') return
+
+  if (path.startsWith('/admin/')) {
+    const auth = getHeader(event, 'authorization')
+    const adminToken = config().adminToken
+    if (!adminToken || auth !== `Bearer ${adminToken}`)
+      throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+    return
+  }
+
   const auth = getHeader(event, 'authorization')
-  if (auth !== `Bearer ${apiToken}`)
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+  const token = auth?.startsWith('Bearer ') ? auth.slice(7) : null
+  if (!token) throw createError({ statusCode: 401, statusMessage: 'Missing bearer token' })
+
+  try {
+    const decoded = await getAuth().verifyIdToken(token)
+    event.context.userId = UserId(decoded.uid)
+  } catch {
+    throw createError({ statusCode: 401, statusMessage: 'Invalid token' })
+  }
 })
+
+declare module 'h3' {
+  interface H3EventContext {
+    userId?: ReturnType<typeof UserId>
+  }
+}

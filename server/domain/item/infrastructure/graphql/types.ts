@@ -36,7 +36,7 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
       nullable: true,
       description: 'Photo image identifier',
     }),
-    addedBy: t.expose('addedBy', { type: 'UserTag', description: 'User who added this item' }),
+    addedBy: t.expose('addedBy', { type: 'UserId', description: 'User who added this item' }),
     personalNotes: t.exposeString('personalNotes', { description: 'Personal notes' }),
     purchaseDate: t.expose('purchaseDate', {
       type: 'DateTime',

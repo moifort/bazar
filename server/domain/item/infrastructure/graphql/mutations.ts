@@ -9,7 +9,7 @@ builder.mutationField('addItem', (t) =>
     type: ItemType,
     description: 'Manually add a new item to the inventory',
     args: { input: t.arg({ type: AddItemInput, required: true }) },
-    resolve: (_root, { input }, ctx) => ItemCommand.add({ ...input, addedBy: ctx.userTag }),
+    resolve: (_root, { input }, ctx) => ItemCommand.add({ ...input, addedBy: ctx.userId }),
   }),
 )
 
@@ -71,6 +71,6 @@ builder.mutationField('confirmItems', (t) =>
       input: t.arg({ type: [ConfirmItemInput], required: true }),
     },
     resolve: (_root, { input }, ctx) =>
-      ItemCommand.confirmItems(input.map((i) => ({ ...i, addedBy: ctx.userTag }))),
+      ItemCommand.confirmItems(input.map((i) => ({ ...i, addedBy: ctx.userId }))),
   }),
 )

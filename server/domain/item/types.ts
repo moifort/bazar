@@ -1,7 +1,7 @@
 import type { Brand } from 'ts-brand'
 import type { ImageId } from '~/domain/image/types'
 import type { PlaceId, StorageId } from '~/domain/location/types'
-import type { UserTag } from '~/domain/shared/types'
+import type { UserId } from '~/domain/shared/types'
 
 export type ItemId = Brand<string, 'ItemId'>
 export type ItemName = Brand<string, 'ItemName'>
@@ -36,7 +36,7 @@ export type Item = {
   photoImageId: ImageId | null
   storageId: StorageId | null
   placeId: PlaceId | null
-  addedBy: UserTag
+  addedBy: UserId
   personalNotes: string
   purchaseDate: Date | null
   purchaseLocation: string

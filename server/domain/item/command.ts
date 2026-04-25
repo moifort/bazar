@@ -3,7 +3,7 @@ import { ImageCommand } from '~/domain/image/command'
 import { LocationQuery } from '~/domain/location/query'
 import type { StorageId } from '~/domain/location/types'
 import { ReminderCommand } from '~/domain/reminder/command'
-import { UserTag } from '~/domain/shared/primitives'
+import { UserId } from '~/domain/shared/primitives'
 import { emit } from '~/system/event-bus'
 import * as repository from './infrastructure/repository'
 import {
@@ -58,7 +58,7 @@ const add = async (input: AddItemInput) => {
     photoImageId,
     storageId: input.storageId ? (input.storageId as StorageId) : null,
     placeId,
-    addedBy: UserTag(input.addedBy),
+    addedBy: UserId(input.addedBy),
     personalNotes: input.personalNotes ?? '',
     purchaseDate: input.purchaseDate ? parsePurchaseDate(input.purchaseDate) : null,
     purchaseLocation: input.purchaseLocation ? parsePurchaseLocation(input.purchaseLocation) : '',

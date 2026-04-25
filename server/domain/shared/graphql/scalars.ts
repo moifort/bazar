@@ -13,7 +13,7 @@ import {
   ZoneName,
 } from '~/domain/location/primitives'
 import { ReminderCompletionId, ReminderId, ReminderTitle } from '~/domain/reminder/primitives'
-import { UserTag } from '~/domain/shared/primitives'
+import { UserId } from '~/domain/shared/primitives'
 import { builder } from './builder'
 
 const validatedParse =
@@ -108,10 +108,10 @@ builder.scalarType('ImageId', {
 })
 
 // Shared
-builder.scalarType('UserTag', {
-  description: 'User identifier tag (e.g. "thibaut")',
+builder.scalarType('UserId', {
+  description: 'Firebase Auth user identifier (UID)',
   serialize: (value) => value as string,
-  parseValue: validatedParse('UserTag', UserTag),
+  parseValue: validatedParse('UserId', UserId),
 })
 
 // Reminder domain

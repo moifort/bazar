@@ -1,8 +1,8 @@
 import { make } from 'ts-brand'
 import { z } from 'zod'
-import type { UserTag as UserTagType } from '~/domain/shared/types'
+import type { UserId as UserIdType } from '~/domain/shared/types'
 
-export const UserTag = (value: unknown) => {
-  const v = z.string().min(1).max(50).parse(value)
-  return make<UserTagType>()(v)
+export const UserId = (value: unknown) => {
+  const v = z.string().min(1).max(128).parse(value)
+  return make<UserIdType>()(v)
 }
