@@ -14,6 +14,5 @@ export type ItemPreview = {
 export type ScanResult = {
   previewId: PreviewId
   previews: ItemPreview[]
-  imageBase64: string
   createdAt: Date
 }

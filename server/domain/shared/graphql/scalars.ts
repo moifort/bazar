@@ -1,6 +1,5 @@
 import { GraphQLError } from 'graphql'
 import { ZodError } from 'zod'
-import { ImageId } from '~/domain/image/primitives'
 import { ItemId, ItemName, Quantity } from '~/domain/item/primitives'
 import {
   PlaceId,
@@ -98,13 +97,6 @@ builder.scalarType('StorageName', {
   description: 'Storage name (non-empty, max 200 characters)',
   serialize: (value) => value as string,
   parseValue: validatedParse('StorageName', StorageName),
-})
-
-// Image domain
-builder.scalarType('ImageId', {
-  description: 'Image unique identifier (UUID)',
-  serialize: (value) => value as string,
-  parseValue: validatedParse('ImageId', ImageId),
 })
 
 // Shared

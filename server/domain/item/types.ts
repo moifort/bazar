@@ -1,5 +1,4 @@
 import type { Brand } from 'ts-brand'
-import type { ImageId } from '~/domain/image/types'
 import type { PlaceId, StorageId } from '~/domain/location/types'
 import type { UserId } from '~/domain/shared/types'
 
@@ -33,14 +32,12 @@ export type Item = {
   description: string
   category: ItemCategory
   quantity: Quantity
-  photoImageId: ImageId | null
   storageId: StorageId | null
   placeId: PlaceId | null
   addedBy: UserId
   personalNotes: string
   purchaseDate: Date | null
   purchaseLocation: string
-  invoiceImageId: ImageId | null
   createdAt: Date
   updatedAt: Date
 }

@@ -31,11 +31,6 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
     description: t.exposeString('description', { description: 'Item description' }),
     category: t.expose('category', { type: ItemCategoryEnum, description: 'Item category' }),
     quantity: t.expose('quantity', { type: 'Quantity', description: 'Number of identical items' }),
-    photoImageId: t.expose('photoImageId', {
-      type: 'ImageId',
-      nullable: true,
-      description: 'Photo image identifier',
-    }),
     addedBy: t.expose('addedBy', { type: 'UserId', description: 'User who added this item' }),
     personalNotes: t.exposeString('personalNotes', { description: 'Personal notes' }),
     purchaseDate: t.expose('purchaseDate', {
@@ -45,11 +40,6 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
     }),
     purchaseLocation: t.exposeString('purchaseLocation', {
       description: 'Where the item was purchased (e.g. "Amazon", "Leroy Merlin")',
-    }),
-    invoiceImageId: t.expose('invoiceImageId', {
-      type: 'ImageId',
-      nullable: true,
-      description: 'Invoice photo image identifier',
     }),
     reminders: t.field({
       type: [ReminderType],

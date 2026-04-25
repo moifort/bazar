@@ -25,7 +25,6 @@ export const analyzePhoto = async (imageBase64: string): Promise<ScanResult> => 
   return {
     previewId: PreviewId(randomUUID()),
     previews,
-    imageBase64,
     createdAt: new Date(),
   }
 }

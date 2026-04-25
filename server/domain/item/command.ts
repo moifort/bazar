@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto'
-import { ImageCommand } from '~/domain/image/command'
 import { LocationQuery } from '~/domain/location/query'
 import type { StorageId } from '~/domain/location/types'
 import { ReminderCommand } from '~/domain/reminder/command'
@@ -21,28 +20,14 @@ type AddItemInput = {
   description?: string | null
   category: string
   quantity?: number | null
-  photoBase64?: string | null
   storageId?: string | null
   personalNotes?: string | null
   addedBy: string
   purchaseDate?: Date | string | null
   purchaseLocation?: string | null
-  invoiceImageBase64?: string | null
 }
 
 const add = async (input: AddItemInput) => {
-  let photoImageId: Item['photoImageId'] = null
-  if (input.photoBase64) {
-    const image = await ImageCommand.save(input.photoBase64, 'image/jpeg')
-    photoImageId = image.id
-  }
-
-  let invoiceImageId: Item['invoiceImageId'] = null
-  if (input.invoiceImageBase64) {
-    const image = await ImageCommand.save(input.invoiceImageBase64, 'image/jpeg')
-    invoiceImageId = image.id
-  }
-
   let placeId: Item['placeId'] = null
   if (input.storageId) {
     const path = await LocationQuery.resolveLocationPath(input.storageId as StorageId)
@@ -55,14 +40,12 @@ const add = async (input: AddItemInput) => {
     description: input.description ?? '',
     category: parseItemCategory(input.category),
     quantity: Quantity(input.quantity ?? 1),
-    photoImageId,
     storageId: input.storageId ? (input.storageId as StorageId) : null,
     placeId,
     addedBy: UserId(input.addedBy),
     personalNotes: input.personalNotes ?? '',
     purchaseDate: input.purchaseDate ? parsePurchaseDate(input.purchaseDate) : null,
     purchaseLocation: input.purchaseLocation ? parsePurchaseLocation(input.purchaseLocation) : '',
-    invoiceImageId,
     createdAt: new Date(),
     updatedAt: new Date(),
   }
@@ -80,20 +63,11 @@ type UpdateItemInput = {
   personalNotes?: string | null
   purchaseDate?: Date | string | null
   purchaseLocation?: string | null
-  invoiceImageBase64?: string | null
 }
 
 const update = async (id: string, input: UpdateItemInput) => {
   const item = await repository.findBy(id)
   if (!item) return 'not-found' as const
-
-  let invoiceImageId = item.invoiceImageId
-  if (input.invoiceImageBase64 !== undefined) {
-    if (item.invoiceImageId) await ImageCommand.remove(item.invoiceImageId)
-    invoiceImageId = input.invoiceImageBase64
-      ? (await ImageCommand.save(input.invoiceImageBase64, 'image/jpeg')).id
-      : null
-  }
 
   const updated: Item = {
     ...item,
@@ -113,7 +87,6 @@ const update = async (id: string, input: UpdateItemInput) => {
       input.purchaseLocation !== undefined
         ? parsePurchaseLocation(input.purchaseLocation ?? '')
         : item.purchaseLocation,
-    invoiceImageId,
     updatedAt: new Date(),
   }
 
@@ -126,14 +99,7 @@ const remove = async (id: string) => {
   const item = await repository.findBy(id)
   if (!item) return 'not-found' as const
 
-  if (item.photoImageId) {
-    await ImageCommand.remove(item.photoImageId)
-  }
-  if (item.invoiceImageId) {
-    await ImageCommand.remove(item.invoiceImageId)
-  }
   await ReminderCommand.removeByItem(id)
-
   await repository.remove(id)
   await emit('item-changed', { type: 'item-removed' as const, itemId: id })
   return 'deleted' as const
@@ -165,25 +131,21 @@ type ConfirmItemInput = {
   quantity?: number | null
   storageId?: string | null
   addedBy: string
-  previewImageBase64?: string | null
 }
 
-const confirmItems = async (inputs: ConfirmItemInput[]) => {
-  const items = await Promise.all(
+const confirmItems = async (inputs: ConfirmItemInput[]) =>
+  Promise.all(
     inputs.map((input) =>
       add({
         name: input.name,
         description: input.description,
         category: input.category,
         quantity: input.quantity,
-        photoBase64: input.previewImageBase64,
         storageId: input.storageId,
         personalNotes: null,
         addedBy: input.addedBy,
       }),
     ),
   )
-  return items
-}
 
 export const ItemCommand = { add, update, remove, move, confirmItems }

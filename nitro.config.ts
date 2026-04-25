@@ -31,7 +31,6 @@ export default defineNitroConfig({
     rooms: { driver: 'fs', base: './.data/db/rooms' },
     zones: { driver: 'fs', base: './.data/db/zones' },
     storages: { driver: 'fs', base: './.data/db/storages' },
-    images: { driver: 'fs', base: './.data/db/images' },
     'scan-cache': { driver: 'fs', base: './.data/db/scan-cache' },
   },
 })
