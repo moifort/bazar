@@ -1,40 +1,15 @@
 import Foundation
 
 enum SharedConfig {
-    enum Environment: String {
-        case dev
-        case production
-    }
+    /// Override the production URL via UserDefaults["serverURL"] for local dev
+    /// (e.g. when pointing the app at the Firebase emulator). Defaults to the
+    /// deployed Cloud Function URL.
+    static let serverURLKey = "serverURL"
+    static let defaultServerURL = "https://bazar-server-PLACEHOLDER.a.run.app"
 
-    static let environmentKey = "environment"
-    static let devServerURLKey = "devServerURL"
-    static let productionURLKey = "productionURL"
-    static let userTagKey = "userTag"
-
-    static let defaultDevURL = "http://192.168.1.206:3000"
-    static let productionURL = "https://bazar.mottet.me"
-    static let defaultEnvironment: Environment = .dev
-    static let defaultUserTag = "thibaut"
-
-    static var environment: Environment {
-        let raw = UserDefaults.standard.string(forKey: environmentKey) ?? ""
-        return Environment(rawValue: raw) ?? defaultEnvironment
-    }
-
-    static var devServerURL: String {
-        let value = UserDefaults.standard.string(forKey: devServerURLKey)
-        return (value?.isEmpty ?? true) ? defaultDevURL : value!
-    }
-
-    static var serverURL: String {
-        switch environment {
-        case .production: return productionURL
-        case .dev: return devServerURL
-        }
-    }
-
-    static var userTag: String {
-        let value = UserDefaults.standard.string(forKey: userTagKey)
-        return (value?.isEmpty ?? true) ? defaultUserTag : value!
+    static var serverURL: URL {
+        let stored = UserDefaults.standard.string(forKey: serverURLKey)
+            ?? defaultServerURL
+        return URL(string: stored) ?? URL(string: defaultServerURL)!
     }
 }

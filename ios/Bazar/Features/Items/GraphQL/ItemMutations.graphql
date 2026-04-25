@@ -16,7 +16,6 @@ mutation UpdateItem($id: ItemId!, $input: UpdateItemInput!) {
     quantity
     purchaseDate
     purchaseLocation
-    invoiceImageId
     updatedAt
   }
 }

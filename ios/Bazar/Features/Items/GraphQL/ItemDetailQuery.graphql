@@ -5,12 +5,10 @@ query ItemDetail($id: ItemId!) {
     description
     category
     quantity
-    photoImageId
     addedBy
     personalNotes
     purchaseDate
     purchaseLocation
-    invoiceImageId
     createdAt
     updatedAt
     location {

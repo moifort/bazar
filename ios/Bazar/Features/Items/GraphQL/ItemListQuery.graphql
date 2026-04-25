@@ -23,7 +23,6 @@ query ItemList(
       name
       category
       quantity
-      photoImageId
       addedBy
       createdAt
       location {
