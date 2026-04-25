@@ -20,3 +20,15 @@ output
 .worktrees/
 ios/Bazar.xcodeproj/
 ios/Bazar/Shared/Secrets.swift
+ios/Bazar/GoogleService-Info.plist
+
+# Terraform
+infra/.bin/
+infra/.terraform/
+infra/.terraform.lock.hcl
+infra/terraform.tfvars
+infra/*.tfstate
+infra/*.tfstate.backup
+infra/AuthKey_*.p8
+infra/apple.p8
+infra/backend.tf
