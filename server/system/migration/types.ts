@@ -1,3 +1,4 @@
+import type { Firestore } from 'firebase-admin/firestore'
 import type { Brand } from 'ts-brand'
 
 export type MigrationVersion = Brand<number, 'MigrationVersion'>
@@ -8,6 +9,6 @@ export type Migration = {
   name: MigrationName
   migrate: (ctx: MigrationContext) => Promise<MigrationResult>
 }
-export type MigrationContext = { storage: (namespace: string) => ReturnType<typeof useStorage> }
+export type MigrationContext = { db: Firestore }
 export type MigrationMeta = { version: MigrationVersion; appliedAt: Date }
 export type MigrationResult = { ok: true; transformed: number } | { ok: false; error: string }

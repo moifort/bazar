@@ -23,7 +23,4 @@ export default defineNitroConfig({
     adminToken: '',
     googleApiKey: '',
   },
-  storage: {
-    'migration-meta': { driver: 'fs', base: './.data/db/migration-meta' },
-  },
 })
