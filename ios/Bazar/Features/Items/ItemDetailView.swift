@@ -137,7 +137,7 @@ struct ItemDetailView: View {
     }
 
     private func imageURL(for imageId: String) -> URL? {
-        APIClient.shared.baseURL.appendingPathComponent("/images/\(imageId)")
+        SharedConfig.serverURL.appendingPathComponent("/images/\(imageId)")
     }
 
     private func loadDetail() async {

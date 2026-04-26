@@ -10,11 +10,15 @@ settings:
   base:
     SWIFT_VERSION: "6.0"
     SWIFT_STRICT_CONCURRENCY: complete
+    DEVELOPMENT_TEAM: 46C337T7YN
 
 packages:
   Apollo:
     url: https://github.com/apollographql/apollo-ios.git
     minorVersion: "1.18.0"
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk.git
+    from: "11.0.0"
 
 targets:
   Bazar:
@@ -27,6 +31,10 @@ targets:
     dependencies:
       - package: Apollo
         product: Apollo
+      - package: Firebase
+        product: FirebaseCore
+      - package: Firebase
+        product: FirebaseAuth
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: co.polyforms.bazar
@@ -36,3 +44,4 @@ targets:
         CURRENT_PROJECT_VERSION: 1
         MARKETING_VERSION: "1.0.0"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_ENTITLEMENTS: Bazar/Bazar.entitlements
