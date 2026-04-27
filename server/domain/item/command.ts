@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { LocationQuery } from '~/domain/location/query'
-import type { StorageId } from '~/domain/location/types'
+import type { StorageId, ZoneId } from '~/domain/location/types'
 import { ReminderCommand } from '~/domain/reminder/command'
 import type { UserId } from '~/domain/shared/types'
 import { emit } from '~/system/event-bus'
@@ -9,11 +9,48 @@ import {
   ItemName,
   ItemId as makeItemId,
   parseItemCategory,
+  parsePurchaseCondition,
   parsePurchaseDate,
   parsePurchaseLocation,
   Quantity,
 } from './primitives'
-import type { Item, ItemId } from './types'
+import type { Item, ItemId, PurchaseCondition } from './types'
+
+type LocationAttachmentInput = {
+  storageId?: string | null
+  zoneId?: string | null
+}
+
+type ResolvedAttachment = Pick<Item, 'storageId' | 'zoneId' | 'placeId'>
+
+const resolveAttachment = async (
+  userId: UserId,
+  input: LocationAttachmentInput,
+): Promise<ResolvedAttachment | 'invalid-location' | 'location-not-found'> => {
+  if (input.storageId && input.zoneId) return 'invalid-location'
+
+  if (input.storageId) {
+    const path = await LocationQuery.resolveLocationPath(userId, input.storageId as StorageId)
+    if (!path) return 'location-not-found'
+    return {
+      storageId: input.storageId as StorageId,
+      zoneId: null,
+      placeId: path.place.id,
+    }
+  }
+
+  if (input.zoneId) {
+    const path = await LocationQuery.resolveZoneLocationPath(userId, input.zoneId as ZoneId)
+    if (!path) return 'location-not-found'
+    return {
+      storageId: null,
+      zoneId: input.zoneId as ZoneId,
+      placeId: path.place.id,
+    }
+  }
+
+  return { storageId: null, zoneId: null, placeId: null }
+}
 
 type AddItemInput = {
   userId: UserId
@@ -22,17 +59,19 @@ type AddItemInput = {
   category: string
   quantity?: number | null
   storageId?: string | null
+  zoneId?: string | null
   personalNotes?: string | null
   purchaseDate?: Date | string | null
   purchaseLocation?: string | null
+  purchaseCondition?: PurchaseCondition | string | null
 }
 
 const add = async (input: AddItemInput) => {
-  let placeId: Item['placeId'] = null
-  if (input.storageId) {
-    const path = await LocationQuery.resolveLocationPath(input.userId, input.storageId as StorageId)
-    if (path) placeId = path.place.id
-  }
+  const attachment = await resolveAttachment(input.userId, {
+    storageId: input.storageId,
+    zoneId: input.zoneId,
+  })
+  if (attachment === 'invalid-location' || attachment === 'location-not-found') return attachment
 
   const item: Item = {
     id: makeItemId(randomUUID()),
@@ -41,12 +80,16 @@ const add = async (input: AddItemInput) => {
     description: input.description ?? '',
     category: parseItemCategory(input.category),
     quantity: Quantity(input.quantity ?? 1),
-    storageId: input.storageId ? (input.storageId as StorageId) : null,
-    placeId,
+    storageId: attachment.storageId,
+    zoneId: attachment.zoneId,
+    placeId: attachment.placeId,
     addedBy: input.userId,
     personalNotes: input.personalNotes ?? '',
     purchaseDate: input.purchaseDate ? parsePurchaseDate(input.purchaseDate) : null,
     purchaseLocation: input.purchaseLocation ? parsePurchaseLocation(input.purchaseLocation) : '',
+    purchaseCondition: input.purchaseCondition
+      ? parsePurchaseCondition(input.purchaseCondition)
+      : null,
     createdAt: new Date(),
     updatedAt: new Date(),
   }
@@ -64,6 +107,7 @@ type UpdateItemInput = {
   personalNotes?: string | null
   purchaseDate?: Date | string | null
   purchaseLocation?: string | null
+  purchaseCondition?: PurchaseCondition | string | null
 }
 
 const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
@@ -88,6 +132,12 @@ const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
       input.purchaseLocation !== undefined
         ? parsePurchaseLocation(input.purchaseLocation ?? '')
         : item.purchaseLocation,
+    purchaseCondition:
+      input.purchaseCondition !== undefined
+        ? input.purchaseCondition
+          ? parsePurchaseCondition(input.purchaseCondition)
+          : null
+        : item.purchaseCondition,
     updatedAt: new Date(),
   }
 
@@ -106,17 +156,19 @@ const remove = async (userId: UserId, id: ItemId) => {
   return 'deleted' as const
 }
 
-const move = async (userId: UserId, id: ItemId, storageId: StorageId) => {
+const move = async (userId: UserId, id: ItemId, target: LocationAttachmentInput) => {
   const item = await repository.findBy(userId, id)
   if (!item) return 'not-found' as const
 
-  const path = await LocationQuery.resolveLocationPath(userId, storageId)
-  if (!path) return 'storage-not-found' as const
+  const attachment = await resolveAttachment(userId, target)
+  if (attachment === 'invalid-location') return 'invalid-location' as const
+  if (attachment === 'location-not-found') return 'location-not-found' as const
 
   const updated: Item = {
     ...item,
-    storageId,
-    placeId: path.place.id,
+    storageId: attachment.storageId,
+    zoneId: attachment.zoneId,
+    placeId: attachment.placeId,
     updatedAt: new Date(),
   }
 
@@ -131,9 +183,14 @@ type ConfirmItemInput = {
   category: string
   quantity?: number | null
   storageId?: string | null
+  zoneId?: string | null
+  personalNotes?: string | null
+  purchaseDate?: Date | string | null
+  purchaseLocation?: string | null
+  purchaseCondition?: PurchaseCondition | string | null
 }
 
 const confirmItems = async (userId: UserId, inputs: ConfirmItemInput[]) =>
-  Promise.all(inputs.map((input) => add({ ...input, userId, personalNotes: null })))
+  Promise.all(inputs.map((input) => add({ ...input, userId })))
 
 export const ItemCommand = { add, update, remove, move, confirmItems }

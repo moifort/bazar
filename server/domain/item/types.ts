@@ -1,5 +1,5 @@
 import type { Brand } from 'ts-brand'
-import type { PlaceId, StorageId } from '~/domain/location/types'
+import type { PlaceId, StorageId, ZoneId } from '~/domain/location/types'
 import type { UserId } from '~/domain/shared/types'
 
 export type ItemId = Brand<string, 'ItemId'>
@@ -26,6 +26,8 @@ export type ItemCategory =
 
 export type ItemSort = 'name' | 'category' | 'created-at' | 'updated-at'
 
+export type PurchaseCondition = 'new' | 'used'
+
 export type Item = {
   id: ItemId
   userId: UserId
@@ -34,11 +36,13 @@ export type Item = {
   category: ItemCategory
   quantity: Quantity
   storageId: StorageId | null
+  zoneId: ZoneId | null
   placeId: PlaceId | null
   addedBy: UserId
   personalNotes: string
   purchaseDate: Date | null
   purchaseLocation: string
+  purchaseCondition: PurchaseCondition | null
   createdAt: Date
   updatedAt: Date
 }

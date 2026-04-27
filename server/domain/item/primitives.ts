@@ -5,6 +5,7 @@ import type {
   ItemId as ItemIdType,
   ItemName as ItemNameType,
   ItemSort,
+  PurchaseCondition,
   Quantity as QuantityType,
 } from '~/domain/item/types'
 
@@ -64,4 +65,13 @@ export const parsePurchaseLocation = (value: unknown): string => {
 
 export const parsePurchaseDate = (value: unknown): Date => {
   return z.coerce.date().parse(value)
+}
+
+const purchaseConditions: PurchaseCondition[] = ['new', 'used']
+
+export const parsePurchaseCondition = (value: unknown): PurchaseCondition => {
+  const v = z.string().parse(value)
+  if (!purchaseConditions.includes(v as PurchaseCondition))
+    throw new Error(`Invalid purchase condition: ${v}`)
+  return v as PurchaseCondition
 }
