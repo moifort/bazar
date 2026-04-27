@@ -9,6 +9,7 @@ query ItemDetail($id: ItemId!) {
     personalNotes
     purchaseDate
     purchaseLocation
+    purchaseCondition
     createdAt
     updatedAt
     location {

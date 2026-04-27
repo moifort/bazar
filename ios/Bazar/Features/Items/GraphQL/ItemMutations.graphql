@@ -16,6 +16,7 @@ mutation UpdateItem($id: ItemId!, $input: UpdateItemInput!) {
     quantity
     purchaseDate
     purchaseLocation
+    purchaseCondition
     updatedAt
   }
 }
@@ -24,8 +25,8 @@ mutation DeleteItem($id: ItemId!) {
   deleteItem(id: $id)
 }
 
-mutation MoveItem($id: ItemId!, $storageId: StorageId!) {
-  moveItem(id: $id, storageId: $storageId) {
+mutation MoveItem($id: ItemId!, $target: MoveItemInput!) {
+  moveItem(id: $id, target: $target) {
     id
     name
     location {

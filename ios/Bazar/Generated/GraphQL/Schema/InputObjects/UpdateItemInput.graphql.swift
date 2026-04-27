@@ -17,6 +17,7 @@ extension BazarGraphQL {
       description: GraphQLNullable<String> = nil,
       name: GraphQLNullable<ItemName> = nil,
       personalNotes: GraphQLNullable<String> = nil,
+      purchaseCondition: GraphQLNullable<GraphQLEnum<PurchaseCondition>> = nil,
       purchaseDate: GraphQLNullable<DateTime> = nil,
       purchaseLocation: GraphQLNullable<String> = nil,
       quantity: GraphQLNullable<Quantity> = nil
@@ -26,6 +27,7 @@ extension BazarGraphQL {
         "description": description,
         "name": name,
         "personalNotes": personalNotes,
+        "purchaseCondition": purchaseCondition,
         "purchaseDate": purchaseDate,
         "purchaseLocation": purchaseLocation,
         "quantity": quantity
@@ -54,6 +56,12 @@ extension BazarGraphQL {
     var personalNotes: GraphQLNullable<String> {
       get { __data["personalNotes"] }
       set { __data["personalNotes"] = newValue }
+    }
+
+    /// New purchase condition (omit to leave unchanged)
+    var purchaseCondition: GraphQLNullable<GraphQLEnum<PurchaseCondition>> {
+      get { __data["purchaseCondition"] }
+      set { __data["purchaseCondition"] = newValue }
     }
 
     /// New purchase date (null to clear)

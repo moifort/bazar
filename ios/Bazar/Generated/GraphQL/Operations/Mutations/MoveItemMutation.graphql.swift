@@ -8,23 +8,23 @@ extension BazarGraphQL {
     static let operationName: String = "MoveItem"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"mutation MoveItem($id: ItemId!, $storageId: StorageId!) { moveItem(id: $id, storageId: $storageId) { __typename id name location { __typename fullPath } } }"#
+        #"mutation MoveItem($id: ItemId!, $target: MoveItemInput!) { moveItem(id: $id, target: $target) { __typename id name location { __typename fullPath } } }"#
       ))
 
     public var id: ItemId
-    public var storageId: StorageId
+    public var target: MoveItemInput
 
     public init(
       id: ItemId,
-      storageId: StorageId
+      target: MoveItemInput
     ) {
       self.id = id
-      self.storageId = storageId
+      self.target = target
     }
 
     public var __variables: Variables? { [
       "id": id,
-      "storageId": storageId
+      "target": target
     ] }
 
     struct Data: BazarGraphQL.SelectionSet {
@@ -35,11 +35,11 @@ extension BazarGraphQL {
       static var __selections: [ApolloAPI.Selection] { [
         .field("moveItem", MoveItem.self, arguments: [
           "id": .variable("id"),
-          "storageId": .variable("storageId")
+          "target": .variable("target")
         ]),
       ] }
 
-      /// Move an item to a different storage location
+      /// Move an item to a different location (zone or storage, mutually exclusive)
       var moveItem: MoveItem { __data["moveItem"] }
 
       /// MoveItem
@@ -61,7 +61,7 @@ extension BazarGraphQL {
         var id: BazarGraphQL.ItemId { __data["id"] }
         /// Item display name
         var name: BazarGraphQL.ItemName { __data["name"] }
-        /// Resolved location path
+        /// Resolved location path (storage or zone level)
         var location: Location? { __data["location"] }
 
         /// MoveItem.Location

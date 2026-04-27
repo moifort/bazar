@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "ItemDetail"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description category quantity addedBy personalNotes purchaseDate purchaseLocation createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } reminders { __typename id title notes dueDate frequency customIntervalDays createdAt updatedAt } } }"#
+        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description category quantity addedBy personalNotes purchaseDate purchaseLocation purchaseCondition createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } reminders { __typename id title notes dueDate frequency customIntervalDays createdAt updatedAt } } }"#
       ))
 
     public var id: ItemId
@@ -50,6 +50,7 @@ extension BazarGraphQL {
           .field("personalNotes", String.self),
           .field("purchaseDate", BazarGraphQL.DateTime?.self),
           .field("purchaseLocation", String.self),
+          .field("purchaseCondition", GraphQLEnum<BazarGraphQL.PurchaseCondition>?.self),
           .field("createdAt", BazarGraphQL.DateTime.self),
           .field("updatedAt", BazarGraphQL.DateTime.self),
           .field("location", Location?.self),
@@ -74,11 +75,13 @@ extension BazarGraphQL {
         var purchaseDate: BazarGraphQL.DateTime? { __data["purchaseDate"] }
         /// Where the item was purchased (e.g. "Amazon", "Leroy Merlin")
         var purchaseLocation: String { __data["purchaseLocation"] }
+        /// Whether the item was bought new or used
+        var purchaseCondition: GraphQLEnum<BazarGraphQL.PurchaseCondition>? { __data["purchaseCondition"] }
         /// Creation date
         var createdAt: BazarGraphQL.DateTime { __data["createdAt"] }
         /// Last update date
         var updatedAt: BazarGraphQL.DateTime { __data["updatedAt"] }
-        /// Resolved location path
+        /// Resolved location path (storage or zone level)
         var location: Location? { __data["location"] }
         /// Reminders attached to this item, sorted by dueDate asc
         var reminders: [Reminder] { __data["reminders"] }
@@ -100,8 +103,8 @@ extension BazarGraphQL {
             .field("roomName", BazarGraphQL.RoomName.self),
             .field("zoneId", BazarGraphQL.ZoneId.self),
             .field("zoneName", BazarGraphQL.ZoneName.self),
-            .field("storageId", BazarGraphQL.StorageId.self),
-            .field("storageName", BazarGraphQL.StorageName.self),
+            .field("storageId", BazarGraphQL.StorageId?.self),
+            .field("storageName", BazarGraphQL.StorageName?.self),
           ] }
 
           /// Full path string (e.g. "Appartement > Cuisine > Placard > Etagere 2")
@@ -112,8 +115,8 @@ extension BazarGraphQL {
           var roomName: BazarGraphQL.RoomName { __data["roomName"] }
           var zoneId: BazarGraphQL.ZoneId { __data["zoneId"] }
           var zoneName: BazarGraphQL.ZoneName { __data["zoneName"] }
-          var storageId: BazarGraphQL.StorageId { __data["storageId"] }
-          var storageName: BazarGraphQL.StorageName { __data["storageName"] }
+          var storageId: BazarGraphQL.StorageId? { __data["storageId"] }
+          var storageName: BazarGraphQL.StorageName? { __data["storageName"] }
         }
 
         /// Item.Reminder

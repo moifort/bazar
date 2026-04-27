@@ -125,7 +125,7 @@ extension BazarGraphQL {
           var addedBy: BazarGraphQL.UserId { __data["addedBy"] }
           /// Creation date
           var createdAt: BazarGraphQL.DateTime { __data["createdAt"] }
-          /// Resolved location path
+          /// Resolved location path (storage or zone level)
           var location: Location? { __data["location"] }
           /// Reminders attached to this item, sorted by dueDate asc
           var reminders: [Reminder] { __data["reminders"] }
