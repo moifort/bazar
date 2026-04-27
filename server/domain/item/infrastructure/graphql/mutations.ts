@@ -1,15 +1,28 @@
 import { GraphQLError } from 'graphql'
 import { builder } from '~/domain/shared/graphql/builder'
 import { ItemCommand } from '../../command'
-import { AddItemInput, ConfirmItemInput, UpdateItemInput } from './inputs'
+import { AddItemInput, ConfirmItemInput, MoveItemInput, UpdateItemInput } from './inputs'
 import { ItemType } from './types'
+
+const invalidLocationError = () =>
+  new GraphQLError('Cannot specify both storageId and zoneId', {
+    extensions: { code: 'INVALID_LOCATION' },
+  })
+
+const locationNotFoundError = () =>
+  new GraphQLError('Location not found', { extensions: { code: 'NOT_FOUND' } })
 
 builder.mutationField('addItem', (t) =>
   t.field({
     type: ItemType,
     description: 'Manually add a new item to the inventory',
     args: { input: t.arg({ type: AddItemInput, required: true }) },
-    resolve: (_root, { input }, ctx) => ItemCommand.add({ ...input, userId: ctx.userId }),
+    resolve: async (_root, { input }, ctx) => {
+      const result = await ItemCommand.add({ ...input, userId: ctx.userId })
+      if (result === 'invalid-location') throw invalidLocationError()
+      if (result === 'location-not-found') throw locationNotFoundError()
+      return result
+    },
   }),
 )
 
@@ -47,17 +60,17 @@ builder.mutationField('deleteItem', (t) =>
 builder.mutationField('moveItem', (t) =>
   t.field({
     type: ItemType,
-    description: 'Move an item to a different storage location',
+    description: 'Move an item to a different location (zone or storage, mutually exclusive)',
     args: {
       id: t.arg({ type: 'ItemId', required: true }),
-      storageId: t.arg({ type: 'StorageId', required: true }),
+      target: t.arg({ type: MoveItemInput, required: true }),
     },
-    resolve: async (_root, { id, storageId }, ctx) => {
-      const result = await ItemCommand.move(ctx.userId, id, storageId)
+    resolve: async (_root, { id, target }, ctx) => {
+      const result = await ItemCommand.move(ctx.userId, id, target)
       if (result === 'not-found')
         throw new GraphQLError('Item not found', { extensions: { code: 'NOT_FOUND' } })
-      if (result === 'storage-not-found')
-        throw new GraphQLError('Storage not found', { extensions: { code: 'NOT_FOUND' } })
+      if (result === 'invalid-location') throw invalidLocationError()
+      if (result === 'location-not-found') throw locationNotFoundError()
       return result.item
     },
   }),
@@ -70,6 +83,16 @@ builder.mutationField('confirmItems', (t) =>
     args: {
       input: t.arg({ type: [ConfirmItemInput], required: true }),
     },
-    resolve: (_root, { input }, ctx) => ItemCommand.confirmItems(ctx.userId, input),
+    resolve: async (_root, { input }, ctx) => {
+      const results = await ItemCommand.confirmItems(ctx.userId, input)
+      for (const result of results) {
+        if (result === 'invalid-location') throw invalidLocationError()
+        if (result === 'location-not-found') throw locationNotFoundError()
+      }
+      return results.filter(
+        (r): r is Exclude<typeof r, 'invalid-location' | 'location-not-found'> =>
+          r !== 'invalid-location' && r !== 'location-not-found',
+      )
+    },
   }),
 )

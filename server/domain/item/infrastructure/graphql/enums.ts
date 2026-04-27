@@ -37,3 +37,11 @@ export const SortOrderEnum = builder.enumType('SortOrder', {
     desc: { description: 'Descending' },
   },
 })
+
+export const PurchaseConditionEnum = builder.enumType('PurchaseCondition', {
+  description: 'Whether the item was bought new or second-hand',
+  values: {
+    new: { description: 'Bought new' },
+    used: { description: 'Bought second-hand or used' },
+  },
+})

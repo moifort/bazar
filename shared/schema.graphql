@@ -23,6 +23,11 @@ input AddItemInput {
   personalNotes: String
 
   """
+  Whether the item was bought new or used
+  """
+  purchaseCondition: PurchaseCondition
+
+  """
   Date the item was purchased
   """
   purchaseDate: DateTime
@@ -38,9 +43,14 @@ input AddItemInput {
   quantity: Quantity
 
   """
-  Storage location
+  Storage attachment (mutually exclusive with zoneId)
   """
   storageId: StorageId
+
+  """
+  Zone attachment when no storage is chosen (mutually exclusive with storageId)
+  """
+  zoneId: ZoneId
 }
 
 """
@@ -113,14 +123,39 @@ input ConfirmItemInput {
   name: ItemName!
 
   """
+  Personal notes
+  """
+  personalNotes: String
+
+  """
+  Whether the item was bought new or used
+  """
+  purchaseCondition: PurchaseCondition
+
+  """
+  Date the item was purchased
+  """
+  purchaseDate: DateTime
+
+  """
+  Where the item was purchased
+  """
+  purchaseLocation: String
+
+  """
   Quantity (default 1)
   """
   quantity: Quantity
 
   """
-  Storage location
+  Storage attachment (mutually exclusive with zoneId)
   """
   storageId: StorageId
+
+  """
+  Zone attachment when no storage is chosen
+  """
+  zoneId: ZoneId
 }
 
 """
@@ -248,7 +283,7 @@ type Item {
   id: ItemId!
 
   """
-  Resolved location path
+  Resolved location path (storage or zone level)
   """
   location: LocationPath
 
@@ -261,6 +296,11 @@ type Item {
   Personal notes
   """
   personalNotes: String!
+
+  """
+  Whether the item was bought new or used
+  """
+  purchaseCondition: PurchaseCondition
 
   """
   Date this item was purchased
@@ -456,10 +496,25 @@ type LocationPath {
   placeName: PlaceName!
   roomId: RoomId!
   roomName: RoomName!
-  storageId: StorageId!
-  storageName: StorageName!
+  storageId: StorageId
+  storageName: StorageName
   zoneId: ZoneId!
   zoneName: ZoneName!
+}
+
+"""
+Target location for moving an item (zone or storage, mutually exclusive)
+"""
+input MoveItemInput {
+  """
+  Move to a storage
+  """
+  storageId: StorageId
+
+  """
+  Move to a zone (no storage)
+  """
+  zoneId: ZoneId
 }
 
 type Mutation {
@@ -544,9 +599,9 @@ type Mutation {
   deleteZone(id: ZoneId!): Boolean!
 
   """
-  Move an item to a different storage location
+  Move an item to a different location (zone or storage, mutually exclusive)
   """
-  moveItem(id: ItemId!, storageId: StorageId!): Item!
+  moveItem(id: ItemId!, target: MoveItemInput!): Item!
 
   """
   Update an existing item
@@ -638,6 +693,21 @@ scalar PlaceId
 Place name (non-empty, max 200 characters)
 """
 scalar PlaceName
+
+"""
+Whether the item was bought new or second-hand
+"""
+enum PurchaseCondition {
+  """
+  Bought new
+  """
+  new
+
+  """
+  Bought second-hand or used
+  """
+  used
+}
 
 """
 Item quantity (positive integer)
@@ -953,6 +1023,11 @@ input UpdateItemInput {
   New personal notes
   """
   personalNotes: String
+
+  """
+  New purchase condition (omit to leave unchanged)
+  """
+  purchaseCondition: PurchaseCondition
 
   """
   New purchase date (null to clear)

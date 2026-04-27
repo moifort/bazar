@@ -4,7 +4,7 @@ import { ReminderType } from '~/domain/reminder/infrastructure/graphql/types'
 import { ReminderQuery } from '~/domain/reminder/query'
 import { builder } from '~/domain/shared/graphql/builder'
 import type { Item } from '../../types'
-import { ItemCategoryEnum } from './enums'
+import { ItemCategoryEnum, PurchaseConditionEnum } from './enums'
 
 const LocationPathType = builder.objectRef<LocationPath>('LocationPath').implement({
   description: 'Full resolved location path for an item',
@@ -18,8 +18,16 @@ const LocationPathType = builder.objectRef<LocationPath>('LocationPath').impleme
     roomName: t.field({ type: 'RoomName', resolve: (path) => path.room.name }),
     zoneId: t.field({ type: 'ZoneId', resolve: (path) => path.zone.id }),
     zoneName: t.field({ type: 'ZoneName', resolve: (path) => path.zone.name }),
-    storageId: t.field({ type: 'StorageId', resolve: (path) => path.storage.id }),
-    storageName: t.field({ type: 'StorageName', resolve: (path) => path.storage.name }),
+    storageId: t.field({
+      type: 'StorageId',
+      nullable: true,
+      resolve: (path) => path.storage?.id ?? null,
+    }),
+    storageName: t.field({
+      type: 'StorageName',
+      nullable: true,
+      resolve: (path) => path.storage?.name ?? null,
+    }),
   }),
 })
 
@@ -41,6 +49,12 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
     purchaseLocation: t.exposeString('purchaseLocation', {
       description: 'Where the item was purchased (e.g. "Amazon", "Leroy Merlin")',
     }),
+    purchaseCondition: t.field({
+      type: PurchaseConditionEnum,
+      nullable: true,
+      description: 'Whether the item was bought new or used',
+      resolve: (item) => item.purchaseCondition,
+    }),
     reminders: t.field({
       type: [ReminderType],
       description: 'Reminders attached to this item, sorted by dueDate asc',
@@ -51,9 +65,12 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
     location: t.field({
       type: LocationPathType,
       nullable: true,
-      description: 'Resolved location path',
-      resolve: (item, _args, ctx) =>
-        item.storageId ? LocationQuery.resolveLocationPath(ctx.userId, item.storageId) : null,
+      description: 'Resolved location path (storage or zone level)',
+      resolve: (item, _args, ctx) => {
+        if (item.storageId) return LocationQuery.resolveLocationPath(ctx.userId, item.storageId)
+        if (item.zoneId) return LocationQuery.resolveZoneLocationPath(ctx.userId, item.zoneId)
+        return null
+      },
     }),
   }),
 })
