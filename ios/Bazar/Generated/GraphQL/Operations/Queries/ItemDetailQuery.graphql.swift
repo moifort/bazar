@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "ItemDetail"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description category quantity photoImageId addedBy personalNotes purchaseDate purchaseLocation invoiceImageId createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } reminders { __typename id title notes dueDate frequency customIntervalDays createdAt updatedAt } } }"#
+        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description category quantity addedBy personalNotes purchaseDate purchaseLocation createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } reminders { __typename id title notes dueDate frequency customIntervalDays createdAt updatedAt } } }"#
       ))
 
     public var id: ItemId
@@ -46,12 +46,10 @@ extension BazarGraphQL {
           .field("description", String.self),
           .field("category", GraphQLEnum<BazarGraphQL.ItemCategory>.self),
           .field("quantity", BazarGraphQL.Quantity.self),
-          .field("photoImageId", BazarGraphQL.ImageId?.self),
-          .field("addedBy", BazarGraphQL.UserTag.self),
+          .field("addedBy", BazarGraphQL.UserId.self),
           .field("personalNotes", String.self),
           .field("purchaseDate", BazarGraphQL.DateTime?.self),
           .field("purchaseLocation", String.self),
-          .field("invoiceImageId", BazarGraphQL.ImageId?.self),
           .field("createdAt", BazarGraphQL.DateTime.self),
           .field("updatedAt", BazarGraphQL.DateTime.self),
           .field("location", Location?.self),
@@ -68,18 +66,14 @@ extension BazarGraphQL {
         var category: GraphQLEnum<BazarGraphQL.ItemCategory> { __data["category"] }
         /// Number of identical items
         var quantity: BazarGraphQL.Quantity { __data["quantity"] }
-        /// Photo image identifier
-        var photoImageId: BazarGraphQL.ImageId? { __data["photoImageId"] }
         /// User who added this item
-        var addedBy: BazarGraphQL.UserTag { __data["addedBy"] }
+        var addedBy: BazarGraphQL.UserId { __data["addedBy"] }
         /// Personal notes
         var personalNotes: String { __data["personalNotes"] }
         /// Date this item was purchased
         var purchaseDate: BazarGraphQL.DateTime? { __data["purchaseDate"] }
         /// Where the item was purchased (e.g. "Amazon", "Leroy Merlin")
         var purchaseLocation: String { __data["purchaseLocation"] }
-        /// Invoice photo image identifier
-        var invoiceImageId: BazarGraphQL.ImageId? { __data["invoiceImageId"] }
         /// Creation date
         var createdAt: BazarGraphQL.DateTime { __data["createdAt"] }
         /// Last update date

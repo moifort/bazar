@@ -3,7 +3,7 @@ import Foundation
 enum ScanStep: Equatable {
     case camera
     case scanning
-    case preview([ItemPreview], imageBase64: String)
+    case preview([ItemPreview])
 
     static func == (lhs: ScanStep, rhs: ScanStep) -> Bool {
         switch (lhs, rhs) {
@@ -28,7 +28,7 @@ final class ScanViewModel {
             do {
                 let base64 = imageData.base64EncodedString()
                 let previews = try await GraphQLScanAPI.analyze(imageBase64: base64)
-                self.step = .preview(previews, imageBase64: base64)
+                self.step = .preview(previews)
             } catch {
                 self.error = reportError(error)
                 self.step = .camera
@@ -44,8 +44,7 @@ final class ScanViewModel {
                     category: preview.category?.rawValue ?? ItemCategory.other.rawValue,
                     description: preview.description,
                     quantity: preview.quantity,
-                    storageId: storageId,
-                    previewImageBase64: nil
+                    storageId: storageId
                 )
             }
             try await GraphQLScanAPI.confirmItems(inputs)

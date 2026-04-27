@@ -8,12 +8,10 @@ struct Item: Identifiable, Sendable {
     let description: String
     let category: ItemCategory
     let quantity: Int
-    var photoImageId: String?
     var addedBy: String
     let personalNotes: String
     var purchaseDate: Date?
     var purchaseLocation: String
-    var invoiceImageId: String?
     let createdAt: Date
     let updatedAt: Date
     var location: LocationPath?
@@ -25,7 +23,6 @@ struct ItemListItem: Identifiable, Sendable {
     let name: String
     let category: ItemCategory
     let quantity: Int
-    var photoImageId: String?
     var locationFullPath: String?
     var placeId: String?
     var placeName: String?

@@ -8,7 +8,7 @@
 import ApolloAPI
 
 extension BazarGraphQL {
-  /// Image unique identifier (UUID)
-  typealias ImageId = String
+  /// Firebase Auth user identifier (UID)
+  typealias UserId = String
 
 }

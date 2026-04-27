@@ -6,7 +6,6 @@ struct ConfirmItemInput: Sendable {
     let description: String?
     let quantity: Int
     let storageId: String?
-    let previewImageBase64: String?
 }
 
 enum GraphQLScanAPI {
@@ -32,7 +31,6 @@ enum GraphQLScanAPI {
                 category: .case(BazarGraphQL.ItemCategory(rawValue: item.category) ?? .other),
                 description: GraphQLHelpers.graphQLNullable(item.description),
                 name: item.name,
-                previewImageBase64: GraphQLHelpers.graphQLNullable(item.previewImageBase64),
                 quantity: GraphQLHelpers.graphQLNullable(item.quantity > 1 ? "\(item.quantity)" : nil),
                 storageId: GraphQLHelpers.graphQLNullable(item.storageId)
             )

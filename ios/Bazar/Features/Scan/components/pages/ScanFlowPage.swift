@@ -24,7 +24,7 @@ struct ScanFlowPage: View {
                 AnalyzingView()
                     .transition(.opacity.combined(with: .scale(scale: 0.95)))
 
-            case .preview(let previews, _):
+            case .preview(let previews):
                 NavigationStack {
                     ScanConfirmationView(
                         previews: previews,

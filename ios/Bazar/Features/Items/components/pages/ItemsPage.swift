@@ -151,8 +151,8 @@ struct ItemsPage: View {
                     id: "p1",
                     placeName: "Maison",
                     items: [
-                        ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", placeId: "p1", placeName: "Maison", roomName: "Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
-                        ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, photoImageId: nil, locationFullPath: "Maison > Cellier", placeId: "p1", placeName: "Maison", roomName: "Cellier", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                        ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, locationFullPath: "Maison > Garage", placeId: "p1", placeName: "Maison", roomName: "Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                        ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, locationFullPath: "Maison > Cellier", placeId: "p1", placeName: "Maison", roomName: "Cellier", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
                     ]
                 ),
             ],
@@ -214,7 +214,7 @@ struct ItemsPage: View {
                     id: "p1",
                     placeName: "Maison",
                     items: [
-                        ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Maison > Garage", placeId: "p1", placeName: "Maison", roomName: "Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                        ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, locationFullPath: "Maison > Garage", placeId: "p1", placeName: "Maison", roomName: "Garage", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
                     ]
                 ),
             ],
@@ -251,15 +251,15 @@ struct ItemsPage: View {
                     id: "p1",
                     placeName: "Appartement",
                     items: [
-                        ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, photoImageId: nil, locationFullPath: "Appartement > Cuisine > Placard > Étagère 2", placeId: "p1", placeName: "Appartement", roomName: "Cuisine", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
-                        ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, photoImageId: nil, locationFullPath: "Appartement > Salon", placeId: "p1", placeName: "Appartement", roomName: "Salon", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                        ItemListItem(id: "1", name: "Perceuse Bosch", category: .tools, quantity: 1, locationFullPath: "Appartement > Cuisine > Placard > Étagère 2", placeId: "p1", placeName: "Appartement", roomName: "Cuisine", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                        ItemListItem(id: "2", name: "Ampoules LED", category: .electronics, quantity: 12, locationFullPath: "Appartement > Salon", placeId: "p1", placeName: "Appartement", roomName: "Salon", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
                     ]
                 ),
                 ItemPlaceGroup(
                     id: "p2",
                     placeName: "Cave",
                     items: [
-                        ItemListItem(id: "3", name: "Ski de fond", category: .sports, quantity: 1, photoImageId: nil, locationFullPath: "Cave > Entrepôt > Étagère A", placeId: "p2", placeName: "Cave", roomName: "Entrepôt", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
+                        ItemListItem(id: "3", name: "Ski de fond", category: .sports, quantity: 1, locationFullPath: "Cave > Entrepôt > Étagère A", placeId: "p2", placeName: "Cave", roomName: "Entrepôt", addedBy: "Thibaut", createdAt: .now, overdueReminderCount: 0),
                     ]
                 ),
             ],

@@ -26,13 +26,11 @@ struct ItemDetailView: View {
                     description: item.description,
                     category: item.category,
                     quantity: item.quantity,
-                    imageURL: item.photoImageId.flatMap(imageURL(for:)),
                     location: item.location,
                     personalNotes: item.personalNotes,
                     createdAt: item.createdAt,
                     purchaseDate: item.purchaseDate,
                     purchaseLocation: item.purchaseLocation,
-                    invoiceImageURL: item.invoiceImageId.flatMap(imageURL(for:)),
                     purchaseLocationSuggestions: purchaseLocationSuggestions,
                     reminders: item.reminders.map(ReminderRowMapper.map),
                     onRefresh: { await loadDetail() },
@@ -99,10 +97,8 @@ struct ItemDetailView: View {
                     PurchaseEditForm(
                         initial: .init(
                             purchaseDate: item.purchaseDate,
-                            purchaseLocation: item.purchaseLocation,
-                            invoiceImageBase64Update: nil
+                            purchaseLocation: item.purchaseLocation
                         ),
-                        existingInvoiceImageURL: item.invoiceImageId.flatMap(imageURL(for:)),
                         purchaseLocationSuggestions: purchaseLocationSuggestions,
                         onSave: { fields in
                             try await savePurchase(fields)
@@ -134,10 +130,6 @@ struct ItemDetailView: View {
             reminders: item.reminders,
             itemNames: [item.id: item.name]
         )
-    }
-
-    private func imageURL(for imageId: String) -> URL? {
-        SharedConfig.serverURL.appendingPathComponent("/images/\(imageId)")
     }
 
     private func loadDetail() async {
@@ -181,7 +173,6 @@ struct ItemDetailView: View {
         nonisolated(unsafe) let input = BazarGraphQL.UpdateItemInput(
             category: .some(.case(BazarGraphQL.ItemCategory(rawValue: fields.category.rawValue) ?? .other)),
             description: .some(fields.description),
-            invoiceImageBase64: fields.invoiceImageBase64Update.map { .some($0) } ?? .none,
             name: .some(fields.name),
             personalNotes: .some(fields.notes),
             purchaseDate: fields.purchaseDate.map { .some(iso.string(from: $0)) } ?? .null,
@@ -198,7 +189,6 @@ struct ItemDetailView: View {
         nonisolated(unsafe) let input = BazarGraphQL.UpdateItemInput(
             category: .none,
             description: .none,
-            invoiceImageBase64: fields.invoiceImageBase64Update.map { .some($0) } ?? .none,
             name: .none,
             personalNotes: .none,
             purchaseDate: fields.purchaseDate.map { .some(iso.string(from: $0)) } ?? .null,

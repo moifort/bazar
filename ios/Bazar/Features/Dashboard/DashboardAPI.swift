@@ -29,7 +29,6 @@ enum GraphQLDashboardAPI {
                     name: item.name,
                     category: ItemCategory(rawValue: item.category.rawValue) ?? .other,
                     quantity: Int(item.quantity) ?? 1,
-                    photoImageId: item.photoImageId,
                     locationFullPath: item.location?.fullPath,
                     placeId: nil,
                     placeName: nil,

@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "ItemList"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query ItemList($category: ItemCategory, $placeId: PlaceId, $roomId: RoomId, $search: String, $sort: ItemSort, $order: SortOrder, $offset: Int, $limit: Int) { items( category: $category placeId: $placeId roomId: $roomId search: $search sort: $sort order: $order offset: $offset limit: $limit ) { __typename items { __typename id name category quantity photoImageId addedBy createdAt location { __typename fullPath placeId placeName roomId roomName } reminders { __typename id dueDate } } totalCount hasMore } }"#
+        #"query ItemList($category: ItemCategory, $placeId: PlaceId, $roomId: RoomId, $search: String, $sort: ItemSort, $order: SortOrder, $offset: Int, $limit: Int) { items( category: $category placeId: $placeId roomId: $roomId search: $search sort: $sort order: $order offset: $offset limit: $limit ) { __typename items { __typename id name category quantity addedBy createdAt location { __typename fullPath placeId placeName roomId roomName } reminders { __typename id dueDate } } totalCount hasMore } }"#
       ))
 
     public var category: GraphQLNullable<GraphQLEnum<ItemCategory>>
@@ -107,8 +107,7 @@ extension BazarGraphQL {
             .field("name", BazarGraphQL.ItemName.self),
             .field("category", GraphQLEnum<BazarGraphQL.ItemCategory>.self),
             .field("quantity", BazarGraphQL.Quantity.self),
-            .field("photoImageId", BazarGraphQL.ImageId?.self),
-            .field("addedBy", BazarGraphQL.UserTag.self),
+            .field("addedBy", BazarGraphQL.UserId.self),
             .field("createdAt", BazarGraphQL.DateTime.self),
             .field("location", Location?.self),
             .field("reminders", [Reminder].self),
@@ -122,10 +121,8 @@ extension BazarGraphQL {
           var category: GraphQLEnum<BazarGraphQL.ItemCategory> { __data["category"] }
           /// Number of identical items
           var quantity: BazarGraphQL.Quantity { __data["quantity"] }
-          /// Photo image identifier
-          var photoImageId: BazarGraphQL.ImageId? { __data["photoImageId"] }
           /// User who added this item
-          var addedBy: BazarGraphQL.UserTag { __data["addedBy"] }
+          var addedBy: BazarGraphQL.UserId { __data["addedBy"] }
           /// Creation date
           var createdAt: BazarGraphQL.DateTime { __data["createdAt"] }
           /// Resolved location path

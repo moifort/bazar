@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "Dashboard"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query Dashboard { dashboard { __typename totalItems itemsByCategory { __typename category count } itemsByPlace { __typename placeId placeName count } recentItems { __typename id name category quantity photoImageId addedBy createdAt location { __typename fullPath } } } }"#
+        #"query Dashboard { dashboard { __typename totalItems itemsByCategory { __typename category count } itemsByPlace { __typename placeId placeName count } recentItems { __typename id name category quantity addedBy createdAt location { __typename fullPath } } } }"#
       ))
 
     public init() {}
@@ -107,8 +107,7 @@ extension BazarGraphQL {
             .field("name", BazarGraphQL.ItemName.self),
             .field("category", GraphQLEnum<BazarGraphQL.ItemCategory>.self),
             .field("quantity", BazarGraphQL.Quantity.self),
-            .field("photoImageId", BazarGraphQL.ImageId?.self),
-            .field("addedBy", BazarGraphQL.UserTag.self),
+            .field("addedBy", BazarGraphQL.UserId.self),
             .field("createdAt", BazarGraphQL.DateTime.self),
             .field("location", Location?.self),
           ] }
@@ -121,10 +120,8 @@ extension BazarGraphQL {
           var category: GraphQLEnum<BazarGraphQL.ItemCategory> { __data["category"] }
           /// Number of identical items
           var quantity: BazarGraphQL.Quantity { __data["quantity"] }
-          /// Photo image identifier
-          var photoImageId: BazarGraphQL.ImageId? { __data["photoImageId"] }
           /// User who added this item
-          var addedBy: BazarGraphQL.UserTag { __data["addedBy"] }
+          var addedBy: BazarGraphQL.UserId { __data["addedBy"] }
           /// Creation date
           var createdAt: BazarGraphQL.DateTime { __data["createdAt"] }
           /// Resolved location path

@@ -16,7 +16,6 @@ extension BazarGraphQL {
       category: GraphQLEnum<ItemCategory>,
       description: GraphQLNullable<String> = nil,
       name: ItemName,
-      previewImageBase64: GraphQLNullable<String> = nil,
       quantity: GraphQLNullable<Quantity> = nil,
       storageId: GraphQLNullable<StorageId> = nil
     ) {
@@ -24,7 +23,6 @@ extension BazarGraphQL {
         "category": category,
         "description": description,
         "name": name,
-        "previewImageBase64": previewImageBase64,
         "quantity": quantity,
         "storageId": storageId
       ])
@@ -46,12 +44,6 @@ extension BazarGraphQL {
     var name: ItemName {
       get { __data["name"] }
       set { __data["name"] = newValue }
-    }
-
-    /// Photo from scan preview as base64
-    var previewImageBase64: GraphQLNullable<String> {
-      get { __data["previewImageBase64"] }
-      set { __data["previewImageBase64"] = newValue }
     }
 
     /// Quantity (default 1)

@@ -79,7 +79,6 @@
 		7FCAF3539C9FC4F26C5CBDEA /* ReminderTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6EA8100D8F6B381E529A86 /* ReminderTitle.swift */; };
 		80C9234B4064B1D9787D7FE7 /* ReminderId.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BCCFD88770B0DE2D975315 /* ReminderId.swift */; };
 		81F411D2B857E719AD699B44 /* SearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C9B0FC268129E8C12E347F /* SearchResultsView.swift */; };
-		86B6F667065BF23263D8B1F5 /* ImageId.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3200489BEC8A98F607FFD86 /* ImageId.swift */; };
 		884A41ECCB5F28070E88DD2A /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6735C526DD16DFF89F7AF631 /* ItemRow.swift */; };
 		8D59034163EF2EA2AB51418A /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1639E48F473AD3B55915E2B5 /* ScanView.swift */; };
 		8DCAE5A84AEC2FA68F8CB204 /* LocationsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E90CFF8E8951AAA87F0F017 /* LocationsPage.swift */; };
@@ -115,6 +114,7 @@
 		C25CC9B83F128750A3F1E918 /* LocationPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B72689C24A754DA3BF2AC9 /* LocationPicker.swift */; };
 		C3A7C44B13E0037FF965F113 /* BazarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */; };
 		C49DFDE5AB1F7BBF536EDDFA /* SearchEntry.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46BE2355F083FD3ED6B86D5 /* SearchEntry.graphql.swift */; };
+		C4ACD3ACA361076493BB3EA5 /* UserId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869DE7B08B101C78223521F5 /* UserId.swift */; };
 		C6B38C53C2EAF48CDBE344E5 /* QuantityStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87AD49AA6F4FEB4376218A76 /* QuantityStepper.swift */; };
 		C71C0C218EC5DE5699AF9CC6 /* EditablePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969E5557F84D0D44EF3F8EC2 /* EditablePreview.swift */; };
 		C75BBCE50F2C3778B4D90FD3 /* Zone.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB7999FAE68C76B5527FA793 /* Zone.graphql.swift */; };
@@ -230,6 +230,7 @@
 		7CE5B73E561E13890925AEE1 /* CategoryCount.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCount.graphql.swift; sourceTree = "<group>"; };
 		7DD071B0FF14446D867771D9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		81334A0DEFD62EC2FAB4F5D2 /* AddReminderInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReminderInput.graphql.swift; sourceTree = "<group>"; };
+		869DE7B08B101C78223521F5 /* UserId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserId.swift; sourceTree = "<group>"; };
 		8795A48B4E16E73895451CA6 /* UpdateItemInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateItemInput.graphql.swift; sourceTree = "<group>"; };
 		87AD49AA6F4FEB4376218A76 /* QuantityStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityStepper.swift; sourceTree = "<group>"; };
 		89B72689C24A754DA3BF2AC9 /* LocationPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPicker.swift; sourceTree = "<group>"; };
@@ -244,7 +245,6 @@
 		9CE79855AF193BA16FE55848 /* DashboardQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardQuery.graphql.swift; sourceTree = "<group>"; };
 		9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BazarApp.swift; sourceTree = "<group>"; };
 		9F415C85D4FE275223739444 /* ItemsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsPage.swift; sourceTree = "<group>"; };
-		A3200489BEC8A98F607FFD86 /* ImageId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageId.swift; sourceTree = "<group>"; };
 		A910A38DCED5283240940428 /* ConfirmItemInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmItemInput.graphql.swift; sourceTree = "<group>"; };
 		A9CD551E13841DCFE2857EFB /* ScanFlowPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanFlowPage.swift; sourceTree = "<group>"; };
 		AB83A2E13CF3995EEF2974C3 /* UpdateReminderInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateReminderInput.graphql.swift; sourceTree = "<group>"; };
@@ -546,7 +546,6 @@
 			isa = PBXGroup;
 			children = (
 				1E7798EA492BA24095B30FCB /* DateTime.swift */,
-				A3200489BEC8A98F607FFD86 /* ImageId.swift */,
 				747852452BE8F5587C19941B /* ItemId.swift */,
 				D894786302504830B5C0FD8C /* ItemName.swift */,
 				CD701F055909C265F3B69723 /* PlaceId.swift */,
@@ -558,6 +557,7 @@
 				AEB367553041712375B3093C /* RoomName.swift */,
 				4ECFF742D6DE03F689734123 /* StorageId.swift */,
 				DEF93BA9D7BEFA5078D2E230 /* StorageName.swift */,
+				869DE7B08B101C78223521F5 /* UserId.swift */,
 				D5F4A49D86BF3B9D8A63341A /* UserTag.swift */,
 				06CD57BF36A20BD88D20301E /* ZoneId.swift */,
 				FC3DD8001654EF2A9B611767 /* ZoneName.swift */,
@@ -969,7 +969,6 @@
 				0E15C0FF0EDA45DB9B96BE43 /* GraphQLClient.swift in Sources */,
 				DAC19910FC0549DCB22C8EE1 /* GraphQLHelpers.swift in Sources */,
 				7C3DD736025788600A472ACF /* GraphQLLoggingInterceptor.swift in Sources */,
-				86B6F667065BF23263D8B1F5 /* ImageId.swift in Sources */,
 				A90B457DD2D193A3719C0C48 /* Item.graphql.swift in Sources */,
 				1273E60F5283FBB2D986A68F /* ItemCategory.graphql.swift in Sources */,
 				34445592BE514E73D302B0B7 /* ItemCategoryMenu.swift in Sources */,
@@ -1058,6 +1057,7 @@
 				D89A6A4D3AD8A37217839ED0 /* UpdateStorageMutation.graphql.swift in Sources */,
 				E289BD92419F45A6FA5BC005 /* UpdateZoneInput.graphql.swift in Sources */,
 				F0257F58EE5D0880926EA08E /* UpdateZoneMutation.graphql.swift in Sources */,
+				C4ACD3ACA361076493BB3EA5 /* UserId.swift in Sources */,
 				042CA9ED5E86878D3F6AEFB7 /* UserTag.swift in Sources */,
 				980EA9F51A7CDE46002E7842 /* ViewfinderOverlay.swift in Sources */,
 				C75BBCE50F2C3778B4D90FD3 /* Zone.graphql.swift in Sources */,

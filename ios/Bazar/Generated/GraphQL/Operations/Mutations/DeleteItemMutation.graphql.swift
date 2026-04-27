@@ -28,7 +28,7 @@ extension BazarGraphQL {
         .field("deleteItem", Bool.self, arguments: ["id": .variable("id")]),
       ] }
 
-      /// Delete an item and its photo
+      /// Delete an item
       var deleteItem: Bool { __data["deleteItem"] }
     }
   }

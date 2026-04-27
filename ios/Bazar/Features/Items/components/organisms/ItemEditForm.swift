@@ -1,9 +1,7 @@
-import PhotosUI
 import SwiftUI
 
 struct ItemEditForm: View {
     let initial: Fields
-    let existingInvoiceImageURL: URL?
     let purchaseLocationSuggestions: [String]
     let onSave: (Fields) async throws -> Void
     let onCancel: () -> Void
@@ -16,21 +14,16 @@ struct ItemEditForm: View {
     @State private var hasPurchaseDate: Bool
     @State private var purchaseDate: Date
     @State private var purchaseLocation: String
-    @State private var invoicePhotoItem: PhotosPickerItem?
-    @State private var pendingInvoiceBase64: String?
-    @State private var invoiceCleared: Bool = false
     @State private var isSaving = false
     @State private var saveError: String?
 
     init(
         initial: Fields,
-        existingInvoiceImageURL: URL? = nil,
         purchaseLocationSuggestions: [String] = [],
         onSave: @escaping (Fields) async throws -> Void,
         onCancel: @escaping () -> Void
     ) {
         self.initial = initial
-        self.existingInvoiceImageURL = existingInvoiceImageURL
         self.purchaseLocationSuggestions = purchaseLocationSuggestions
         self.onSave = onSave
         self.onCancel = onCancel
@@ -103,8 +96,6 @@ struct ItemEditForm: View {
                         }
                     }
                 }
-
-                invoiceRow
             }
 
             Section("Notes") {
@@ -140,9 +131,6 @@ struct ItemEditForm: View {
         } message: {
             Text(saveError ?? "")
         }
-        .onChange(of: invoicePhotoItem) { _, newItem in
-            Task { await loadInvoiceData(from: newItem) }
-        }
     }
 
     private var suggestionsToShow: [String] {
@@ -154,63 +142,8 @@ struct ItemEditForm: View {
             .map { $0 }
     }
 
-    @ViewBuilder
-    private var invoiceRow: some View {
-        if pendingInvoiceBase64 != nil {
-            LabeledContent {
-                Button("Annuler", role: .destructive) {
-                    pendingInvoiceBase64 = nil
-                    invoicePhotoItem = nil
-                }
-            } label: {
-                Label("Nouvelle facture prête", systemImage: "doc.badge.plus")
-                    .foregroundStyle(.green)
-            }
-        } else if let existingInvoiceImageURL, !invoiceCleared {
-            LabeledContent {
-                HStack {
-                    AsyncImage(url: existingInvoiceImageURL) { phase in
-                        if case .success(let image) = phase {
-                            image.resizable().aspectRatio(contentMode: .fit).frame(height: 32)
-                        } else {
-                            Image(systemName: "doc").foregroundStyle(.secondary)
-                        }
-                    }
-                    Button("Supprimer", role: .destructive) { invoiceCleared = true }
-                        .buttonStyle(.borderless)
-                }
-            } label: {
-                Label("Facture", systemImage: "doc.text")
-            }
-        } else {
-            PhotosPicker(
-                selection: $invoicePhotoItem,
-                matching: .images,
-                photoLibrary: .shared()
-            ) {
-                Label("Ajouter une photo de la facture", systemImage: "doc.badge.plus")
-            }
-        }
-    }
-
-    private func loadInvoiceData(from item: PhotosPickerItem?) async {
-        guard let item else { return }
-        if let data = try? await item.loadTransferable(type: Data.self) {
-            pendingInvoiceBase64 = data.base64EncodedString()
-            invoiceCleared = false
-        }
-    }
-
     private func save() async {
         isSaving = true
-        let invoiceUpdate: String?
-        if let pendingInvoiceBase64 {
-            invoiceUpdate = pendingInvoiceBase64
-        } else if invoiceCleared {
-            invoiceUpdate = ""
-        } else {
-            invoiceUpdate = nil
-        }
         let fields = Fields(
             name: name.trimmingCharacters(in: .whitespaces),
             description: description.trimmingCharacters(in: .whitespaces),
@@ -218,8 +151,7 @@ struct ItemEditForm: View {
             quantity: quantity,
             notes: notes.trimmingCharacters(in: .whitespaces),
             purchaseDate: hasPurchaseDate ? purchaseDate : nil,
-            purchaseLocation: purchaseLocation.trimmingCharacters(in: .whitespaces),
-            invoiceImageBase64Update: invoiceUpdate
+            purchaseLocation: purchaseLocation.trimmingCharacters(in: .whitespaces)
         )
         do {
             try await onSave(fields)
@@ -239,8 +171,6 @@ extension ItemEditForm {
         var notes: String
         var purchaseDate: Date?
         var purchaseLocation: String
-        /// nil = no change, "" = clear, non-empty = replace with this base64 photo.
-        var invoiceImageBase64Update: String?
 
         init(
             name: String,
@@ -249,8 +179,7 @@ extension ItemEditForm {
             quantity: Int,
             notes: String,
             purchaseDate: Date? = nil,
-            purchaseLocation: String = "",
-            invoiceImageBase64Update: String? = nil
+            purchaseLocation: String = ""
         ) {
             self.name = name
             self.description = description
@@ -259,7 +188,6 @@ extension ItemEditForm {
             self.notes = notes
             self.purchaseDate = purchaseDate
             self.purchaseLocation = purchaseLocation
-            self.invoiceImageBase64Update = invoiceImageBase64Update
         }
 
         init(from item: Item) {
@@ -270,8 +198,7 @@ extension ItemEditForm {
                 quantity: item.quantity,
                 notes: item.personalNotes,
                 purchaseDate: item.purchaseDate,
-                purchaseLocation: item.purchaseLocation,
-                invoiceImageBase64Update: nil
+                purchaseLocation: item.purchaseLocation
             )
         }
     }
@@ -289,7 +216,6 @@ extension ItemEditForm {
                 purchaseDate: Date(timeIntervalSinceNow: -86_400 * 30),
                 purchaseLocation: "Amazon"
             ),
-            existingInvoiceImageURL: nil,
             purchaseLocationSuggestions: ["Amazon", "Leroy Merlin", "Castorama"],
             onSave: { _ in },
             onCancel: {}

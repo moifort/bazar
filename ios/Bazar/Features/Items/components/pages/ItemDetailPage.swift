@@ -6,13 +6,11 @@ struct ItemDetailPage: View {
     let description: String
     let category: ItemCategory
     let quantity: Int
-    let imageURL: URL?
     let location: LocationPath?
     let personalNotes: String
     let createdAt: Date
     let purchaseDate: Date?
     let purchaseLocation: String
-    let invoiceImageURL: URL?
     let purchaseLocationSuggestions: [String]
     let reminders: [ReminderRow.Model]
 
@@ -32,7 +30,6 @@ struct ItemDetailPage: View {
             if isEditing {
                 ItemEditForm(
                     initial: editFields,
-                    existingInvoiceImageURL: invoiceImageURL,
                     purchaseLocationSuggestions: purchaseLocationSuggestions,
                     onSave: { fields in
                         try await onEditSave(fields)
@@ -72,40 +69,13 @@ struct ItemDetailPage: View {
             quantity: quantity,
             notes: personalNotes,
             purchaseDate: purchaseDate,
-            purchaseLocation: purchaseLocation,
-            invoiceImageBase64Update: nil
+            purchaseLocation: purchaseLocation
         )
     }
 
     @ViewBuilder
     private var itemContent: some View {
         List {
-            if let imageURL {
-                Section {
-                    AsyncImage(url: imageURL) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxHeight: 300)
-                                .clipShape(.rect(cornerRadius: 12))
-                        case .failure:
-                            Image(systemName: "photo")
-                                .font(.largeTitle)
-                                .foregroundStyle(.secondary)
-                                .frame(maxWidth: .infinity, minHeight: 100)
-                        default:
-                            ProgressView()
-                                .frame(maxWidth: .infinity, minHeight: 100)
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-                }
-            }
-
             Section("Informations") {
                 LabeledContent("Catégorie") {
                     Label(category.label, systemImage: category.icon)
@@ -182,11 +152,6 @@ struct ItemDetailPage: View {
                         LabeledContent("Lieu", value: purchaseLocation)
                     }
                 }
-                if let invoiceImageURL {
-                    Link(destination: invoiceImageURL) {
-                        Label("Voir la facture", systemImage: "doc.text.magnifyingglass")
-                    }
-                }
                 Button {
                     onOpenPurchaseEdit()
                 } label: {
@@ -218,7 +183,7 @@ struct ItemDetailPage: View {
     }
 
     private var hasPurchaseInfo: Bool {
-        purchaseDate != nil || !purchaseLocation.isEmpty || invoiceImageURL != nil
+        purchaseDate != nil || !purchaseLocation.isEmpty
     }
 
     private var locationAccessibilityLabel: String {
@@ -276,7 +241,6 @@ struct ItemDetailPage: View {
             description: "Perceuse visseuse sans fil 18V, deux batteries incluses.",
             category: .tools,
             quantity: 1,
-            imageURL: nil,
             location: LocationPath(
                 fullPath: "Maison > Garage > Établi > Tiroir 1",
                 placeId: "p1",
@@ -292,7 +256,6 @@ struct ItemDetailPage: View {
             createdAt: Date(timeIntervalSinceNow: -86_400 * 365),
             purchaseDate: Date(timeIntervalSinceNow: -86_400 * 120),
             purchaseLocation: "amazon.fr",
-            invoiceImageURL: nil,
             purchaseLocationSuggestions: ["Amazon", "Leroy Merlin"],
             reminders: [],
             onRefresh: {},
@@ -314,13 +277,11 @@ struct ItemDetailPage: View {
             description: "",
             category: .electronics,
             quantity: 12,
-            imageURL: nil,
             location: nil,
             personalNotes: "",
             createdAt: Date(),
             purchaseDate: nil,
             purchaseLocation: "",
-            invoiceImageURL: nil,
             purchaseLocationSuggestions: [],
             reminders: [],
             onRefresh: {},

@@ -116,7 +116,6 @@ final class ItemsViewModel {
                 name: detail.name,
                 category: detail.category,
                 quantity: detail.quantity,
-                photoImageId: detail.photoImageId,
                 locationFullPath: detail.location?.fullPath,
                 placeId: detail.location?.placeId,
                 placeName: detail.location?.placeName,
