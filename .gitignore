@@ -31,4 +31,3 @@ infra/*.tfstate
 infra/*.tfstate.backup
 infra/AuthKey_*.p8
 infra/apple.p8
-infra/backend.tf
