@@ -1,8 +1,10 @@
 import { sortBy } from 'lodash-es'
 import type { Place, Room, Storage, Zone } from './types'
 
-export const fullPath = (place: Place, room: Room, zone: Zone, storage: Storage) =>
-  `${place.name} > ${room.name} > ${zone.name} > ${storage.name}`
+export const fullPath = (place: Place, room: Room, zone: Zone, storage: Storage | null) =>
+  storage
+    ? `${place.name} > ${room.name} > ${zone.name} > ${storage.name}`
+    : `${place.name} > ${room.name} > ${zone.name}`
 
 export const sortByOrder = <T extends { order: number }>(items: T[]) =>
   sortBy(items, ({ order }) => order)

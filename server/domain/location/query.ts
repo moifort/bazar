@@ -7,7 +7,7 @@ export type LocationPath = {
   place: Place
   room: Room
   zone: Zone
-  storage: Storage
+  storage: Storage | null
   fullPath: string
 }
 
@@ -50,6 +50,28 @@ const resolveLocationPath = async (
   }
 }
 
+const resolveZoneLocationPath = async (
+  userId: UserId,
+  zoneId: ZoneId,
+): Promise<LocationPath | null> => {
+  const zone = await repository.findZoneBy(userId, zoneId)
+  if (!zone) return null
+
+  const room = await repository.findRoomBy(userId, zone.roomId)
+  if (!room) return null
+
+  const place = await repository.findPlaceBy(userId, room.placeId)
+  if (!place) return null
+
+  return {
+    place,
+    room,
+    zone,
+    storage: null,
+    fullPath: fullPath(place, room, zone, null),
+  }
+}
+
 export const LocationQuery = {
   allPlaces,
   placeById,
@@ -58,4 +80,5 @@ export const LocationQuery = {
   storagesByZone,
   storageById,
   resolveLocationPath,
+  resolveZoneLocationPath,
 }

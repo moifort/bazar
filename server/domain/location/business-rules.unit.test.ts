@@ -53,7 +53,7 @@ const storage = (name: string): Storage => ({
 })
 
 describe('fullPath', () => {
-  test('builds the full location path', () => {
+  test('builds the full location path including storage', () => {
     const result = fullPath(
       place('Appartement'),
       room('Cuisine'),
@@ -61,6 +61,11 @@ describe('fullPath', () => {
       storage('Etagere 2'),
     )
     expect(result).toBe('Appartement > Cuisine > Placard haut > Etagere 2')
+  })
+
+  test('builds a zone-only path when storage is null', () => {
+    const result = fullPath(place('Appartement'), room('Cuisine'), zone('Placard haut'), null)
+    expect(result).toBe('Appartement > Cuisine > Placard haut')
   })
 })
 
