@@ -12,10 +12,25 @@ struct Item: Identifiable, Sendable {
     let personalNotes: String
     var purchaseDate: Date?
     var purchaseLocation: String
+    var purchaseCondition: PurchaseCondition?
     let createdAt: Date
     let updatedAt: Date
     var location: LocationPath?
     var reminders: [Reminder]
+}
+
+enum PurchaseCondition: String, Sendable, CaseIterable, Identifiable {
+    case new
+    case used
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .new: "Neuf"
+        case .used: "Occasion"
+        }
+    }
 }
 
 struct ItemListItem: Identifiable, Sendable {
@@ -94,8 +109,34 @@ struct ItemPreview: Identifiable, Sendable {
     var category: ItemCategory?
     var description: String
     var quantity: Int
+    var personalNotes: String
+    var purchaseDate: Date?
+    var purchaseLocation: String
+    var purchaseCondition: PurchaseCondition?
 
     var id: String { previewId }
+
+    init(
+        previewId: String,
+        name: String,
+        category: ItemCategory?,
+        description: String,
+        quantity: Int,
+        personalNotes: String = "",
+        purchaseDate: Date? = nil,
+        purchaseLocation: String = "",
+        purchaseCondition: PurchaseCondition? = nil
+    ) {
+        self.previewId = previewId
+        self.name = name
+        self.category = category
+        self.description = description
+        self.quantity = quantity
+        self.personalNotes = personalNotes
+        self.purchaseDate = purchaseDate
+        self.purchaseLocation = purchaseLocation
+        self.purchaseCondition = purchaseCondition
+    }
 }
 
 // MARK: - Location
@@ -108,8 +149,24 @@ struct LocationPath: Sendable {
     let roomName: String
     let zoneId: String
     let zoneName: String
-    let storageId: String
-    let storageName: String
+    let storageId: String?
+    let storageName: String?
+}
+
+enum LocationSelection: Equatable, Sendable {
+    case none
+    case zone(id: String)
+    case storage(id: String)
+
+    var zoneId: String? {
+        if case .zone(let id) = self { return id }
+        return nil
+    }
+
+    var storageId: String? {
+        if case .storage(let id) = self { return id }
+        return nil
+    }
 }
 
 struct Place: Identifiable, Sendable {

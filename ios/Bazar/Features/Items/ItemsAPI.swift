@@ -63,6 +63,7 @@ enum GraphQLItemsAPI {
             personalNotes: item.personalNotes,
             purchaseDate: item.purchaseDate.flatMap { GraphQLHelpers.parseISO8601($0) },
             purchaseLocation: item.purchaseLocation,
+            purchaseCondition: item.purchaseCondition.flatMap { PurchaseCondition(rawValue: $0.rawValue) },
             createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date(),
             updatedAt: GraphQLHelpers.parseISO8601(item.updatedAt) ?? Date(),
             location: item.location.map { loc in
@@ -117,8 +118,12 @@ enum GraphQLItemsAPI {
         _ = try await GraphQLHelpers.perform(client, mutation: mutation)
     }
 
-    static func move(id: String, storageId: String) async throws {
-        let mutation = BazarGraphQL.MoveItemMutation(id: id, storageId: storageId)
+    static func move(id: String, target: LocationSelection) async throws {
+        let input = BazarGraphQL.MoveItemInput(
+            storageId: GraphQLHelpers.graphQLNullable(target.storageId),
+            zoneId: GraphQLHelpers.graphQLNullable(target.zoneId)
+        )
+        let mutation = BazarGraphQL.MoveItemMutation(id: id, target: input)
         _ = try await GraphQLHelpers.perform(client, mutation: mutation)
     }
 
