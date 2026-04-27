@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LocationPicker: View {
-    @Binding var selectedStorageId: String?
+    @Binding var selection: LocationSelection
 
     @Environment(\.dismiss) private var dismiss
     @State private var places: [Place] = []
@@ -33,7 +33,7 @@ struct LocationPicker: View {
                     pickerList
                 }
             }
-            .navigationTitle("Choisir un rangement")
+            .navigationTitle("Choisir un emplacement")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -42,7 +42,7 @@ struct LocationPicker: View {
                 }
                 ToolbarItem(placement: .primaryAction) {
                     Button("Aucun") {
-                        selectedStorageId = nil
+                        selection = .none
                         dismiss()
                     }
                 }
@@ -79,15 +79,31 @@ struct LocationPicker: View {
                         DisclosureGroup(isExpanded: roomExpansion(room.id)) {
                             ForEach(room.zones) { zone in
                                 DisclosureGroup(isExpanded: zoneExpansion(zone.id)) {
+                                    Button {
+                                        selection = .zone(id: zone.id)
+                                        dismiss()
+                                    } label: {
+                                        HStack {
+                                            Label("Toute la zone", systemImage: "rectangle.dashed")
+                                                .font(.caption)
+                                            Spacer()
+                                            if selection == .zone(id: zone.id) {
+                                                Image(systemName: "checkmark")
+                                                    .foregroundStyle(.blue)
+                                            }
+                                        }
+                                    }
+                                    .tint(.primary)
+
                                     ForEach(zone.storages) { storage in
                                         Button {
-                                            selectedStorageId = storage.id
+                                            selection = .storage(id: storage.id)
                                             dismiss()
                                         } label: {
                                             HStack {
                                                 Label(storage.name, systemImage: "archivebox")
                                                 Spacer()
-                                                if selectedStorageId == storage.id {
+                                                if selection == .storage(id: storage.id) {
                                                     Image(systemName: "checkmark")
                                                         .foregroundStyle(.blue)
                                                 }
@@ -230,5 +246,5 @@ private enum AddTarget {
 }
 
 #Preview {
-    LocationPicker(selectedStorageId: .constant(nil))
+    LocationPicker(selection: .constant(.none))
 }

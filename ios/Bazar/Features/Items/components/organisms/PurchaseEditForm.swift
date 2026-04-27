@@ -13,6 +13,7 @@ struct PurchaseEditForm: View {
     @State private var hasPurchaseDate: Bool
     @State private var purchaseDate: Date
     @State private var purchaseLocation: String
+    @State private var purchaseCondition: PurchaseCondition?
     @State private var isSaving = false
     @State private var saveError: String?
 
@@ -29,6 +30,7 @@ struct PurchaseEditForm: View {
         _hasPurchaseDate = State(initialValue: initial.purchaseDate != nil)
         _purchaseDate = State(initialValue: initial.purchaseDate ?? Date())
         _purchaseLocation = State(initialValue: initial.purchaseLocation)
+        _purchaseCondition = State(initialValue: initial.purchaseCondition)
     }
 
     var body: some View {
@@ -53,6 +55,15 @@ struct PurchaseEditForm: View {
                         .textInputAutocapitalization(.words)
                 } label: {
                     Label("Lieu", systemImage: "bag")
+                }
+
+                Picker(selection: $purchaseCondition) {
+                    Text("Non renseigné").tag(PurchaseCondition?.none)
+                    ForEach(PurchaseCondition.allCases) { condition in
+                        Text(condition.label).tag(PurchaseCondition?.some(condition))
+                    }
+                } label: {
+                    Label("État", systemImage: "sparkles")
                 }
 
                 if !suggestionsToShow.isEmpty {
@@ -112,7 +123,8 @@ struct PurchaseEditForm: View {
         isSaving = true
         let fields = Fields(
             purchaseDate: hasPurchaseDate ? purchaseDate : nil,
-            purchaseLocation: purchaseLocation.trimmingCharacters(in: .whitespaces)
+            purchaseLocation: purchaseLocation.trimmingCharacters(in: .whitespaces),
+            purchaseCondition: purchaseCondition
         )
         do {
             try await onSave(fields)
@@ -127,6 +139,17 @@ extension PurchaseEditForm {
     struct Fields: Sendable {
         var purchaseDate: Date?
         var purchaseLocation: String
+        var purchaseCondition: PurchaseCondition?
+
+        init(
+            purchaseDate: Date? = nil,
+            purchaseLocation: String = "",
+            purchaseCondition: PurchaseCondition? = nil
+        ) {
+            self.purchaseDate = purchaseDate
+            self.purchaseLocation = purchaseLocation
+            self.purchaseCondition = purchaseCondition
+        }
     }
 }
 

@@ -14,6 +14,7 @@ struct ItemEditForm: View {
     @State private var hasPurchaseDate: Bool
     @State private var purchaseDate: Date
     @State private var purchaseLocation: String
+    @State private var purchaseCondition: PurchaseCondition?
     @State private var isSaving = false
     @State private var saveError: String?
 
@@ -35,6 +36,7 @@ struct ItemEditForm: View {
         _hasPurchaseDate = State(initialValue: initial.purchaseDate != nil)
         _purchaseDate = State(initialValue: initial.purchaseDate ?? Date())
         _purchaseLocation = State(initialValue: initial.purchaseLocation)
+        _purchaseCondition = State(initialValue: initial.purchaseCondition)
     }
 
     var body: some View {
@@ -83,6 +85,15 @@ struct ItemEditForm: View {
                         .textInputAutocapitalization(.words)
                 } label: {
                     Label("Lieu", systemImage: "bag")
+                }
+
+                Picker(selection: $purchaseCondition) {
+                    Text("Non renseigné").tag(PurchaseCondition?.none)
+                    ForEach(PurchaseCondition.allCases) { condition in
+                        Text(condition.label).tag(PurchaseCondition?.some(condition))
+                    }
+                } label: {
+                    Label("État", systemImage: "sparkles")
                 }
 
                 if !suggestionsToShow.isEmpty {
@@ -151,7 +162,8 @@ struct ItemEditForm: View {
             quantity: quantity,
             notes: notes.trimmingCharacters(in: .whitespaces),
             purchaseDate: hasPurchaseDate ? purchaseDate : nil,
-            purchaseLocation: purchaseLocation.trimmingCharacters(in: .whitespaces)
+            purchaseLocation: purchaseLocation.trimmingCharacters(in: .whitespaces),
+            purchaseCondition: purchaseCondition
         )
         do {
             try await onSave(fields)
@@ -171,6 +183,7 @@ extension ItemEditForm {
         var notes: String
         var purchaseDate: Date?
         var purchaseLocation: String
+        var purchaseCondition: PurchaseCondition?
 
         init(
             name: String,
@@ -179,7 +192,8 @@ extension ItemEditForm {
             quantity: Int,
             notes: String,
             purchaseDate: Date? = nil,
-            purchaseLocation: String = ""
+            purchaseLocation: String = "",
+            purchaseCondition: PurchaseCondition? = nil
         ) {
             self.name = name
             self.description = description
@@ -188,6 +202,7 @@ extension ItemEditForm {
             self.notes = notes
             self.purchaseDate = purchaseDate
             self.purchaseLocation = purchaseLocation
+            self.purchaseCondition = purchaseCondition
         }
 
         init(from item: Item) {
@@ -198,7 +213,8 @@ extension ItemEditForm {
                 quantity: item.quantity,
                 notes: item.personalNotes,
                 purchaseDate: item.purchaseDate,
-                purchaseLocation: item.purchaseLocation
+                purchaseLocation: item.purchaseLocation,
+                purchaseCondition: item.purchaseCondition
             )
         }
     }

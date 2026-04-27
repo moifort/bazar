@@ -14,7 +14,7 @@ struct ItemDetailView: View {
     @State private var showReminders = false
     @State private var showMovePicker = false
     @State private var showPurchaseEdit = false
-    @State private var pendingStorageId: String?
+    @State private var pendingLocation: LocationSelection = .none
     @State private var isMoving = false
 
     var body: some View {
@@ -31,6 +31,7 @@ struct ItemDetailView: View {
                     createdAt: item.createdAt,
                     purchaseDate: item.purchaseDate,
                     purchaseLocation: item.purchaseLocation,
+                    purchaseCondition: item.purchaseCondition,
                     purchaseLocationSuggestions: purchaseLocationSuggestions,
                     reminders: item.reminders.map(ReminderRowMapper.map),
                     onRefresh: { await loadDetail() },
@@ -41,7 +42,7 @@ struct ItemDetailView: View {
                     },
                     onOpenReminders: { showReminders = true },
                     onOpenMove: {
-                        pendingStorageId = item.location?.storageId
+                        pendingLocation = currentLocationSelection(for: item)
                         showMovePicker = true
                     },
                     onOpenPurchaseEdit: { showPurchaseEdit = true },
@@ -84,12 +85,14 @@ struct ItemDetailView: View {
             }
         }
         .sheet(isPresented: $showMovePicker, onDismiss: {
-            let currentId = item?.location?.storageId
-            if let newId = pendingStorageId, newId != currentId {
-                Task { await moveItem(to: newId) }
+            guard let item else { return }
+            let current = currentLocationSelection(for: item)
+            if pendingLocation != current {
+                let target = pendingLocation
+                Task { await moveItem(to: target) }
             }
         }) {
-            LocationPicker(selectedStorageId: $pendingStorageId)
+            LocationPicker(selection: $pendingLocation)
         }
         .sheet(isPresented: $showPurchaseEdit) {
             if let item {
@@ -97,7 +100,8 @@ struct ItemDetailView: View {
                     PurchaseEditForm(
                         initial: .init(
                             purchaseDate: item.purchaseDate,
-                            purchaseLocation: item.purchaseLocation
+                            purchaseLocation: item.purchaseLocation,
+                            purchaseCondition: item.purchaseCondition
                         ),
                         purchaseLocationSuggestions: purchaseLocationSuggestions,
                         onSave: { fields in
@@ -155,16 +159,26 @@ struct ItemDetailView: View {
         }
     }
 
-    private func moveItem(to storageId: String) async {
+    private func moveItem(to target: LocationSelection) async {
         isMoving = true
         defer { isMoving = false }
         do {
-            try await GraphQLItemsAPI.move(id: itemId, storageId: storageId)
+            try await GraphQLItemsAPI.move(id: itemId, target: target)
             item = try await GraphQLItemsAPI.getDetail(id: itemId)
             onUpdated()
         } catch {
             errorMessage = reportError(error)
         }
+    }
+
+    private func currentLocationSelection(for item: Item) -> LocationSelection {
+        if let storageId = item.location?.storageId {
+            return .storage(id: storageId)
+        }
+        if let zoneId = item.location?.zoneId, item.location?.storageId == nil {
+            return .zone(id: zoneId)
+        }
+        return .none
     }
 
     private func saveItem(_ fields: ItemEditForm.Fields) async throws {
@@ -175,6 +189,7 @@ struct ItemDetailView: View {
             description: .some(fields.description),
             name: .some(fields.name),
             personalNotes: .some(fields.notes),
+            purchaseCondition: graphQLPurchaseCondition(fields.purchaseCondition),
             purchaseDate: fields.purchaseDate.map { .some(iso.string(from: $0)) } ?? .null,
             purchaseLocation: .some(fields.purchaseLocation),
             quantity: .some(String(fields.quantity))
@@ -191,11 +206,22 @@ struct ItemDetailView: View {
             description: .none,
             name: .none,
             personalNotes: .none,
+            purchaseCondition: graphQLPurchaseCondition(fields.purchaseCondition),
             purchaseDate: fields.purchaseDate.map { .some(iso.string(from: $0)) } ?? .null,
             purchaseLocation: .some(fields.purchaseLocation),
             quantity: .none
         )
         try await GraphQLItemsAPI.update(id: itemId, input: input)
         item = try await GraphQLItemsAPI.getDetail(id: itemId)
+    }
+
+    private func graphQLPurchaseCondition(
+        _ condition: PurchaseCondition?
+    ) -> GraphQLNullable<GraphQLEnum<BazarGraphQL.PurchaseCondition>> {
+        guard let condition else { return .null }
+        guard let value = BazarGraphQL.PurchaseCondition(rawValue: condition.rawValue) else {
+            return .null
+        }
+        return .some(.case(value))
     }
 }

@@ -11,6 +11,7 @@ struct ItemDetailPage: View {
     let createdAt: Date
     let purchaseDate: Date?
     let purchaseLocation: String
+    let purchaseCondition: PurchaseCondition?
     let purchaseLocationSuggestions: [String]
     let reminders: [ReminderRow.Model]
 
@@ -69,7 +70,8 @@ struct ItemDetailPage: View {
             quantity: quantity,
             notes: personalNotes,
             purchaseDate: purchaseDate,
-            purchaseLocation: purchaseLocation
+            purchaseLocation: purchaseLocation,
+            purchaseCondition: purchaseCondition
         )
     }
 
@@ -152,6 +154,9 @@ struct ItemDetailPage: View {
                         LabeledContent("Lieu", value: purchaseLocation)
                     }
                 }
+                if let purchaseCondition {
+                    LabeledContent("État", value: purchaseCondition.label)
+                }
                 Button {
                     onOpenPurchaseEdit()
                 } label: {
@@ -183,12 +188,13 @@ struct ItemDetailPage: View {
     }
 
     private var hasPurchaseInfo: Bool {
-        purchaseDate != nil || !purchaseLocation.isEmpty
+        purchaseDate != nil || !purchaseLocation.isEmpty || purchaseCondition != nil
     }
 
     private var locationAccessibilityLabel: String {
         guard let location else { return "Lieu non défini" }
-        return "Lieu : \(location.placeName), \(location.roomName), \(location.zoneName), \(location.storageName)"
+        let storage = location.storageName.map { ", \($0)" } ?? ""
+        return "Lieu : \(location.placeName), \(location.roomName), \(location.zoneName)\(storage)"
     }
 
     private func locationURL(from text: String) -> URL? {
@@ -256,6 +262,7 @@ struct ItemDetailPage: View {
             createdAt: Date(timeIntervalSinceNow: -86_400 * 365),
             purchaseDate: Date(timeIntervalSinceNow: -86_400 * 120),
             purchaseLocation: "amazon.fr",
+            purchaseCondition: .new,
             purchaseLocationSuggestions: ["Amazon", "Leroy Merlin"],
             reminders: [],
             onRefresh: {},
@@ -282,6 +289,7 @@ struct ItemDetailPage: View {
             createdAt: Date(),
             purchaseDate: nil,
             purchaseLocation: "",
+            purchaseCondition: nil,
             purchaseLocationSuggestions: [],
             reminders: [],
             onRefresh: {},
