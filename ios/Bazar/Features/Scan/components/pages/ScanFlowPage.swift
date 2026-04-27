@@ -8,7 +8,7 @@ struct ScanFlowPage: View {
 
     let onCapture: (Data) -> Void
     let onScanAnother: () -> Void
-    let onConfirm: ([ItemPreview], String?) async -> Void
+    let onConfirm: ([ItemPreview], LocationSelection) async -> Void
     let onDismiss: () -> Void
     let onErrorDismiss: () -> Void
 
@@ -29,8 +29,8 @@ struct ScanFlowPage: View {
                     ScanConfirmationView(
                         previews: previews,
                         onScanAnother: onScanAnother,
-                        onConfirm: { editedPreviews, storageId in
-                            await onConfirm(editedPreviews, storageId)
+                        onConfirm: { editedPreviews, location in
+                            await onConfirm(editedPreviews, location)
                         },
                         onClose: onDismiss
                     )

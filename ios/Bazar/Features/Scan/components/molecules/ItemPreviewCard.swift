@@ -12,6 +12,7 @@ struct ItemPreviewCard: View {
     @Binding var preview: EditablePreview
     var focus: FocusState<ItemPreviewField?>.Binding
     var onSubmit: () -> Void
+    var onEditDetails: () -> Void
     var onDuplicate: () -> Void
     var onDelete: () -> Void
 
@@ -53,6 +54,11 @@ struct ItemPreviewCard: View {
                 .accessibilityIdentifier("item-name-field-\(preview.id)")
 
             Menu {
+                Button {
+                    onEditDetails()
+                } label: {
+                    Label("Détails…", systemImage: "slider.horizontal.3")
+                }
                 Button {
                     onDuplicate()
                 } label: {
@@ -114,6 +120,7 @@ private struct CategoryAvatar: View {
         preview: $preview,
         focus: $focus,
         onSubmit: {},
+        onEditDetails: {},
         onDuplicate: {},
         onDelete: {}
     )

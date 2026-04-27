@@ -15,8 +15,8 @@ struct ScanView: View {
             selectedPhoto: $selectedPhoto,
             onCapture: { viewModel.capturePhoto($0) },
             onScanAnother: { viewModel.reset() },
-            onConfirm: { previews, storageId in
-                guard await viewModel.confirmItems(previews, storageId: storageId) else { return }
+            onConfirm: { previews, location in
+                guard await viewModel.confirmItems(previews, location: location) else { return }
                 viewModel.reset()
                 onFlowCompleted()
             },

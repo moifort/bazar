@@ -36,7 +36,7 @@ final class ScanViewModel {
         }
     }
 
-    func confirmItems(_ previews: [ItemPreview], storageId: String?) async -> Bool {
+    func confirmItems(_ previews: [ItemPreview], location: LocationSelection) async -> Bool {
         do {
             let inputs = previews.map { preview in
                 ConfirmItemInput(
@@ -44,7 +44,12 @@ final class ScanViewModel {
                     category: preview.category?.rawValue ?? ItemCategory.other.rawValue,
                     description: preview.description,
                     quantity: preview.quantity,
-                    storageId: storageId
+                    storageId: location.storageId,
+                    zoneId: location.zoneId,
+                    personalNotes: preview.personalNotes,
+                    purchaseDate: preview.purchaseDate,
+                    purchaseLocation: preview.purchaseLocation,
+                    purchaseCondition: preview.purchaseCondition
                 )
             }
             try await GraphQLScanAPI.confirmItems(inputs)

@@ -7,13 +7,31 @@ struct EditablePreview: Identifiable, Equatable {
     var category: ItemCategory?
     var description: String
     var quantity: Int
+    var personalNotes: String
+    var purchaseDate: Date?
+    var purchaseLocation: String
+    var purchaseCondition: PurchaseCondition?
 
-    init(id: String, name: String, category: ItemCategory?, description: String, quantity: Int) {
+    init(
+        id: String,
+        name: String,
+        category: ItemCategory?,
+        description: String,
+        quantity: Int,
+        personalNotes: String = "",
+        purchaseDate: Date? = nil,
+        purchaseLocation: String = "",
+        purchaseCondition: PurchaseCondition? = nil
+    ) {
         self.id = id
         self.name = name
         self.category = category
         self.description = description
         self.quantity = quantity
+        self.personalNotes = personalNotes
+        self.purchaseDate = purchaseDate
+        self.purchaseLocation = purchaseLocation
+        self.purchaseCondition = purchaseCondition
     }
 
     init(from preview: ItemPreview) {
@@ -22,7 +40,11 @@ struct EditablePreview: Identifiable, Equatable {
             name: preview.name,
             category: preview.category,
             description: preview.description,
-            quantity: preview.quantity
+            quantity: preview.quantity,
+            personalNotes: preview.personalNotes,
+            purchaseDate: preview.purchaseDate,
+            purchaseLocation: preview.purchaseLocation,
+            purchaseCondition: preview.purchaseCondition
         )
     }
 
@@ -32,7 +54,11 @@ struct EditablePreview: Identifiable, Equatable {
             name: name,
             category: category,
             description: description,
-            quantity: quantity
+            quantity: quantity,
+            personalNotes: personalNotes,
+            purchaseDate: purchaseDate,
+            purchaseLocation: purchaseLocation,
+            purchaseCondition: purchaseCondition
         )
     }
 }

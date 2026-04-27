@@ -13,6 +13,7 @@ struct ScanConfirmationPage: View {
     var focus: FocusState<ItemPreviewField?>.Binding
     let onOpenLocationPicker: () -> Void
     let onAdd: () -> Void
+    let onEditDetails: (String) -> Void
     let onDuplicate: (String) -> Void
     let onDelete: (String) -> Void
     let onScanAnother: () -> Void
@@ -35,6 +36,7 @@ struct ScanConfirmationPage: View {
                                 preview: $preview,
                                 focus: focus,
                                 onSubmit: { focusNext(after: preview.id) },
+                                onEditDetails: { onEditDetails(preview.id) },
                                 onDuplicate: { onDuplicate(preview.id) },
                                 onDelete: { onDelete(preview.id) }
                             )
@@ -228,6 +230,7 @@ struct ScanConfirmationPage: View {
             focus: $focus,
             onOpenLocationPicker: {},
             onAdd: {},
+            onEditDetails: { _ in },
             onDuplicate: { _ in },
             onDelete: { id in previews.removeAll { $0.id == id } },
             onScanAnother: {},

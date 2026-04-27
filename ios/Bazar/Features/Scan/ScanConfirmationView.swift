@@ -1,26 +1,28 @@
 import SwiftUI
 
 /// Connected container for the scan confirmation step.
-/// Owns the editable preview list, storage selection, LocationPicker sheet,
-/// async confirm action and breadcrumb resolution. Renders through the pure
-/// `ScanConfirmationPage` view.
+/// Owns the editable preview list, location selection, LocationPicker sheet,
+/// async confirm action, breadcrumb resolution and the per-item details sheet.
+/// Renders through the pure `ScanConfirmationPage` view.
 struct ScanConfirmationView: View {
     let previews: [ItemPreview]
     let onScanAnother: () -> Void
-    let onConfirm: ([ItemPreview], String?) async -> Void
+    let onConfirm: ([ItemPreview], LocationSelection) async -> Void
     let onClose: () -> Void
 
     @State private var editablePreviews: [EditablePreview]
-    @State private var selectedStorageId: String?
+    @State private var selection: LocationSelection
     @State private var showLocationPicker = false
+    @State private var detailsTargetId: String?
     @State private var isConfirming = false
     @State private var places: [Place] = []
+    @State private var purchaseLocationSuggestions: [String] = []
     @FocusState private var focused: ItemPreviewField?
 
     init(
         previews: [ItemPreview],
         onScanAnother: @escaping () -> Void,
-        onConfirm: @escaping ([ItemPreview], String?) async -> Void,
+        onConfirm: @escaping ([ItemPreview], LocationSelection) async -> Void,
         onClose: @escaping () -> Void
     ) {
         self.previews = previews
@@ -28,20 +30,19 @@ struct ScanConfirmationView: View {
         self.onConfirm = onConfirm
         self.onClose = onClose
         _editablePreviews = State(initialValue: previews.map { EditablePreview(from: $0) })
-        _selectedStorageId = State(
-            initialValue: UserDefaults.standard.string(forKey: "lastStorageId")
-        )
+        _selection = State(initialValue: Self.loadLastSelection())
     }
 
     var body: some View {
         ScanConfirmationPage(
             previews: $editablePreviews,
-            storageName: resolvedStorage?.name,
-            breadcrumb: resolvedStorage?.breadcrumb,
+            storageName: resolvedLocation?.name,
+            breadcrumb: resolvedLocation?.breadcrumb,
             isConfirming: isConfirming,
             focus: $focused,
             onOpenLocationPicker: { showLocationPicker = true },
             onAdd: addItem,
+            onEditDetails: { id in detailsTargetId = id },
             onDuplicate: duplicate(id:),
             onDelete: delete(id:),
             onScanAnother: onScanAnother,
@@ -49,9 +50,25 @@ struct ScanConfirmationView: View {
             onClose: onClose
         )
         .sheet(isPresented: $showLocationPicker) {
-            LocationPicker(selectedStorageId: $selectedStorageId)
+            LocationPicker(selection: $selection)
         }
-        .task { await loadPlaces() }
+        .sheet(item: detailsBinding) { target in
+            ScanItemDetailsSheet(
+                preview: target.preview,
+                purchaseLocationSuggestions: purchaseLocationSuggestions,
+                onSave: { updated in
+                    if let index = editablePreviews.firstIndex(where: { $0.id == target.id }) {
+                        editablePreviews[index] = updated
+                    }
+                    detailsTargetId = nil
+                },
+                onCancel: { detailsTargetId = nil }
+            )
+        }
+        .task {
+            await loadPlaces()
+            await loadSuggestions()
+        }
         .onAppear(perform: autoFocusIfSingle)
     }
 
@@ -73,13 +90,17 @@ struct ScanConfirmationView: View {
 
     private func duplicate(id: String) {
         guard let index = editablePreviews.firstIndex(where: { $0.id == id }) else { return }
-        var copy = editablePreviews[index]
-        copy = EditablePreview(
+        let original = editablePreviews[index]
+        let copy = EditablePreview(
             id: UUID().uuidString,
-            name: copy.name,
-            category: copy.category,
-            description: copy.description,
-            quantity: copy.quantity
+            name: original.name,
+            category: original.category,
+            description: original.description,
+            quantity: original.quantity,
+            personalNotes: original.personalNotes,
+            purchaseDate: original.purchaseDate,
+            purchaseLocation: original.purchaseLocation,
+            purchaseCondition: original.purchaseCondition
         )
         withAnimation(.snappy) {
             editablePreviews.insert(copy, at: index + 1)
@@ -97,10 +118,8 @@ struct ScanConfirmationView: View {
         isConfirming = true
         focused = nil
         let items = editablePreviews.map { $0.toPreview() }
-        if let storageId = selectedStorageId {
-            UserDefaults.standard.set(storageId, forKey: "lastStorageId")
-        }
-        await onConfirm(items, selectedStorageId)
+        Self.persistSelection(selection)
+        await onConfirm(items, selection)
         isConfirming = false
     }
 
@@ -112,31 +131,98 @@ struct ScanConfirmationView: View {
         }
     }
 
-    // MARK: - Breadcrumb
+    // MARK: - Sheet binding
+
+    private var detailsBinding: Binding<DetailsTarget?> {
+        Binding(
+            get: {
+                guard let id = detailsTargetId,
+                      let preview = editablePreviews.first(where: { $0.id == id })
+                else { return nil }
+                return DetailsTarget(id: id, preview: preview)
+            },
+            set: { newValue in
+                if newValue == nil { detailsTargetId = nil }
+            }
+        )
+    }
+
+    // MARK: - Loading
 
     private func loadPlaces() async {
         do {
             places = try await GraphQLLocationsAPI.allPlaces()
         } catch {
             // Silent failure: the header card gracefully falls back to the
-            // default "Choisir un emplacement" prompt when no storage resolves.
+            // default "Choisir un emplacement" prompt when no location resolves.
         }
     }
 
-    private var resolvedStorage: (name: String, breadcrumb: String)? {
-        guard let storageId = selectedStorageId else { return nil }
-        for place in places {
-            for room in place.rooms {
-                for zone in room.zones {
-                    if let storage = zone.storages.first(where: { $0.id == storageId }) {
-                        let breadcrumb = "\(place.name) · \(room.name) · \(zone.name)"
-                        return (storage.name, breadcrumb)
+    private func loadSuggestions() async {
+        purchaseLocationSuggestions = (try? await GraphQLItemsAPI.distinctPurchaseLocations()) ?? []
+    }
+
+    // MARK: - Resolution
+
+    private var resolvedLocation: (name: String, breadcrumb: String)? {
+        switch selection {
+        case .none:
+            return nil
+        case .storage(let storageId):
+            for place in places {
+                for room in place.rooms {
+                    for zone in room.zones {
+                        if let storage = zone.storages.first(where: { $0.id == storageId }) {
+                            let breadcrumb = "\(place.name) · \(room.name) · \(zone.name)"
+                            return (storage.name, breadcrumb)
+                        }
                     }
                 }
             }
+            return nil
+        case .zone(let zoneId):
+            for place in places {
+                for room in place.rooms {
+                    if let zone = room.zones.first(where: { $0.id == zoneId }) {
+                        let breadcrumb = "\(place.name) · \(room.name)"
+                        return (zone.name, breadcrumb)
+                    }
+                }
+            }
+            return nil
         }
-        return nil
     }
+
+    // MARK: - Persistence
+
+    private static let storageKey = "lastLocationSelection"
+
+    private static func loadLastSelection() -> LocationSelection {
+        guard let raw = UserDefaults.standard.string(forKey: storageKey) else { return .none }
+        let parts = raw.split(separator: ":", maxSplits: 1).map(String.init)
+        guard parts.count == 2 else { return .none }
+        switch parts[0] {
+        case "zone": return .zone(id: parts[1])
+        case "storage": return .storage(id: parts[1])
+        default: return .none
+        }
+    }
+
+    private static func persistSelection(_ selection: LocationSelection) {
+        switch selection {
+        case .none:
+            UserDefaults.standard.removeObject(forKey: storageKey)
+        case .zone(let id):
+            UserDefaults.standard.set("zone:\(id)", forKey: storageKey)
+        case .storage(let id):
+            UserDefaults.standard.set("storage:\(id)", forKey: storageKey)
+        }
+    }
+}
+
+private struct DetailsTarget: Identifiable {
+    let id: String
+    let preview: EditablePreview
 }
 
 #Preview {
