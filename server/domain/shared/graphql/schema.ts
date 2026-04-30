@@ -35,4 +35,7 @@ import '~/domain/search/infrastructure/graphql/queries'
 import '~/domain/dashboard/infrastructure/graphql/types'
 import '~/domain/dashboard/infrastructure/graphql/queries'
 
+// Notification domain
+import '~/domain/notification/infrastructure/graphql/mutations'
+
 export const schema = builder.toSchema()
