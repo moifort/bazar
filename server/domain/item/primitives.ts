@@ -5,6 +5,7 @@ import type {
   ItemId as ItemIdType,
   ItemName as ItemNameType,
   ItemSort,
+  LowStockThreshold as LowStockThresholdType,
   PurchaseCondition,
   Quantity as QuantityType,
 } from '~/domain/item/types'
@@ -24,6 +25,13 @@ export const Quantity = (value: unknown) => {
     .preprocess((v) => (typeof v === 'string' ? Number(v) : v), z.number().int().positive())
     .parse(value)
   return make<QuantityType>()(v)
+}
+
+export const LowStockThreshold = (value: unknown) => {
+  const v = z
+    .preprocess((v) => (typeof v === 'string' ? Number(v) : v), z.number().int().positive())
+    .parse(value)
+  return make<LowStockThresholdType>()(v)
 }
 
 const itemCategories: ItemCategory[] = [

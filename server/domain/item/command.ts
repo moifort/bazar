@@ -7,6 +7,7 @@ import { emit } from '~/system/event-bus'
 import * as repository from './infrastructure/repository'
 import {
   ItemName,
+  LowStockThreshold,
   ItemId as makeItemId,
   parseItemCategory,
   parsePurchaseCondition,
@@ -64,6 +65,7 @@ type AddItemInput = {
   purchaseDate?: Date | string | null
   purchaseLocation?: string | null
   purchaseCondition?: PurchaseCondition | string | null
+  lowStockThreshold?: number | null
 }
 
 const add = async (input: AddItemInput) => {
@@ -90,6 +92,8 @@ const add = async (input: AddItemInput) => {
     purchaseCondition: input.purchaseCondition
       ? parsePurchaseCondition(input.purchaseCondition)
       : null,
+    lowStockThreshold:
+      input.lowStockThreshold != null ? LowStockThreshold(input.lowStockThreshold) : null,
     createdAt: new Date(),
     updatedAt: new Date(),
   }
@@ -108,6 +112,7 @@ type UpdateItemInput = {
   purchaseDate?: Date | string | null
   purchaseLocation?: string | null
   purchaseCondition?: PurchaseCondition | string | null
+  lowStockThreshold?: number | null
 }
 
 const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
@@ -138,6 +143,12 @@ const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
           ? parsePurchaseCondition(input.purchaseCondition)
           : null
         : item.purchaseCondition,
+    lowStockThreshold:
+      input.lowStockThreshold !== undefined
+        ? input.lowStockThreshold != null
+          ? LowStockThreshold(input.lowStockThreshold)
+          : null
+        : (item.lowStockThreshold ?? null),
     updatedAt: new Date(),
   }
 
