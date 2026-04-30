@@ -12,6 +12,7 @@
 		0E15C0FF0EDA45DB9B96BE43 /* GraphQLClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123E45F0A8A5EAF1A4298EDB /* GraphQLClient.swift */; };
 		0E8962CF92086BA764990B76 /* CreatePlaceMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1026D885285E83036E0066E /* CreatePlaceMutation.graphql.swift */; };
 		0EC25C01473967A1F8B5678B /* ScanAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C53A615CD60EF4DD65417 /* ScanAPI.swift */; };
+		120D25B122E4AC09A5B57149 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 22FA85B8294931F180D69EFA /* FirebaseMessaging */; };
 		1273E60F5283FBB2D986A68F /* ItemCategory.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5097F4907EB102ED7B8F1F4B /* ItemCategory.graphql.swift */; };
 		14252C90C8E14383D5A979D2 /* Place.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44077CB7920080BE5B2B4DDA /* Place.graphql.swift */; };
 		181D902E07C872095F2C6580 /* Room.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C8DC5BFCCCA33FA07A5B55 /* Room.graphql.swift */; };
@@ -108,7 +109,6 @@
 		A929CD6285C0553D7153F2D5 /* ItemPreview.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCCF188C36636D1ED20E5A1 /* ItemPreview.graphql.swift */; };
 		AD0772A744E03A27AC9798EB /* ZoneId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CD57BF36A20BD88D20301E /* ZoneId.swift */; };
 		AE4023993B26A76E9215514A /* ItemIdWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029A0FC3DAF543170A65CCCF /* ItemIdWrapper.swift */; };
-		B0811392BA27046FBDB2C3B3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6ED9EAF1EC1667D28E8A5860 /* GoogleService-Info.plist */; };
 		B2A0BA379ADB5BEFAFFDFDC5 /* BazarGraphQL.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C80DD98112700F01D6829E /* BazarGraphQL.graphql.swift */; };
 		B91211F2E06A8854CAF9859D /* ReminderRowMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A53D13E8EFDEE9BEAD6D55 /* ReminderRowMapper.swift */; };
 		BA209A046E3F8E6C42348630 /* CreateStorageInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11803D072639B81ED576701 /* CreateStorageInput.graphql.swift */; };
@@ -219,13 +219,12 @@
 		5F61A9C9FAF06B35F4D03584 /* LocationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRow.swift; sourceTree = "<group>"; };
 		6285FBBFB04FD9DC5C872CE1 /* AddItemMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemMutation.graphql.swift; sourceTree = "<group>"; };
 		64BAF202AF06BF200DCF6D27 /* DeleteZoneMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteZoneMutation.graphql.swift; sourceTree = "<group>"; };
-		6505F1C8C2D8683B3C2D9F42 /* Secrets.swift.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Secrets.swift.example; sourceTree = "<group>"; };
+		6505F1C8C2D8683B3C2D9F42 /* Secrets.swift.example */ = {isa = PBXFileReference; path = Secrets.swift.example; sourceTree = "<group>"; };
 		66C8DC5BFCCCA33FA07A5B55 /* Room.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Room.graphql.swift; sourceTree = "<group>"; };
 		6735C526DD16DFF89F7AF631 /* ItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemRow.swift; sourceTree = "<group>"; };
 		67EEFF5AA7C65A9B8B18AD00 /* Items.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.graphql.swift; sourceTree = "<group>"; };
 		6A9B10A5BD25D44043BE0515 /* UpdateRoomMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRoomMutation.graphql.swift; sourceTree = "<group>"; };
 		6BE11C582F11BAFC07B646EC /* ItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsViewModel.swift; sourceTree = "<group>"; };
-		6ED9EAF1EC1667D28E8A5860 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		712815E86FF819E3E873478A /* AppleNonce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleNonce.swift; sourceTree = "<group>"; };
 		72040D9143BBFF7FF0CF08AA /* Query.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.graphql.swift; sourceTree = "<group>"; };
 		74201AD560736044676C56BD /* PurchaseEditForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseEditForm.swift; sourceTree = "<group>"; };
@@ -275,7 +274,7 @@
 		C9A53D13E8EFDEE9BEAD6D55 /* ReminderRowMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderRowMapper.swift; sourceTree = "<group>"; };
 		CA1938DC975C58F65E32CE19 /* ReminderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderRow.swift; sourceTree = "<group>"; };
 		CA6151013503448B5F905A1F /* SchemaMetadata.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaMetadata.graphql.swift; sourceTree = "<group>"; };
-		CA9FB317296ADB41C8326031 /* Bazar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bazar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA9FB317296ADB41C8326031 /* Bazar.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Bazar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB58511C3C6FB8834CFB5995 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		CBE219CC11056D9883F0C67F /* ReminderEditSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditSheet.swift; sourceTree = "<group>"; };
 		CD65AEFD7E5B951537B69C93 /* RemindersDueQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersDueQuery.graphql.swift; sourceTree = "<group>"; };
@@ -325,6 +324,7 @@
 				F30205EEFC588B2229556AFF /* Apollo in Frameworks */,
 				72AAA958B4ABBD02CED8D8EC /* FirebaseCore in Frameworks */,
 				D35F4A10268F3760BE281B70 /* FirebaseAuth in Frameworks */,
+				120D25B122E4AC09A5B57149 /* FirebaseMessaging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,7 +520,6 @@
 				C3D16071C398258604B901B9 /* Bazar.entitlements */,
 				9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */,
 				91BAC7F26D2161B9FFDAA1E0 /* ContentView.swift */,
-				6ED9EAF1EC1667D28E8A5860 /* GoogleService-Info.plist */,
 				DC6BD8B0FE59C15DB8DFD1AB /* Settings.bundle */,
 				1EE258AF058E49F9C614094D /* Features */,
 				283524ED7D45B9B9AC84687A /* Generated */,
@@ -869,6 +868,7 @@
 				1B9694779345AF99DBDB271E /* Apollo */,
 				4B00DE57532F9ABF90B6C2E9 /* FirebaseCore */,
 				4A00CB13D6B9C4877A36F142 /* FirebaseAuth */,
+				22FA85B8294931F180D69EFA /* FirebaseMessaging */,
 			);
 			productName = Bazar;
 			productReference = CA9FB317296ADB41C8326031 /* Bazar.app */;
@@ -917,7 +917,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB07574C619B0A79EECC91B6 /* Assets.xcassets in Resources */,
-				B0811392BA27046FBDB2C3B3 /* GoogleService-Info.plist in Resources */,
 				3CABAC0F9055A7A36FD132C0 /* Secrets.swift.example in Resources */,
 				F29020770C979EE1B6C47647 /* Settings.bundle in Resources */,
 			);
@@ -1092,8 +1091,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Bazar;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Bazar utilise l'appareil photo pour scanner et identifier vos objets.";
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1101,10 +1100,6 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.polyforms.bazar;
 				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1119,8 +1114,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Bazar;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Bazar utilise l'appareil photo pour scanner et identifier vos objets.";
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1128,10 +1123,6 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.polyforms.bazar;
 				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1306,6 +1297,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 54AE16CC5D2F65DF60C5EFB8 /* XCRemoteSwiftPackageReference "apollo-ios" */;
 			productName = Apollo;
+		};
+		22FA85B8294931F180D69EFA /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79480FEE71DDBB46317DF911 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		4A00CB13D6B9C4877A36F142 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;

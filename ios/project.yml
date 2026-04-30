@@ -35,12 +35,15 @@ targets:
         product: FirebaseCore
       - package: Firebase
         product: FirebaseAuth
+      - package: Firebase
+        product: FirebaseMessaging
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: co.polyforms.bazar
         INFOPLIST_KEY_CFBundleDisplayName: Bazar
         INFOPLIST_KEY_UILaunchScreen_Generation: true
         INFOPLIST_KEY_NSCameraUsageDescription: "Bazar utilise l'appareil photo pour scanner et identifier vos objets."
+        INFOPLIST_KEY_UIBackgroundModes: "remote-notification"
         GENERATE_INFOPLIST_FILE: true
         CURRENT_PROJECT_VERSION: 1
         MARKETING_VERSION: "1.0.0"
