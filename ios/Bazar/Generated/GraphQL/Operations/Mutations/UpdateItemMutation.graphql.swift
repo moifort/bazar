@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "UpdateItem"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"mutation UpdateItem($id: ItemId!, $input: UpdateItemInput!) { updateItem(id: $id, input: $input) { __typename id name category quantity purchaseDate purchaseLocation purchaseCondition updatedAt } }"#
+        #"mutation UpdateItem($id: ItemId!, $input: UpdateItemInput!) { updateItem(id: $id, input: $input) { __typename id name category quantity purchaseDate purchaseLocation purchaseCondition lowStockThreshold updatedAt } }"#
       ))
 
     public var id: ItemId
@@ -59,6 +59,7 @@ extension BazarGraphQL {
           .field("purchaseDate", BazarGraphQL.DateTime?.self),
           .field("purchaseLocation", String.self),
           .field("purchaseCondition", GraphQLEnum<BazarGraphQL.PurchaseCondition>?.self),
+          .field("lowStockThreshold", Int?.self),
           .field("updatedAt", BazarGraphQL.DateTime.self),
         ] }
 
@@ -76,6 +77,8 @@ extension BazarGraphQL {
         var purchaseLocation: String { __data["purchaseLocation"] }
         /// Whether the item was bought new or used
         var purchaseCondition: GraphQLEnum<BazarGraphQL.PurchaseCondition>? { __data["purchaseCondition"] }
+        /// Quantity threshold below which a low-stock notification fires
+        var lowStockThreshold: Int? { __data["lowStockThreshold"] }
         /// Last update date
         var updatedAt: BazarGraphQL.DateTime { __data["updatedAt"] }
       }

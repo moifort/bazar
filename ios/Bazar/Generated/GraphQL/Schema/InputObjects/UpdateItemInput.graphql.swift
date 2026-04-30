@@ -15,6 +15,7 @@ extension BazarGraphQL {
     init(
       category: GraphQLNullable<GraphQLEnum<ItemCategory>> = nil,
       description: GraphQLNullable<String> = nil,
+      lowStockThreshold: GraphQLNullable<Int> = nil,
       name: GraphQLNullable<ItemName> = nil,
       personalNotes: GraphQLNullable<String> = nil,
       purchaseCondition: GraphQLNullable<GraphQLEnum<PurchaseCondition>> = nil,
@@ -25,6 +26,7 @@ extension BazarGraphQL {
       __data = InputDict([
         "category": category,
         "description": description,
+        "lowStockThreshold": lowStockThreshold,
         "name": name,
         "personalNotes": personalNotes,
         "purchaseCondition": purchaseCondition,
@@ -44,6 +46,12 @@ extension BazarGraphQL {
     var description: GraphQLNullable<String> {
       get { __data["description"] }
       set { __data["description"] = newValue }
+    }
+
+    /// New low-stock threshold (positive integer; null to clear; omit to leave unchanged)
+    var lowStockThreshold: GraphQLNullable<Int> {
+      get { __data["lowStockThreshold"] }
+      set { __data["lowStockThreshold"] = newValue }
     }
 
     /// New item name

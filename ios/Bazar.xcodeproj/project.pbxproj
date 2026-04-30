@@ -22,6 +22,7 @@
 		198729D26D75370A3B278766 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29B997D03D63D18EC311DB9 /* UIImage+Resize.swift */; };
 		1A522CA2FC67E687D2525C2C /* DashboardAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378F727F6CF2DE9AA6B67801 /* DashboardAPI.swift */; };
 		1A5D1C2F662210347C936601 /* AuthRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5BC3AC1E0CF929D9B29219 /* AuthRoot.swift */; };
+		1B282CEEF6E21575C2D575E3 /* SubscribeToNotificationsMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D28A119C87E2B457939AD6 /* SubscribeToNotificationsMutation.graphql.swift */; };
 		1CAF7FB7E6F804F680F830A0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91BAC7F26D2161B9FFDAA1E0 /* ContentView.swift */; };
 		1F4782FC69FA18A926F87122 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52592BF330FE52B5FB4AED22 /* Secrets.swift */; };
 		206D7E94DA4BABA1AF2A8D8D /* ReminderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1938DC975C58F65E32CE19 /* ReminderRow.swift */; };
@@ -53,6 +54,7 @@
 		4C592CB92B30370B888220DC /* UpdateReminderMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A828467120D1E5009DCAF0 /* UpdateReminderMutation.graphql.swift */; };
 		4CE299E49A86E738B46E67AE /* Reminder.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0884C1CDEDF9C347B8A3D934 /* Reminder.graphql.swift */; };
 		4F986D1A5DE3D75179DB2FFD /* UpdateItemInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8795A48B4E16E73895451CA6 /* UpdateItemInput.graphql.swift */; };
+		511E5FE684F7E5EC222B7D01 /* UnsubscribeFromNotificationsMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B06A35212302144C93DAFBF /* UnsubscribeFromNotificationsMutation.graphql.swift */; };
 		595BDE75D2C1D42F63CB48CF /* CreateZoneInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = E052F843B5AE8C07BFFBA8E1 /* CreateZoneInput.graphql.swift */; };
 		5A3515096F90377189F3A120 /* AnalyzeItemPhotoMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A26431244AFBE3FA55DDF5 /* AnalyzeItemPhotoMutation.graphql.swift */; };
 		5A8E50984D7263AE443D4B04 /* FirebaseTokenInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B72F649DF2AC3B8D68D1451 /* FirebaseTokenInterceptor.swift */; };
@@ -97,6 +99,8 @@
 		97A9388AB0046ACDCC780B16 /* RemindersDueQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65AEFD7E5B951537B69C93 /* RemindersDueQuery.graphql.swift */; };
 		980EA9F51A7CDE46002E7842 /* ViewfinderOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99829147069424F5CC544BF /* ViewfinderOverlay.swift */; };
 		982CB456388C833107A0164B /* Dashboard.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06400A76AF24005C344DCCE /* Dashboard.graphql.swift */; };
+		99645BA6C4F2D3560B093057 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45AD30DBAF9869B06D91BAA /* AppDelegate.swift */; };
+		9ADA8A6323FBB03C33565671 /* NotificationSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F76B922E9A077FC8B8DA82 /* NotificationSubscriber.swift */; };
 		9D545CDDA72167697767A9CE /* RemindersAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D47C67B4CAEE0E199E8A13 /* RemindersAPI.swift */; };
 		9D8D3C7C563FC8247A04D0E7 /* UpdateReminderInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB83A2E13CF3995EEF2974C3 /* UpdateReminderInput.graphql.swift */; };
 		9FFDB712BE05BFC831F133E7 /* LocationsAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCB31B2AC738ECBD67B0C20 /* LocationsAPI.swift */; };
@@ -174,6 +178,7 @@
 		0884C1CDEDF9C347B8A3D934 /* Reminder.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.graphql.swift; sourceTree = "<group>"; };
 		0895467E1212A670A012D166 /* ItemSort.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSort.graphql.swift; sourceTree = "<group>"; };
 		08B0BA1ADCC6A12329FB647D /* AuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSession.swift; sourceTree = "<group>"; };
+		0B06A35212302144C93DAFBF /* UnsubscribeFromNotificationsMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsubscribeFromNotificationsMutation.graphql.swift; sourceTree = "<group>"; };
 		123E45F0A8A5EAF1A4298EDB /* GraphQLClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLClient.swift; sourceTree = "<group>"; };
 		152633BC5707BBB9BAF9E17E /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
 		1639E48F473AD3B55915E2B5 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
@@ -201,6 +206,7 @@
 		43B2387DADDCD0A802517295 /* CreateStorageMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateStorageMutation.graphql.swift; sourceTree = "<group>"; };
 		44077CB7920080BE5B2B4DDA /* Place.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.graphql.swift; sourceTree = "<group>"; };
 		463FE00C70C09C329A295D39 /* DashboardPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPage.swift; sourceTree = "<group>"; };
+		46D28A119C87E2B457939AD6 /* SubscribeToNotificationsMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeToNotificationsMutation.graphql.swift; sourceTree = "<group>"; };
 		489353CA58597C0801D77375 /* ReminderFrequency.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderFrequency.graphql.swift; sourceTree = "<group>"; };
 		4C5B6AD8CF8B2576DB7B5061 /* UpdateStorageInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateStorageInput.graphql.swift; sourceTree = "<group>"; };
 		4C8413BBD0FB4BDACE098D62 /* RoomId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomId.swift; sourceTree = "<group>"; };
@@ -255,6 +261,7 @@
 		AEB367553041712375B3093C /* RoomName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomName.swift; sourceTree = "<group>"; };
 		B06400A76AF24005C344DCCE /* Dashboard.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.graphql.swift; sourceTree = "<group>"; };
 		B0A6BBB115A19984F10B3C4D /* ScanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewModel.swift; sourceTree = "<group>"; };
+		B2F76B922E9A077FC8B8DA82 /* NotificationSubscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSubscriber.swift; sourceTree = "<group>"; };
 		B46BE2355F083FD3ED6B86D5 /* SearchEntry.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEntry.graphql.swift; sourceTree = "<group>"; };
 		B4BCCFD88770B0DE2D975315 /* ReminderId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderId.swift; sourceTree = "<group>"; };
 		B4F3D2F0AF5C4C86FAE93678 /* CreateRoomMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomMutation.graphql.swift; sourceTree = "<group>"; };
@@ -304,6 +311,7 @@
 		F21914AC05AE2FD0217F7065 /* UpdateRoomInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRoomInput.graphql.swift; sourceTree = "<group>"; };
 		F29B997D03D63D18EC311DB9 /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 		F2C6674033E209C505D19B79 /* EditLocationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLocationSheet.swift; sourceTree = "<group>"; };
+		F45AD30DBAF9869B06D91BAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F68249AE93774CCF1D5B1678 /* DeleteItemMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteItemMutation.graphql.swift; sourceTree = "<group>"; };
 		FA10914CA60E237567382D29 /* ScanConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanConfirmationView.swift; sourceTree = "<group>"; };
 		FB6EA8100D8F6B381E529A86 /* ReminderTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTitle.swift; sourceTree = "<group>"; };
@@ -439,6 +447,8 @@
 				BC7CE050E23A05E065096D0E /* DeleteStorageMutation.graphql.swift */,
 				64BAF202AF06BF200DCF6D27 /* DeleteZoneMutation.graphql.swift */,
 				17FF66ABC5AD555115A5C582 /* MoveItemMutation.graphql.swift */,
+				46D28A119C87E2B457939AD6 /* SubscribeToNotificationsMutation.graphql.swift */,
+				0B06A35212302144C93DAFBF /* UnsubscribeFromNotificationsMutation.graphql.swift */,
 				BD1BAC47263C29C7FAA508C6 /* UpdateItemMutation.graphql.swift */,
 				33A22775E64CFBED26769D6C /* UpdatePlaceMutation.graphql.swift */,
 				42A828467120D1E5009DCAF0 /* UpdateReminderMutation.graphql.swift */,
@@ -719,6 +729,7 @@
 		C626DCBEABF10CF3E2233A0F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				F45AD30DBAF9869B06D91BAA /* AppDelegate.swift */,
 				E1807DD660E989B02096988F /* ErrorReporting.swift */,
 				5B72F649DF2AC3B8D68D1451 /* FirebaseTokenInterceptor.swift */,
 				123E45F0A8A5EAF1A4298EDB /* GraphQLClient.swift */,
@@ -727,6 +738,7 @@
 				029A0FC3DAF543170A65CCCF /* ItemIdWrapper.swift */,
 				DBB863E4D5364D9EB0FFA99C /* ModelTypes.swift */,
 				CB58511C3C6FB8834CFB5995 /* NotificationManager.swift */,
+				B2F76B922E9A077FC8B8DA82 /* NotificationSubscriber.swift */,
 				52592BF330FE52B5FB4AED22 /* Secrets.swift */,
 				6505F1C8C2D8683B3C2D9F42 /* Secrets.swift.example */,
 				8FA181C4DC151F955C391FEB /* SharedConfig.swift */,
@@ -848,6 +860,13 @@
 			path = pages;
 			sourceTree = "<group>";
 		};
+		"TEMP_F08F5782-9005-4BBC-906C-AE28344998B3" /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -936,6 +955,7 @@
 				CFFAF06E12BBFA5CFD012B3E /* AddReminderMutation.graphql.swift in Sources */,
 				D2084765C552602B44617769 /* AllPlacesQuery.graphql.swift in Sources */,
 				5A3515096F90377189F3A120 /* AnalyzeItemPhotoMutation.graphql.swift in Sources */,
+				99645BA6C4F2D3560B093057 /* AppDelegate.swift in Sources */,
 				A1ED2EB50C1DEFCE18ADE463 /* AppleNonce.swift in Sources */,
 				412DFD28FEA7E433D1E5786F /* AsyncToolbarButton.swift in Sources */,
 				1A5D1C2F662210347C936601 /* AuthRoot.swift in Sources */,
@@ -1012,6 +1032,7 @@
 				62AB6704679F8F77A968F878 /* MoveItemMutation.graphql.swift in Sources */,
 				696E6C87EA5AA6417C248F71 /* Mutation.graphql.swift in Sources */,
 				7247F307FD8E0BB107B08B8D /* NotificationManager.swift in Sources */,
+				9ADA8A6323FBB03C33565671 /* NotificationSubscriber.swift in Sources */,
 				14252C90C8E14383D5A979D2 /* Place.graphql.swift in Sources */,
 				1863131FB745D19FE7AF646E /* PlaceCount.graphql.swift in Sources */,
 				DAB01BFBA833B6665EF2608D /* PlaceDetailPage.swift in Sources */,
@@ -1055,7 +1076,9 @@
 				A63FBD60BFC8D4BD938E71B8 /* StorageHeaderCard.swift in Sources */,
 				9250191966981EE1D5B75FC3 /* StorageId.swift in Sources */,
 				91C71C1D3544040A7E19A7C9 /* StorageName.swift in Sources */,
+				1B282CEEF6E21575C2D575E3 /* SubscribeToNotificationsMutation.graphql.swift in Sources */,
 				198729D26D75370A3B278766 /* UIImage+Resize.swift in Sources */,
+				511E5FE684F7E5EC222B7D01 /* UnsubscribeFromNotificationsMutation.graphql.swift in Sources */,
 				4F986D1A5DE3D75179DB2FFD /* UpdateItemInput.graphql.swift in Sources */,
 				3ABAFDAF64A8E1C0407B5DAA /* UpdateItemMutation.graphql.swift in Sources */,
 				221C353448A0A3C6EB91910B /* UpdatePlaceInput.graphql.swift in Sources */,

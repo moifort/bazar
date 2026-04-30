@@ -10,6 +10,7 @@ query ItemDetail($id: ItemId!) {
     purchaseDate
     purchaseLocation
     purchaseCondition
+    lowStockThreshold
     createdAt
     updatedAt
     location {

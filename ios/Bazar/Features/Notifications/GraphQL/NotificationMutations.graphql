@@ -1,0 +1,7 @@
+mutation SubscribeToNotifications($token: String!) {
+  subscribeToNotifications(token: $token)
+}
+
+mutation UnsubscribeFromNotifications($token: String!) {
+  unsubscribeFromNotifications(token: $token)
+}

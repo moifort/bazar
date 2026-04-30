@@ -1,11 +1,8 @@
-import FirebaseCore
 import SwiftUI
 
 @main
 struct BazarApp: App {
-    init() {
-        FirebaseApp.configure()
-    }
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {
         WindowGroup {

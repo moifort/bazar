@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "ItemDetail"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description category quantity addedBy personalNotes purchaseDate purchaseLocation purchaseCondition createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } reminders { __typename id title notes dueDate frequency customIntervalDays createdAt updatedAt } } }"#
+        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description category quantity addedBy personalNotes purchaseDate purchaseLocation purchaseCondition lowStockThreshold createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } reminders { __typename id title notes dueDate frequency customIntervalDays createdAt updatedAt } } }"#
       ))
 
     public var id: ItemId
@@ -51,6 +51,7 @@ extension BazarGraphQL {
           .field("purchaseDate", BazarGraphQL.DateTime?.self),
           .field("purchaseLocation", String.self),
           .field("purchaseCondition", GraphQLEnum<BazarGraphQL.PurchaseCondition>?.self),
+          .field("lowStockThreshold", Int?.self),
           .field("createdAt", BazarGraphQL.DateTime.self),
           .field("updatedAt", BazarGraphQL.DateTime.self),
           .field("location", Location?.self),
@@ -77,6 +78,8 @@ extension BazarGraphQL {
         var purchaseLocation: String { __data["purchaseLocation"] }
         /// Whether the item was bought new or used
         var purchaseCondition: GraphQLEnum<BazarGraphQL.PurchaseCondition>? { __data["purchaseCondition"] }
+        /// Quantity threshold below which a low-stock notification fires
+        var lowStockThreshold: Int? { __data["lowStockThreshold"] }
         /// Creation date
         var createdAt: BazarGraphQL.DateTime { __data["createdAt"] }
         /// Last update date

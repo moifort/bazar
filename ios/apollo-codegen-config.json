@@ -8,7 +8,8 @@
       "Bazar/Features/Scan/GraphQL/*.graphql",
       "Bazar/Features/Search/GraphQL/*.graphql",
       "Bazar/Features/Dashboard/GraphQL/*.graphql",
-      "Bazar/Features/Reminders/GraphQL/*.graphql"
+      "Bazar/Features/Reminders/GraphQL/*.graphql",
+      "Bazar/Features/Notifications/GraphQL/*.graphql"
     ]
   },
   "output": {

@@ -17,6 +17,7 @@ mutation UpdateItem($id: ItemId!, $input: UpdateItemInput!) {
     purchaseDate
     purchaseLocation
     purchaseCondition
+    lowStockThreshold
     updatedAt
   }
 }
