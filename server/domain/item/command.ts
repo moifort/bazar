@@ -4,6 +4,7 @@ import type { StorageId, ZoneId } from '~/domain/location/types'
 import { ReminderCommand } from '~/domain/reminder/command'
 import type { UserId } from '~/domain/shared/types'
 import { emit } from '~/system/event-bus'
+import { detectThresholdCrossing, type LowStockCrossedEvent } from './events'
 import * as repository from './infrastructure/repository'
 import {
   ItemName,
@@ -154,6 +155,16 @@ const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
 
   await repository.save(updated)
   await emit('item-changed', { type: 'item-updated' as const, item: updated })
+  if (detectThresholdCrossing(item, updated) && updated.lowStockThreshold != null) {
+    const event: LowStockCrossedEvent = {
+      userId: updated.userId,
+      itemId: updated.id,
+      name: updated.name,
+      newQuantity: updated.quantity,
+      threshold: updated.lowStockThreshold,
+    }
+    await emit('low-stock-crossed', event)
+  }
   return { tag: 'updated' as const, item: updated }
 }
 
