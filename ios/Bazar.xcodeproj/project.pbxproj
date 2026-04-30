@@ -164,6 +164,7 @@
 		FB9AC2F3C395DFF4A263E560 /* ItemRemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184FDF2436BA7B75F616429 /* ItemRemindersView.swift */; };
 		FD4D16C4AB45363EBAEC4083 /* DeleteReminderMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04619EAC75978ED7F76420C1 /* DeleteReminderMutation.graphql.swift */; };
 		FF7AF39B8E5C2CE2571ABA09 /* PlaceId.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD701F055909C265F3B69723 /* PlaceId.swift */; };
+		FFC6A183F99971E512749F64 /* LowStockEditForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90C232915078548C8E15F6F /* LowStockEditForm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -292,6 +293,7 @@
 		D5F4A49D86BF3B9D8A63341A /* UserTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTag.swift; sourceTree = "<group>"; };
 		D6F1D6C9D984E61C530C7AB6 /* RoomDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailPage.swift; sourceTree = "<group>"; };
 		D894786302504830B5C0FD8C /* ItemName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemName.swift; sourceTree = "<group>"; };
+		D90C232915078548C8E15F6F /* LowStockEditForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LowStockEditForm.swift; sourceTree = "<group>"; };
 		DBB863E4D5364D9EB0FFA99C /* ModelTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTypes.swift; sourceTree = "<group>"; };
 		DC6BD8B0FE59C15DB8DFD1AB /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = wrapper.cfbundle; path = Settings.bundle; sourceTree = "<group>"; };
 		DEF93BA9D7BEFA5078D2E230 /* StorageName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageName.swift; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 			isa = PBXGroup;
 			children = (
 				FD4C7AB2E7FAAD8B2EBE41C2 /* ItemEditForm.swift */,
+				D90C232915078548C8E15F6F /* LowStockEditForm.swift */,
 				74201AD560736044676C56BD /* PurchaseEditForm.swift */,
 			);
 			path = organisms;
@@ -860,7 +863,7 @@
 			path = pages;
 			sourceTree = "<group>";
 		};
-		"TEMP_F08F5782-9005-4BBC-906C-AE28344998B3" /* Notifications */ = {
+		"TEMP_D9E7D808-E1DD-46BC-AA8C-39CD8EE84B52" /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -1027,6 +1030,7 @@
 				3FF9C13B907025F3546F58A3 /* LocationsView.swift in Sources */,
 				3E0C9DDE6EA5123218851DBF /* LocationsViewModel.swift in Sources */,
 				77C7C3A1C847E8D346CFCE5F /* LoginView.swift in Sources */,
+				FFC6A183F99971E512749F64 /* LowStockEditForm.swift in Sources */,
 				8F574F1B6FEF984B4C22A4AB /* ModelTypes.swift in Sources */,
 				7A11AA55230D77C7804D9707 /* MoveItemInput.graphql.swift in Sources */,
 				62AB6704679F8F77A968F878 /* MoveItemMutation.graphql.swift in Sources */,

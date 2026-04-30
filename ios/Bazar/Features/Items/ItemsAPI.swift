@@ -64,6 +64,7 @@ enum GraphQLItemsAPI {
             purchaseDate: item.purchaseDate.flatMap { GraphQLHelpers.parseISO8601($0) },
             purchaseLocation: item.purchaseLocation,
             purchaseCondition: item.purchaseCondition.flatMap { PurchaseCondition(rawValue: $0.rawValue) },
+            lowStockThreshold: item.lowStockThreshold,
             createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date(),
             updatedAt: GraphQLHelpers.parseISO8601(item.updatedAt) ?? Date(),
             location: item.location.map { loc in

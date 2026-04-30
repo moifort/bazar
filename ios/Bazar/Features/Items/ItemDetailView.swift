@@ -14,6 +14,7 @@ struct ItemDetailView: View {
     @State private var showReminders = false
     @State private var showMovePicker = false
     @State private var showPurchaseEdit = false
+    @State private var showLowStockEdit = false
     @State private var pendingLocation: LocationSelection = .none
     @State private var isMoving = false
 
@@ -32,6 +33,7 @@ struct ItemDetailView: View {
                     purchaseDate: item.purchaseDate,
                     purchaseLocation: item.purchaseLocation,
                     purchaseCondition: item.purchaseCondition,
+                    lowStockThreshold: item.lowStockThreshold,
                     purchaseLocationSuggestions: purchaseLocationSuggestions,
                     reminders: item.reminders.map(ReminderRowMapper.map),
                     onRefresh: { await loadDetail() },
@@ -46,6 +48,7 @@ struct ItemDetailView: View {
                         showMovePicker = true
                     },
                     onOpenPurchaseEdit: { showPurchaseEdit = true },
+                    onOpenLowStockEdit: { showLowStockEdit = true },
                     onClose: { dismiss() }
                 )
             } else if let errorMessage {
@@ -110,6 +113,21 @@ struct ItemDetailView: View {
                             onUpdated()
                         },
                         onCancel: { showPurchaseEdit = false }
+                    )
+                }
+            }
+        }
+        .sheet(isPresented: $showLowStockEdit) {
+            if let item {
+                NavigationStack {
+                    LowStockEditForm(
+                        initial: item.lowStockThreshold,
+                        onSave: { threshold in
+                            try await saveLowStockThreshold(threshold)
+                            showLowStockEdit = false
+                            onUpdated()
+                        },
+                        onCancel: { showLowStockEdit = false }
                     )
                 }
             }
@@ -193,6 +211,22 @@ struct ItemDetailView: View {
             purchaseDate: fields.purchaseDate.map { .some(iso.string(from: $0)) } ?? .null,
             purchaseLocation: .some(fields.purchaseLocation),
             quantity: .some(String(fields.quantity))
+        )
+        try await GraphQLItemsAPI.update(id: itemId, input: input)
+        item = try await GraphQLItemsAPI.getDetail(id: itemId)
+    }
+
+    private func saveLowStockThreshold(_ threshold: Int?) async throws {
+        nonisolated(unsafe) let input = BazarGraphQL.UpdateItemInput(
+            category: .none,
+            description: .none,
+            lowStockThreshold: threshold.map { .some($0) } ?? .null,
+            name: .none,
+            personalNotes: .none,
+            purchaseCondition: .none,
+            purchaseDate: .none,
+            purchaseLocation: .none,
+            quantity: .none
         )
         try await GraphQLItemsAPI.update(id: itemId, input: input)
         item = try await GraphQLItemsAPI.getDetail(id: itemId)

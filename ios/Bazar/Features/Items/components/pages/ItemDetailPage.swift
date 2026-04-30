@@ -12,6 +12,7 @@ struct ItemDetailPage: View {
     let purchaseDate: Date?
     let purchaseLocation: String
     let purchaseCondition: PurchaseCondition?
+    let lowStockThreshold: Int?
     let purchaseLocationSuggestions: [String]
     let reminders: [ReminderRow.Model]
 
@@ -21,6 +22,7 @@ struct ItemDetailPage: View {
     let onOpenReminders: () -> Void
     let onOpenMove: () -> Void
     let onOpenPurchaseEdit: () -> Void
+    let onOpenLowStockEdit: () -> Void
     let onClose: () -> Void
 
     @State private var showDeleteConfirmation = false
@@ -84,7 +86,17 @@ struct ItemDetailPage: View {
                         .foregroundStyle(category.color)
                         .labelStyle(.titleAndIcon)
                 }
-                LabeledContent("Quantité", value: "\(quantity)")
+                LabeledContent("Quantité") {
+                    HStack(spacing: 6) {
+                        if isLowStock {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.orange)
+                                .font(.callout)
+                        }
+                        Text("\(quantity)")
+                            .foregroundStyle(.secondary)
+                    }
+                }
                 LabeledContent(
                     "Ajouté le",
                     value: createdAt.formatted(date: .abbreviated, time: .omitted)
@@ -108,6 +120,21 @@ struct ItemDetailPage: View {
                 .accessibilityIdentifier("move-item-row")
                 .accessibilityLabel(locationAccessibilityLabel)
                 .accessibilityHint("Touchez pour déplacer l'objet")
+            }
+
+            Section("Alerte stock") {
+                Button(action: onOpenLowStockEdit) {
+                    HStack {
+                        Label(lowStockSummaryLabel, systemImage: lowStockSystemImage)
+                            .foregroundStyle(isLowStock ? Color.orange : .primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.secondary)
+                            .font(.caption.weight(.semibold))
+                    }
+                    .contentShape(.rect)
+                }
+                .accessibilityIdentifier("edit-low-stock-button")
             }
 
             Section {
@@ -191,6 +218,20 @@ struct ItemDetailPage: View {
         purchaseDate != nil || !purchaseLocation.isEmpty || purchaseCondition != nil
     }
 
+    private var isLowStock: Bool {
+        guard let lowStockThreshold else { return false }
+        return quantity <= lowStockThreshold
+    }
+
+    private var lowStockSummaryLabel: String {
+        guard let lowStockThreshold else { return "Configurer une alerte" }
+        return "Alerter sous \(lowStockThreshold) en stock"
+    }
+
+    private var lowStockSystemImage: String {
+        isLowStock ? "exclamationmark.triangle.fill" : "bell.badge.waveform"
+    }
+
     private var locationAccessibilityLabel: String {
         guard let location else { return "Lieu non défini" }
         let storage = location.storageName.map { ", \($0)" } ?? ""
@@ -263,6 +304,7 @@ struct ItemDetailPage: View {
             purchaseDate: Date(timeIntervalSinceNow: -86_400 * 120),
             purchaseLocation: "amazon.fr",
             purchaseCondition: .new,
+            lowStockThreshold: nil,
             purchaseLocationSuggestions: ["Amazon", "Leroy Merlin"],
             reminders: [],
             onRefresh: {},
@@ -271,6 +313,7 @@ struct ItemDetailPage: View {
             onOpenReminders: {},
             onOpenMove: {},
             onOpenPurchaseEdit: {},
+            onOpenLowStockEdit: {},
             onClose: {}
         )
     }
@@ -290,6 +333,7 @@ struct ItemDetailPage: View {
             purchaseDate: nil,
             purchaseLocation: "",
             purchaseCondition: nil,
+            lowStockThreshold: 5,
             purchaseLocationSuggestions: [],
             reminders: [],
             onRefresh: {},
@@ -298,6 +342,7 @@ struct ItemDetailPage: View {
             onOpenReminders: {},
             onOpenMove: {},
             onOpenPurchaseEdit: {},
+            onOpenLowStockEdit: {},
             onClose: {}
         )
     }

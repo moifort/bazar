@@ -13,10 +13,16 @@ struct Item: Identifiable, Sendable {
     var purchaseDate: Date?
     var purchaseLocation: String
     var purchaseCondition: PurchaseCondition?
+    var lowStockThreshold: Int?
     let createdAt: Date
     let updatedAt: Date
     var location: LocationPath?
     var reminders: [Reminder]
+
+    var isLowStock: Bool {
+        guard let lowStockThreshold else { return false }
+        return quantity <= lowStockThreshold
+    }
 }
 
 enum PurchaseCondition: String, Sendable, CaseIterable, Identifiable {
