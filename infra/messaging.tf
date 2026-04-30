@@ -12,6 +12,13 @@ locals {
   apns_private_key_path = coalesce(var.apns_private_key_path, var.apple_private_key_path)
 }
 
+# Read the project number — needed by the Firebase mobilesdk-pa endpoint and
+# saves the upload script from making a separate `gcloud projects describe`
+# call (which would require an interactive gcloud auth login).
+data "google_project" "this" {
+  project_id = google_project.this.project_id
+}
+
 # Allow the Cloud Function runtime SA to call the FCM HTTP v1 API.
 resource "google_project_iam_member" "function_fcm" {
   project = google_project.this.project_id
@@ -37,6 +44,7 @@ resource "null_resource" "apns_auth_key" {
     command     = <<-EOT
       ${path.module}/scripts/upload-apns-key.sh \
         '${google_project.this.project_id}' \
+        '${data.google_project.this.number}' \
         '${google_firebase_apple_app.ios.app_id}' \
         '${local.apns_key_id}' \
         '${var.apple_team_id}' \
