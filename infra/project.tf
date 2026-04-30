@@ -12,6 +12,8 @@ resource "google_project" "this" {
 
 resource "google_project_service" "apis" {
   for_each = toset([
+    "fcm.googleapis.com",
+    "fcmregistrations.googleapis.com",
     "firebase.googleapis.com",
     "firestore.googleapis.com",
     "identitytoolkit.googleapis.com",

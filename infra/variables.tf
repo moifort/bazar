@@ -65,6 +65,22 @@ variable "apple_private_key_path" {
   type        = string
 }
 
+# APNs (Apple Push Notification service) — used by Firebase Cloud Messaging
+# to deliver pushes to iOS. Defaults to the same .p8 used for Sign in with
+# Apple, which works as long as that key has the APNs capability enabled in
+# Apple Developer. Override with a dedicated APNs-only key if needed.
+variable "apns_key_id" {
+  description = "Apple key ID for APNs (defaults to apple_key_id)"
+  type        = string
+  default     = null
+}
+
+variable "apns_private_key_path" {
+  description = "Path to the APNs .p8 file (defaults to apple_private_key_path)"
+  type        = string
+  default     = null
+}
+
 # Backend secrets
 variable "google_api_key" {
   description = "Google AI API key for Gemini 2.5 Flash (item photo analysis)"

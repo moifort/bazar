@@ -46,6 +46,36 @@ Every push to `main` runs `.github/workflows/deploy.yml`, which builds the
 Nitro bundle and runs `terraform apply` against the same state stored in
 GCS. Only the function source archive changes between runs.
 
+## Cloud Messaging (FCM)
+
+Push notifications to iOS go through Firebase Cloud Messaging (FCM), which
+in turn forwards to APNs. Two pieces of state are needed:
+
+1. **APIs enabled** (`fcm.googleapis.com`, `fcmregistrations.googleapis.com`)
+   — declared in `project.tf`.
+2. **APNs Authentication Key uploaded** to Firebase Cloud Messaging.
+
+The same Apple `.p8` used for Sign in with Apple is reused by default
+(`apns_key_id` / `apns_private_key_path` default to `apple_*` values). The
+key must have the **APNs** capability enabled in Apple Developer (in
+addition to *Sign in with Apple*). If only one key is needed and it has
+both capabilities, no extra config is required.
+
+`messaging.tf` runs `scripts/upload-apns-key.sh` via a `null_resource` to
+upload the key automatically. The endpoint it calls
+(`firebasemobilesdk-pa.googleapis.com/v1/projects/.../clients/{app}:setApnsAuthKey`)
+is the same one used by the Firebase Console but is not part of the
+publicly documented Firebase Management API. If Google changes it, the
+script logs the failure and continues — terraform `apply` succeeds — and
+you can finish the upload in the UI:
+
+> Firebase Console → Project Settings → Cloud Messaging → Apple app
+> configuration → APNs Authentication Key → Upload.
+
+The runtime service account `bazar-runtime` is granted
+`roles/firebasecloudmessaging.admin` so the Cloud Function can call the
+FCM v1 send API with Application Default Credentials.
+
 ## Teardown
 
 ```bash
