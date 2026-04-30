@@ -248,6 +248,11 @@ type Dashboard {
   itemsByPlace: [PlaceCount!]!
 
   """
+  Items currently in low-stock state (quantity ≤ lowStockThreshold), sorted by name
+  """
+  lowStockItems: [Item!]!
+
+  """
   Most recently added items
   """
   recentItems: [Item!]!

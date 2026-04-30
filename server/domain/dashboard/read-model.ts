@@ -35,10 +35,15 @@ export const buildDashboard = async (userId: UserId): Promise<Dashboard> => {
 
   const recentItems = items.slice(0, 10)
 
+  const lowStockItems = items
+    .filter((item) => item.lowStockThreshold != null && item.quantity <= item.lowStockThreshold)
+    .sort((a, b) => a.name.localeCompare(b.name))
+
   return {
     totalItems: items.length,
     itemsByCategory,
     itemsByPlace,
     recentItems,
+    lowStockItems,
   }
 }

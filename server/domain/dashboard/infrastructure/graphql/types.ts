@@ -39,5 +39,11 @@ export const DashboardType = builder.objectRef<Dashboard>('Dashboard').implement
       description: 'Most recently added items',
       resolve: (dashboard) => dashboard.recentItems,
     }),
+    lowStockItems: t.field({
+      type: [ItemType],
+      description:
+        'Items currently in low-stock state (quantity ≤ lowStockThreshold), sorted by name',
+      resolve: (dashboard) => dashboard.lowStockItems,
+    }),
   }),
 })

@@ -17,4 +17,5 @@ export type Dashboard = {
   itemsByCategory: CategoryCount[]
   itemsByPlace: PlaceCount[]
   recentItems: Item[]
+  lowStockItems: Item[]
 }
