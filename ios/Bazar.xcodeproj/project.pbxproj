@@ -114,6 +114,7 @@
 		A929CD6285C0553D7153F2D5 /* ItemPreview.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCCF188C36636D1ED20E5A1 /* ItemPreview.graphql.swift */; };
 		AD0772A744E03A27AC9798EB /* ZoneId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CD57BF36A20BD88D20301E /* ZoneId.swift */; };
 		AE4023993B26A76E9215514A /* ItemIdWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029A0FC3DAF543170A65CCCF /* ItemIdWrapper.swift */; };
+		B0811392BA27046FBDB2C3B3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6ED9EAF1EC1667D28E8A5860 /* GoogleService-Info.plist */; };
 		B2A0BA379ADB5BEFAFFDFDC5 /* BazarGraphQL.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C80DD98112700F01D6829E /* BazarGraphQL.graphql.swift */; };
 		B91211F2E06A8854CAF9859D /* ReminderRowMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A53D13E8EFDEE9BEAD6D55 /* ReminderRowMapper.swift */; };
 		BA209A046E3F8E6C42348630 /* CreateStorageInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11803D072639B81ED576701 /* CreateStorageInput.graphql.swift */; };
@@ -234,6 +235,7 @@
 		67EEFF5AA7C65A9B8B18AD00 /* Items.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.graphql.swift; sourceTree = "<group>"; };
 		6A9B10A5BD25D44043BE0515 /* UpdateRoomMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRoomMutation.graphql.swift; sourceTree = "<group>"; };
 		6BE11C582F11BAFC07B646EC /* ItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsViewModel.swift; sourceTree = "<group>"; };
+		6ED9EAF1EC1667D28E8A5860 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		712815E86FF819E3E873478A /* AppleNonce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleNonce.swift; sourceTree = "<group>"; };
 		72040D9143BBFF7FF0CF08AA /* Query.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.graphql.swift; sourceTree = "<group>"; };
 		74201AD560736044676C56BD /* PurchaseEditForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseEditForm.swift; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 				C3D16071C398258604B901B9 /* Bazar.entitlements */,
 				9D702C35BD0A4C2FB5F9C8C2 /* BazarApp.swift */,
 				91BAC7F26D2161B9FFDAA1E0 /* ContentView.swift */,
+				6ED9EAF1EC1667D28E8A5860 /* GoogleService-Info.plist */,
 				DC6BD8B0FE59C15DB8DFD1AB /* Settings.bundle */,
 				1EE258AF058E49F9C614094D /* Features */,
 				283524ED7D45B9B9AC84687A /* Generated */,
@@ -874,7 +877,7 @@
 			path = pages;
 			sourceTree = "<group>";
 		};
-		"TEMP_2915A762-951F-40BD-82BA-7BB85D686757" /* Notifications */ = {
+		"TEMP_071881E9-57CA-4123-A3B6-5EC452367660" /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -950,6 +953,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB07574C619B0A79EECC91B6 /* Assets.xcassets in Resources */,
+				B0811392BA27046FBDB2C3B3 /* GoogleService-Info.plist in Resources */,
 				3CABAC0F9055A7A36FD132C0 /* Secrets.swift.example in Resources */,
 				F29020770C979EE1B6C47647 /* Settings.bundle in Resources */,
 			);
