@@ -23,6 +23,10 @@ export const AddItemInput = builder.inputType('AddItemInput', {
       type: PurchaseConditionEnum,
       description: 'Whether the item was bought new or used',
     }),
+    lowStockThreshold: t.int({
+      description:
+        'Quantity threshold below which a low-stock notification fires (positive integer)',
+    }),
   }),
 })
 
@@ -39,6 +43,10 @@ export const UpdateItemInput = builder.inputType('UpdateItemInput', {
     purchaseCondition: t.field({
       type: PurchaseConditionEnum,
       description: 'New purchase condition (omit to leave unchanged)',
+    }),
+    lowStockThreshold: t.int({
+      description:
+        'New low-stock threshold (positive integer; null to clear; omit to leave unchanged)',
     }),
   }),
 })
@@ -69,6 +77,10 @@ export const ConfirmItemInput = builder.inputType('ConfirmItemInput', {
     purchaseCondition: t.field({
       type: PurchaseConditionEnum,
       description: 'Whether the item was bought new or used',
+    }),
+    lowStockThreshold: t.int({
+      description:
+        'Quantity threshold below which a low-stock notification fires (positive integer)',
     }),
   }),
 })

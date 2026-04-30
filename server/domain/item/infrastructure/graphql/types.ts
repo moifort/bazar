@@ -55,6 +55,10 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
       description: 'Whether the item was bought new or used',
       resolve: (item) => item.purchaseCondition,
     }),
+    lowStockThreshold: t.exposeInt('lowStockThreshold', {
+      nullable: true,
+      description: 'Quantity threshold below which a low-stock notification fires',
+    }),
     reminders: t.field({
       type: [ReminderType],
       description: 'Reminders attached to this item, sorted by dueDate asc',

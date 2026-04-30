@@ -13,6 +13,11 @@ input AddItemInput {
   description: String
 
   """
+  Quantity threshold below which a low-stock notification fires (positive integer)
+  """
+  lowStockThreshold: Int
+
+  """
   Item name
   """
   name: ItemName!
@@ -116,6 +121,11 @@ input ConfirmItemInput {
   Item description
   """
   description: String
+
+  """
+  Quantity threshold below which a low-stock notification fires (positive integer)
+  """
+  lowStockThreshold: Int
 
   """
   Item name
@@ -286,6 +296,11 @@ type Item {
   Resolved location path (storage or zone level)
   """
   location: LocationPath
+
+  """
+  Quantity threshold below which a low-stock notification fires
+  """
+  lowStockThreshold: Int
 
   """
   Item display name
@@ -602,6 +617,16 @@ type Mutation {
   Move an item to a different location (zone or storage, mutually exclusive)
   """
   moveItem(id: ItemId!, target: MoveItemInput!): Item!
+
+  """
+  Register an FCM device token for push notifications
+  """
+  subscribeToNotifications(token: String!): Boolean!
+
+  """
+  Unregister an FCM device token from push notifications
+  """
+  unsubscribeFromNotifications(token: String!): Boolean!
 
   """
   Update an existing item
@@ -1013,6 +1038,11 @@ input UpdateItemInput {
   New description
   """
   description: String
+
+  """
+  New low-stock threshold (positive integer; null to clear; omit to leave unchanged)
+  """
+  lowStockThreshold: Int
 
   """
   New item name
