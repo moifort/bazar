@@ -215,6 +215,16 @@ struct DashboardData: Sendable {
     let itemsByCategory: [CategoryCount]
     let itemsByPlace: [PlaceCount]
     let recentItems: [ItemListItem]
+    let lowStockItems: [LowStockAlert]
+}
+
+struct LowStockAlert: Identifiable, Sendable {
+    let id: String
+    let name: String
+    let category: ItemCategory
+    let quantity: Int
+    let threshold: Int
+    let locationFullPath: String?
 }
 
 struct CategoryCount: Sendable, Identifiable {

@@ -37,6 +37,17 @@ enum GraphQLDashboardAPI {
                     createdAt: GraphQLHelpers.parseISO8601(item.createdAt) ?? Date(),
                     overdueReminderCount: 0
                 )
+            },
+            lowStockItems: dashboard.lowStockItems.compactMap { item in
+                guard let threshold = item.lowStockThreshold else { return nil }
+                return LowStockAlert(
+                    id: item.id,
+                    name: item.name,
+                    category: ItemCategory(rawValue: item.category.rawValue) ?? .other,
+                    quantity: Int(item.quantity) ?? 0,
+                    threshold: threshold,
+                    locationFullPath: item.location?.fullPath
+                )
             }
         )
     }

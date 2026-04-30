@@ -25,6 +25,16 @@ struct DashboardView: View {
                                 overdueReminderCount: item.overdueReminderCount
                             )
                         },
+                        lowStockAlerts: data.lowStockItems.map { alert in
+                            .init(
+                                id: alert.id,
+                                name: alert.name,
+                                category: alert.category,
+                                quantity: alert.quantity,
+                                threshold: alert.threshold,
+                                locationPath: alert.locationFullPath
+                            )
+                        },
                         onRefresh: { await viewModel.load() },
                         onItemTap: { selectedItemId = $0 }
                     )

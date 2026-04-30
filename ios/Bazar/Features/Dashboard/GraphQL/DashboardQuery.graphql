@@ -21,5 +21,15 @@ query Dashboard {
         fullPath
       }
     }
+    lowStockItems {
+      id
+      name
+      category
+      quantity
+      lowStockThreshold
+      location {
+        fullPath
+      }
+    }
   }
 }

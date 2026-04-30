@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "Dashboard"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query Dashboard { dashboard { __typename totalItems itemsByCategory { __typename category count } itemsByPlace { __typename placeId placeName count } recentItems { __typename id name category quantity addedBy createdAt location { __typename fullPath } } } }"#
+        #"query Dashboard { dashboard { __typename totalItems itemsByCategory { __typename category count } itemsByPlace { __typename placeId placeName count } recentItems { __typename id name category quantity addedBy createdAt location { __typename fullPath } } lowStockItems { __typename id name category quantity lowStockThreshold location { __typename fullPath } } } }"#
       ))
 
     public init() {}
@@ -39,6 +39,7 @@ extension BazarGraphQL {
           .field("itemsByCategory", [ItemsByCategory].self),
           .field("itemsByPlace", [ItemsByPlace].self),
           .field("recentItems", [RecentItem].self),
+          .field("lowStockItems", [LowStockItem].self),
         ] }
 
         /// Total number of items
@@ -49,6 +50,8 @@ extension BazarGraphQL {
         var itemsByPlace: [ItemsByPlace] { __data["itemsByPlace"] }
         /// Most recently added items
         var recentItems: [RecentItem] { __data["recentItems"] }
+        /// Items currently in low-stock state (quantity ≤ lowStockThreshold), sorted by name
+        var lowStockItems: [LowStockItem] { __data["lowStockItems"] }
 
         /// Dashboard.ItemsByCategory
         ///
@@ -128,6 +131,55 @@ extension BazarGraphQL {
           var location: Location? { __data["location"] }
 
           /// Dashboard.RecentItem.Location
+          ///
+          /// Parent Type: `LocationPath`
+          struct Location: BazarGraphQL.SelectionSet {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
+
+            static var __parentType: any ApolloAPI.ParentType { BazarGraphQL.Objects.LocationPath }
+            static var __selections: [ApolloAPI.Selection] { [
+              .field("__typename", String.self),
+              .field("fullPath", String.self),
+            ] }
+
+            /// Full path string (e.g. "Appartement > Cuisine > Placard > Etagere 2")
+            var fullPath: String { __data["fullPath"] }
+          }
+        }
+
+        /// Dashboard.LowStockItem
+        ///
+        /// Parent Type: `Item`
+        struct LowStockItem: BazarGraphQL.SelectionSet {
+          let __data: DataDict
+          init(_dataDict: DataDict) { __data = _dataDict }
+
+          static var __parentType: any ApolloAPI.ParentType { BazarGraphQL.Objects.Item }
+          static var __selections: [ApolloAPI.Selection] { [
+            .field("__typename", String.self),
+            .field("id", BazarGraphQL.ItemId.self),
+            .field("name", BazarGraphQL.ItemName.self),
+            .field("category", GraphQLEnum<BazarGraphQL.ItemCategory>.self),
+            .field("quantity", BazarGraphQL.Quantity.self),
+            .field("lowStockThreshold", Int?.self),
+            .field("location", Location?.self),
+          ] }
+
+          /// Item unique identifier
+          var id: BazarGraphQL.ItemId { __data["id"] }
+          /// Item display name
+          var name: BazarGraphQL.ItemName { __data["name"] }
+          /// Item category
+          var category: GraphQLEnum<BazarGraphQL.ItemCategory> { __data["category"] }
+          /// Number of identical items
+          var quantity: BazarGraphQL.Quantity { __data["quantity"] }
+          /// Quantity threshold below which a low-stock notification fires
+          var lowStockThreshold: Int? { __data["lowStockThreshold"] }
+          /// Resolved location path (storage or zone level)
+          var location: Location? { __data["location"] }
+
+          /// Dashboard.LowStockItem.Location
           ///
           /// Parent Type: `LocationPath`
           struct Location: BazarGraphQL.SelectionSet {

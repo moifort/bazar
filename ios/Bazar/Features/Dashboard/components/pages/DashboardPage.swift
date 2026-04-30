@@ -4,11 +4,31 @@ struct DashboardPage: View {
     let totalItems: Int
     let placeCounts: [PlaceCountRow]
     let recentItems: [RecentItemRow]
+    let lowStockAlerts: [LowStockAlertRow.Model]
     let onRefresh: () async -> Void
     let onItemTap: (String) -> Void
 
     var body: some View {
         List {
+            if !lowStockAlerts.isEmpty {
+                Section("Alertes stock bas") {
+                    ForEach(lowStockAlerts) { alert in
+                        Button {
+                            onItemTap(alert.id)
+                        } label: {
+                            LowStockAlertRow(
+                                name: alert.name,
+                                category: alert.category,
+                                quantity: alert.quantity,
+                                threshold: alert.threshold,
+                                locationPath: alert.locationPath
+                            )
+                        }
+                        .tint(.primary)
+                    }
+                }
+            }
+
             if !placeCounts.isEmpty {
                 Section("Par lieu") {
                     ForEach(placeCounts) { place in
@@ -44,7 +64,7 @@ struct DashboardPage: View {
         .navigationBarTitleDisplayMode(.large)
         .refreshable { await onRefresh() }
         .overlay {
-            if placeCounts.isEmpty && recentItems.isEmpty {
+            if placeCounts.isEmpty && recentItems.isEmpty && lowStockAlerts.isEmpty {
                 ContentUnavailableView(
                     "Aucun objet",
                     systemImage: "archivebox",
@@ -80,6 +100,17 @@ extension DashboardPage {
     }
 }
 
+extension LowStockAlertRow {
+    struct Model: Identifiable {
+        let id: String
+        let name: String
+        let category: ItemCategory
+        let quantity: Int
+        let threshold: Int
+        let locationPath: String?
+    }
+}
+
 #Preview("Loaded") {
     NavigationStack {
         DashboardPage(
@@ -91,6 +122,9 @@ extension DashboardPage {
             recentItems: [
                 .init(id: "i1", name: "Perceuse Bosch", category: .tools, quantity: 1, locationPath: "Maison > Garage", overdueReminderCount: 0),
                 .init(id: "i2", name: "Ampoules LED", category: .electronics, quantity: 12, locationPath: "Maison > Cellier", overdueReminderCount: 1),
+            ],
+            lowStockAlerts: [
+                .init(id: "i3", name: "Boîtes nourriture bébé", category: .food, quantity: 1, threshold: 2, locationPath: "Maison > Cuisine > Placard"),
             ],
             onRefresh: {},
             onItemTap: { _ in }
@@ -104,6 +138,7 @@ extension DashboardPage {
             totalItems: 0,
             placeCounts: [],
             recentItems: [],
+            lowStockAlerts: [],
             onRefresh: {},
             onItemTap: { _ in }
         )
