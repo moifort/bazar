@@ -13,7 +13,7 @@ builder.mutationField('addReminder', (t) =>
     args: { input: t.arg({ type: AddReminderInput, required: true }) },
     resolve: async (_root, { input }, ctx) =>
       match(await ItemUseCase.addReminder(ctx.userId, input))
-        .with('item-not-found', domainError)
+        .with('item-not-found', 'invalid-frequency', domainError)
         .with(P.not(P.string), ({ reminder }) => reminder)
         .exhaustive(),
   }),
@@ -29,7 +29,7 @@ builder.mutationField('updateReminder', (t) =>
     },
     resolve: async (_root, { id, input }, ctx) =>
       match(await ReminderCommand.update(ctx.userId, id, input))
-        .with('not-found', domainError)
+        .with('not-found', 'invalid-frequency', domainError)
         .with(P.not(P.string), ({ reminder }) => reminder)
         .exhaustive(),
   }),

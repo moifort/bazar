@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto'
 import type { ItemId } from '~/domain/item/types'
 import type { UserId } from '~/domain/shared/types'
 import { emit } from '~/system/event-bus'
-import { computeNextDueDate, isOneShot } from './business-rules'
+import { isOneShot, nextDueDate } from './business-rules'
 import * as repository from './infrastructure/repository'
 import {
   ReminderCompletionId as makeReminderCompletionId,
@@ -31,33 +31,34 @@ type UpdateReminderInput = {
   customIntervalDays?: number | null
 }
 
+type ResolvedFrequency = { frequency: ReminderFrequency | null; customIntervalDays: number | null }
+
+// `customIntervalDays` belongs to `custom-days` and to nothing else: a one-shot
+// reminder carries no interval, and a fixed frequency derives its own. Breaking
+// that pairing is a caller error, reported as a sentinel — never thrown.
 const resolveFrequency = (
   frequency: string | null | undefined,
   customIntervalDays: number | null | undefined,
-): { frequency: ReminderFrequency | null; customIntervalDays: number | null } => {
+): ResolvedFrequency | 'invalid-frequency' => {
   if (frequency == null) {
-    if (customIntervalDays != null)
-      throw new Error('customIntervalDays must be null when frequency is null')
+    if (customIntervalDays != null) return 'invalid-frequency'
     return { frequency: null, customIntervalDays: null }
   }
   const parsed = parseReminderFrequency(frequency)
   if (parsed === 'custom-days') {
-    if (customIntervalDays == null)
-      throw new Error('customIntervalDays is required when frequency is custom-days')
+    if (customIntervalDays == null) return 'invalid-frequency'
     return { frequency: parsed, customIntervalDays: parseCustomIntervalDays(customIntervalDays) }
   }
-  if (customIntervalDays != null)
-    throw new Error('customIntervalDays must be null unless frequency is custom-days')
+  if (customIntervalDays != null) return 'invalid-frequency'
   return { frequency: parsed, customIntervalDays: null }
 }
 
 // The item's existence is checked by the caller that owns it (`ItemUseCase`);
 // here `itemId` is an opaque reference.
 const add = async (userId: UserId, input: AddReminderInput) => {
-  const { frequency, customIntervalDays } = resolveFrequency(
-    input.frequency,
-    input.customIntervalDays,
-  )
+  const resolved = resolveFrequency(input.frequency, input.customIntervalDays)
+  if (resolved === 'invalid-frequency') return resolved
+  const { frequency, customIntervalDays } = resolved
 
   const reminder: Reminder = {
     id: makeReminderId(randomUUID()),
@@ -90,6 +91,7 @@ const update = async (userId: UserId, id: ReminderId, input: UpdateReminderInput
             : reminder.customIntervalDays,
         )
       : { frequency: reminder.frequency, customIntervalDays: reminder.customIntervalDays }
+  if (nextFrequency === 'invalid-frequency') return nextFrequency
 
   const updated: Reminder = {
     ...reminder,
@@ -133,14 +135,17 @@ const complete = async (userId: UserId, id: ReminderId, completedAt: Date = new 
     return { tag: 'done' as const, completion }
   }
 
-  const nextDueDate = computeNextDueDate(
-    reminder.dueDate,
-    // biome-ignore lint/style/noNonNullAssertion: isOneShot false implies frequency !== null
-    reminder.frequency!,
-    reminder.customIntervalDays,
-    completedAt,
-  )
-  const rescheduled: Reminder = { ...reminder, dueDate: nextDueDate, updatedAt: new Date() }
+  const rescheduled: Reminder = {
+    ...reminder,
+    dueDate: nextDueDate(
+      reminder.dueDate,
+      // biome-ignore lint/style/noNonNullAssertion: isOneShot false implies frequency !== null
+      reminder.frequency!,
+      reminder.customIntervalDays,
+      completedAt,
+    ),
+    updatedAt: new Date(),
+  }
   await repository.save(rescheduled)
   await emit('reminder-changed', {
     type: 'reminder-completed' as const,

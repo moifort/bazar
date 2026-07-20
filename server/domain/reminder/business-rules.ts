@@ -21,7 +21,7 @@ const addDays = (date: Date, days: number): Date => {
   return result
 }
 
-export const computeNextDueDate = (
+export const nextDueDate = (
   current: Date,
   frequency: ReminderFrequency,
   customIntervalDays: number | null,
