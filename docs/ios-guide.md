@@ -92,6 +92,26 @@ The `.graphql` operation files live next to the feature (`Features/{Feature}/Gra
 and are listed in `ios/apollo-codegen-config.json`. A new folder there means a new entry in that
 config.
 
+### Model types
+
+The structs on the app side of that boundary live in `Shared/ModelTypes.swift`. They are
+`Sendable` — Swift 6 strict concurrency crosses them between the API actor and the `@MainActor`
+ViewModel — and `Identifiable` when a list renders them. They carry the shape the UI needs, not
+the shape the schema returns: flattening (`locationFullPath`, `placeName`) and derived counts are
+computed once during the mapping, never recomputed in a view body.
+
+```swift
+struct ItemListItem: Identifiable, Sendable {
+    let id: String
+    let name: String
+    let category: ItemCategory
+    let locationFullPath: String?   // flattened from the nested location payload
+}
+```
+
+Optionality here mirrors GraphQL nullability, and stops there: an absent value is `nil`, and the
+view decides what to show for it.
+
 ## Feature pattern
 
 ### ViewModel — `@MainActor @Observable`
@@ -142,7 +162,22 @@ Promote a molecule used by two features up into `Shared/Components/`.
 A leaf view takes `String`, `Int`, `Bool`, `Date?`, a logic-free enum (`ItemCategory`) or a
 closure — **never** a generated Apollo type, and not a whole model struct when it reads three
 fields. When a component needs five or more parameters, give it a nested `Item` struct and do the
-mapping in the page.
+mapping in the page:
+
+```swift
+struct StatRow: View {
+    struct Item: Identifiable {
+        let id = UUID()
+        let label: String
+        let count: Int
+        var highlighted: Bool = false
+    }
+    let items: [Item]
+}
+```
+
+The struct is nested inside the view on purpose: it is that component's input shape, not a shared
+model, and nesting keeps it from drifting into `ModelTypes.swift`.
 
 ## CTA + network — never a silent wait
 

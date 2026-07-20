@@ -12,7 +12,8 @@ Enum/union values are English technical symbols (`kitchenware`, `custom-days`,
 **only** French in the repo: user-facing copy (the iOS app's on-screen text and preview names,
 the push notification body in `server/domain/notification/infrastructure/fcm.ts`) and French data
 values quoted as examples in code, prompts and GraphQL descriptions. Never mix languages in a
-commit message or a comment. Full rules: [docs/code-style.md](docs/code-style.md#language).
+commit message or a comment. Control: `grep -rnP '[\x{00C0}-\x{00FF}]' server/` must only return
+those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 
 ## Collaboration
 
@@ -64,7 +65,8 @@ commit message or a comment. Full rules: [docs/code-style.md](docs/code-style.md
 > [architecture](docs/architecture.md), [domain-guide](docs/domain-guide.md),
 > [graphql-patterns](docs/graphql-patterns.md), [business-rules](docs/business-rules.md),
 > [migrations](docs/migrations.md), [readme-guide](docs/readme-guide.md),
-> [collaboration](docs/collaboration.md). This section is the quick reference.
+> [collaboration](docs/collaboration.md), [app-store-release](docs/app-store-release.md).
+> This section is the quick reference.
 
 - **Stack**: Bun + Nitro 2.13 (`preset firebase`, gen 2, nodejs22, `europe-west3`) + Apollo Server 5 + Pothos 4 + firebase-admin (native Firestore) + Zod + ts-brand. DDD/CQRS strict. Biome (spaces 2, single quotes, no semicolons, width 100), `ts-pattern` (`match().exhaustive()`), `lodash-es`.
 - **Domains**: `server/domain/{item,location,reminder,notification,scan,search,dashboard,shared}` — `item`, `location`, `reminder` and `notification` persist; `scan` is ephemeral (previews are never stored); `search` and `dashboard` are read-only aggregations over the other domains' public `Query` namespaces. System concerns in `server/system/`. Standard layout (`types.ts`, `primitives.ts`, `command.ts`, `query.ts`, `infrastructure/{repository,graphql/*}.ts`, optional `business-rules.ts` / `use-case.ts` / `events.ts`): [docs/domain-guide.md](docs/domain-guide.md).
@@ -101,6 +103,12 @@ commit message or a comment. Full rules: [docs/code-style.md](docs/code-style.md
 - Style: **Liquid Glass** = native iOS 26 components (no custom re-skins). Feature structure `Features/{Feature}/components/{pages,organisms,molecules,atoms}/`, shared atoms in `Shared/Components/`.
 - **Generated Apollo types stop at `{Feature}API.swift`** — nothing above that boundary imports `BazarGraphQL`. **Primitive-first leaf views**; **pages = pure presentation**, coordinators (`{Feature}View.swift`) own navigation, sheets and network calls; **previews as Storybook** (everything below page level previewable offline); **a CTA that hits the network shows it** (`AsyncToolbarButton`, optimistic deletes — never `.disabled(...)` alone).
 - Never add files through Xcode's UI: write the file, re-run `xcodegen generate` if a folder appeared. `DEVELOPER_DIR` is required because `xcode-select` points to CommandLineTools.
+
+## App Store Distribution
+
+Full release flow — latest **final** Xcode only (ITMS-90111), the beta-macOS `BuildMachineOSBuild`
+patch, the `CURRENT_PROJECT_VERSION` bump in `ios/project.yml`:
+[docs/app-store-release.md](docs/app-store-release.md).
 
 ## Gemini API Key & Secrets
 

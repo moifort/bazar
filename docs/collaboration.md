@@ -114,9 +114,6 @@ these guides come from. When a pattern exists there, **replicate it rather than 
 
 Temporal facts — **delete each note once it no longer holds.**
 
-- **2026-07-20 — the repo is being aligned onto these guides.** The docs landed first and describe
-  the *target* state; the code follows in successive commits (domain isolation, executable
-  architecture test, absence-over-`null`, Firestore-side reads). Until that sequence is finished,
-  a divergence between a guide and the code is a to-do, not a doc bug. Delete this note when
-  `bun test` runs `server/architecture.unit.test.ts` green on a repo with no `null` left in the
-  domain.
+- **2026-07-20 — the iOS app has no test target.** `ios/project.yml` declares the app alone, so
+  the SwiftUI side has no automated coverage at all: every iOS change is verified by building and
+  looking at it in the simulator. Delete this note when a test target exists.
