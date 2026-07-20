@@ -1,10 +1,10 @@
 import { sortBy } from 'lodash-es'
 import { match } from 'ts-pattern'
 import { LocationQuery } from '~/domain/location/query'
-import type { ZoneId } from '~/domain/location/types'
+import type { PlaceId, RoomId, ZoneId } from '~/domain/location/types'
 import type { UserId } from '~/domain/shared/types'
 import * as repository from './infrastructure/repository'
-import type { ItemCategory, ItemId, ItemSort } from './types'
+import type { Item, ItemCategory, ItemId, ItemSort } from './types'
 
 type SortOrder = 'asc' | 'desc'
 
@@ -21,31 +21,70 @@ type ItemFilters = {
 
 const all = (userId: UserId) => repository.findAllByUser(userId)
 
+const DEFAULT_LIMIT = 40
+
+const matchesSearch = (item: Item, search: string) => {
+  const query = search.toLowerCase()
+  return (
+    item.name.toLowerCase().includes(query) ||
+    item.description.toLowerCase().includes(query) ||
+    item.personalNotes.toLowerCase().includes(query)
+  )
+}
+
+// `search` and `roomId` have no Firestore equivalent: one is full-text, the
+// other tests membership of a room's zones and storages, which `in` caps at 30
+// values. Both must narrow the set *before* the page is cut, so they force a
+// full read — pushing them after Firestore's limit would return short pages.
+// Every other combination is filtered, ordered and sliced by Firestore.
+const needsFullScan = (filters: ItemFilters) => Boolean(filters.search || filters.roomId)
+
+// An item sits in a room either through one of its zones directly, or through a
+// storage inside one of them — both attachments have to be collected.
+const attachmentsOfRoom = async (userId: UserId, roomId: RoomId) => {
+  const zones = await LocationQuery.zonesByRoom(userId, roomId)
+  const storages = await Promise.all(
+    zones.map(({ id }) => LocationQuery.storagesByZone(userId, id)),
+  )
+  return {
+    zoneIds: new Set<string>(zones.map(({ id }) => id)),
+    storageIds: new Set<string>(storages.flat().map(({ id }) => id)),
+  }
+}
+
 const allItems = async (userId: UserId, filters: ItemFilters = {}) => {
+  const offset = filters.offset ?? 0
+  const limit = filters.limit ?? DEFAULT_LIMIT
+  const sort = filters.sort ?? 'created-at'
+
+  if (!needsFullScan(filters)) {
+    return repository.findPage(userId, {
+      category: filters.category ?? undefined,
+      placeId: (filters.placeId ?? undefined) as PlaceId | undefined,
+      sort,
+      order: filters.order ?? undefined,
+      offset,
+      limit,
+    })
+  }
+
   let items = await repository.findAllByUser(userId)
 
-  if (filters.category) {
-    items = items.filter((item) => item.category === filters.category)
-  }
-
-  if (filters.placeId) {
-    items = items.filter((item) => item.placeId === filters.placeId)
-  }
-
-  if (filters.search) {
-    const query = filters.search.toLowerCase()
+  if (filters.category) items = items.filter((item) => item.category === filters.category)
+  if (filters.placeId) items = items.filter((item) => item.placeId === filters.placeId)
+  if (filters.search) items = items.filter((item) => matchesSearch(item, filters.search as string))
+  if (filters.roomId) {
+    const { zoneIds, storageIds } = await attachmentsOfRoom(userId, filters.roomId as RoomId)
     items = items.filter(
-      (item) =>
-        item.name.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.personalNotes.toLowerCase().includes(query),
+      ({ zoneId, storageId }) =>
+        (zoneId !== null && zoneIds.has(zoneId)) ||
+        (storageId !== null && storageIds.has(storageId)),
     )
   }
 
   const totalCount = items.length
 
-  const sortField = filters.sort ?? 'created-at'
-  const sorted = match(sortField)
+  const sorted = match(sort)
     .with('name', () => sortBy(items, ({ name }) => name.toLowerCase()))
     .with('category', () => sortBy(items, ({ category }) => category))
     .with('created-at', () => sortBy(items, ({ createdAt }) => createdAt).reverse())
@@ -53,18 +92,14 @@ const allItems = async (userId: UserId, filters: ItemFilters = {}) => {
     .exhaustive()
 
   const ordered =
-    filters.order === 'asc' && (sortField === 'created-at' || sortField === 'updated-at')
+    filters.order === 'asc' && (sort === 'created-at' || sort === 'updated-at')
       ? sorted.reverse()
-      : filters.order === 'desc' && sortField !== 'created-at' && sortField !== 'updated-at'
+      : filters.order === 'desc' && sort !== 'created-at' && sort !== 'updated-at'
         ? sorted.reverse()
         : sorted
 
-  const offset = filters.offset ?? 0
-  const limit = filters.limit ?? 40
-  const paged = ordered.slice(offset, offset + limit)
-
   return {
-    items: paged,
+    items: ordered.slice(offset, offset + limit),
     totalCount,
     hasMore: offset + limit < totalCount,
   }
