@@ -24,7 +24,14 @@ locals {
 }
 
 resource "google_firestore_index" "composite" {
-  for_each = { for i, idx in local.firestore_indexes : i => idx }
+  # Keyed by a stable identifier (collection + fields), not the array position, so
+  # adding or removing an index never re-keys — and therefore never destroys and
+  # recreates — the others. A position key caused a transient FAILED_PRECONDITION
+  # whenever the list changed in the middle.
+  for_each = {
+    for idx in local.firestore_indexes :
+    "${idx.collectionGroup}|${join(",", [for f in idx.fields : "${f.fieldPath}:${try(f.order, "NA")}"])}" => idx
+  }
 
   provider    = google-beta
   project     = google_project.this.project_id
