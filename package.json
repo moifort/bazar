@@ -5,10 +5,12 @@
     "prepare": "nitro prepare",
     "build": "nitro build",
     "dev": "nitro dev --host 0.0.0.0",
-    "lint:fix": "bun biome lint --fix",
+    "lint": "bunx biome check",
+    "lint:fix": "bunx biome check --write",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
     "generate:graphql": "bun scripts/export-graphql-schema.ts",
+    "generate:ios": "./scripts/apollo-codegen.sh",
     "generate": "bun run generate:graphql"
   },
   "devDependencies": {
