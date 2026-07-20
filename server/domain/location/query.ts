@@ -13,6 +13,12 @@ export type LocationPath = {
 
 const allPlaces = (userId: UserId) => repository.findAllPlaces(userId)
 
+const allRooms = (userId: UserId) => repository.findAllRooms(userId)
+
+const allZones = (userId: UserId) => repository.findAllZones(userId)
+
+const allStorages = (userId: UserId) => repository.findAllStorages(userId)
+
 const placeById = (userId: UserId, id: PlaceId) => repository.findPlaceBy(userId, id)
 
 const roomsByPlace = (userId: UserId, placeId: PlaceId) =>
@@ -74,6 +80,9 @@ const resolveZoneLocationPath = async (
 
 export const LocationQuery = {
   allPlaces,
+  allRooms,
+  allZones,
+  allStorages,
   placeById,
   roomsByPlace,
   zonesByRoom,

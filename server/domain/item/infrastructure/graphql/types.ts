@@ -1,5 +1,4 @@
 import type { LocationPath } from '~/domain/location/query'
-import { LocationQuery } from '~/domain/location/query'
 import { ReminderType } from '~/domain/reminder/infrastructure/graphql/types'
 import { ReminderQuery } from '~/domain/reminder/query'
 import { builder } from '~/domain/shared/graphql/builder'
@@ -70,11 +69,7 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
       type: LocationPathType,
       nullable: true,
       description: 'Resolved location path (storage or zone level)',
-      resolve: (item, _args, ctx) => {
-        if (item.storageId) return LocationQuery.resolveLocationPath(ctx.userId, item.storageId)
-        if (item.zoneId) return LocationQuery.resolveZoneLocationPath(ctx.userId, item.zoneId)
-        return null
-      },
+      resolve: (item, _args, ctx) => ctx.loaders.locationPath(item),
     }),
   }),
 })

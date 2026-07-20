@@ -1,7 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { LocationQuery } from '~/domain/location/query'
-import type { StorageId, ZoneId } from '~/domain/location/types'
-import { ReminderCommand } from '~/domain/reminder/command'
+import type { PlaceId, StorageId, ZoneId } from '~/domain/location/types'
 import type { UserId } from '~/domain/shared/types'
 import { emit } from '~/system/event-bus'
 import { detectThresholdCrossing, type LowStockCrossedEvent } from './events'
@@ -18,41 +16,17 @@ import {
 } from './primitives'
 import type { Item, ItemId, PurchaseCondition } from './types'
 
-type LocationAttachmentInput = {
-  storageId?: string | null
-  zoneId?: string | null
+/**
+ * Where the item sits, already resolved against the location tree. Resolving it
+ * belongs to `use-case.ts` — the command only stores what it is handed.
+ */
+export type Attachment = {
+  storageId: StorageId | null
+  zoneId: ZoneId | null
+  placeId: PlaceId | null
 }
 
-type ResolvedAttachment = Pick<Item, 'storageId' | 'zoneId' | 'placeId'>
-
-const resolveAttachment = async (
-  userId: UserId,
-  input: LocationAttachmentInput,
-): Promise<ResolvedAttachment | 'invalid-location' | 'location-not-found'> => {
-  if (input.storageId && input.zoneId) return 'invalid-location'
-
-  if (input.storageId) {
-    const path = await LocationQuery.resolveLocationPath(userId, input.storageId as StorageId)
-    if (!path) return 'location-not-found'
-    return {
-      storageId: input.storageId as StorageId,
-      zoneId: null,
-      placeId: path.place.id,
-    }
-  }
-
-  if (input.zoneId) {
-    const path = await LocationQuery.resolveZoneLocationPath(userId, input.zoneId as ZoneId)
-    if (!path) return 'location-not-found'
-    return {
-      storageId: null,
-      zoneId: input.zoneId as ZoneId,
-      placeId: path.place.id,
-    }
-  }
-
-  return { storageId: null, zoneId: null, placeId: null }
-}
+export const NO_ATTACHMENT: Attachment = { storageId: null, zoneId: null, placeId: null }
 
 type AddItemInput = {
   userId: UserId
@@ -60,8 +34,7 @@ type AddItemInput = {
   description?: string | null
   category: string
   quantity?: number | null
-  storageId?: string | null
-  zoneId?: string | null
+  attachment: Attachment
   personalNotes?: string | null
   purchaseDate?: Date | string | null
   purchaseLocation?: string | null
@@ -70,12 +43,6 @@ type AddItemInput = {
 }
 
 const add = async (input: AddItemInput) => {
-  const attachment = await resolveAttachment(input.userId, {
-    storageId: input.storageId,
-    zoneId: input.zoneId,
-  })
-  if (attachment === 'invalid-location' || attachment === 'location-not-found') return attachment
-
   const item: Item = {
     id: makeItemId(randomUUID()),
     userId: input.userId,
@@ -83,9 +50,9 @@ const add = async (input: AddItemInput) => {
     description: input.description ?? '',
     category: parseItemCategory(input.category),
     quantity: Quantity(input.quantity ?? 1),
-    storageId: attachment.storageId,
-    zoneId: attachment.zoneId,
-    placeId: attachment.placeId,
+    storageId: input.attachment.storageId,
+    zoneId: input.attachment.zoneId,
+    placeId: input.attachment.placeId,
     addedBy: input.userId,
     personalNotes: input.personalNotes ?? '',
     purchaseDate: input.purchaseDate ? parsePurchaseDate(input.purchaseDate) : null,
@@ -165,54 +132,27 @@ const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
     }
     await emit('low-stock-crossed', event)
   }
-  return { tag: 'updated' as const, item: updated }
+  return updated
 }
 
 const remove = async (userId: UserId, id: ItemId) => {
   const item = await repository.findBy(userId, id)
   if (!item) return 'not-found' as const
 
-  await ReminderCommand.removeByItem(userId, id)
   await repository.remove(id)
   await emit('item-changed', { type: 'item-removed' as const, itemId: id })
   return 'deleted' as const
 }
 
-const move = async (userId: UserId, id: ItemId, target: LocationAttachmentInput) => {
+const move = async (userId: UserId, id: ItemId, attachment: Attachment) => {
   const item = await repository.findBy(userId, id)
   if (!item) return 'not-found' as const
 
-  const attachment = await resolveAttachment(userId, target)
-  if (attachment === 'invalid-location') return 'invalid-location' as const
-  if (attachment === 'location-not-found') return 'location-not-found' as const
+  const moved: Item = { ...item, ...attachment, updatedAt: new Date() }
 
-  const updated: Item = {
-    ...item,
-    storageId: attachment.storageId,
-    zoneId: attachment.zoneId,
-    placeId: attachment.placeId,
-    updatedAt: new Date(),
-  }
-
-  await repository.save(updated)
-  await emit('item-changed', { type: 'item-moved' as const, item: updated })
-  return { tag: 'moved' as const, item: updated }
+  await repository.save(moved)
+  await emit('item-changed', { type: 'item-moved' as const, item: moved })
+  return moved
 }
 
-type ConfirmItemInput = {
-  name: string
-  description?: string | null
-  category: string
-  quantity?: number | null
-  storageId?: string | null
-  zoneId?: string | null
-  personalNotes?: string | null
-  purchaseDate?: Date | string | null
-  purchaseLocation?: string | null
-  purchaseCondition?: PurchaseCondition | string | null
-}
-
-const confirmItems = async (userId: UserId, inputs: ConfirmItemInput[]) =>
-  Promise.all(inputs.map((input) => add({ ...input, userId })))
-
-export const ItemCommand = { add, update, remove, move, confirmItems }
+export const ItemCommand = { add, update, remove, move }

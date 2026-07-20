@@ -1,33 +1,53 @@
 import DataLoader from 'dataloader'
 import { keyBy } from 'lodash-es'
-import * as locationRepository from '~/domain/location/infrastructure/repository'
-import type { Place, Room, Storage, Zone } from '~/domain/location/types'
+import { fullPath } from '~/domain/location/business-rules'
+import type { LocationPath } from '~/domain/location/query'
+import { LocationQuery } from '~/domain/location/query'
+import type { Place, Room, Storage, StorageId, Zone, ZoneId } from '~/domain/location/types'
 import type { UserId } from '~/domain/shared/types'
 
-export const createLoaders = (userId: UserId) => ({
-  place: new DataLoader<string, Place | null>(async (placeIds) => {
-    const places = await locationRepository.findAllPlaces(userId)
-    const byId = keyBy(places, ({ id }) => id)
-    return placeIds.map((id) => byId[id] ?? null)
-  }),
+// The user's whole location tree is small, so each loader reads its collection
+// once per request and serves the entire page from it — never one read per item.
+const byOwner = <T extends { id: string }>(readAll: () => Promise<T[]>) =>
+  new DataLoader<string, T | undefined>(async (ids) => {
+    const byId = keyBy(await readAll(), ({ id }) => id)
+    return ids.map((id) => byId[id])
+  })
 
-  room: new DataLoader<string, Room | null>(async (roomIds) => {
-    const rooms = await locationRepository.findAllRooms(userId)
-    const byId = keyBy(rooms, ({ id }) => id)
-    return roomIds.map((id) => byId[id] ?? null)
-  }),
+type Attachment = { storageId?: StorageId | null; zoneId?: ZoneId | null }
 
-  zone: new DataLoader<string, Zone | null>(async (zoneIds) => {
-    const zones = await locationRepository.findAllZones(userId)
-    const byId = keyBy(zones, ({ id }) => id)
-    return zoneIds.map((id) => byId[id] ?? null)
-  }),
+export const createLoaders = (userId: UserId) => {
+  const place = byOwner<Place>(() => LocationQuery.allPlaces(userId))
+  const room = byOwner<Room>(() => LocationQuery.allRooms(userId))
+  const zone = byOwner<Zone>(() => LocationQuery.allZones(userId))
+  const storage = byOwner<Storage>(() => LocationQuery.allStorages(userId))
 
-  storage: new DataLoader<string, Storage | null>(async (storageIds) => {
-    const storages = await locationRepository.findAllStorages(userId)
-    const byId = keyBy(storages, ({ id }) => id)
-    return storageIds.map((id) => byId[id] ?? null)
-  }),
-})
+  // Walks up from the item's attachment through the loaders, so a page of items
+  // costs four reads in total instead of four per item.
+  const locationPath = async (attachment: Attachment): Promise<LocationPath | null> => {
+    const attachedStorage = attachment.storageId
+      ? await storage.load(attachment.storageId)
+      : undefined
+    const zoneId = attachedStorage?.zoneId ?? attachment.zoneId
+    if (!zoneId) return null
+
+    const attachedZone = await zone.load(zoneId)
+    if (!attachedZone) return null
+    const attachedRoom = await room.load(attachedZone.roomId)
+    if (!attachedRoom) return null
+    const attachedPlace = await place.load(attachedRoom.placeId)
+    if (!attachedPlace) return null
+
+    return {
+      place: attachedPlace,
+      room: attachedRoom,
+      zone: attachedZone,
+      storage: attachedStorage ?? null,
+      fullPath: fullPath(attachedPlace, attachedRoom, attachedZone, attachedStorage ?? null),
+    }
+  }
+
+  return { place, room, zone, storage, locationPath }
+}
 
 export type Loaders = ReturnType<typeof createLoaders>

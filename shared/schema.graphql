@@ -368,7 +368,7 @@ type Mutation {
   """Create a new zone in a room"""
   createZone(input: CreateZoneInput!): Zone!
 
-  """Delete an item"""
+  """Delete an item, together with the reminders attached to it"""
   deleteItem(id: ItemId!): Boolean!
 
   """Delete a place and all its rooms, zones, and storages"""

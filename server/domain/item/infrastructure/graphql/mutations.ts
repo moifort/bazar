@@ -1,28 +1,21 @@
-import { GraphQLError } from 'graphql'
+import { match, P } from 'ts-pattern'
 import { builder } from '~/domain/shared/graphql/builder'
+import { domainError } from '~/domain/shared/graphql/errors'
 import { ItemCommand } from '../../command'
+import { ItemUseCase } from '../../use-case'
 import { AddItemInput, ConfirmItemInput, MoveItemInput, UpdateItemInput } from './inputs'
 import { ItemType } from './types'
-
-const invalidLocationError = () =>
-  new GraphQLError('Cannot specify both storageId and zoneId', {
-    extensions: { code: 'INVALID_LOCATION' },
-  })
-
-const locationNotFoundError = () =>
-  new GraphQLError('Location not found', { extensions: { code: 'NOT_FOUND' } })
 
 builder.mutationField('addItem', (t) =>
   t.field({
     type: ItemType,
     description: 'Manually add a new item to the inventory',
     args: { input: t.arg({ type: AddItemInput, required: true }) },
-    resolve: async (_root, { input }, ctx) => {
-      const result = await ItemCommand.add({ ...input, userId: ctx.userId })
-      if (result === 'invalid-location') throw invalidLocationError()
-      if (result === 'location-not-found') throw locationNotFoundError()
-      return result
-    },
+    resolve: async (_root, { input }, ctx) =>
+      match(await ItemUseCase.add(ctx.userId, input))
+        .with('invalid-location', 'location-not-found', domainError)
+        .with(P.not(P.string), (item) => item)
+        .exhaustive(),
   }),
 )
 
@@ -34,26 +27,24 @@ builder.mutationField('updateItem', (t) =>
       id: t.arg({ type: 'ItemId', required: true }),
       input: t.arg({ type: UpdateItemInput, required: true }),
     },
-    resolve: async (_root, { id, input }, ctx) => {
-      const result = await ItemCommand.update(ctx.userId, id, input)
-      if (result === 'not-found')
-        throw new GraphQLError('Item not found', { extensions: { code: 'NOT_FOUND' } })
-      return result.item
-    },
+    resolve: async (_root, { id, input }, ctx) =>
+      match(await ItemCommand.update(ctx.userId, id, input))
+        .with('not-found', domainError)
+        .with(P.not(P.string), (item) => item)
+        .exhaustive(),
   }),
 )
 
 builder.mutationField('deleteItem', (t) =>
   t.field({
     type: 'Boolean',
-    description: 'Delete an item',
+    description: 'Delete an item, together with the reminders attached to it',
     args: { id: t.arg({ type: 'ItemId', required: true }) },
-    resolve: async (_root, { id }, ctx) => {
-      const result = await ItemCommand.remove(ctx.userId, id)
-      if (result === 'not-found')
-        throw new GraphQLError('Item not found', { extensions: { code: 'NOT_FOUND' } })
-      return true
-    },
+    resolve: async (_root, { id }, ctx) =>
+      match(await ItemUseCase.remove(ctx.userId, id))
+        .with('not-found', domainError)
+        .with('deleted', () => true)
+        .exhaustive(),
   }),
 )
 
@@ -65,14 +56,11 @@ builder.mutationField('moveItem', (t) =>
       id: t.arg({ type: 'ItemId', required: true }),
       target: t.arg({ type: MoveItemInput, required: true }),
     },
-    resolve: async (_root, { id, target }, ctx) => {
-      const result = await ItemCommand.move(ctx.userId, id, target)
-      if (result === 'not-found')
-        throw new GraphQLError('Item not found', { extensions: { code: 'NOT_FOUND' } })
-      if (result === 'invalid-location') throw invalidLocationError()
-      if (result === 'location-not-found') throw locationNotFoundError()
-      return result.item
-    },
+    resolve: async (_root, { id, target }, ctx) =>
+      match(await ItemUseCase.move(ctx.userId, id, target))
+        .with('not-found', 'invalid-location', 'location-not-found', domainError)
+        .with(P.not(P.string), (item) => item)
+        .exhaustive(),
   }),
 )
 
@@ -84,14 +72,12 @@ builder.mutationField('confirmItems', (t) =>
       input: t.arg({ type: [ConfirmItemInput], required: true }),
     },
     resolve: async (_root, { input }, ctx) => {
-      const results = await ItemCommand.confirmItems(ctx.userId, input)
-      for (const result of results) {
-        if (result === 'invalid-location') throw invalidLocationError()
-        if (result === 'location-not-found') throw locationNotFoundError()
-      }
-      return results.filter(
-        (r): r is Exclude<typeof r, 'invalid-location' | 'location-not-found'> =>
-          r !== 'invalid-location' && r !== 'location-not-found',
+      const results = await ItemUseCase.confirmScanned(ctx.userId, input)
+      return results.map((result) =>
+        match(result)
+          .with('invalid-location', 'location-not-found', domainError)
+          .with(P.not(P.string), (item) => item)
+          .exhaustive(),
       )
     },
   }),

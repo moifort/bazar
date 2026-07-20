@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto'
-import { ItemQuery } from '~/domain/item/query'
 import type { ItemId } from '~/domain/item/types'
 import type { UserId } from '~/domain/shared/types'
 import { emit } from '~/system/event-bus'
@@ -52,10 +51,9 @@ const resolveFrequency = (
   return { frequency: parsed, customIntervalDays: null }
 }
 
+// The item's existence is checked by the caller that owns it (`ItemUseCase`);
+// here `itemId` is an opaque reference.
 const add = async (userId: UserId, input: AddReminderInput) => {
-  const item = await ItemQuery.itemById(userId, input.itemId)
-  if (!item) return 'item-not-found' as const
-
   const { frequency, customIntervalDays } = resolveFrequency(
     input.frequency,
     input.customIntervalDays,

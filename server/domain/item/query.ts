@@ -19,6 +19,8 @@ type ItemFilters = {
   limit?: number | null
 }
 
+const all = (userId: UserId) => repository.findAllByUser(userId)
+
 const allItems = async (userId: UserId, filters: ItemFilters = {}) => {
   let items = await repository.findAllByUser(userId)
 
@@ -100,6 +102,7 @@ const countByZone = async (userId: UserId, zoneId: ZoneId): Promise<number> => {
 }
 
 export const ItemQuery = {
+  all,
   allItems,
   itemById,
   itemsByStorage,
