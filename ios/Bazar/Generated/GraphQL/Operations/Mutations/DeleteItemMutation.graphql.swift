@@ -28,7 +28,7 @@ extension BazarGraphQL {
         .field("deleteItem", Bool.self, arguments: ["id": .variable("id")]),
       ] }
 
-      /// Delete an item
+      /// Delete an item, together with the reminders attached to it
       var deleteItem: Bool { __data["deleteItem"] }
     }
   }
