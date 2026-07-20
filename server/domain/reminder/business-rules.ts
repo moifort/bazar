@@ -24,7 +24,7 @@ const addDays = (date: Date, days: number): Date => {
 export const nextDueDate = (
   current: Date,
   frequency: ReminderFrequency,
-  customIntervalDays: number | null,
+  customIntervalDays?: number,
   now: Date = new Date(),
 ): Date => {
   const base = current.getTime() >= now.getTime() ? current : now
@@ -41,4 +41,4 @@ export const nextDueDate = (
     .exhaustive()
 }
 
-export const isOneShot = (frequency: ReminderFrequency | null): boolean => frequency === null
+export const isOneShot = (frequency?: ReminderFrequency): boolean => frequency === undefined

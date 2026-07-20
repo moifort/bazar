@@ -14,10 +14,10 @@ export const findAll = async (userId: UserId): Promise<Reminder[]> => {
   return snap.docs.map((doc) => doc.data())
 }
 
-export const findBy = async (userId: UserId, id: ReminderId): Promise<Reminder | null> => {
+export const findBy = async (userId: UserId, id: ReminderId): Promise<Reminder | undefined> => {
   const snap = await reminders().doc(id).get()
   const data = snap.data()
-  return data && data.userId === userId ? data : null
+  return data && data.userId === userId ? data : undefined
 }
 
 export const findByItem = async (userId: UserId, itemId: ItemId): Promise<Reminder[]> => {

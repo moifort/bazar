@@ -7,7 +7,7 @@ export type LocationPath = {
   place: Place
   room: Room
   zone: Zone
-  storage: Storage | null
+  storage?: Storage
   fullPath: string
 }
 
@@ -34,18 +34,18 @@ const storageById = (userId: UserId, id: StorageId) => repository.findStorageBy(
 const resolveLocationPath = async (
   userId: UserId,
   storageId: StorageId,
-): Promise<LocationPath | null> => {
+): Promise<LocationPath | undefined> => {
   const storage = await repository.findStorageBy(userId, storageId)
-  if (!storage) return null
+  if (!storage) return undefined
 
   const zone = await repository.findZoneBy(userId, storage.zoneId)
-  if (!zone) return null
+  if (!zone) return undefined
 
   const room = await repository.findRoomBy(userId, zone.roomId)
-  if (!room) return null
+  if (!room) return undefined
 
   const place = await repository.findPlaceBy(userId, room.placeId)
-  if (!place) return null
+  if (!place) return undefined
 
   return {
     place,
@@ -59,22 +59,22 @@ const resolveLocationPath = async (
 const resolveZoneLocationPath = async (
   userId: UserId,
   zoneId: ZoneId,
-): Promise<LocationPath | null> => {
+): Promise<LocationPath | undefined> => {
   const zone = await repository.findZoneBy(userId, zoneId)
-  if (!zone) return null
+  if (!zone) return undefined
 
   const room = await repository.findRoomBy(userId, zone.roomId)
-  if (!room) return null
+  if (!room) return undefined
 
   const place = await repository.findPlaceBy(userId, room.placeId)
-  if (!place) return null
+  if (!place) return undefined
 
   return {
     place,
     room,
     zone,
-    storage: null,
-    fullPath: fullPath(place, room, zone, null),
+    storage: undefined,
+    fullPath: fullPath(place, room, zone),
   }
 }
 

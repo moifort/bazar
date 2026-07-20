@@ -23,7 +23,7 @@ const createPlace = async (userId: UserId, input: { name: string; icon?: string 
     id: makePlaceId(randomUUID()),
     userId,
     name: PlaceName(input.name),
-    icon: input.icon ?? null,
+    icon: input.icon ?? undefined,
     order: nextOrder(existing),
   }
   await repository.savePlace(place)
@@ -41,7 +41,7 @@ const updatePlace = async (
   const updated: Place = {
     ...place,
     name: input.name ? PlaceName(input.name) : place.name,
-    icon: input.icon !== undefined ? (input.icon ?? null) : place.icon,
+    icon: input.icon !== undefined ? (input.icon ?? undefined) : place.icon,
     order: input.order ?? place.order,
   }
   await repository.savePlace(updated)
@@ -72,7 +72,7 @@ const createRoom = async (
     userId,
     placeId: input.placeId,
     name: RoomName(input.name),
-    icon: input.icon ?? null,
+    icon: input.icon ?? undefined,
     order: nextOrder(existing),
   }
   await repository.saveRoom(room)
@@ -90,7 +90,7 @@ const updateRoom = async (
   const updated: Room = {
     ...room,
     name: input.name ? RoomName(input.name) : room.name,
-    icon: input.icon !== undefined ? (input.icon ?? null) : room.icon,
+    icon: input.icon !== undefined ? (input.icon ?? undefined) : room.icon,
     order: input.order ?? room.order,
   }
   await repository.saveRoom(updated)

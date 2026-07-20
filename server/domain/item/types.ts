@@ -36,15 +36,15 @@ export type Item = {
   description: string
   category: ItemCategory
   quantity: Quantity
-  storageId: StorageId | null
-  zoneId: ZoneId | null
-  placeId: PlaceId | null
+  storageId?: StorageId
+  zoneId?: ZoneId
+  placeId?: PlaceId
   addedBy: UserId
   personalNotes: string
-  purchaseDate: Date | null
+  purchaseDate?: Date
   purchaseLocation: string
-  purchaseCondition: PurchaseCondition | null
-  lowStockThreshold: LowStockThreshold | null
+  purchaseCondition?: PurchaseCondition
+  lowStockThreshold?: LowStockThreshold
   createdAt: Date
   updatedAt: Date
 }

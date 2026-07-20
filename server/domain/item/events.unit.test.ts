@@ -45,8 +45,8 @@ describe('detectThresholdCrossing', () => {
   test('does not fire when threshold is null', () => {
     expect(
       detectThresholdCrossing(
-        { quantity: q(5), lowStockThreshold: null },
-        { quantity: q(1), lowStockThreshold: null },
+        { quantity: q(5), lowStockThreshold: undefined },
+        { quantity: q(1), lowStockThreshold: undefined },
       ),
     ).toBe(false)
   })
@@ -63,7 +63,7 @@ describe('detectThresholdCrossing', () => {
   test('fires when threshold is added and quantity is already below', () => {
     expect(
       detectThresholdCrossing(
-        { quantity: q(2), lowStockThreshold: null },
+        { quantity: q(2), lowStockThreshold: undefined },
         { quantity: q(2), lowStockThreshold: t(3) },
       ),
     ).toBe(true)

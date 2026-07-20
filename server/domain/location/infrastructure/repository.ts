@@ -11,10 +11,10 @@ const storages = () => db().collection('storages').withConverter(genericDataConv
 const ownedDoc = async <T extends { userId: UserId }>(
   ref: FirebaseFirestore.DocumentReference<T>,
   userId: UserId,
-): Promise<T | null> => {
+): Promise<T | undefined> => {
   const snap = await ref.get()
   const data = snap.data()
-  return data && data.userId === userId ? data : null
+  return data && data.userId === userId ? data : undefined
 }
 
 // Places

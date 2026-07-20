@@ -59,10 +59,10 @@ export const findPage = async (userId: UserId, args: ItemPageArgs): Promise<Item
   }
 }
 
-export const findBy = async (userId: UserId, id: ItemId): Promise<Item | null> => {
+export const findBy = async (userId: UserId, id: ItemId): Promise<Item | undefined> => {
   const doc = await items().doc(id).get()
   const data = doc.data()
-  return data && data.userId === userId ? data : null
+  return data && data.userId === userId ? data : undefined
 }
 
 export const save = async (item: Item): Promise<Item> => {

@@ -31,7 +31,7 @@ type UpdateReminderInput = {
   customIntervalDays?: number | null
 }
 
-type ResolvedFrequency = { frequency: ReminderFrequency | null; customIntervalDays: number | null }
+type ResolvedFrequency = { frequency?: ReminderFrequency; customIntervalDays?: number }
 
 // `customIntervalDays` belongs to `custom-days` and to nothing else: a one-shot
 // reminder carries no interval, and a fixed frequency derives its own. Breaking
@@ -42,7 +42,7 @@ const resolveFrequency = (
 ): ResolvedFrequency | 'invalid-frequency' => {
   if (frequency == null) {
     if (customIntervalDays != null) return 'invalid-frequency'
-    return { frequency: null, customIntervalDays: null }
+    return {}
   }
   const parsed = parseReminderFrequency(frequency)
   if (parsed === 'custom-days') {
@@ -50,7 +50,7 @@ const resolveFrequency = (
     return { frequency: parsed, customIntervalDays: parseCustomIntervalDays(customIntervalDays) }
   }
   if (customIntervalDays != null) return 'invalid-frequency'
-  return { frequency: parsed, customIntervalDays: null }
+  return { frequency: parsed }
 }
 
 // The item's existence is checked by the caller that owns it (`ItemUseCase`);

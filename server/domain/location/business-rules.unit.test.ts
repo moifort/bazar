@@ -23,7 +23,7 @@ const place = (name: string): Place => ({
   id: make<PlaceId>()('p1'),
   userId,
   name: make<PlaceName>()(name),
-  icon: null,
+  icon: undefined,
   order: 0,
 })
 
@@ -32,7 +32,7 @@ const room = (name: string): Room => ({
   userId,
   placeId: make<PlaceId>()('p1'),
   name: make<RoomName>()(name),
-  icon: null,
+  icon: undefined,
   order: 0,
 })
 
@@ -64,7 +64,7 @@ describe('fullPath', () => {
   })
 
   test('builds a zone-only path when storage is null', () => {
-    const result = fullPath(place('Appartement'), room('Cuisine'), zone('Placard haut'), null)
+    const result = fullPath(place('Appartement'), room('Cuisine'), zone('Placard haut'))
     expect(result).toBe('Appartement > Cuisine > Placard haut')
   })
 })

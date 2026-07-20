@@ -14,7 +14,7 @@ export type Place = {
   id: PlaceId
   userId: UserId
   name: PlaceName
-  icon: string | null
+  icon?: string
   order: number
 }
 
@@ -23,7 +23,7 @@ export type Room = {
   userId: UserId
   placeId: PlaceId
   name: RoomName
-  icon: string | null
+  icon?: string
   order: number
 }
 

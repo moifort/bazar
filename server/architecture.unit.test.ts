@@ -146,4 +146,16 @@ describe('architecture', () => {
       })
     }
   })
+
+  // Absence in the domain is a missing field, never null. Null survives only at
+  // the GraphQL and Firestore boundaries, so the domain models are the check.
+  test('no null in the domain models', () => {
+    const violations: string[] = []
+    for (const file of glob('server/domain/*/types.ts')) {
+      linesOf(file).forEach((line, i) => {
+        if (/\bnull\b/.test(line)) violations.push(`${file}:${i + 1}: ${line.trim()}`)
+      })
+    }
+    expect(violations).toEqual([])
+  })
 })

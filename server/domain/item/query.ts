@@ -77,8 +77,7 @@ const allItems = async (userId: UserId, filters: ItemFilters = {}) => {
     const { zoneIds, storageIds } = await attachmentsOfRoom(userId, filters.roomId as RoomId)
     items = items.filter(
       ({ zoneId, storageId }) =>
-        (zoneId !== null && zoneIds.has(zoneId)) ||
-        (storageId !== null && storageIds.has(storageId)),
+        (zoneId && zoneIds.has(zoneId)) || (storageId && storageIds.has(storageId)),
     )
   }
 
@@ -131,7 +130,7 @@ const countByZone = async (userId: UserId, zoneId: ZoneId): Promise<number> => {
   const storageIds = new Set<string>(storages.map(({ id }) => id))
   const items = await repository.findAllByUser(userId)
   return items.reduce(
-    (count, { storageId }) => (storageId !== null && storageIds.has(storageId) ? count + 1 : count),
+    (count, { storageId }) => (storageId && storageIds.has(storageId) ? count + 1 : count),
     0,
   )
 }

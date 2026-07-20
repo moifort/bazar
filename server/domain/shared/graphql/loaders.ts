@@ -42,8 +42,8 @@ export const createLoaders = (userId: UserId) => {
       place: attachedPlace,
       room: attachedRoom,
       zone: attachedZone,
-      storage: attachedStorage ?? null,
-      fullPath: fullPath(attachedPlace, attachedRoom, attachedZone, attachedStorage ?? null),
+      storage: attachedStorage,
+      fullPath: fullPath(attachedPlace, attachedRoom, attachedZone, attachedStorage),
     }
   }
 

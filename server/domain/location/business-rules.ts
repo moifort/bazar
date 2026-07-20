@@ -1,7 +1,7 @@
 import { sortBy } from 'lodash-es'
 import type { Place, Room, Storage, Zone } from './types'
 
-export const fullPath = (place: Place, room: Room, zone: Zone, storage: Storage | null) =>
+export const fullPath = (place: Place, room: Room, zone: Zone, storage?: Storage) =>
   storage
     ? `${place.name} > ${room.name} > ${zone.name} > ${storage.name}`
     : `${place.name} > ${room.name} > ${zone.name}`

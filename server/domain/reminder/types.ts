@@ -15,8 +15,8 @@ export type Reminder = {
   title: ReminderTitle
   notes: string
   dueDate: Date
-  frequency: ReminderFrequency | null
-  customIntervalDays: number | null
+  frequency?: ReminderFrequency
+  customIntervalDays?: number
   createdAt: Date
   updatedAt: Date
 }

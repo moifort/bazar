@@ -21,12 +21,12 @@ import type { Item, ItemId, PurchaseCondition } from './types'
  * belongs to `use-case.ts` — the command only stores what it is handed.
  */
 export type Attachment = {
-  storageId: StorageId | null
-  zoneId: ZoneId | null
-  placeId: PlaceId | null
+  storageId?: StorageId
+  zoneId?: ZoneId
+  placeId?: PlaceId
 }
 
-export const NO_ATTACHMENT: Attachment = { storageId: null, zoneId: null, placeId: null }
+export const NO_ATTACHMENT: Attachment = {}
 
 type AddItemInput = {
   userId: UserId
@@ -50,18 +50,16 @@ const add = async (input: AddItemInput) => {
     description: input.description ?? '',
     category: parseItemCategory(input.category),
     quantity: Quantity(input.quantity ?? 1),
-    storageId: input.attachment.storageId,
-    zoneId: input.attachment.zoneId,
-    placeId: input.attachment.placeId,
+    ...input.attachment,
     addedBy: input.userId,
     personalNotes: input.personalNotes ?? '',
-    purchaseDate: input.purchaseDate ? parsePurchaseDate(input.purchaseDate) : null,
+    purchaseDate: input.purchaseDate ? parsePurchaseDate(input.purchaseDate) : undefined,
     purchaseLocation: input.purchaseLocation ? parsePurchaseLocation(input.purchaseLocation) : '',
     purchaseCondition: input.purchaseCondition
       ? parsePurchaseCondition(input.purchaseCondition)
-      : null,
+      : undefined,
     lowStockThreshold:
-      input.lowStockThreshold != null ? LowStockThreshold(input.lowStockThreshold) : null,
+      input.lowStockThreshold != null ? LowStockThreshold(input.lowStockThreshold) : undefined,
     createdAt: new Date(),
     updatedAt: new Date(),
   }
@@ -99,7 +97,7 @@ const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
       input.purchaseDate !== undefined
         ? input.purchaseDate
           ? parsePurchaseDate(input.purchaseDate)
-          : null
+          : undefined
         : item.purchaseDate,
     purchaseLocation:
       input.purchaseLocation !== undefined
@@ -109,14 +107,14 @@ const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
       input.purchaseCondition !== undefined
         ? input.purchaseCondition
           ? parsePurchaseCondition(input.purchaseCondition)
-          : null
+          : undefined
         : item.purchaseCondition,
     lowStockThreshold:
       input.lowStockThreshold !== undefined
         ? input.lowStockThreshold != null
           ? LowStockThreshold(input.lowStockThreshold)
-          : null
-        : (item.lowStockThreshold ?? null),
+          : undefined
+        : item.lowStockThreshold,
     updatedAt: new Date(),
   }
 
@@ -148,7 +146,15 @@ const move = async (userId: UserId, id: ItemId, attachment: Attachment) => {
   const item = await repository.findBy(userId, id)
   if (!item) return 'not-found' as const
 
-  const moved: Item = { ...item, ...attachment, updatedAt: new Date() }
+  // Assigned field by field, never spread: an attachment with no key at all is
+  // a detach, and spreading it would leave the previous location in place.
+  const moved: Item = {
+    ...item,
+    storageId: attachment.storageId,
+    zoneId: attachment.zoneId,
+    placeId: attachment.placeId,
+    updatedAt: new Date(),
+  }
 
   await repository.save(moved)
   await emit('item-changed', { type: 'item-moved' as const, item: moved })

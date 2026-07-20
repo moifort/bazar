@@ -4,9 +4,9 @@ import type { PreviewId, ScanResult } from '../types'
 
 const scans = () => db().collection('scan-cache').withConverter(genericDataConverter<ScanResult>())
 
-export const findBy = async (id: PreviewId): Promise<ScanResult | null> => {
+export const findBy = async (id: PreviewId): Promise<ScanResult | undefined> => {
   const snap = await scans().doc(id).get()
-  return snap.data() ?? null
+  return snap.data()
 }
 
 export const save = async (result: ScanResult): Promise<ScanResult> => {

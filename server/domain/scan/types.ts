@@ -7,7 +7,7 @@ export type PreviewId = Brand<string, 'PreviewId'>
 export type ItemPreview = {
   previewId: PreviewId
   name: string
-  category: ItemCategory | null
+  category?: ItemCategory
   description: string
   quantity: number
 }

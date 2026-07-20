@@ -26,13 +26,13 @@ const attachmentOf = async (
   if (input.storageId) {
     const path = await LocationQuery.resolveLocationPath(userId, input.storageId as StorageId)
     if (!path) return 'location-not-found'
-    return { storageId: input.storageId as StorageId, zoneId: null, placeId: path.place.id }
+    return { storageId: input.storageId as StorageId, placeId: path.place.id }
   }
 
   if (input.zoneId) {
     const path = await LocationQuery.resolveZoneLocationPath(userId, input.zoneId as ZoneId)
     if (!path) return 'location-not-found'
-    return { storageId: null, zoneId: input.zoneId as ZoneId, placeId: path.place.id }
+    return { zoneId: input.zoneId as ZoneId, placeId: path.place.id }
   }
 
   return NO_ATTACHMENT
