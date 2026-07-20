@@ -1,7 +1,7 @@
 # Error Handling
 
 Portable rules — nothing here names this project. Examples use a fictional `bean` domain; this
-repo's wiring (the `domainError` helper, the Sentry plugin) is in
+repo's wiring (the `domainError` helper, where faults surface) is in
 [graphql-patterns.md](graphql-patterns.md) and [architecture.md](architecture.md#observability).
 
 ## Principle
