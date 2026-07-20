@@ -27,6 +27,14 @@ Commit on the working branch (usually **`main`**) — this project commits freel
 convention, so the generic "branch first before committing" rule does **not** apply here. Only
 branch when the user asks for one.
 
+## Never work in a git worktree
+
+**Work in the main checkout, never in a `git worktree`.** Everything lands on `main` here, so an
+isolated worktree buys nothing and costs plenty: it starts from `origin/main` and therefore misses
+unpushed local commits, it needs its own `bunx nitro prepare` and its own SwiftPM resolve before
+anything typechecks or builds, and it splits the Xcode DerivedData the codegen script looks in.
+If an agent harness offers to isolate the session in one, decline and stay in the main checkout.
+
 ## Never open a pull request
 
 This is a solo project: CI (Unit Tests + Deploy) runs on `main` pushes only, so a pull request

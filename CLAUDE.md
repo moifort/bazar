@@ -49,12 +49,13 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 > [docs/git-best-practices.md](docs/git-best-practices.md)) — read it at the start of any coding
 > session. This section is the quick reference.
 
-1. Verify the build before committing: `bun tsc --noEmit` and/or the iOS `xcodebuild`, depending on what was touched (`bunx nitro prepare` first if routes changed).
-2. Review the diff yourself, **inline**, before committing — never through a subagent.
-3. **Commit freely, one task = one commit**: commit each finished task without asking, never bundle tasks — a rollback is a clean `git revert`. English messages, Conventional Commits, `Co-Authored-By:` trailer.
-4. **Close every task with the surfaces touched, then the diff size** ([docs/collaboration.md](docs/collaboration.md#closing-a-task-surfaces-then-diff-size)): one sentence on which of **the database**, **the backend** and **the iOS app** changed (the deployment blast radius), then `git show --stat HEAD | tail -1` and the lines added / removed — a refactor that only adds is a refactor that forgot to delete.
-5. **Never push until the user explicitly says "push"**, and **never open a PR**: a push goes straight to `origin/main` (`git push origin HEAD:main`), whatever the working branch, following the [push protocol](docs/git-workflow.md#push-protocol-only-when-the-user-says-push) — reshape the pending commits, Biome autofix, regenerate the iOS GraphQL API if the schema changed, push, watch CI to green.
-6. **Not at push time**: never touch `README.md` — it is updated on its own, when asked.
+1. **Work in the main checkout — never a `git worktree`** ([docs/git-workflow.md](docs/git-workflow.md#never-work-in-a-git-worktree)): everything lands on `main` here, so isolation buys nothing and costs a missing `nitro prepare`, a missing SwiftPM resolve and a split DerivedData. Decline if a harness offers to create one.
+2. Verify the build before committing: `bun tsc --noEmit` and/or the iOS `xcodebuild`, depending on what was touched (`bunx nitro prepare` first if routes changed).
+3. Review the diff yourself, **inline**, before committing — never through a subagent.
+4. **Commit freely, one task = one commit**: commit each finished task without asking, never bundle tasks — a rollback is a clean `git revert`. English messages, Conventional Commits, `Co-Authored-By:` trailer.
+5. **Close every task with the surfaces touched, then the diff size** ([docs/collaboration.md](docs/collaboration.md#closing-a-task-surfaces-then-diff-size)): one sentence on which of **the database**, **the backend** and **the iOS app** changed (the deployment blast radius), then `git show --stat HEAD | tail -1` and the lines added / removed — a refactor that only adds is a refactor that forgot to delete.
+6. **Never push until the user explicitly says "push"**, and **never open a PR**: a push goes straight to `origin/main` (`git push origin HEAD:main`), whatever the working branch, following the [push protocol](docs/git-workflow.md#push-protocol-only-when-the-user-says-push) — reshape the pending commits, Biome autofix, regenerate the iOS GraphQL API if the schema changed, push, watch CI to green.
+7. **Not at push time**: never touch `README.md` — it is updated on its own, when asked.
 
 ## Backend Patterns (TypeScript / Nitro)
 
