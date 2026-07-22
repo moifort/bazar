@@ -21,6 +21,14 @@ surgery, reshape before pushing) are in [git-best-practices.md](./git-best-pract
 - **Scopes** used here: `ios`, `server`, `infra`, `docs`, or a domain name (`item`, `location`,
   `reminder`, `notification`, `scan`, `search`, `dashboard`).
 
+## Staging: only your own task
+
+Sessions share the primary checkout (no worktrees, see
+[Never work in a git worktree](#never-work-in-a-git-worktree)), so files you did not touch may
+belong to a session still running or to work left in progress. **Stage the explicit paths of
+your task**, then commit — never `git add -A`, `git add .` or `git commit -a`. Check `git show
+--stat HEAD` after committing: an unexpected file in the list means you took someone else's work.
+
 ## Branching
 
 Commit on the working branch (usually **`main`**) — this project commits freely to `main` by
@@ -37,7 +45,7 @@ If an agent harness offers to isolate the session in one, decline and stay in th
 
 ## Never open a pull request
 
-This is a solo project: CI (Unit Tests + Deploy) runs on `main` pushes only, so a pull request
+This is a solo project: CI (Tests + Deploy) runs on `main` pushes only, so a pull request
 is pure ceremony. **Never open one, never suggest one.** On "push", the work goes straight to
 `origin/main` — even from a feature branch (see *Push protocol* below).
 
@@ -55,8 +63,8 @@ user-gated. Approval to commit is never approval to push.
 2. **Biome autofix.** Run `bun run lint:fix` (`bunx biome check --write`) to correct every
    auto-fixable formatting/syntax issue across the repo — including vendored/generated files like
    asset-catalog `Contents.json`, which CI's `bunx biome check` lints too. Then run `bun run lint`
-   to confirm it's clean, and commit any changes. This is what keeps the Unit Tests job green — a
-   local `bun test` alone does **not** cover Biome.
+   to confirm it's clean, and commit any changes. This is what keeps the Tests / Unit job (which
+   runs `biome check`) green — a local `bun test` alone does **not** cover Biome.
 3. **iOS GraphQL API** (only if the GraphQL schema changed): run `bun run generate:graphql`,
    then `bun run generate:ios`, and commit the regenerated `shared/schema.graphql` and the
    generated Apollo operations so the app's typed operations stay in sync with the deployed schema.
@@ -66,7 +74,8 @@ user-gated. Approval to commit is never approval to push.
    deploy.
 5. **Push — straight to `origin/main`.** `git push origin HEAD:main` (fast-forward), whatever
    the working branch — never via a pull request. Realign local `main` afterwards.
-6. **Analyze the CI.** A push to `main` fires two workflows — **Unit Tests** and **Deploy**.
+6. **Analyze the CI.** A push to `main` fires the test workflows (**Tests**: Unit, Integration —
+   plus the npm strict-peer-deps guard) and **Deploy**.
    Watch them through to completion rather than assuming green: `gh run watch`, or
    `gh run list --branch main --limit 5` then `gh run view <id> --log-failed` on any failure.
    The push isn't done until CI is green; if a job fails, report it and fix it (a follow-up
