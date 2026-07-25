@@ -41,6 +41,20 @@ The store's "What's New" field is the same list, in French:
 `bun scripts/release-notes.ts notes <version>` prints the bullets flat, headings and emphasis
 stripped, because the store shows one plain list and would print `###` literally.
 
+## The two public pages App Store Connect asks for
+
+A listing needs a **privacy policy URL** and a **support URL**, both reachable without an account.
+They live in `docs/pages/` as two static files and are published by the Pages workflow on every
+push that touches them:
+
+- <https://moifort.github.io/bazar/privacy.html>
+- <https://moifort.github.io/bazar/support.html>
+
+Keep them true to the app, not to an intention: the privacy page names every piece of data
+collected, who processes it, and how long it is kept — including that a scan photo is analysed and
+thrown away rather than stored. A page that promises less than the app does is a rejection; one
+that promises more is worse.
+
 ## Beta-macOS build machines
 
 If the dev Mac runs a **beta macOS**, the archive carries a prerelease `BuildMachineOSBuild` stamp
