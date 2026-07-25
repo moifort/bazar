@@ -95,6 +95,18 @@ variable "admin_token" {
   default     = null
 }
 
+variable "premium_user_ids" {
+  description = "Comma-separated Firebase uids granted Premium outright (the maker's own account, a reviewer's). An override on top of the App Store entitlement, never a substitute. Exposed as NITRO_PREMIUM_USER_IDS."
+  type        = string
+  default     = ""
+}
+
+variable "apple_app_id" {
+  description = "The app's numeric App Store identifier, required to verify a Production StoreKit signature (Apple omits it in the sandbox). Exposed as NITRO_APPLE_APP_ID."
+  type        = string
+  default     = ""
+}
+
 variable "sentry_dsn" {
   description = "Sentry DSN for error reporting (empty disables Sentry). Exposed to the function as NITRO_SENTRY_DSN, read via process.env.NITRO_SENTRY_DSN in the Nitro plugin."
   type        = string

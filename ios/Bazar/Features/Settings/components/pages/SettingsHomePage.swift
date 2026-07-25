@@ -7,7 +7,11 @@ struct SettingsHomePage: View {
     let buildNumber: String
     let email: String?
     let isDeleting: Bool
+    /// Absent until the allowance answers — the section stays out of the list
+    /// rather than showing an empty gauge.
+    let quota: QuotaState?
     let onChangelog: () -> Void
+    let onUpgrade: () -> Void
     let onSignOut: () -> Void
     let onDeleteAccount: () -> Void
     let onClose: () -> Void
@@ -31,6 +35,16 @@ struct SettingsHomePage: View {
                 }
                 .tint(.primary)
                 .accessibilityIdentifier("changelog-button")
+            }
+
+            if let quota {
+                QuotaSection(
+                    isPremium: quota.isPremium,
+                    used: quota.used,
+                    limit: quota.limit,
+                    renewsOn: quota.renewsOn,
+                    onUpgrade: onUpgrade
+                )
             }
 
             Section("Compte") {
@@ -88,7 +102,15 @@ struct SettingsHomePage: View {
             buildNumber: "1",
             email: "thibaut@example.com",
             isDeleting: false,
+            quota: QuotaState(
+                isPremium: false,
+                used: 7,
+                limit: 10,
+                remaining: 3,
+                renewsOn: Date(timeIntervalSince1970: 1_785_888_000)
+            ),
             onChangelog: {},
+            onUpgrade: {},
             onSignOut: {},
             onDeleteAccount: {},
             onClose: {}
@@ -103,7 +125,9 @@ struct SettingsHomePage: View {
             buildNumber: "1",
             email: "thibaut@example.com",
             isDeleting: true,
+            quota: nil,
             onChangelog: {},
+            onUpgrade: {},
             onSignOut: {},
             onDeleteAccount: {},
             onClose: {}

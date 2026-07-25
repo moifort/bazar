@@ -32,6 +32,7 @@ extension BazarGraphQL {
       case "CategoryCount": return BazarGraphQL.Objects.CategoryCount
       case "ChangelogEntry": return BazarGraphQL.Objects.ChangelogEntry
       case "Dashboard": return BazarGraphQL.Objects.Dashboard
+      case "Entitlement": return BazarGraphQL.Objects.Entitlement
       case "Item": return BazarGraphQL.Objects.Item
       case "ItemPreview": return BazarGraphQL.Objects.ItemPreview
       case "Items": return BazarGraphQL.Objects.Items
@@ -40,6 +41,7 @@ extension BazarGraphQL {
       case "Place": return BazarGraphQL.Objects.Place
       case "PlaceCount": return BazarGraphQL.Objects.PlaceCount
       case "Query": return BazarGraphQL.Objects.Query
+      case "Quota": return BazarGraphQL.Objects.Quota
       case "Reminder": return BazarGraphQL.Objects.Reminder
       case "Room": return BazarGraphQL.Objects.Room
       case "SearchEntry": return BazarGraphQL.Objects.SearchEntry

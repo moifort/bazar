@@ -46,7 +46,7 @@ ios/Bazar/
 ```
 
 Features: `Items`, `Locations`, `Scan`, `Search`, `Dashboard`, `Reminders`, `Notifications`,
-`Auth`, `Settings`.
+`Auth`, `Settings`, `Subscription`, `Quota`.
 
 ## Data fetching — GraphQL, not REST
 
@@ -233,6 +233,17 @@ what the user reads: labels, titles, accessibility *labels*, preview names. See
 runs Sign in with Apple, `AppleNonce` generates the nonce Firebase requires, `AuthSession` holds
 the session. Every GraphQL request then carries the Firebase ID token through the interceptor.
 Portal-side setup: [apple-sign-in.md](./apple-sign-in.md).
+
+## In-app purchase — StoreKit 2, server-decided
+
+`Features/Subscription/` holds the whole App Store relationship: `SubscriptionStore` (`@Observable`,
+app-scoped from `AuthRoot` because `Transaction.updates` must be listened to for the app's whole
+life) and `PremiumSheet`. `Features/Quota/` holds the gauge, shown on the free plan only.
+
+The store never grants Premium on its own: it hands the signed transaction to `syncEntitlement`,
+and `isPremium` is the server's answer. Prices come from `Product`, never from a string in the
+app. A refused scan opens the sheet rather than an alert. Model, numbers and the frozen account
+token: [in-app-purchase.md](./in-app-purchase.md).
 
 ## Account deletion — required, and reachable
 

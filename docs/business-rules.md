@@ -94,12 +94,36 @@ projection to fall out of sync.
   category and by place (both sorted by count, descending), the most recent items, and the
   currently low-stock ones (sorted by name).
 
+## The photo scan is the only metered action
+
+Everything else — items, the location hierarchy, reminders, notifications, search, the dashboard —
+is unlimited on every plan. The AI scan is the app's only variable cost, so it is the only thing a
+plan decides: **10 scans per calendar month (UTC) on the free plan**, no monthly allowance on
+Premium.
+
+The allowance is checked **before** the AI is called and the scan recorded **after** it answered:
+a refusal costs nothing, and a failed analysis is not a scan the user spent.
+
+Premium answers to a 4000-scan ceiling over the last 12 months, which the app never shows: it is
+anti-abuse plumbing, not a plan limit. The copy says "scannez sans compter" and never *illimité* —
+the ceiling exists, so the word would be a lie. Full model:
+[in-app-purchase.md](./in-app-purchase.md).
+
+## Premium is what the App Store sold, never what the app claims
+
+A plan comes from a transaction Apple signed, verified server-side, and carrying an account token
+derived from the user's own id. Absent entitlement, expired entitlement, revoked entitlement: all
+three are `free`. A cancelled subscription stays Premium until the paid period ends — that is what
+was paid for; a refund ends it on the spot, whatever the expiry says.
+
 ## Deleting an account erases everything, in one direction
 
 `deleteAccount` is irreversible and immediate: no grace period, no scheduled job, no soft delete
 to reason about. Each domain forgets its own documents — items, the four location levels,
-reminders with their completion history, the registered devices — and none of them knows about
-the others; `server/system/account/` orchestrates.
+reminders with their completion history, the registered devices, the scan counters and the
+entitlement — and none of them knows about the others; `server/system/account/` orchestrates.
+
+What it cannot do is end a subscription: only the App Store can, at the user's own request.
 
 The **account itself goes last**. An account deleted before its data would leave documents keyed
 to a user nobody can authenticate as: unreachable, unclaimable, and invisible to any later

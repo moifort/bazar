@@ -3,6 +3,7 @@ import type {
   DocumentReference,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
+  Transaction,
 } from 'firebase-admin/firestore'
 import { chunk } from 'lodash-es'
 import { db } from '~/system/firebase'
@@ -18,6 +19,17 @@ export const deleteInBatches = async (refs: DocumentReference[]): Promise<void> 
     await batch.commit()
   }
 }
+
+// An absent field is not a stored `null`: dropping the key is how the domain's
+// "no value" survives a full `set`, which would otherwise write `undefined`.
+export const withoutAbsentFields = <T extends DocumentData>(data: T): T =>
+  Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined)) as T
+
+// Read-modify-write under Firestore's own optimistic locking. A counter read
+// outside the transaction and written inside is exactly how two concurrent calls
+// both record "one spent" and only one lands.
+export const transactionally = <T>(run: (tx: Transaction) => Promise<T>): Promise<T> =>
+  db().runTransaction(run)
 
 export const genericDataConverter = <T extends DocumentData>(): FirestoreDataConverter<T> => ({
   toFirestore: (data: T) => data,

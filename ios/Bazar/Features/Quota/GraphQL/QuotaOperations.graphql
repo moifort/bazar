@@ -1,0 +1,9 @@
+query Quota {
+  quota {
+    plan
+    used
+    limit
+    remaining
+    renewsOn
+  }
+}

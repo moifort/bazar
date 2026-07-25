@@ -1,0 +1,78 @@
+{
+  "identifier" : "B2C3D4E5",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : {
+    "_applicationInternalID" : "0000000000",
+    "_developerTeamID" : "46C337T7YN",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 0,
+    "_locale" : "fr_FR",
+    "_storefront" : "FRA",
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21460001",
+      "localizations" : [
+        {
+          "description" : "Scannez sans compter.",
+          "displayName" : "Bazar Premium",
+          "locale" : "fr_FR"
+        }
+      ],
+      "name" : "Bazar Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "19.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6750001",
+          "introductoryOffer" : {
+            "internalID" : "6750003",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Le scan photo sans allocation mensuelle à surveiller.",
+              "displayName" : "Premium annuel",
+              "locale" : "fr_FR"
+            }
+          ],
+          "productID" : "co.polyforms.bazar.premium.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Premium annuel",
+          "subscriptionGroupID" : "21460001",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "1.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6750002",
+          "localizations" : [
+            {
+              "description" : "Le scan photo sans allocation mensuelle à surveiller.",
+              "displayName" : "Premium mensuel",
+              "locale" : "fr_FR"
+            }
+          ],
+          "productID" : "co.polyforms.bazar.premium.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Premium mensuel",
+          "subscriptionGroupID" : "21460001",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

@@ -80,8 +80,13 @@ resource "google_cloudfunctions2_function" "server" {
     min_instance_count    = 0
     service_account_email = google_service_account.function.email
 
+    # Not secrets: a comped-account list and a public App Store id. NITRO_APPLE_ENVIRONMENT
+    # is deliberately left unset, so signatures are tried against both Production and
+    # Sandbox — which is what a shipped app needs (TestFlight and App Review sign in Sandbox).
     environment_variables = {
       NITRO_FIREBASE_PROJECT_ID = google_project.this.project_id
+      NITRO_APPLE_APP_ID        = var.apple_app_id
+      NITRO_PREMIUM_USER_IDS    = var.premium_user_ids
     }
 
     dynamic "secret_environment_variables" {

@@ -68,11 +68,12 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 > [architecture](docs/architecture.md), [domain-guide](docs/domain-guide.md),
 > [graphql-patterns](docs/graphql-patterns.md), [business-rules](docs/business-rules.md),
 > [migrations](docs/migrations.md), [readme-guide](docs/readme-guide.md),
-> [collaboration](docs/collaboration.md), [app-store-release](docs/app-store-release.md).
+> [collaboration](docs/collaboration.md), [app-store-release](docs/app-store-release.md),
+> [in-app-purchase](docs/in-app-purchase.md).
 > This section is the quick reference.
 
 - **Stack**: Bun + Nitro 2.13 (`preset firebase`, gen 2, nodejs22, `europe-west3`) + Apollo Server 5 + Pothos 4 + firebase-admin (native Firestore) + Zod + ts-brand. DDD/CQRS strict. Biome (spaces 2, single quotes, no semicolons, width 100), `ts-pattern` (`match().exhaustive()`), `lodash-es`.
-- **Domains**: `server/domain/{item,location,reminder,notification,scan,search,dashboard,shared}` — `item`, `location`, `reminder` and `notification` persist; `scan` is ephemeral (previews are never stored); `search` and `dashboard` are read-only aggregations over the other domains' public `Query` namespaces. System concerns in `server/system/` (`account` = the irreversible `deleteAccount`, `changelog` = the app's "Nouveautés" list). Standard layout (`types.ts`, `primitives.ts`, `command.ts`, `query.ts`, `infrastructure/{repository,graphql/*}.ts`, optional `business-rules.ts` / `use-case.ts` / `events.ts`): [docs/domain-guide.md](docs/domain-guide.md).
+- **Domains**: `server/domain/{item,location,reminder,notification,scan,quota,entitlement,search,dashboard,shared}` — `item`, `location`, `reminder`, `notification`, `quota` and `entitlement` persist; `scan` is ephemeral (previews are never stored); `search` and `dashboard` are read-only aggregations over the other domains' public `Query` namespaces. System concerns in `server/system/` (`account` = the irreversible `deleteAccount`, `changelog` = the app's "Nouveautés" list). Standard layout (`types.ts`, `primitives.ts`, `command.ts`, `query.ts`, `infrastructure/{repository,graphql/*}.ts`, optional `business-rules.ts` / `use-case.ts` / `events.ts`): [docs/domain-guide.md](docs/domain-guide.md).
 - **Branded types** (`ts-brand` + Zod constructors in `primitives.ts`: `ItemId`, `Quantity`, `StorageId`, `ReminderTitle`…); discriminated results for absence/errors (`'not-found' as const`) — no exceptions for control flow, **no `null` in the domain** (absence = `field?: T`, converted only at the GraphQL/Firestore boundaries).
 - **Storage: native Firestore**, only inside `infrastructure/repository.ts`, via the `server/utils/firestore.ts` helpers and the per-request cache (`memoizedPerRequest`) — see [docs/architecture.md](docs/architecture.md#storage--native-firestore). Flat owner-scoped collections; **every query filters on `userId`**. Filtering, sorting and pagination happen in Firestore, never in memory.
 - **GraphQL** (single endpoint `POST /graphql`): the location fields on `ItemType` resolve through the per-request loaders — never one read per item (N+1); read budgets asserted in tests via `fake.reads`. See [docs/graphql-patterns.md](docs/graphql-patterns.md).
@@ -91,6 +92,7 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 - **A scan produces previews, not items**: nothing is persisted until the user confirms the batch; a refused batch leaves no trace.
 - **A reminder is recurring or one-shot** (absent frequency = one-shot); `customIntervalDays` belongs to `custom-days` and to nothing else. Completing reschedules (from the later of due date and completion date) or finishes and deletes. Deleting an item deletes its reminders.
 - **Search and dashboard derive, never store** — no projection to fall out of sync.
+- **The photo scan is the only metered action**: 10/month on the free plan, no monthly allowance on Premium (a 4000-per-12-months anti-abuse ceiling the app never shows — the copy says "scannez sans compter", never *illimité*). Checked before the AI call, recorded after it answered. Premium is a transaction Apple signed and the server verified, nothing else: [docs/in-app-purchase.md](docs/in-app-purchase.md).
 - **Deleting an account erases everything, data before account**: each domain forgets its own documents, then Firebase Auth drops the user — never the reverse, which would strand documents nobody can authenticate as.
 
 ## Database Migrations
@@ -116,7 +118,7 @@ patch, the `CURRENT_PROJECT_VERSION` bump in `ios/project.yml`:
 
 ## Gemini API Key & Secrets
 
-- The AI (photo scan) is **Gemini 2.5 Flash** in `server/domain/scan/infrastructure/gemini.ts`, key in `NITRO_GOOGLE_API_KEY`; `POST /admin/migrate` is gated by `NITRO_ADMIN_TOKEN`; `NITRO_SENTRY_DSN` is optional (a non-URL value disables error reporting). Local `.env` (see `.env.example`); in production, GCP Secret Manager (project `polyforms-bazar-prod`), provisioned by `infra/secrets.tf`. Never commit a key. Always update `.env.example` and this section when adding an env var.
+- The AI (photo scan) is **Gemini 2.5 Flash** in `server/domain/scan/infrastructure/gemini.ts`, key in `NITRO_GOOGLE_API_KEY`; `POST /admin/migrate` is gated by `NITRO_ADMIN_TOKEN`; optional: `NITRO_SENTRY_DSN` (a non-URL value disables error reporting), `NITRO_PREMIUM_USER_IDS` (comped Premium accounts), `NITRO_APPLE_APP_ID` and `NITRO_APPLE_ENVIRONMENT` (pins App Store signature checks, `Xcode` for the local StoreKit file). Local `.env` (see `.env.example`); in production, GCP Secret Manager (project `polyforms-bazar-prod`), provisioned by `infra/secrets.tf`. Never commit a key. Always update `.env.example` and this section when adding an env var.
 
 ## iOS Simulator
 

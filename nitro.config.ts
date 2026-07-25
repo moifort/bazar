@@ -22,5 +22,8 @@ export default defineNitroConfig({
   runtimeConfig: {
     adminToken: '',
     googleApiKey: '',
+    premiumUserIds: '',
+    appleAppId: '',
+    appleEnvironment: '',
   },
 })

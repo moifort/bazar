@@ -4,6 +4,9 @@ import SwiftUI
 /// otherwise the main TabView (`ContentView`).
 struct AuthRoot: View {
     @State private var session = AuthSession()
+    /// App-scoped: StoreKit's transaction listener must live for the whole run,
+    /// and every screen that sells or gates reads the same answer.
+    @State private var subscription = SubscriptionStore()
 
     var body: some View {
         Group {
@@ -14,5 +17,6 @@ struct AuthRoot: View {
             }
         }
         .environment(session)
+        .environment(subscription)
     }
 }

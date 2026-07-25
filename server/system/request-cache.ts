@@ -19,3 +19,15 @@ export const memoizedPerRequest = <T>(key: string, fn: () => T): T => {
     return fn()
   }
 }
+
+// Drop one memoized entry so a later read in the same request sees what was just
+// written — the cache is held for the whole request, and a write invalidates it.
+export const evictFromRequestCache = (key: string) => {
+  try {
+    const event = useEvent()
+    if (event.context._queryCache)
+      delete (event.context._queryCache as Record<string, unknown>)[key]
+  } catch {
+    // No request context (migration scripts, tests) — nothing was cached.
+  }
+}

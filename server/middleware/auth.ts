@@ -9,6 +9,10 @@ export default defineEventHandler(async (event) => {
 
   if (path === '/health') return
 
+  // The App Store webhook has no user to authenticate as: its proof of origin is
+  // Apple's signature on the payload, checked by the handler itself.
+  if (path.startsWith('/apple/')) return
+
   if (path.startsWith('/admin/')) {
     const auth = getHeader(event, 'authorization')
     const adminToken = config().adminToken

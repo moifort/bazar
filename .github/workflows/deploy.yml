@@ -53,6 +53,8 @@ jobs:
           apple_key_id           = "${{ secrets.APPLE_KEY_ID }}"
           apple_private_key_path = "./apple.p8"
           google_api_key         = "${{ secrets.GEMINI_API_KEY }}"
+          premium_user_ids       = "${{ vars.PREMIUM_USER_IDS }}"
+          apple_app_id           = "${{ vars.APPLE_APP_ID }}"
           sentry_dsn             = "${{ secrets.SENTRY_DSN }}"
           admin_token            = "${{ secrets.ADMIN_TOKEN }}"
           EOF

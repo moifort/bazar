@@ -19,10 +19,14 @@ enum ScanStep: Equatable {
 final class ScanViewModel {
     var step: ScanStep = .camera
     var error: String?
+    /// The scan was refused because the month's allowance is spent. Its own flag,
+    /// not an error message: the answer is the Premium sheet, not an alert.
+    var quotaExhausted = false
 
     func capturePhoto(_ imageData: Data) {
         step = .scanning
         error = nil
+        quotaExhausted = false
 
         Task {
             do {
@@ -30,7 +34,11 @@ final class ScanViewModel {
                 let previews = try await GraphQLScanAPI.analyze(imageBase64: base64)
                 self.step = .preview(previews)
             } catch {
-                self.error = reportError(error)
+                if isQuotaExhausted(error) {
+                    self.quotaExhausted = true
+                } else {
+                    self.error = reportError(error)
+                }
                 self.step = .camera
             }
         }
@@ -64,4 +72,11 @@ final class ScanViewModel {
         step = .camera
         error = nil
     }
+}
+
+/// The server refuses a scan over the allowance with a `QUOTA_EXHAUSTED` domain
+/// error, which reaches the app as the sentinel itself in the message.
+private func isQuotaExhausted(_ error: Error) -> Bool {
+    guard case APIError.graphQL(let messages) = error else { return false }
+    return messages.contains { $0.contains("quota-exhausted") }
 }

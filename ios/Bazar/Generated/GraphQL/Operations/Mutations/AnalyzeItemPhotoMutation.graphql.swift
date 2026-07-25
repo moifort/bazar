@@ -28,7 +28,9 @@ extension BazarGraphQL {
         .field("analyzeItemPhoto", [AnalyzeItemPhoto].self, arguments: ["imageBase64": .variable("imageBase64")]),
       ] }
 
-      /// Analyze a photo with Gemini AI to identify household items
+      /// Analyze a photo with Gemini AI to identify household items. Nothing is stored in the inventory: the answer is a batch of previews, confirmed or thrown away afterwards.
+      ///
+      /// This is the one metered action. Answers `QUOTA_EXHAUSTED` when the plan allows no further scan — see the `quota` query for what is left.
       var analyzeItemPhoto: [AnalyzeItemPhoto] { __data["analyzeItemPhoto"] }
 
       /// AnalyzeItemPhoto

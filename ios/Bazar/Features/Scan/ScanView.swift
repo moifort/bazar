@@ -5,6 +5,7 @@ struct ScanView: View {
     var onFlowCompleted: () -> Void = {}
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(SubscriptionStore.self) private var subscription
     @State private var viewModel = ScanViewModel()
     @State private var selectedPhoto: PhotosPickerItem?
 
@@ -26,6 +27,11 @@ struct ScanView: View {
             },
             onErrorDismiss: { viewModel.error = nil }
         )
+        // A refused scan opens the offer rather than an alert: the user asked for
+        // something the plan does not cover, and the sheet is the answer to that.
+        .sheet(isPresented: $viewModel.quotaExhausted) {
+            PremiumSheet(store: subscription)
+        }
         .onChange(of: selectedPhoto) {
             guard let item = selectedPhoto else { return }
             selectedPhoto = nil

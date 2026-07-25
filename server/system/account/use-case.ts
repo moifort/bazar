@@ -1,6 +1,8 @@
+import { EntitlementCommand } from '~/domain/entitlement/command'
 import { ItemCommand } from '~/domain/item/command'
 import { LocationCommand } from '~/domain/location/command'
 import { NotificationCommand } from '~/domain/notification/command'
+import { QuotaCommand } from '~/domain/quota/command'
 import { ReminderCommand } from '~/domain/reminder/command'
 import type { UserId } from '~/domain/shared/types'
 import { auth } from '~/system/firebase'
@@ -14,11 +16,16 @@ export namespace AccountUseCase {
   /// before its data would leave documents keyed to a user nobody can authenticate
   /// as, unreachable and unclaimable. The reverse merely leaves an empty account,
   /// which the next attempt finishes off.
+  ///
+  /// What this cannot do is end a subscription. Only the App Store can, at the
+  /// user's own request — the app says so before it deletes anything.
   export const remove = async (userId: UserId): Promise<void> => {
     await ItemCommand.forget(userId)
     await ReminderCommand.forget(userId)
     await LocationCommand.forget(userId)
     await NotificationCommand.forget(userId)
+    await QuotaCommand.forget(userId)
+    await EntitlementCommand.forget(userId)
     await auth().deleteUser(userId)
   }
 }

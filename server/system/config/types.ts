@@ -1,0 +1,5 @@
+import type { Brand } from 'ts-brand'
+
+export type AdminToken = Brand<string, 'AdminToken'>
+export type GoogleApiKey = Brand<string, 'GoogleApiKey'>
+export type AppleAppId = Brand<number, 'AppleAppId'>

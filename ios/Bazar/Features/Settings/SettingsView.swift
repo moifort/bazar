@@ -4,9 +4,12 @@ import SwiftUI
 /// call the settings screens make. The pages below it stay pure.
 struct SettingsView: View {
     @Environment(AuthSession.self) private var authSession
+    @Environment(SubscriptionStore.self) private var subscription
     @Environment(\.dismiss) private var dismiss
 
     @State private var path: [Route] = []
+    @State private var quota: QuotaState?
+    @State private var showPremium = false
     @State private var entries: [ChangelogVersion] = []
     @State private var changelogLoading = true
     @State private var changelogError: String?
@@ -22,11 +25,20 @@ struct SettingsView: View {
                 buildNumber: buildNumber,
                 email: authSession.user?.email,
                 isDeleting: isDeleting,
+                quota: quota,
                 onChangelog: { path.append(.changelog) },
+                onUpgrade: { showPremium = true },
                 onSignOut: signOut,
                 onDeleteAccount: { Task { await deleteAccount() } },
                 onClose: { dismiss() }
             )
+            .task { quota = try? await QuotaAPI.load() }
+            .sheet(
+                isPresented: $showPremium,
+                onDismiss: { Task { quota = try? await QuotaAPI.load() } }
+            ) {
+                PremiumSheet(store: subscription)
+            }
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .changelog:

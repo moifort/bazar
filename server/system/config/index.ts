@@ -1,12 +1,32 @@
-import type { Brand } from 'ts-brand'
+import {
+  AdminToken,
+  AppleAppId,
+  AppleEnvironment,
+  GoogleApiKey,
+  PremiumUserIds,
+} from '~/system/config/primitives'
 
-type AdminToken = Brand<string, 'AdminToken'>
-type GoogleApiKey = Brand<string, 'GoogleApiKey'>
-
+// Each field is validated when it is read, not when `config()` is called: a
+// missing Gemini key must break the scan, not the quota that gates it.
 export const config = () => {
   const runtimeConfig = useRuntimeConfig()
   return {
-    adminToken: runtimeConfig.adminToken as AdminToken,
-    googleApiKey: runtimeConfig.googleApiKey as GoogleApiKey,
+    get adminToken() {
+      return runtimeConfig.adminToken ? AdminToken(runtimeConfig.adminToken) : undefined
+    },
+    get googleApiKey() {
+      return GoogleApiKey(runtimeConfig.googleApiKey)
+    },
+    get premiumUserIds() {
+      return PremiumUserIds(runtimeConfig.premiumUserIds)
+    },
+    get appleAppId() {
+      return runtimeConfig.appleAppId ? AppleAppId(runtimeConfig.appleAppId) : undefined
+    },
+    get appleEnvironment() {
+      return runtimeConfig.appleEnvironment
+        ? AppleEnvironment(runtimeConfig.appleEnvironment)
+        : undefined
+    },
   }
 }
