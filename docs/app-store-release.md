@@ -54,8 +54,21 @@ those texts in the web console is therefore pointless — the next release wipes
 Two deliberate exceptions:
 
 - **Screenshots are uploaded by hand** (`skip_screenshots`). They change when the interface
-  changes, which is not a release's rhythm, and generating them in CI cost more than it returned.
-  Regenerate them locally, look at them, drop them in.
+  changes, which is not a release's rhythm, and generating them in CI cost more than it returned:
+  the simulator has to be brought to the front and the app has to have finished drawing, and both
+  failed silently — blank rectangles reached a listing before anyone looked. Regenerate them
+  locally, **look at them**, drop them in:
+
+  ```bash
+  scripts/screenshots/capture.sh <path-to-Bazar.app> build/screenshots/raw
+  bun scripts/screenshots/compose.ts build/screenshots/raw build/screenshots
+  ```
+
+  `capture.sh` shoots one raw screen per entry of `scripts/screenshots/panels.json` through
+  DebugGallery (`-gallery <screen>`) on the 6.9" simulator, with a frozen 9:41 status bar, and
+  refuses a capture that is still SpringBoard or still blank. `compose.ts` drives headless Chrome
+  over the CSS template in `panel.ts` to lay the caption over each one — the design lives in CSS
+  so it stays retouchable there. A caption added to `panels.json` needs its gallery case.
 - **The age rating is not declared here.** Apple requires attributes fastlane's rating config
   cannot express, and a delivery that omits them is rejected outright. It is set once, on the app
   rather than on a version — nothing about it changes from one release to the next.
@@ -79,6 +92,20 @@ Keep them true to the app, not to an intention: the privacy page names every pie
 collected, who processes it, and how long it is kept — including that a scan photo is analysed and
 thrown away rather than stored. A page that promises less than the app does is a rejection; one
 that promises more is worse.
+
+## The app icon
+
+Generated with Nano Banana Pro, never hand-authored
+([collaboration.md](./collaboration.md#visual-assets)). The prompt is committed, so the icon can
+be regenerated coherently rather than re-invented:
+
+```bash
+GOOGLE_API_KEY=… bun scripts/generate-icon.ts scripts/icon-prompt.txt build/icon.png
+sips -Z 1024 build/icon.png --out ios/Bazar/Assets.xcassets/AppIcon.appiconset/icon-1024.png
+```
+
+The prompt describes what actually ships — a coral-to-teal gradient behind a Liquid Glass house —
+and the store panels reuse the same gradient. Change one, change the other.
 
 ## Xcode version
 

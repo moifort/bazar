@@ -1,0 +1,22 @@
+[
+  {
+    "screen": "scan-preview",
+    "caption": "Une photo suffit\npour ranger une étagère",
+    "subtitle": "L'IA reconnaît chaque objet, lui donne un nom, une catégorie et une quantité. Rien n'est enregistré avant votre validation."
+  },
+  {
+    "screen": "items",
+    "caption": "Tout ce que vous possédez,\nrangé par lieu",
+    "subtitle": "Filtrez par catégorie, cherchez un nom, retrouvez l'objet et l'étagère où il dort."
+  },
+  {
+    "screen": "locations",
+    "caption": "Du lieu jusqu'à l'étagère,\nen quatre niveaux",
+    "subtitle": "Lieu, pièce, zone, rangement — avec le nombre d'objets de chaque zone."
+  },
+  {
+    "screen": "dashboard",
+    "caption": "Savoir ce qu'il reste\navant d'en manquer",
+    "subtitle": "Un seuil par objet, et une alerte au moment précis où la quantité passe dessous."
+  }
+]

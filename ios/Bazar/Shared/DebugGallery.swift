@@ -51,6 +51,64 @@ struct DebugGallery: View {
                     onRefresh: {}
                 )
             }
+        case "dashboard":
+            NavigationStack {
+                DashboardPage(
+                    totalItems: 152,
+                    placeCounts: Fixtures.placeCounts,
+                    recentItems: Fixtures.recentItems,
+                    lowStockAlerts: Fixtures.lowStockAlerts,
+                    onRefresh: {},
+                    onItemTap: { _ in },
+                    onSettings: {}
+                )
+            }
+        case "items":
+            NavigationStack {
+                ItemsPage(
+                    groups: Fixtures.itemGroups,
+                    totalCount: 152,
+                    hasMore: true,
+                    isLoading: false,
+                    errorMessage: nil,
+                    navigationSubtitle: "152 objets",
+                    categoryFilter: .constant(nil),
+                    searchText: .constant(""),
+                    isSearching: false,
+                    searchResults: nil,
+                    onRefresh: {},
+                    onLoadMore: {},
+                    onPrefetch: { _ in },
+                    onItemTap: { _ in },
+                    onItemDelete: { _ in },
+                    onSearchTextChanged: {},
+                    onSearchSelectItem: { _ in }
+                )
+            }
+        case "locations":
+            NavigationStack {
+                LocationsPage(
+                    places: Fixtures.places,
+                    isLoading: false,
+                    errorMessage: nil,
+                    onRefresh: {},
+                    onAddPlace: { _ in },
+                    onDeletePlace: { _ in },
+                    onEditPlace: { _, _, _ in },
+                    onReorderPlaces: { _, _ in }
+                )
+            }
+        case "scan-preview":
+            ScanFlowPage(
+                step: .preview(Fixtures.previews),
+                errorMessage: nil,
+                selectedPhoto: .constant(nil),
+                onCapture: { _ in },
+                onScanAnother: {},
+                onConfirm: { _, _ in },
+                onDismiss: {},
+                onErrorDismiss: {}
+            )
         case "premium":
             Color.clear
                 .sheet(isPresented: .constant(true)) {
@@ -104,6 +162,107 @@ enum Fixtures {
             badge: nil,
             isTrial: false
         ),
+    ]
+
+    static let placeCounts: [DashboardPage.PlaceCountRow] = [
+        .init(id: "p1", placeName: "Appartement", count: 118),
+        .init(id: "p2", placeName: "Cave", count: 34),
+    ]
+
+    static let recentItems: [DashboardPage.RecentItemRow] = [
+        .init(id: "i1", name: "Perceuse Bosch", category: .tools, quantity: 1, locationPath: "Appartement > Garage > Établi", overdueReminderCount: 0),
+        .init(id: "i2", name: "Ampoules LED E27", category: .electronics, quantity: 12, locationPath: "Appartement > Cellier > Étagère 2", overdueReminderCount: 0),
+        .init(id: "i3", name: "Machine à café", category: .appliances, quantity: 1, locationPath: "Appartement > Cuisine > Plan de travail", overdueReminderCount: 1),
+    ]
+
+    static let lowStockAlerts: [LowStockAlertRow.Model] = [
+        .init(id: "i4", name: "Café en grains", category: .food, quantity: 1, threshold: 2, locationPath: "Appartement > Cuisine > Placard haut"),
+        .init(id: "i5", name: "Piles AA", category: .electronics, quantity: 2, threshold: 4, locationPath: "Appartement > Bureau > Tiroir 1"),
+    ]
+
+    static let itemGroups: [ItemPlaceGroup] = [
+        ItemPlaceGroup(
+            id: "p1",
+            placeName: "Appartement",
+            items: [
+                item("i1", "Perceuse Bosch", .tools, 1, "Appartement > Garage > Établi"),
+                item("i2", "Ampoules LED E27", .electronics, 12, "Appartement > Cellier > Étagère 2"),
+                item("i3", "Machine à café", .appliances, 1, "Appartement > Cuisine > Plan de travail", overdue: 1),
+                item("i4", "Café en grains", .food, 1, "Appartement > Cuisine > Placard haut"),
+            ]
+        ),
+        ItemPlaceGroup(
+            id: "p2",
+            placeName: "Cave",
+            items: [
+                item("i6", "Pot de peinture blanche", .other, 3, "Cave > Réserve > Étagère basse"),
+                item("i7", "Skis", .sports, 2, "Cave > Réserve > Casier 4"),
+            ]
+        ),
+    ]
+
+    private static func item(
+        _ id: String,
+        _ name: String,
+        _ category: ItemCategory,
+        _ quantity: Int,
+        _ path: String,
+        overdue: Int = 0
+    ) -> ItemListItem {
+        ItemListItem(
+            id: id,
+            name: name,
+            category: category,
+            quantity: quantity,
+            locationFullPath: path,
+            placeId: "p1",
+            placeName: "Appartement",
+            roomName: "Cuisine",
+            addedBy: "gallery",
+            createdAt: Date(timeIntervalSince1970: 1_785_024_000),
+            overdueReminderCount: overdue
+        )
+    }
+
+    static let places: [Place] = [
+        Place(
+            id: "p1",
+            name: "Appartement",
+            icon: "🏠",
+            order: 1,
+            rooms: [
+                Room(id: "r1", placeId: "p1", name: "Cuisine", icon: "🍳", order: 1, zones: [
+                    Zone(id: "z1", roomId: "r1", name: "Placard haut", order: 1, itemCount: 23, storages: [
+                        Storage(id: "s1", zoneId: "z1", name: "Étagère 1", order: 1),
+                        Storage(id: "s2", zoneId: "z1", name: "Étagère 2", order: 2),
+                    ]),
+                    Zone(id: "z2", roomId: "r1", name: "Plan de travail", order: 2, itemCount: 8, storages: []),
+                ]),
+                Room(id: "r2", placeId: "p1", name: "Garage", icon: "🔧", order: 2, zones: [
+                    Zone(id: "z3", roomId: "r2", name: "Établi", order: 1, itemCount: 41, storages: [
+                        Storage(id: "s3", zoneId: "z3", name: "Tiroir 1", order: 1),
+                    ]),
+                ]),
+            ]
+        ),
+        Place(
+            id: "p2",
+            name: "Cave",
+            icon: "📦",
+            order: 2,
+            rooms: [
+                Room(id: "r3", placeId: "p2", name: "Réserve", icon: nil, order: 1, zones: [
+                    Zone(id: "z4", roomId: "r3", name: "Étagère métallique", order: 1, itemCount: 34, storages: []),
+                ]),
+            ]
+        ),
+    ]
+
+    static let previews: [ItemPreview] = [
+        ItemPreview(previewId: "pv1", name: "Boîte de conserve — tomates pelées", category: .food, description: "Conserve 400 g", quantity: 4, personalNotes: "", purchaseLocation: ""),
+        ItemPreview(previewId: "pv2", name: "Paquet de pâtes", category: .food, description: "Penne 500 g", quantity: 2, personalNotes: "", purchaseLocation: ""),
+        ItemPreview(previewId: "pv3", name: "Bouteille d'huile d'olive", category: .food, description: "1 L", quantity: 1, personalNotes: "", purchaseLocation: ""),
+        ItemPreview(previewId: "pv4", name: "Rouleau d'essuie-tout", category: .other, description: "", quantity: 3, personalNotes: "", purchaseLocation: ""),
     ]
 
     static let changelog: [ChangelogVersion] = [

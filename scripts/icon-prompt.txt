@@ -1,0 +1,11 @@
+A premium iOS app icon artwork, square 1:1.
+
+CRITICAL FRAMING RULE: the artwork is a FULL BLEED SQUARE. The gradient background must reach all four corners and all four edges of the image, completely filling the square. Do NOT draw rounded corners. Do NOT draw a white border, a white margin, a frame, a drop shadow around the artwork, or an icon floating on a background. There is no icon-shaped object in the image — the image IS the icon, edge to edge, corner to corner, as a plain square.
+
+CRITICAL CONTENT RULE: the house is the ONLY object in the image. Do NOT add glass panes, glass plates, glass cards, floating rectangles, panels, sheets or any secondary shapes behind or around it. The background is a pure gradient, nothing else.
+
+Background: a smooth diagonal gradient filling the whole square, running from a warm coral orange at the top left to a cool teal green at the bottom right. Perfectly smooth, no objects, no texture.
+
+Subject: a single house silhouette, large and centred — a wide pitched roof over a simple square body, with one small rounded-square window cut out of the upper left of the body. It is a solid, warm off-white shape rendered as Apple's Liquid Glass material: thick, refractive, physically believable, with real light bending, crisp specular highlights along the roof ridge and the edges, and a gentle caustic pool of light cast beneath it.
+
+Style: Apple design language. Clean, minimal, no text, no letters, no numbers, no logos. Soft studio lighting from the upper left. The house silhouette must stay legible at very small sizes: keep it large, centred, high contrast against the background.
