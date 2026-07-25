@@ -79,6 +79,12 @@ before assuming a step is credential-gated (`gh auth status`, local files — e.
 may already carry the needed scopes). Hand off only the steps that genuinely require the user's
 external logins (Apple, GCP console), as precise numbered instructions.
 
+**A blocked tool call is not a handoff.** When the harness's permission layer refuses a command
+(`gh secret set`, a `terraform apply`, an install script), the step is still Claude's to run — the
+block is a prompt to confirm, not a reason to hand the user a copy-paste line. Say what is blocked
+and ask for the go-ahead in one sentence, then run it yourself. Ending a task with "à lancer de ton
+côté" for something the CLI can do is the failure mode this rule exists to prevent.
+
 ## Visual assets
 
 Generate visual assets (app icons, illustrations) with **Nano Banana Pro** (Gemini image model)
