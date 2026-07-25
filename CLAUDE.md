@@ -112,8 +112,11 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 
 ## App Store Distribution
 
-Full release flow — latest **final** Xcode only (ITMS-90111), the beta-macOS `BuildMachineOSBuild`
-patch, the `CURRENT_PROJECT_VERSION` bump in `ios/project.yml`:
+**A release is a tag**: `git tag ios-v1.1 && git push origin ios-v1.1` fires the Release workflow,
+which guards the version against `MARKETING_VERSION` and the changelog, builds, uploads, pushes the
+`fastlane/metadata/` listing, submits for review and publishes on approval — nobody in between.
+Deploy the backend first (the in-app "Nouveautés" list is served by it). Full flow, the manual
+fallback and the beta-macOS `BuildMachineOSBuild` patch:
 [docs/app-store-release.md](docs/app-store-release.md).
 
 ## Gemini API Key & Secrets

@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    # Prefixed by platform: the backend deploys from main and would otherwise have no way
+    # to carry a tag of its own without colliding with the app's.
+    tags: ['ios-v*']
+  workflow_dispatch:
+
+permissions:
+  # write, because the last step publishes the GitHub release for the tag.
+  contents: write
+
+jobs:
+  release:
+    name: 📱 iOS
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+
+      # ITMS-90111: the App Store rejects a build made with anything but the latest final
+      # Xcode. The runner image ships several; pick the newest.
+      - name: Select the newest Xcode
+        run: |
+          set -euo pipefail
+          LATEST=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          echo "using $LATEST"
+          sudo xcode-select -s "$LATEST"
+          xcodebuild -version
+
+      - name: Read the version out of the tag
+        id: version
+        run: echo "value=${GITHUB_REF_NAME#ios-v}" >> "$GITHUB_OUTPUT"
+
+      # Fails before anything reaches Apple: a tag that disagrees with MARKETING_VERSION, or a
+      # changelog whose section is still called "Unreleased", is a release nobody meant to make.
+      - name: Guard the release
+        run: bun scripts/release-notes.ts guard "${{ steps.version.outputs.value }}"
+
+      - name: Write the release notes
+        run: |
+          bun scripts/release-notes.ts notes "${{ steps.version.outputs.value }}" \
+            > fastlane/metadata/fr-FR/release_notes.txt
+          cat fastlane/metadata/fr-FR/release_notes.txt
+
+      # Only the hand-typed custom scalars are committed; the rest of the Apollo output is
+      # generated, so a fresh checkout has no `BazarGraphQL` namespace at all and every
+      # build fails. Resolving the packages first is what puts apollo-ios-cli on disk.
+      - name: Generate the typed GraphQL API
+        run: |
+          xcodebuild -project ios/Bazar.xcodeproj -scheme Bazar \
+            -resolvePackageDependencies -derivedDataPath build/spm
+          # Printed unconditionally: the first attempt failed here with no output at
+          # all, and one listing answers "did the checkout land where we expect?"
+          echo "--- SourcePackages ---"
+          ls -d build/spm/SourcePackages/checkouts/apollo-ios/CLI 2>&1 || true
+          # Called directly, not through `bun run`: the environment variable that
+          # `bun run` was meant to pass along never reached the script.
+          ./scripts/apollo-codegen.sh
+
+      - name: Build, upload, submit and publish
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          BUILD_NUMBER: ${{ github.run_number }}
+          FASTLANE_SKIP_UPDATE_CHECK: '1'
+          # fastlane asks xcodebuild for the build settings with a 3-second patience and
+          # four retries. This project, with its SwiftPM graph, takes longer than that on a
+          # cold runner — and fastlane treats the timeout as fatal rather than waiting.
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: '180'
+          FASTLANE_XCODEBUILD_SETTINGS_RETRIES: '5'
+        run: fastlane release
+
+      # Last on purpose: a GitHub release announces a version that reached the App Store,
+      # so it must not exist when the delivery failed. In English, from CHANGELOG.md: the
+      # store speaks the user's language, the repository speaks the team's. As markdown
+      # with its headings intact — GitHub renders them, the store would print them.
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bun scripts/release-notes.ts markdown "${{ steps.version.outputs.value }}" en \
+            > build/github-release.md
+          gh release create "$GITHUB_REF_NAME" \
+            --title "iOS ${{ steps.version.outputs.value }}" \
+            --notes-file build/github-release.md \
+            --verify-tag

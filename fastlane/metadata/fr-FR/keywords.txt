@@ -1,0 +1,1 @@
+inventaire,rangement,maison,objets,ia,scan,stock,cave,garage,boite,ranger,retrouver,rappel

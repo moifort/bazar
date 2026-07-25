@@ -1,0 +1,55 @@
+app_identifier("co.polyforms.bazar")
+
+# The listing's texts live in the repository and are pushed on every release, overwriting
+# whatever App Store Connect holds. Editing them in the web console is therefore pointless —
+# the next release wipes them.
+metadata_path("./fastlane/metadata")
+
+# Screenshots are uploaded by hand, not by the pipeline. They change when the interface
+# changes, which is not the same rhythm as a release, and generating them in CI cost more
+# than it ever returned: the simulator has to be brought to the front, the app has to have
+# finished drawing, and both failed silently — a set of home screens and then a set of
+# blank rectangles reached the listing before anyone looked. Regenerate them with
+# `scripts/screenshots/capture.sh` then `compose.ts`, look at them, and drop them in.
+skip_screenshots(true)
+
+# The age rating is deliberately NOT declared here. Apple now requires attributes
+# fastlane's rating config cannot express — advertising, messagingAndChat, lootBox,
+# ageAssurance, parentalControls, userGeneratedContent, gunsOrOtherWeapons and
+# healthOrWellnessTopics — and a delivery that omits them is rejected outright.
+# It is set once, directly on the app's ageRatingDeclaration, and it belongs to the
+# app rather than to a version: nothing about it changes from one release to the next.
+
+# No interactive confirmation: this runs unattended in CI.
+force(true)
+
+# precheck screens the listing for things Apple rejects, but it cannot read in-app
+# purchases through an API key and fails the whole delivery rather than skipping them.
+# The subscriptions are configured once in App Store Connect and are not what this
+# pipeline changes, so there is nothing here for precheck to catch.
+precheck_include_in_app_purchases(false)
+
+# The tag is the last human act: the build is submitted for review and goes on sale the
+# moment Apple approves it, with nobody in between. A version that should not ship on
+# approval is a version that should not have been tagged.
+submit_for_review(true)
+automatic_release(true)
+
+# Asked by App Store Connect at every submission. Answering them here keeps the pipeline
+# from stalling on a prompt nobody is there to read.
+submission_information({
+  add_id_info_uses_idfa: false,
+  export_compliance_uses_encryption: false,
+  export_compliance_encryption_updated: false,
+  content_rights_contains_third_party_content: false
+})
+
+app_review_information(
+  first_name: "Thibaut",
+  last_name: "Mottet",
+  email_address: "thibaut.mottet@gmail.com",
+  phone_number: "+33623070069",
+  notes: "Sign in with Apple is the only way in; any Apple ID works, no demo account is needed. " \
+         "The AI scan needs a photo of everyday household objects: a shelf, a drawer or a " \
+         "few items on a table will do."
+)

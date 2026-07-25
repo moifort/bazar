@@ -1,0 +1,21 @@
+Bazar est un inventaire de maison : vous photographiez vos affaires, l'IA les nomme, et l'application se souvient de quelle pièce, quelle étagère, quelle boîte.
+
+PHOTOGRAPHIER PLUTÔT QUE SAISIR
+Une photo d'une étagère, d'un tiroir ou d'un carton suffit : l'IA reconnaît chaque objet, lui donne un nom, une catégorie et une quantité. Vous corrigez ce qui vous chante, vous validez, et tout entre d'un coup.
+
+UNE ADRESSE À QUATRE NIVEAUX
+Lieu, pièce, zone, rangement — de l'appartement jusqu'à l'étagère du haut du placard de la cuisine. Chaque objet sait où il est, et une recherche suffit à le retrouver.
+
+SAVOIR CE QU'IL RESTE
+Un seuil de stock bas par objet, et une notification au moment précis où la quantité passe dessous. Plus de deuxième paquet acheté pour rien, plus de dernier rouleau découvert trop tard.
+
+DES RAPPELS D'ENTRETIEN
+Détartrer la machine à café, changer le filtre, réviser le vélo : un rappel ponctuel ou récurrent sur n'importe quel objet, qui se replanifie tout seul une fois fait.
+
+VOS PHOTOS NE SONT PAS CONSERVÉES
+La photo est analysée puis abandonnée. Seuls les objets que vous confirmez sont enregistrés.
+
+GRATUIT, ET PREMIUM POUR LE SCAN
+L'inventaire est gratuit et illimité : objets, lieux, rappels, alertes. Seul le scan photo est compté, à 10 par mois civil. Premium vous laisse scanner sans compter.
+
+Premium mensuel : 1,99 €/mois. Premium annuel : 19,99 €/an, après 7 jours d'essai gratuit. L'abonnement se renouvelle automatiquement sauf résiliation au moins 24 h avant la fin de la période en cours. La gestion et la résiliation se font dans les réglages du compte App Store.
