@@ -49,6 +49,13 @@ This is a solo project: CI (Tests + Deploy) runs on `main` pushes only, so a pul
 is pure ceremony. **Never open one, never suggest one.** On "push", the work goes straight to
 `origin/main` — even from a feature branch (see *Push protocol* below).
 
+The one exception is **Renovate**, which opens its own dependency PRs and merges them itself once
+the test workflows pass — the PR is the bot's review surface, not ours. `renovate.json` groups
+every non-major bump into a single squashed automerged PR, keeps majors separate, and pins the two
+versions the Cloud Function build cannot survive (`graphql` < 17, `firebase-admin` < 14 — the Nitro
+firebase preset installs `firebase-functions@latest` with npm, whose peer ranges reject them).
+Leave those pins in place; a red Renovate PR is a real incompatibility, not a flake.
+
 ## Never push until asked
 
 **Never push until the user explicitly says "push".** Commits accumulate locally; pushing is
