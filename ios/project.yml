@@ -19,6 +19,9 @@ packages:
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk.git
     from: "11.0.0"
+  Sentry:
+    url: https://github.com/getsentry/sentry-cocoa.git
+    from: "9.0.0"
 
 targets:
   Bazar:
@@ -37,6 +40,8 @@ targets:
         product: FirebaseAuth
       - package: Firebase
         product: FirebaseMessaging
+      - package: Sentry
+        product: Sentry
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: co.polyforms.bazar

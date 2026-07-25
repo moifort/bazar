@@ -15,6 +15,7 @@ of them.
 | UI | SwiftUI, native iOS 26 components (Liquid Glass — no custom re-skins) |
 | Data | Apollo iOS 1.18, generated into `ios/Bazar/Generated/GraphQL` |
 | Auth / push | Firebase Auth (Sign in with Apple), Firebase Messaging |
+| Error reporting | `sentry-cocoa` (SPM), release builds only |
 
 Because the project is generated, **never add files through Xcode's UI**: create the file on disk
 and, if a new folder appeared, re-run XcodeGen (`xcodegen generate` in `ios/`). Adding a source
@@ -256,6 +257,26 @@ code (the sign-in one is handed out once and never stored), revoke the Apple tok
 call the `deleteAccount` mutation so the server erases the data, and only then sign out locally.
 Backing out of the Apple sheet throws `.canceled`, which the coordinator swallows — nothing was
 deleted, so an error alert would lie.
+
+## Error reporting — Sentry
+
+`Shared/ErrorReporting.swift` holds both ends: `startErrorReporting()`, called first thing in
+`AppDelegate.application(_:didFinishLaunchingWithOptions:)`, and `reportError(_:)`, which does
+`SentrySDK.capture(error:)` and returns the message the view shows — so the 40 call sites in the
+ViewModels report without knowing Sentry exists.
+
+The SDK starts **in release builds only** (`#if !DEBUG`). A crash from the simulator, the debug
+gallery or a preview is not an incident; letting it into the same stream as real ones buries the
+reports that matter. That mirrors the backend, where the DSN only exists in production's Secret
+Manager.
+
+The DSN lives in `Shared/SharedConfig.swift` next to the server URL, not in the gitignored
+`Secrets.swift`: a Sentry DSN is public by design, and a release built on CI would never see a
+gitignored file. A blank or non-`https://` value leaves the SDK inert, the same "no-op on empty
+DSN" behaviour as [the backend plugin](./architecture.md#observability).
+
+The app reports to the `bazar-ios` project of the `polyforms` Sentry organisation; the backend
+has its own (`bazar-server`), so a crash on the phone is never mixed up with a fault in the API.
 
 ## Push notifications
 

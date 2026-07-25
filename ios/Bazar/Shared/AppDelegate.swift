@@ -8,6 +8,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency Messag
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        startErrorReporting()
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self

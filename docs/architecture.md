@@ -225,3 +225,9 @@ disables reporting, so a bad value never breaks the deploy — a DSN Sentry's SD
 `init()` would fail the Cloud Run health check and take the whole release down. The plugin hooks
 Nitro's `error` event and captures only faults with no `statusCode` or one `>= 500`; anything the
 API answered as a 4xx is dropped on the floor. Whatever escapes both also lands in Cloud Logging.
+
+The backend reports to the `bazar-server` project of the `polyforms` Sentry organisation, its DSN
+carried by the `SENTRY_DSN` repository secret and handed to Terraform as `sentry_dsn`. The iOS app
+has its own project (`bazar-ios`, DSN hardcoded — see
+[ios-guide.md](./ios-guide.md#error-reporting--sentry)), so a fault in the API is never mixed up
+with a crash on the phone.
