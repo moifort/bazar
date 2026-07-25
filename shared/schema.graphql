@@ -68,6 +68,24 @@ type CategoryCount {
   count: Int!
 }
 
+"""
+One release in the app’s "What’s new" list — the changes shipped in a given version of the app, e.g. `"1.2"` with "Faster photo scans"
+"""
+type ChangelogEntry {
+  """
+  When that version was released, e.g. `"2026-07-18T00:00:00.000Z"` (`null` for a release not yet dated)
+  """
+  date: DateTime
+
+  """
+  The list of changes in this release, one line each, ready to show to the user, e.g. `"Faster photo scans"` then `"Fixed a crash when adding an item"`
+  """
+  notes: [String!]!
+
+  """The app version these notes are for, e.g. `"1.2"`"""
+  version: String!
+}
+
 """Input for confirming a scanned item"""
 input ConfirmItemInput {
   """Item category"""
@@ -465,6 +483,19 @@ enum PurchaseCondition {
 scalar Quantity
 
 type Query {
+  """
+  The app’s "What’s new" list — one entry per release, newest first. Feeds the changelog screen. For example the `"1.2"` entry with notes `"Faster photo scans"` and `"Fixed a crash when adding an item"`, then the `"1.1"` entry, and so on.
+  
+  ```graphql
+  changelog {
+    version
+    date
+    notes
+  }
+  ```
+  """
+  changelog: [ChangelogEntry!]!
+
   """Dashboard with inventory statistics"""
   dashboard: Dashboard!
 

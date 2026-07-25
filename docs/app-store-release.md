@@ -11,14 +11,21 @@ version).
 
 ## Release flow
 
-1. Bump `CURRENT_PROJECT_VERSION` — every upload to App Store Connect needs a build number higher
+1. Write the release notes in English under `## Unreleased` in `CHANGELOG.md`, then the French
+   translation under `## Unreleased` in `CHANGELOG.fr.md` — how to word them:
+   [changelog-best-practices.md](./changelog-best-practices.md). Version both sections at release
+   time (`## 1.1 (2026.08.02)`); `## Unreleased` left behind is what
+   `bun scripts/release-notes.ts guard <version>` refuses to release.
+2. Bump `CURRENT_PROJECT_VERSION` — every upload to App Store Connect needs a build number higher
    than the last one, even when the marketing version does not move. It lives in
    `ios/project.yml`, which is the source: change it there and re-run `xcodegen generate`, never
    edit `ios/Bazar.xcodeproj` by hand.
-2. Confirm the backend the build points at is deployed. The app talks to one GraphQL endpoint, so
+3. Confirm the backend the build points at is deployed. The app talks to one GraphQL endpoint, so
    a schema the shipped binary does not know about is a broken release — regenerate and rebuild
    (`bun run generate:graphql`, `bun run generate:ios`) if the schema moved since the last upload.
-3. Archive, export, upload:
+   The deploy also rebuilds `server/system/changelog-content.ts` from `CHANGELOG.fr.md`; **without
+   that deploy the in-app "Nouveautés" list stays stale**, since it is served by the backend.
+4. Archive, export, upload:
 
    ```bash
    DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
@@ -30,8 +37,9 @@ version).
    then `-exportArchive` with the App Store export options, and upload through Xcode Organizer or
    `xcrun altool`.
 
-Bazar ships no in-app changelog, so there is no release-notes asset to regenerate — the notes are
-written straight into App Store Connect.
+The store's "What's New" field is the same list, in French:
+`bun scripts/release-notes.ts notes <version>` prints the bullets flat, headings and emphasis
+stripped, because the store shows one plain list and would print `###` literally.
 
 ## Beta-macOS build machines
 

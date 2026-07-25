@@ -1,0 +1,15 @@
+# Journal des modifications
+
+Toutes les évolutions notables de Bazar, la plus récente en premier.
+
+## 1.0.0 (2026.07.25)
+
+### New
+
+- Scan photo d'une étagère ou d'un tiroir : l'IA nomme, catégorise et compte chaque objet, et rien n'est enregistré tant que le lot n'est pas confirmé.
+- Une adresse à quatre niveaux pour chaque objet — lieu, pièce, zone, rangement — jusqu'à l'étagère où il se trouve.
+- Recherche dans tout l'inventaire.
+- Tableau de bord de ce qui est rangé, de ce qui manque bientôt et de ce qui arrive à échéance.
+- Seuil de stock bas par objet, avec une notification dès que la quantité le franchit.
+- Rappels d'entretien sur n'importe quel objet, ponctuels ou récurrents : mensuel, trimestriel, semestriel, annuel, ou un nombre de jours au choix.
+- Connexion avec Apple.

@@ -47,7 +47,9 @@ server/
 │   └── 03-notifications.ts      # subscribes the notification domain to domain events
 ├── system/                      # infrastructure concerns
 │   ├── config/                  # runtime config (env)
+│   ├── changelog/               # parses the shipped CHANGELOG.fr.md into the app's "Nouveautés"
 │   ├── migration/               # runner.ts, types.ts, primitives.ts, migrations/
+│   ├── changelog-content.ts     # generated from CHANGELOG.fr.md, gitignored
 │   ├── event-bus.ts             # in-process domain event bus
 │   ├── logger.ts                # consola tagged loggers
 │   ├── firebase.ts              # firebase-admin init + db()

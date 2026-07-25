@@ -5,12 +5,13 @@ which shelf, which box it sits in — and get a push when something runs low.
 
 ## Language
 
-Everything versioned and technical is **English**: commits, code, comments, docs, identifiers,
-file names, GraphQL descriptions, AI prompts, test names, iOS accessibility *identifiers*.
-Enum/union values are English technical symbols (`kitchenware`, `custom-days`,
-`low-stock-crossed`) — the schema never speaks the user's language, the app translates. The
-**only** French in the repo: user-facing copy (the iOS app's on-screen text and preview names,
-the push notification body in `server/domain/notification/infrastructure/fcm.ts`) and French data
+Everything versioned and technical is **English**: commits, code, comments, docs (incl.
+`CHANGELOG.md`), identifiers, file names, GraphQL descriptions, AI prompts, test names, iOS
+accessibility *identifiers*. Enum/union values are English technical symbols (`kitchenware`,
+`custom-days`, `low-stock-crossed`) — the schema never speaks the user's language, the app
+translates. The **only** French in the repo: user-facing copy (`CHANGELOG.fr.md` + its generated
+asset `server/system/changelog-content.ts`, the iOS app's on-screen text and preview names, the
+push notification body in `server/domain/notification/infrastructure/fcm.ts`) and French data
 values quoted as examples in code, prompts and GraphQL descriptions. Never mix languages in a
 commit message or a comment. Control: `grep -rnP '[\x{00C0}-\x{00FF}]' server/` must only return
 those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
@@ -62,7 +63,8 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 > Extended guides live in `docs/`, split in two: the **rules**, written project-agnostic —
 > [ddd-best-practices](docs/ddd-best-practices.md), [graphql-best-practices](docs/graphql-best-practices.md),
 > [code-style](docs/code-style.md), [branded-types](docs/branded-types.md),
-> [error-handling](docs/error-handling.md) — and this repo's **wiring** —
+> [error-handling](docs/error-handling.md), [changelog-best-practices](docs/changelog-best-practices.md)
+> — and this repo's **wiring** —
 > [architecture](docs/architecture.md), [domain-guide](docs/domain-guide.md),
 > [graphql-patterns](docs/graphql-patterns.md), [business-rules](docs/business-rules.md),
 > [migrations](docs/migrations.md), [readme-guide](docs/readme-guide.md),

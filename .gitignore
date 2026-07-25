@@ -31,3 +31,6 @@ infra/*.tfstate
 infra/*.tfstate.backup
 infra/AuthKey_*.p8
 infra/apple.p8
+
+# Generated from CHANGELOG.fr.md by scripts/generate-changelog-asset.ts
+server/system/changelog-content.ts

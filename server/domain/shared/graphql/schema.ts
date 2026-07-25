@@ -38,4 +38,8 @@ import '~/domain/dashboard/infrastructure/graphql/queries'
 // Notification domain
 import '~/domain/notification/infrastructure/graphql/mutations'
 
+// Changelog (system)
+import '~/system/changelog/infrastructure/graphql/types'
+import '~/system/changelog/infrastructure/graphql/queries'
+
 export const schema = builder.toSchema()
