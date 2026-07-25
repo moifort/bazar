@@ -74,8 +74,8 @@ user-gated. Approval to commit is never approval to push.
    deploy.
 5. **Push — straight to `origin/main`.** `git push origin HEAD:main` (fast-forward), whatever
    the working branch — never via a pull request. Realign local `main` afterwards.
-6. **Analyze the CI.** A push to `main` fires the test workflows (**Tests**: Unit, Integration —
-   plus the npm strict-peer-deps guard) and **Deploy**.
+6. **Analyze the CI.** A push to `main` fires the test workflows (**Tests**: Unit, Integration,
+   Feature — plus the npm strict-peer-deps guard) and **Deploy**.
    Watch them through to completion rather than assuming green: `gh run watch`, or
    `gh run list --branch main --limit 5` then `gh run view <id> --log-failed` on any failure.
    The push isn't done until CI is green; if a job fails, report it and fix it (a follow-up

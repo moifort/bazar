@@ -33,7 +33,7 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 - **Backend typecheck**: `bun tsc --noEmit`
 - **Regenerate types** (if routes changed): `bunx nitro prepare`; run it before `bun tsc`
 - **Dev server**: `bun run dev` — Nitro on `http://localhost:3000` (GraphQL at `POST /graphql`)
-- **Tests**: `bun test` (all tiers) — includes `server/architecture.unit.test.ts`, the executable conventions; per tier: `bun run test:unit` / `bun run test:int`
+- **Tests**: `bun test` (all tiers) — includes `server/architecture.unit.test.ts`, the executable conventions; per tier: `bun run test:unit` / `bun run test:int` / `bun run test:feat`
 - **Test coverage**: `bun run test:coverage`
 - **Linter**: `bun run lint` (`bunx biome check`); autofix with `bun run lint:fix`
 - **Runtime**: always use `bun`/`bunx`, never `npm`/`npx`
