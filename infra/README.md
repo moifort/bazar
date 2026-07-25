@@ -26,7 +26,7 @@ cp infra/terraform.tfvars.example infra/terraform.tfvars
 cp ~/Downloads/AuthKey_KEY1234567.p8 infra/
 
 # From repo root
-make bootstrap
+bun run bootstrap
 ```
 
 The `bootstrap.sh` driver:
@@ -76,8 +76,24 @@ The runtime service account `bazar-runtime` is granted
 `roles/firebasecloudmessaging.admin` so the Cloud Function can call the
 FCM v1 send API with Application Default Credentials.
 
+## Day-to-day
+
+Every entry point is a `bun run` script — there is no Makefile.
+
+| Script | What it does |
+| --- | --- |
+| `bun run bootstrap` | One-shot provisioning of a fresh project (`scripts/bootstrap.sh`) |
+| `bun run infra:build` | Install, `nitro prepare`, export the SDL, build the function bundle |
+| `bun run infra:init` | `terraform init` in `infra/` |
+| `bun run infra:plan` | Build, then `terraform plan` |
+| `bun run infra:apply` | Build, then `terraform apply` |
+| `bun run destroy` | Tear the whole stack down (`scripts/teardown.sh`) |
+
+`plan` and `apply` rebuild first on purpose: the function source archive is an
+input to the plan, so planning against a stale bundle plans the wrong deploy.
+
 ## Teardown
 
 ```bash
-make destroy
+bun run destroy
 ```

@@ -25,7 +25,7 @@ Both attached to the `Bazar` target.
 
 The `terraform apply` step generates this file at `ios/Bazar/GoogleService-Info.plist`
 (see `infra/ios.tf`). The file is gitignored — every developer downloads
-their own copy via `make bootstrap` against their GCP project.
+their own copy via `bun run bootstrap` against their GCP project.
 
 In Xcode, drag-and-drop the file into the `Bazar` group so it gets added to
 the bundle (`Copy items if needed: yes`, `Targets: Bazar`).
@@ -60,7 +60,7 @@ In `https://developer.apple.com/account`:
 
 ## 6. Update SharedConfig.defaultServerURL
 
-After `make bootstrap` prints the Cloud Function URL, replace the
+After `bun run bootstrap` prints the Cloud Function URL, replace the
 `PLACEHOLDER` in `ios/Bazar/Shared/SharedConfig.swift` with that URL (or
 override it via UserDefaults["serverURL"] at runtime).
 
