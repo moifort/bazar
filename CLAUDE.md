@@ -113,7 +113,7 @@ patch, the `CURRENT_PROJECT_VERSION` bump in `ios/project.yml`:
 
 ## Gemini API Key & Secrets
 
-- The AI (photo scan) is **Gemini 2.5 Flash** in `server/domain/scan/infrastructure/gemini.ts`, key in `NITRO_GOOGLE_API_KEY`; `POST /admin/migrate` is gated by `NITRO_ADMIN_TOKEN`. Local `.env` (see `.env.example`); in production, GCP Secret Manager (project `polyforms-bazar-prod`), provisioned by `infra/secrets.tf`. Never commit a key. Always update `.env.example` and this section when adding an env var.
+- The AI (photo scan) is **Gemini 2.5 Flash** in `server/domain/scan/infrastructure/gemini.ts`, key in `NITRO_GOOGLE_API_KEY`; `POST /admin/migrate` is gated by `NITRO_ADMIN_TOKEN`; `NITRO_SENTRY_DSN` is optional (a non-URL value disables error reporting). Local `.env` (see `.env.example`); in production, GCP Secret Manager (project `polyforms-bazar-prod`), provisioned by `infra/secrets.tf`. Never commit a key. Always update `.env.example` and this section when adding an env var.
 
 ## iOS Simulator
 

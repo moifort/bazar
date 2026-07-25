@@ -95,6 +95,13 @@ variable "admin_token" {
   default     = null
 }
 
+variable "sentry_dsn" {
+  description = "Sentry DSN for error reporting (empty disables Sentry). Exposed to the function as NITRO_SENTRY_DSN, read via process.env.NITRO_SENTRY_DSN in the Nitro plugin."
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 variable "github_repo" {
   description = "GitHub repository (owner/name) allowed to deploy via Workload Identity Federation"
   type        = string

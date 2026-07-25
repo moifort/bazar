@@ -42,6 +42,7 @@ server/
 │   └── admin/migrate.post.ts    # POST /admin/migrate → runs migrations
 ├── middleware/auth.ts           # Firebase ID token / admin token auth (H3 middleware)
 ├── plugins/
+│   ├── 01-sentry.ts             # error reporting (Sentry, DSN from NITRO_SENTRY_DSN)
 │   ├── 02-graphql.ts            # boots ApolloServer once with the assembled schema
 │   └── 03-notifications.ts      # subscribes the notification domain to domain events
 ├── system/                      # infrastructure concerns
@@ -212,6 +213,12 @@ Command → emit('low-stock-crossed') → notification handler → FCM push
 
 Logging goes through `server/system/logger.ts` (`consola`, one tagged logger per module) — the
 arch test bans `console.log|error|warn` in server code, the migration runner's `console.info`
-aside. There is no error-reporting service wired in: a Cloud Function fault surfaces in Cloud
-Logging. Expected 4xx (401 missing user, 404, `BAD_USER_INPUT`) are business outcomes, not
+aside. Expected 4xx (401 missing user, 404, `BAD_USER_INPUT`) are business outcomes, not
 incidents, and must never be logged as errors.
+
+Error reporting is wired in `server/plugins/01-sentry.ts` via `@sentry/node`, with the DSN read
+from `NITRO_SENTRY_DSN` (Secret Manager in production, `.env` locally). A blank or invalid DSN
+disables reporting, so a bad value never breaks the deploy — a DSN Sentry's SDK rejects at
+`init()` would fail the Cloud Run health check and take the whole release down. The plugin hooks
+Nitro's `error` event and captures only faults with no `statusCode` or one `>= 500`; anything the
+API answered as a 4xx is dropped on the floor. Whatever escapes both also lands in Cloud Logging.
