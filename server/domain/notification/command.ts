@@ -42,4 +42,6 @@ const dispatchLowStock = async ({ userId, itemName, newQuantity }: DispatchLowSt
   await Promise.all(invalidTokens.map((token) => repository.removeByToken(token)))
 }
 
-export const NotificationCommand = { subscribe, unsubscribe, dispatchLowStock }
+const forget = (userId: UserId): Promise<void> => repository.removeAllByUser(userId)
+
+export const NotificationCommand = { subscribe, unsubscribe, dispatchLowStock, forget }

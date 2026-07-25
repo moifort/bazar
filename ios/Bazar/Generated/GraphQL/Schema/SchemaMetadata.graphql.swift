@@ -30,6 +30,7 @@ extension BazarGraphQL {
     static func objectType(forTypename typename: String) -> ApolloAPI.Object? {
       switch typename {
       case "CategoryCount": return BazarGraphQL.Objects.CategoryCount
+      case "ChangelogEntry": return BazarGraphQL.Objects.ChangelogEntry
       case "Dashboard": return BazarGraphQL.Objects.Dashboard
       case "Item": return BazarGraphQL.Objects.Item
       case "ItemPreview": return BazarGraphQL.Objects.ItemPreview

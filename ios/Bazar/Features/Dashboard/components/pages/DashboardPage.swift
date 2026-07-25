@@ -7,6 +7,7 @@ struct DashboardPage: View {
     let lowStockAlerts: [LowStockAlertRow.Model]
     let onRefresh: () async -> Void
     let onItemTap: (String) -> Void
+    let onSettings: () -> Void
 
     var body: some View {
         List {
@@ -63,6 +64,15 @@ struct DashboardPage: View {
         .navigationSubtitle(subtitle)
         .navigationBarTitleDisplayMode(.large)
         .refreshable { await onRefresh() }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: onSettings) {
+                    Image(systemName: "gearshape")
+                }
+                .accessibilityLabel("Réglages")
+                .accessibilityIdentifier("settings-button")
+            }
+        }
         .overlay {
             if placeCounts.isEmpty && recentItems.isEmpty && lowStockAlerts.isEmpty {
                 ContentUnavailableView(
@@ -127,7 +137,8 @@ extension LowStockAlertRow {
                 .init(id: "i3", name: "Boîtes nourriture bébé", category: .food, quantity: 1, threshold: 2, locationPath: "Maison > Cuisine > Placard"),
             ],
             onRefresh: {},
-            onItemTap: { _ in }
+            onItemTap: { _ in },
+            onSettings: {}
         )
     }
 }
@@ -140,7 +151,8 @@ extension LowStockAlertRow {
             recentItems: [],
             lowStockAlerts: [],
             onRefresh: {},
-            onItemTap: { _ in }
+            onItemTap: { _ in },
+            onSettings: {}
         )
     }
 }

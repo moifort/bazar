@@ -94,6 +94,17 @@ projection to fall out of sync.
   category and by place (both sorted by count, descending), the most recent items, and the
   currently low-stock ones (sorted by name).
 
+## Deleting an account erases everything, in one direction
+
+`deleteAccount` is irreversible and immediate: no grace period, no scheduled job, no soft delete
+to reason about. Each domain forgets its own documents — items, the four location levels,
+reminders with their completion history, the registered devices — and none of them knows about
+the others; `server/system/account/` orchestrates.
+
+The **account itself goes last**. An account deleted before its data would leave documents keyed
+to a user nobody can authenticate as: unreachable, unclaimable, and invisible to any later
+attempt. The reverse merely leaves an empty account, which a second attempt finishes off.
+
 ## Absence, everywhere
 
 A field with no value is **absent**, never `null` and never an empty-string placeholder standing

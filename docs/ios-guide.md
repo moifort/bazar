@@ -24,7 +24,7 @@ path to `project.yml` is only needed for a new top-level group.
 
 ```
 ios/Bazar/
-├── BazarApp.swift              # @main — hands off to AuthRoot
+├── BazarApp.swift              # @main — AuthRoot, or DebugGallery under -gallery
 ├── ContentView.swift           # the TabView: Accueil, Objets, Scanner, Lieux
 ├── Features/{Feature}/
 │   ├── {Feature}API.swift      # the mapping boundary: GraphQL → model types
@@ -46,7 +46,7 @@ ios/Bazar/
 ```
 
 Features: `Items`, `Locations`, `Scan`, `Search`, `Dashboard`, `Reminders`, `Notifications`,
-`Auth`.
+`Auth`, `Settings`.
 
 ## Data fetching — GraphQL, not REST
 
@@ -233,6 +233,18 @@ what the user reads: labels, titles, accessibility *labels*, preview names. See
 runs Sign in with Apple, `AppleNonce` generates the nonce Firebase requires, `AuthSession` holds
 the session. Every GraphQL request then carries the Firebase ID token through the interceptor.
 Portal-side setup: [apple-sign-in.md](./apple-sign-in.md).
+
+## Account deletion — required, and reachable
+
+An app that signs users in with Apple must let them delete the account from inside the app
+(App Store Review Guideline 5.1.1(v)). `Settings` carries it: a destructive row, an alert naming
+what goes, then `AuthSession.deleteAccount()`.
+
+The order matters and is fixed: run Sign in with Apple again to obtain a fresh authorization
+code (the sign-in one is handed out once and never stored), revoke the Apple token with it,
+call the `deleteAccount` mutation so the server erases the data, and only then sign out locally.
+Backing out of the Apple sheet throws `.canceled`, which the coordinator swallows — nothing was
+deleted, so an error alert would lie.
 
 ## Push notifications
 

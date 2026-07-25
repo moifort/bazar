@@ -2,7 +2,7 @@ import type { PlaceId } from '~/domain/location/types'
 import type { UserId } from '~/domain/shared/types'
 import { db } from '~/system/firebase'
 import { memoizedPerRequest } from '~/system/request-cache'
-import { genericDataConverter } from '~/utils/firestore'
+import { deleteInBatches, genericDataConverter } from '~/utils/firestore'
 import type { Item, ItemCategory, ItemId } from '../types'
 
 const items = () => db().collection('items').withConverter(genericDataConverter<Item>())
@@ -72,4 +72,9 @@ export const save = async (item: Item): Promise<Item> => {
 
 export const remove = async (id: ItemId): Promise<void> => {
   await items().doc(id).delete()
+}
+
+export const removeAllByUser = async (userId: UserId): Promise<void> => {
+  const snap = await items().where('userId', '==', userId).get()
+  await deleteInBatches(snap.docs.map((doc) => doc.ref))
 }

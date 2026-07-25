@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto'
 import type { UserId } from '~/domain/shared/types'
 import { db } from '~/system/firebase'
-import { genericDataConverter } from '~/utils/firestore'
+import { deleteInBatches, genericDataConverter } from '~/utils/firestore'
 import type { NotificationSubscription, NotificationToken } from '../types'
 
 const subscriptions = () =>
@@ -25,4 +25,9 @@ export const save = async (
 
 export const removeByToken = async (token: NotificationToken): Promise<void> => {
   await subscriptions().doc(docId(token)).delete()
+}
+
+export const removeAllByUser = async (userId: UserId): Promise<void> => {
+  const snap = await subscriptions().where('userId', '==', userId).get()
+  await deleteInBatches(snap.docs.map((doc) => doc.ref))
 }

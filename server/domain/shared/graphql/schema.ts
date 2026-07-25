@@ -42,4 +42,7 @@ import '~/domain/notification/infrastructure/graphql/mutations'
 import '~/system/changelog/infrastructure/graphql/types'
 import '~/system/changelog/infrastructure/graphql/queries'
 
+// Account (system)
+import '~/system/account/infrastructure/graphql/mutations'
+
 export const schema = builder.toSchema()

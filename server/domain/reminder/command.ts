@@ -177,4 +177,6 @@ const removeByItem = async (userId: UserId, itemId: ItemId) => {
   )
 }
 
-export const ReminderCommand = { add, update, complete, remove, removeByItem }
+const forget = (userId: UserId): Promise<void> => repository.removeAllByUser(userId)
+
+export const ReminderCommand = { add, update, complete, remove, removeByItem, forget }

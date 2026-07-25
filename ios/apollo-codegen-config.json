@@ -1,7 +1,9 @@
 {
   "schemaNamespace": "BazarGraphQL",
   "input": {
-    "schemaSearchPaths": ["../shared/schema.graphql"],
+    "schemaSearchPaths": [
+      "../shared/schema.graphql"
+    ],
     "operationSearchPaths": [
       "Bazar/Features/Items/GraphQL/*.graphql",
       "Bazar/Features/Locations/GraphQL/*.graphql",
@@ -9,7 +11,8 @@
       "Bazar/Features/Search/GraphQL/*.graphql",
       "Bazar/Features/Dashboard/GraphQL/*.graphql",
       "Bazar/Features/Reminders/GraphQL/*.graphql",
-      "Bazar/Features/Notifications/GraphQL/*.graphql"
+      "Bazar/Features/Notifications/GraphQL/*.graphql",
+      "Bazar/Features/Settings/GraphQL/*.graphql"
     ]
   },
   "output": {

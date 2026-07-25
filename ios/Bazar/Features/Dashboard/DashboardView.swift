@@ -5,6 +5,7 @@ struct DashboardView: View {
 
     @State private var viewModel = DashboardViewModel()
     @State private var selectedItemId: String?
+    @State private var showSettings = false
 
     var body: some View {
         NavigationStack {
@@ -36,7 +37,8 @@ struct DashboardView: View {
                             )
                         },
                         onRefresh: { await viewModel.load() },
-                        onItemTap: { selectedItemId = $0 }
+                        onItemTap: { selectedItemId = $0 },
+                        onSettings: { showSettings = true }
                     )
                 } else if let error = viewModel.error {
                     ContentUnavailableView(
@@ -61,6 +63,9 @@ struct DashboardView: View {
                 NavigationStack {
                     ItemDetailView(itemId: wrapper.id)
                 }
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView()
             }
         }
     }

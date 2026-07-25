@@ -1,7 +1,7 @@
 import type { ItemId } from '~/domain/item/types'
 import type { UserId } from '~/domain/shared/types'
 import { db } from '~/system/firebase'
-import { genericDataConverter } from '~/utils/firestore'
+import { deleteInBatches, genericDataConverter } from '~/utils/firestore'
 import type { Reminder, ReminderCompletion, ReminderCompletionId, ReminderId } from '../types'
 
 const reminders = () => db().collection('reminders').withConverter(genericDataConverter<Reminder>())
@@ -68,4 +68,13 @@ export const findCompletionsByReminder = async (
 
 export const removeCompletion = async (id: ReminderCompletionId): Promise<void> => {
   await completions().doc(id).delete()
+}
+
+// The completion history goes with the reminders it belongs to: it outlives a
+// single reminder, never its owner.
+export const removeAllByUser = async (userId: UserId): Promise<void> => {
+  for (const collection of [reminders(), completions()]) {
+    const snap = await collection.where('userId', '==', userId).get()
+    await deleteInBatches(snap.docs.map((doc) => doc.ref))
+  }
 }

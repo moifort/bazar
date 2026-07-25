@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, mock, test } from 'bun:test'
 import type { UserId } from '~/domain/shared/types'
-import { fakeDb, resetFakeFirestore } from '~/test/fake-firestore'
+import { fakeFirebase, resetFakeFirestore } from '~/test/fake-firestore'
 
-mock.module('~/system/firebase', () => ({ db: fakeDb }))
+mock.module('~/system/firebase', fakeFirebase)
 
 const { ItemQuery } = await import('./query')
 

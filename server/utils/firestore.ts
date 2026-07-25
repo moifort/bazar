@@ -1,8 +1,23 @@
 import type {
   DocumentData,
+  DocumentReference,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
 } from 'firebase-admin/firestore'
+import { chunk } from 'lodash-es'
+import { db } from '~/system/firebase'
+
+// Firestore caps a write batch at 500 operations, so an erasure of unknown size
+// is committed in slices rather than in one batch that would fail past the cap.
+const BATCH_LIMIT = 500
+
+export const deleteInBatches = async (refs: DocumentReference[]): Promise<void> => {
+  for (const slice of chunk(refs, BATCH_LIMIT)) {
+    const batch = db().batch()
+    for (const ref of slice) batch.delete(ref)
+    await batch.commit()
+  }
+}
 
 export const genericDataConverter = <T extends DocumentData>(): FirestoreDataConverter<T> => ({
   toFirestore: (data: T) => data,

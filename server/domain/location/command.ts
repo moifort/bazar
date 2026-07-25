@@ -190,7 +190,10 @@ const deleteStorage = async (userId: UserId, id: StorageId) => {
   return 'deleted' as const
 }
 
+const forget = (userId: UserId): Promise<void> => repository.removeAllByUser(userId)
+
 export const LocationCommand = {
+  forget,
   createPlace,
   updatePlace,
   deletePlace,

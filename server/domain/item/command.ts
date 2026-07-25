@@ -161,4 +161,8 @@ const move = async (userId: UserId, id: ItemId, attachment: Attachment) => {
   return moved
 }
 
-export const ItemCommand = { add, update, remove, move }
+// Every item of one owner, gone. Reminders are the reminder domain's own
+// business — the account use case asks it directly.
+const forget = (userId: UserId): Promise<void> => repository.removeAllByUser(userId)
+
+export const ItemCommand = { add, update, remove, move, forget }

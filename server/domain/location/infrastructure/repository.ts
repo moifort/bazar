@@ -1,6 +1,6 @@
 import type { UserId } from '~/domain/shared/types'
 import { db } from '~/system/firebase'
-import { genericDataConverter } from '~/utils/firestore'
+import { deleteInBatches, genericDataConverter } from '~/utils/firestore'
 import type { Place, PlaceId, Room, RoomId, Storage, StorageId, Zone, ZoneId } from '../types'
 
 const places = () => db().collection('places').withConverter(genericDataConverter<Place>())
@@ -114,4 +114,16 @@ export const saveStorage = async (storage: Storage) => {
 
 export const removeStorage = async (id: StorageId) => {
   await storages().doc(id).delete()
+}
+
+// Erasure
+
+// The whole hierarchy at once, level by level. The cascade of `deletePlace` walks
+// down from each root; this does not need to — every level is owner-scoped, so
+// wiping the four collections leaves nothing orphaned behind.
+export const removeAllByUser = async (userId: UserId): Promise<void> => {
+  for (const collection of [places(), rooms(), zones(), storages()]) {
+    const snap = await collection.where('userId', '==', userId).get()
+    await deleteInBatches(snap.docs.map((doc) => doc.ref))
+  }
 }
