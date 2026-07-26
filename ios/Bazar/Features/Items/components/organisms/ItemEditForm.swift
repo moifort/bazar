@@ -8,6 +8,7 @@ struct ItemEditForm: View {
 
     @State private var name: String
     @State private var description: String
+    @State private var tags: [String]
     @State private var category: ItemCategory
     @State private var quantity: Int
     @State private var notes: String
@@ -30,6 +31,7 @@ struct ItemEditForm: View {
         self.onCancel = onCancel
         _name = State(initialValue: initial.name)
         _description = State(initialValue: initial.description)
+        _tags = State(initialValue: initial.tags)
         _category = State(initialValue: initial.category)
         _quantity = State(initialValue: initial.quantity)
         _notes = State(initialValue: initial.notes)
@@ -58,6 +60,14 @@ struct ItemEditForm: View {
                 }
 
                 Stepper("Quantité : \(quantity)", value: $quantity, in: 1...9999)
+            }
+
+            Section {
+                TagField(tags: $tags)
+            } header: {
+                Text("Mots-clés")
+            } footer: {
+                Text("Servent à retrouver l'objet : ce qui est écrit dessus, ce qui le décrit.")
             }
 
             Section("Description") {
@@ -161,6 +171,7 @@ struct ItemEditForm: View {
             category: category,
             quantity: quantity,
             notes: notes.trimmingCharacters(in: .whitespaces),
+            tags: tags,
             purchaseDate: hasPurchaseDate ? purchaseDate : nil,
             purchaseLocation: purchaseLocation.trimmingCharacters(in: .whitespaces),
             purchaseCondition: purchaseCondition
@@ -178,6 +189,7 @@ extension ItemEditForm {
     struct Fields: Sendable {
         var name: String
         var description: String
+        var tags: [String]
         var category: ItemCategory
         var quantity: Int
         var notes: String
@@ -191,12 +203,14 @@ extension ItemEditForm {
             category: ItemCategory,
             quantity: Int,
             notes: String,
+            tags: [String] = [],
             purchaseDate: Date? = nil,
             purchaseLocation: String = "",
             purchaseCondition: PurchaseCondition? = nil
         ) {
             self.name = name
             self.description = description
+            self.tags = tags
             self.category = category
             self.quantity = quantity
             self.notes = notes
@@ -212,6 +226,7 @@ extension ItemEditForm {
                 category: item.category,
                 quantity: item.quantity,
                 notes: item.personalNotes,
+                tags: item.tags,
                 purchaseDate: item.purchaseDate,
                 purchaseLocation: item.purchaseLocation,
                 purchaseCondition: item.purchaseCondition
@@ -229,6 +244,7 @@ extension ItemEditForm {
                 category: .tools,
                 quantity: 1,
                 notes: "Batterie à remplacer",
+                tags: ["bosch", "18v", "visseuse", "bricolage"],
                 purchaseDate: Date(timeIntervalSinceNow: -86_400 * 30),
                 purchaseLocation: "Amazon"
             ),

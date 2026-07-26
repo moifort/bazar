@@ -56,6 +56,27 @@ all — just created, not yet put away.
   and rewritten on every `move` — it exists so that "everything in this place" stays a single
   query, and it is never edited on its own.
 
+## One item groups identical units, its tags say them apart
+
+Twelve labelled spice jars are one item with a quantity of twelve, not twelve items. What
+distinguishes the units is not lost in the grouping: it goes into **`tags`**, the keywords the
+item is searched by.
+
+A tag comes from one of two places, in this order:
+
+- **what is written on the units** — the label, the brand, the flavour, the variant, the size
+  ("cumin", "paprika", "Bosch", "18V");
+- **what describes the item** — its generic nature, material, colour, use ("condiment",
+  "cuisine").
+
+- The list is **always present**, empty when the item carries none, and never `null`.
+- Keywords are deduplicated case- and accent-insensitively, first spelling wins, and the list is
+  capped at twenty — past that a tag list stops telling the search anything new.
+- `tags` feed the search index alongside the name, the description and the personal notes, which
+  is the whole point of the field: "paprika" and "condiment" both find the jar.
+- The AI proposes them on a scan; the user edits them like any other field. Nothing about a tag is
+  read-only.
+
 ## Quantity, low stock, and the crossing
 
 An item has a `quantity` (a positive integer) and optionally a `lowStockThreshold`. No threshold
@@ -73,8 +94,8 @@ means the user never wants to hear about this item.
 ## A scan produces previews, not items
 
 Photographing is not owning. The AI (Gemini 2.5 Flash vision) returns a batch of **previews** —
-name, guessed category, description, quantity — identified by a `previewId`, and **nothing is
-persisted at that point**. The user reviews the batch, edits what the AI got wrong, and
+name, guessed category, description, tags, quantity — identified by a `previewId`, and **nothing
+is persisted at that point**. The user reviews the batch, edits what the AI got wrong, and
 **confirms**; only then are items created, all at once, in one place.
 
 - A preview whose category the AI couldn't guess arrives without one — the user picks it; the
@@ -113,7 +134,9 @@ projection to fall out of sync.
 
 - **Search** is fuzzy and accent-insensitive across items, places and rooms, ranked by how the
   match happened: exact (100), prefix (80), word prefix (60), substring (40), near-miss within
-  edit distance 2 (20). Anything scoring zero is not a result.
+  edit distance 2 (20). Anything scoring zero is not a result. An item is matched on its name, its
+  description, its personal notes and its tags — the scoring works word by word, so every keyword
+  is an entry point of its own.
 - **The dashboard** answers "how much do I own, of what, and where": total, breakdown by
   category and by place (both sorted by count, descending), the most recent items, and the
   currently low-stock ones (sorted by name).

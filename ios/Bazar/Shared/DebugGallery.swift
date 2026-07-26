@@ -86,6 +86,34 @@ struct DebugGallery: View {
                     onSearchSelectItem: { _ in }
                 )
             }
+        case "item-detail":
+            NavigationStack {
+                ItemDetailPage(
+                    id: "i1",
+                    name: "Pot d'épices",
+                    description: "Pots de 50 g étiquetés, rangés sur le porte-épices.",
+                    tags: ["cumin", "paprika", "curry", "épice", "condiment", "cuisine"],
+                    category: .food,
+                    quantity: 12,
+                    location: Fixtures.itemLocation,
+                    personalNotes: "",
+                    createdAt: Date(timeIntervalSinceNow: -86_400 * 30),
+                    purchaseDate: nil,
+                    purchaseLocation: "",
+                    purchaseCondition: nil,
+                    lowStockThreshold: 3,
+                    purchaseLocationSuggestions: [],
+                    reminders: [],
+                    onRefresh: {},
+                    onDelete: {},
+                    onEditSave: { _ in },
+                    onOpenReminders: {},
+                    onOpenMove: {},
+                    onOpenPurchaseEdit: {},
+                    onOpenLowStockEdit: {},
+                    onClose: {}
+                )
+            }
         case "locations":
             NavigationStack {
                 LocationsPage(
@@ -292,10 +320,22 @@ enum Fixtures {
         ),
     ]
 
+    static let itemLocation = LocationPath(
+        fullPath: "Maison > Cuisine > Placard > Étagère du haut",
+        placeId: "p1",
+        placeName: "Maison",
+        roomId: "r1",
+        roomName: "Cuisine",
+        zoneId: "z1",
+        zoneName: "Placard",
+        storageId: "s1",
+        storageName: "Étagère du haut"
+    )
+
     static let previews: [ItemPreview] = [
-        ItemPreview(previewId: "pv1", name: "Boîte de conserve — tomates pelées", category: .food, description: "Conserve 400 g", quantity: 4, personalNotes: "", purchaseLocation: ""),
-        ItemPreview(previewId: "pv2", name: "Paquet de pâtes", category: .food, description: "Penne 500 g", quantity: 2, personalNotes: "", purchaseLocation: ""),
-        ItemPreview(previewId: "pv3", name: "Bouteille d'huile d'olive", category: .food, description: "1 L", quantity: 1, personalNotes: "", purchaseLocation: ""),
+        ItemPreview(previewId: "pv1", name: "Boîte de conserve — tomates pelées", category: .food, description: "Conserve 400 g", quantity: 4, tags: ["tomates pelées", "conserve", "légume"], personalNotes: "", purchaseLocation: ""),
+        ItemPreview(previewId: "pv2", name: "Pot d'épices", category: .food, description: "Pots de 50 g étiquetés", quantity: 12, tags: ["cumin", "paprika", "curry", "épice", "condiment", "cuisine"], personalNotes: "", purchaseLocation: ""),
+        ItemPreview(previewId: "pv3", name: "Bouteille d'huile d'olive", category: .food, description: "1 L", quantity: 1, tags: ["huile d'olive", "condiment"], personalNotes: "", purchaseLocation: ""),
         ItemPreview(previewId: "pv4", name: "Rouleau d'essuie-tout", category: .other, description: "", quantity: 3, personalNotes: "", purchaseLocation: ""),
     ]
 

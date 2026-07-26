@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "ItemDetail"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description category quantity addedBy personalNotes purchaseDate purchaseLocation purchaseCondition lowStockThreshold createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } reminders { __typename id title notes dueDate frequency customIntervalDays createdAt updatedAt } } }"#
+        #"query ItemDetail($id: ItemId!) { item(id: $id) { __typename id name description tags category quantity addedBy personalNotes purchaseDate purchaseLocation purchaseCondition lowStockThreshold createdAt updatedAt location { __typename fullPath placeId placeName roomId roomName zoneId zoneName storageId storageName } reminders { __typename id title notes dueDate frequency customIntervalDays createdAt updatedAt } } }"#
       ))
 
     public var id: ItemId
@@ -44,6 +44,7 @@ extension BazarGraphQL {
           .field("id", BazarGraphQL.ItemId.self),
           .field("name", BazarGraphQL.ItemName.self),
           .field("description", String.self),
+          .field("tags", [BazarGraphQL.ItemTag].self),
           .field("category", GraphQLEnum<BazarGraphQL.ItemCategory>.self),
           .field("quantity", BazarGraphQL.Quantity.self),
           .field("addedBy", BazarGraphQL.UserId.self),
@@ -64,6 +65,8 @@ extension BazarGraphQL {
         var name: BazarGraphQL.ItemName { __data["name"] }
         /// Item description
         var description: String { __data["description"] }
+        /// Search keywords: what is written on the units this item groups ("cumin", "paprika") and what describes it ("condiment", "cuisine")
+        var tags: [BazarGraphQL.ItemTag] { __data["tags"] }
         /// Item category
         var category: GraphQLEnum<BazarGraphQL.ItemCategory> { __data["category"] }
         /// Number of identical items

@@ -1,7 +1,7 @@
 import SchemaBuilder from '@pothos/core'
 import { GraphQLScalarType } from 'graphql'
 import type { H3Event } from 'h3'
-import type { ItemId, ItemName, Quantity } from '~/domain/item/types'
+import type { ItemId, ItemName, ItemTag, Quantity } from '~/domain/item/types'
 import type {
   PlaceId,
   PlaceName,
@@ -37,6 +37,7 @@ export const builder = new SchemaBuilder<{
     DateTime: { Input: Date; Output: Date }
     ItemId: { Input: ItemId; Output: ItemId }
     ItemName: { Input: ItemName; Output: ItemName }
+    ItemTag: { Input: ItemTag; Output: ItemTag }
     Quantity: { Input: Quantity; Output: Quantity }
     PlaceId: { Input: PlaceId; Output: PlaceId }
     PlaceName: { Input: PlaceName; Output: PlaceName }

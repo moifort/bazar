@@ -16,6 +16,7 @@ const seedItem = (id: string, over: Record<string, unknown> = {}) =>
     userId: USER,
     name: id,
     description: '',
+    tags: [],
     personalNotes: '',
     category: 'tools',
     quantity: 1,

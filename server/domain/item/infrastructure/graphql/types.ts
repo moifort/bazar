@@ -36,6 +36,11 @@ export const ItemType = builder.objectRef<Item>('Item').implement({
     id: t.expose('id', { type: 'ItemId', description: 'Item unique identifier' }),
     name: t.expose('name', { type: 'ItemName', description: 'Item display name' }),
     description: t.exposeString('description', { description: 'Item description' }),
+    tags: t.expose('tags', {
+      type: ['ItemTag'],
+      description:
+        'Search keywords: what is written on the units this item groups ("cumin", "paprika") and what describes it ("condiment", "cuisine")',
+    }),
     category: t.expose('category', { type: ItemCategoryEnum, description: 'Item category' }),
     quantity: t.expose('quantity', { type: 'Quantity', description: 'Number of identical items' }),
     addedBy: t.expose('addedBy', { type: 'UserId', description: 'User who added this item' }),

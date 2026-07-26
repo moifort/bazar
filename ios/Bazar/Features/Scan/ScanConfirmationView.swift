@@ -97,6 +97,7 @@ struct ScanConfirmationView: View {
             category: original.category,
             description: original.description,
             quantity: original.quantity,
+            tags: original.tags,
             personalNotes: original.personalNotes,
             purchaseDate: original.purchaseDate,
             purchaseLocation: original.purchaseLocation,

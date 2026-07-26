@@ -19,6 +19,7 @@ export const analyzePhoto = async (userId: UserId, imageBase64: string): Promise
     name: item.name,
     category: (item.category as ItemCategory) ?? null,
     description: item.description ?? '',
+    tags: item.tags ?? [],
     quantity: item.quantity ?? 1,
   }))
 

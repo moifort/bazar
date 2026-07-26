@@ -21,7 +21,8 @@ extension BazarGraphQL {
       purchaseCondition: GraphQLNullable<GraphQLEnum<PurchaseCondition>> = nil,
       purchaseDate: GraphQLNullable<DateTime> = nil,
       purchaseLocation: GraphQLNullable<String> = nil,
-      quantity: GraphQLNullable<Quantity> = nil
+      quantity: GraphQLNullable<Quantity> = nil,
+      tags: GraphQLNullable<[ItemTag]> = nil
     ) {
       __data = InputDict([
         "category": category,
@@ -32,7 +33,8 @@ extension BazarGraphQL {
         "purchaseCondition": purchaseCondition,
         "purchaseDate": purchaseDate,
         "purchaseLocation": purchaseLocation,
-        "quantity": quantity
+        "quantity": quantity,
+        "tags": tags
       ])
     }
 
@@ -88,6 +90,12 @@ extension BazarGraphQL {
     var quantity: GraphQLNullable<Quantity> {
       get { __data["quantity"] }
       set { __data["quantity"] = newValue }
+    }
+
+    /// New search keywords (empty list to clear; omit to leave unchanged)
+    var tags: GraphQLNullable<[ItemTag]> {
+      get { __data["tags"] }
+      set { __data["tags"] = newValue }
     }
   }
 

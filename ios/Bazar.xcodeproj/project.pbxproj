@@ -106,6 +106,7 @@
 		81F411D2B857E719AD699B44 /* SearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C9B0FC268129E8C12E347F /* SearchResultsView.swift */; };
 		82C48404BB761EA82F7AC3A1 /* OnboardingAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757598BEF307A44CF6511C3B /* OnboardingAPI.swift */; };
 		884A41ECCB5F28070E88DD2A /* ItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6735C526DD16DFF89F7AF631 /* ItemRow.swift */; };
+		88E08800C18E3B42278E4FF8 /* TagField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B31D0F99057724ECA93FB7 /* TagField.swift */; };
 		8BC4FD3BB26279D7294B5481 /* FirstName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B6650119F6794B6FB6CB37 /* FirstName.swift */; };
 		8D59034163EF2EA2AB51418A /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1639E48F473AD3B55915E2B5 /* ScanView.swift */; };
 		8DCAE5A84AEC2FA68F8CB204 /* LocationsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E90CFF8E8951AAA87F0F017 /* LocationsPage.swift */; };
@@ -122,6 +123,7 @@
 		97A9388AB0046ACDCC780B16 /* RemindersDueQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD65AEFD7E5B951537B69C93 /* RemindersDueQuery.graphql.swift */; };
 		980EA9F51A7CDE46002E7842 /* ViewfinderOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99829147069424F5CC544BF /* ViewfinderOverlay.swift */; };
 		982CB456388C833107A0164B /* Dashboard.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06400A76AF24005C344DCCE /* Dashboard.graphql.swift */; };
+		99116AD055342A8FDC9EB0AF /* ItemTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86BFC8C4A197017434377B4 /* ItemTag.swift */; };
 		99645BA6C4F2D3560B093057 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45AD30DBAF9869B06D91BAA /* AppDelegate.swift */; };
 		9AB525B42EAB75D2439AECD0 /* Quota.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6792E6C38554182C622DFAFB /* Quota.graphql.swift */; };
 		9ADA8A6323FBB03C33565671 /* NotificationSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F76B922E9A077FC8B8DA82 /* NotificationSubscriber.swift */; };
@@ -170,6 +172,7 @@
 		CFFAF06E12BBFA5CFD012B3E /* AddReminderMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9AE44F189A422C0F52B77A2 /* AddReminderMutation.graphql.swift */; };
 		D2084765C552602B44617769 /* AllPlacesQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553E53662DE2917B8EAEAADB /* AllPlacesQuery.graphql.swift */; };
 		D247D14E805DCB2AC8E44EF8 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02DD1FAAC65037AD17DAECE /* OnboardingView.swift */; };
+		D29DEEA585B1375DCB4F72C3 /* TagChips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF1829D47131027F388B8B2 /* TagChips.swift */; };
 		D2A7C913EC0BFEFB466828BD /* ReminderFrequency.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489353CA58597C0801D77375 /* ReminderFrequency.graphql.swift */; };
 		D35F4A10268F3760BE281B70 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4A00CB13D6B9C4877A36F142 /* FirebaseAuth */; };
 		D3D564F83A278B1584CF314C /* DistinctPurchaseLocationsQuery.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E7E7383EABF976BE153D52 /* DistinctPurchaseLocationsQuery.graphql.swift */; };
@@ -184,6 +187,7 @@
 		DEA2EE40F2114AAB73818859 /* DeleteStorageMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7CE050E23A05E065096D0E /* DeleteStorageMutation.graphql.swift */; };
 		DF6B428D1B68227D5BC365B3 /* AddItemMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6285FBBFB04FD9DC5C872CE1 /* AddItemMutation.graphql.swift */; };
 		E055544EDADABEC6E9E4C3DB /* ConfirmItemsMutation.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED18391D049C0824EDE0A8BE /* ConfirmItemsMutation.graphql.swift */; };
+		E1BD6B7A179F433CCB999E9A /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FEB2D938D10C814F75B45 /* FlowLayout.swift */; };
 		E289BD92419F45A6FA5BC005 /* UpdateZoneInput.graphql.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134C1797998AD9F0F88D95E /* UpdateZoneInput.graphql.swift */; };
 		E4DFD4F3B4B5966558D2439A /* SchemaConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB62E818C766845266C402E /* SchemaConfiguration.swift */; };
 		E4ED5C61032BF5E8706C841E /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F89DA0FC114FDBA9B8B4719 /* SearchViewModel.swift */; };
@@ -246,6 +250,7 @@
 		32D47C67B4CAEE0E199E8A13 /* RemindersAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersAPI.swift; sourceTree = "<group>"; };
 		33A22775E64CFBED26769D6C /* UpdatePlaceMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlaceMutation.graphql.swift; sourceTree = "<group>"; };
 		340183DEE866C72A8303F4E4 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		35B31D0F99057724ECA93FB7 /* TagField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagField.swift; sourceTree = "<group>"; };
 		378F727F6CF2DE9AA6B67801 /* DashboardAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardAPI.swift; sourceTree = "<group>"; };
 		383954842A84FB5B5FADC7F6 /* SearchQuery.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQuery.graphql.swift; sourceTree = "<group>"; };
 		3F93730F9332DA33F3DE341B /* UpdateStorageMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateStorageMutation.graphql.swift; sourceTree = "<group>"; };
@@ -281,6 +286,7 @@
 		6792E6C38554182C622DFAFB /* Quota.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quota.graphql.swift; sourceTree = "<group>"; };
 		67EEFF5AA7C65A9B8B18AD00 /* Items.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.graphql.swift; sourceTree = "<group>"; };
 		6A9B10A5BD25D44043BE0515 /* UpdateRoomMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateRoomMutation.graphql.swift; sourceTree = "<group>"; };
+		6AF1829D47131027F388B8B2 /* TagChips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagChips.swift; sourceTree = "<group>"; };
 		6BE11C582F11BAFC07B646EC /* ItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsViewModel.swift; sourceTree = "<group>"; };
 		6ED9EAF1EC1667D28E8A5860 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7090BE25F2FBC6F335024022 /* ChangelogEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangelogEntryRow.swift; sourceTree = "<group>"; };
@@ -323,6 +329,7 @@
 		A4A24DF39DBE5510F05830CB /* QuotaSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotaSection.swift; sourceTree = "<group>"; };
 		A58849347429E1CA583C115B /* Entitlement.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entitlement.graphql.swift; sourceTree = "<group>"; };
 		A910A38DCED5283240940428 /* ConfirmItemInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmItemInput.graphql.swift; sourceTree = "<group>"; };
+		A92FEB2D938D10C814F75B45 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		A9CD551E13841DCFE2857EFB /* ScanFlowPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanFlowPage.swift; sourceTree = "<group>"; };
 		AB83A2E13CF3995EEF2974C3 /* UpdateReminderInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateReminderInput.graphql.swift; sourceTree = "<group>"; };
 		ADB8D10A874A48CFAF2F4027 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -380,6 +387,7 @@
 		E304AD86D9701D805BAF163B /* SyncEntitlementMutation.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEntitlementMutation.graphql.swift; sourceTree = "<group>"; };
 		E36BBD17426FC9E99E355C72 /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStore.swift; sourceTree = "<group>"; };
 		E7D8327375B14B515F761379 /* UpdatePlaceInput.graphql.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePlaceInput.graphql.swift; sourceTree = "<group>"; };
+		E86BFC8C4A197017434377B4 /* ItemTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTag.swift; sourceTree = "<group>"; };
 		E912516B096BA0433315E77D /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		E99829147069424F5CC544BF /* ViewfinderOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewfinderOverlay.swift; sourceTree = "<group>"; };
 		EBCCE34F0EBAD4FBD82B53C9 /* SettingsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; };
@@ -540,6 +548,7 @@
 			isa = PBXGroup;
 			children = (
 				6735C526DD16DFF89F7AF631 /* ItemRow.swift */,
+				35B31D0F99057724ECA93FB7 /* TagField.swift */,
 			);
 			path = molecules;
 			sourceTree = "<group>";
@@ -730,6 +739,7 @@
 			isa = PBXGroup;
 			children = (
 				16FE4F4E06665110128A65CB /* AsyncToolbarButton.swift */,
+				A92FEB2D938D10C814F75B45 /* FlowLayout.swift */,
 			);
 			path = atoms;
 			sourceTree = "<group>";
@@ -741,6 +751,7 @@
 				03B6650119F6794B6FB6CB37 /* FirstName.swift */,
 				747852452BE8F5587C19941B /* ItemId.swift */,
 				D894786302504830B5C0FD8C /* ItemName.swift */,
+				E86BFC8C4A197017434377B4 /* ItemTag.swift */,
 				CD701F055909C265F3B69723 /* PlaceId.swift */,
 				16D8772176070DD83C06CFED /* PlaceName.swift */,
 				C1E8206DCD4F6CB15BEA294B /* Quantity.swift */,
@@ -781,6 +792,7 @@
 			isa = PBXGroup;
 			children = (
 				906A3DC6666CD80A028977DE /* atoms */,
+				B4027590240E74950C9452E0 /* molecules */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -894,6 +906,14 @@
 				EC402BE785A3EC005DE1E40A /* components */,
 			);
 			path = Scan;
+			sourceTree = "<group>";
+		};
+		B4027590240E74950C9452E0 /* molecules */ = {
+			isa = PBXGroup;
+			children = (
+				6AF1829D47131027F388B8B2 /* TagChips.swift */,
+			);
+			path = molecules;
 			sourceTree = "<group>";
 		};
 		B7E33B8B53BCAA790CF0564A /* Reminders */ = {
@@ -1108,7 +1128,7 @@
 			path = Subscription;
 			sourceTree = "<group>";
 		};
-		"TEMP_CCFD0924-5C2D-4C6B-90C5-8C973321D1B6" /* Notifications */ = {
+		"TEMP_A48F09F6-4F70-4889-8720-2EE53D921064" /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -1259,6 +1279,7 @@
 				5A8E50984D7263AE443D4B04 /* FirebaseTokenInterceptor.swift in Sources */,
 				8BC4FD3BB26279D7294B5481 /* FirstName.swift in Sources */,
 				7CFFBBF39C0FEA1274D3579D /* FirstNameStep.swift in Sources */,
+				E1BD6B7A179F433CCB999E9A /* FlowLayout.swift in Sources */,
 				0E15C0FF0EDA45DB9B96BE43 /* GraphQLClient.swift in Sources */,
 				DAC19910FC0549DCB22C8EE1 /* GraphQLHelpers.swift in Sources */,
 				7C3DD736025788600A472ACF /* GraphQLLoggingInterceptor.swift in Sources */,
@@ -1280,6 +1301,7 @@
 				FB9AC2F3C395DFF4A263E560 /* ItemRemindersView.swift in Sources */,
 				884A41ECCB5F28070E88DD2A /* ItemRow.swift in Sources */,
 				5FB75218EB295642954B9BC9 /* ItemSort.graphql.swift in Sources */,
+				99116AD055342A8FDC9EB0AF /* ItemTag.swift in Sources */,
 				9159588679D720455E9E899B /* Items.graphql.swift in Sources */,
 				1885AF007B567C81FB3E4E46 /* ItemsAPI.swift in Sources */,
 				29C33B97F2264620867BDD4C /* ItemsPage.swift in Sources */,
@@ -1368,6 +1390,8 @@
 				D7392C54440C09D6A0C272EF /* SubscriptionProducts.swift in Sources */,
 				66238FA0DF698CBA63EC56C4 /* SubscriptionStore.swift in Sources */,
 				91B89E1644A0D8590BD50D3D /* SyncEntitlementMutation.graphql.swift in Sources */,
+				D29DEEA585B1375DCB4F72C3 /* TagChips.swift in Sources */,
+				88E08800C18E3B42278E4FF8 /* TagField.swift in Sources */,
 				198729D26D75370A3B278766 /* UIImage+Resize.swift in Sources */,
 				511E5FE684F7E5EC222B7D01 /* UnsubscribeFromNotificationsMutation.graphql.swift in Sources */,
 				4F986D1A5DE3D75179DB2FFD /* UpdateItemInput.graphql.swift in Sources */,

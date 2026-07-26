@@ -31,6 +31,7 @@ const itemSchema = z.object({
     .nullable()
     .optional(),
   description: z.string().optional().default(''),
+  tags: z.array(z.string()).optional().default([]),
   quantity: z.number().int().positive().optional().default(1),
 })
 
@@ -74,14 +75,22 @@ N'inventorie jamais le meuble ni le contenant qui porte les objets : tiroir, eta
 armoire, commode, buffet, casier, boite de rangement sont des lieux de rangement, pas des objets.
 Un meuble qui ne range rien (canape, table, lampe, chaise) reste un objet valide.
 
+Regroupe en une seule entree les exemplaires du meme type, meme si leurs etiquettes different :
+douze pots d'epices etiquetes donnent une entree "Pot d'epices" avec quantity 12, jamais douze entrees.
+
 Pour chaque objet retenu, extrais :
 - name : nom de l'objet en francais
 - category : une parmi tools, appliances, decor, clothing, documents, food, electronics, furniture, kitchenware, linen, sports, toys, books, media, hygiene, other
 - description : breve description en francais (1-2 phrases)
-- quantity : nombre d'exemplaires identiques visibles (defaut 1)
+- tags : de 3 a 8 mots-cles courts en minuscules qui permettront de retrouver l'objet, dans cet ordre :
+  d'abord ce qui est ecrit sur chaque exemplaire (etiquette, marque, parfum, variante, taille),
+  ensuite ce qui decrit l'objet (nature generique, matiere, couleur, usage).
+  Un ou deux mots par tag, jamais une phrase, et jamais la simple reprise de name.
+  Exemple pour les douze pots : ["cumin", "paprika", "curry", "epice", "condiment", "cuisine"]
+- quantity : nombre d'exemplaires du meme type visibles (defaut 1)
 
 Si aucun objet ne satisfait ces criteres, reponds avec une liste vide.
-Reponds en JSON avec le schema : { "items": [{ "name", "category", "description", "quantity" }] }`
+Reponds en JSON avec le schema : { "items": [{ "name", "category", "description", "tags", "quantity" }] }`
 
 export const analyzeImage = async (imageBase64: string) => {
   const { googleApiKey } = config()

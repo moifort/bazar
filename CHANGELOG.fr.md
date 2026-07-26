@@ -7,6 +7,7 @@ Toutes les évolutions notables de Bazar, la plus récente en premier.
 ### New
 
 - Au premier lancement, l'application demande un prénom et le nom d'une première maison, puis propose ses pièces habituelles — l'inventaire a tout de suite où se ranger.
+- Des mots-clés sur chaque objet, modifiables à la main et proposés par le scan : les exemplaires identiques sont regroupés en un seul objet et ce qui est écrit sur chacun reste trouvable.
 
 ### Fixed
 

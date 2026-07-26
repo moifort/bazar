@@ -34,6 +34,7 @@ const seedItem = () =>
     userId,
     name: 'Machine a cafe',
     description: '',
+    tags: [],
     personalNotes: '',
     category: 'appliance',
     quantity: 1,

@@ -62,6 +62,35 @@ describe('addItem mutation', () => {
     expect(stored).toMatchObject({ storageId: s1, placeId: p1 })
   })
 
+  test('stores the search keywords, deduplicated', async () => {
+    const result = await execute(`
+      mutation {
+        addItem(input: {
+          name: "Pot d'epices"
+          category: food
+          quantity: 12
+          tags: ["cumin", "Cumin", "paprika", "condiment"]
+        }) {
+          tags
+        }
+      }
+    `)
+
+    expect(result.errors).toBeUndefined()
+    expect(result.data?.addItem).toEqual({ tags: ['cumin', 'paprika', 'condiment'] })
+  })
+
+  test('refuses a blank keyword at the boundary', async () => {
+    const result = await execute(`
+      mutation {
+        addItem(input: { name: "Casserole", category: kitchenware, tags: ["  "] }) { id }
+      }
+    `)
+
+    expect(result.errors?.[0]?.extensions?.code).toBe('BAD_USER_INPUT')
+    expect(fake.snapshot('items').size).toBe(0)
+  })
+
   test('refuses an item attached to a storage AND a zone', async () => {
     seedLocationChain()
 
@@ -84,6 +113,7 @@ describe('deleteItem mutation', () => {
       userId,
       name: 'Casserole',
       description: '',
+      tags: [],
       personalNotes: '',
       category: 'kitchenware',
       quantity: 1,

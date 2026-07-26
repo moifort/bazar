@@ -25,6 +25,7 @@ struct ItemDetailView: View {
                     id: item.id,
                     name: item.name,
                     description: item.description,
+                    tags: item.tags,
                     category: item.category,
                     quantity: item.quantity,
                     location: item.location,
@@ -210,7 +211,8 @@ struct ItemDetailView: View {
             purchaseCondition: graphQLPurchaseCondition(fields.purchaseCondition),
             purchaseDate: fields.purchaseDate.map { .some(iso.string(from: $0)) } ?? .null,
             purchaseLocation: .some(fields.purchaseLocation),
-            quantity: .some(String(fields.quantity))
+            quantity: .some(String(fields.quantity)),
+            tags: .some(fields.tags)
         )
         try await GraphQLItemsAPI.update(id: itemId, input: input)
         item = try await GraphQLItemsAPI.getDetail(id: itemId)

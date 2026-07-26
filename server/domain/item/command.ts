@@ -9,6 +9,7 @@ import {
   LowStockThreshold,
   ItemId as makeItemId,
   parseItemCategory,
+  parseItemTags,
   parsePurchaseCondition,
   parsePurchaseDate,
   parsePurchaseLocation,
@@ -32,6 +33,7 @@ type AddItemInput = {
   userId: UserId
   name: string
   description?: string | null
+  tags?: string[] | null
   category: string
   quantity?: number | null
   attachment: Attachment
@@ -48,6 +50,7 @@ const add = async (input: AddItemInput) => {
     userId: input.userId,
     name: ItemName(input.name),
     description: input.description ?? '',
+    tags: parseItemTags(input.tags ?? []),
     category: parseItemCategory(input.category),
     quantity: Quantity(input.quantity ?? 1),
     ...input.attachment,
@@ -72,6 +75,7 @@ const add = async (input: AddItemInput) => {
 type UpdateItemInput = {
   name?: string | null
   description?: string | null
+  tags?: string[] | null
   category?: string | null
   quantity?: number | null
   personalNotes?: string | null
@@ -89,6 +93,7 @@ const update = async (userId: UserId, id: ItemId, input: UpdateItemInput) => {
     ...item,
     name: input.name ? ItemName(input.name) : item.name,
     description: input.description !== undefined ? (input.description ?? '') : item.description,
+    tags: input.tags !== undefined ? parseItemTags(input.tags ?? []) : item.tags,
     category: input.category ? parseItemCategory(input.category) : item.category,
     quantity: input.quantity ? Quantity(input.quantity) : item.quantity,
     personalNotes:

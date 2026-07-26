@@ -23,6 +23,7 @@ extension BazarGraphQL {
       purchaseLocation: GraphQLNullable<String> = nil,
       quantity: GraphQLNullable<Quantity> = nil,
       storageId: GraphQLNullable<StorageId> = nil,
+      tags: GraphQLNullable<[ItemTag]> = nil,
       zoneId: GraphQLNullable<ZoneId> = nil
     ) {
       __data = InputDict([
@@ -36,6 +37,7 @@ extension BazarGraphQL {
         "purchaseLocation": purchaseLocation,
         "quantity": quantity,
         "storageId": storageId,
+        "tags": tags,
         "zoneId": zoneId
       ])
     }
@@ -98,6 +100,12 @@ extension BazarGraphQL {
     var storageId: GraphQLNullable<StorageId> {
       get { __data["storageId"] }
       set { __data["storageId"] = newValue }
+    }
+
+    /// Search keywords (deduplicated, max 20)
+    var tags: GraphQLNullable<[ItemTag]> {
+      get { __data["tags"] }
+      set { __data["tags"] = newValue }
     }
 
     /// Zone attachment when no storage is chosen

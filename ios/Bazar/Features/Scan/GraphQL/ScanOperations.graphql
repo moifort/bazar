@@ -4,6 +4,7 @@ mutation AnalyzeItemPhoto($imageBase64: String!) {
     name
     category
     description
+    tags
     quantity
   }
 }

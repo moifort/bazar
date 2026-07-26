@@ -44,6 +44,7 @@ const seedItem = (id: string, over: Record<string, unknown> = {}) =>
     userId,
     name: `Objet ${id.slice(-2)}`,
     description: '',
+    tags: [],
     personalNotes: '',
     category: 'kitchenware',
     quantity: 1,

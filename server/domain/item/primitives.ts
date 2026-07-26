@@ -5,10 +5,12 @@ import type {
   ItemId as ItemIdType,
   ItemName as ItemNameType,
   ItemSort,
+  ItemTag as ItemTagType,
   LowStockThreshold as LowStockThresholdType,
   PurchaseCondition,
   Quantity as QuantityType,
 } from '~/domain/item/types'
+import { normalizeText } from '~/utils/text'
 
 export const ItemId = (value: unknown) => {
   const v = z.string().uuid().parse(value)
@@ -18,6 +20,37 @@ export const ItemId = (value: unknown) => {
 export const ItemName = (value: unknown) => {
   const v = z.string().min(1).max(500).parse(value)
   return make<ItemNameType>()(v)
+}
+
+export const ItemTag = (value: unknown) => {
+  const v = z.string().trim().min(1).max(50).parse(value)
+  return make<ItemTagType>()(v)
+}
+
+// The upper bound is a guard rail, not a feature: past twenty keywords a tag
+// list stops telling the search engine anything it did not already know.
+const MAX_TAGS = 20
+
+// One keyword written twice with a different case or a missing accent is one
+// keyword. First spelling wins, so the labels read on the units keep the order
+// the AI listed them in, ahead of the words describing the item.
+export const parseItemTags = (values: unknown): ItemTagType[] => {
+  const raw = z.array(z.string()).parse(values)
+  const seen = new Set<string>()
+  const tags: ItemTagType[] = []
+
+  for (const value of raw) {
+    // A blank is what an untouched input field sends, not a rejected tag.
+    if (value.trim().length === 0) continue
+
+    const key = normalizeText(value)
+    if (seen.has(key)) continue
+    seen.add(key)
+    tags.push(ItemTag(value))
+    if (tags.length === MAX_TAGS) break
+  }
+
+  return tags
 }
 
 export const Quantity = (value: unknown) => {

@@ -34,6 +34,7 @@ describe('withoutStorageUnits', () => {
     previewId: PreviewId(crypto.randomUUID()),
     name,
     description: '',
+    tags: [],
     quantity: 1,
   })
 

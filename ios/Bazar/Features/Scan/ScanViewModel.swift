@@ -51,6 +51,7 @@ final class ScanViewModel {
                     name: preview.name,
                     category: preview.category?.rawValue ?? ItemCategory.other.rawValue,
                     description: preview.description,
+                    tags: preview.tags,
                     quantity: preview.quantity,
                     storageId: location.storageId,
                     zoneId: location.zoneId,

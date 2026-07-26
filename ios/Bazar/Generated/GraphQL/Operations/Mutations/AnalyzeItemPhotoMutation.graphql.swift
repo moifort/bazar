@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "AnalyzeItemPhoto"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"mutation AnalyzeItemPhoto($imageBase64: String!) { analyzeItemPhoto(imageBase64: $imageBase64) { __typename previewId name category description quantity } }"#
+        #"mutation AnalyzeItemPhoto($imageBase64: String!) { analyzeItemPhoto(imageBase64: $imageBase64) { __typename previewId name category description tags quantity } }"#
       ))
 
     public var imageBase64: String
@@ -47,6 +47,7 @@ extension BazarGraphQL {
           .field("name", String.self),
           .field("category", String?.self),
           .field("description", String.self),
+          .field("tags", [String].self),
           .field("quantity", Int.self),
         ] }
 
@@ -58,6 +59,8 @@ extension BazarGraphQL {
         var category: String? { __data["category"] }
         /// Item description
         var description: String { __data["description"] }
+        /// Suggested search keywords: labels read on the units, then descriptive words
+        var tags: [String] { __data["tags"] }
         /// Number of identical items
         var quantity: Int { __data["quantity"] }
       }

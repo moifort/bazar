@@ -7,6 +7,7 @@ All notable changes to Bazar, most recent first.
 ### New
 
 - First launch asks for a first name and the name of a first house, then offers the rooms it usually has — the inventory has somewhere to go from the start.
+- Search keywords on every item, editable by hand and proposed by the scan: identical units are grouped into one item and what is written on each of them stays searchable.
 
 ### Fixed
 

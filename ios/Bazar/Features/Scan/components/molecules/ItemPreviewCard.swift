@@ -19,6 +19,11 @@ struct ItemPreviewCard: View {
     var body: some View {
         VStack(spacing: 0) {
             header
+            if !preview.tags.isEmpty {
+                TagChips(tags: preview.tags, font: .caption)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 12)
+            }
             Divider()
                 .padding(.horizontal, 16)
             ItemCategoryMenu(category: $preview.category)
@@ -111,10 +116,11 @@ private struct CategoryAvatar: View {
     @Previewable @FocusState var focus: ItemPreviewField?
     @Previewable @State var preview = EditablePreview(
         id: "1",
-        name: "Perceuse Bosch visseuse 18V",
-        category: .tools,
+        name: "Pot d'épices",
+        category: .food,
         description: "",
-        quantity: 3
+        quantity: 12,
+        tags: ["cumin", "paprika", "curry", "épice", "condiment"]
     )
     return ItemPreviewCard(
         preview: $preview,

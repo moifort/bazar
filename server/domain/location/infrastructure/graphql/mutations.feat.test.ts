@@ -83,6 +83,7 @@ describe('places query', () => {
       userId,
       name: 'Casserole',
       description: '',
+      tags: [],
       personalNotes: '',
       category: 'kitchenware',
       quantity: 1,

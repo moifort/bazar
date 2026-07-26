@@ -4,6 +4,7 @@ struct ItemDetailPage: View {
     let id: String
     let name: String
     let description: String
+    let tags: [String]
     let category: ItemCategory
     let quantity: Int
     let location: LocationPath?
@@ -71,6 +72,7 @@ struct ItemDetailPage: View {
             category: category,
             quantity: quantity,
             notes: personalNotes,
+            tags: tags,
             purchaseDate: purchaseDate,
             purchaseLocation: purchaseLocation,
             purchaseCondition: purchaseCondition
@@ -198,6 +200,13 @@ struct ItemDetailPage: View {
                 .accessibilityIdentifier("edit-purchase-button")
             }
 
+            if !tags.isEmpty {
+                Section("Mots-clés") {
+                    TagChips(tags: tags)
+                        .padding(.vertical, 2)
+                }
+            }
+
             if !description.isEmpty {
                 Section("Description") {
                     Text(description)
@@ -286,6 +295,7 @@ struct ItemDetailPage: View {
             id: "i1",
             name: "Perceuse Bosch",
             description: "Perceuse visseuse sans fil 18V, deux batteries incluses.",
+            tags: ["bosch", "18v", "visseuse", "sans fil", "bricolage"],
             category: .tools,
             quantity: 1,
             location: LocationPath(
@@ -325,6 +335,7 @@ struct ItemDetailPage: View {
             id: "i2",
             name: "Ampoule LED",
             description: "",
+            tags: [],
             category: .electronics,
             quantity: 12,
             location: nil,

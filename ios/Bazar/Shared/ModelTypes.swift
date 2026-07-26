@@ -6,6 +6,9 @@ struct Item: Identifiable, Sendable {
     let id: String
     let name: String
     let description: String
+    /// Keywords the item can be searched by: what is written on the units it
+    /// groups ("cumin", "paprika") and what describes it ("condiment").
+    let tags: [String]
     let category: ItemCategory
     let quantity: Int
     var addedBy: String
@@ -114,6 +117,7 @@ struct ItemPreview: Identifiable, Sendable {
     var name: String
     var category: ItemCategory?
     var description: String
+    var tags: [String]
     var quantity: Int
     var personalNotes: String
     var purchaseDate: Date?
@@ -128,6 +132,7 @@ struct ItemPreview: Identifiable, Sendable {
         category: ItemCategory?,
         description: String,
         quantity: Int,
+        tags: [String] = [],
         personalNotes: String = "",
         purchaseDate: Date? = nil,
         purchaseLocation: String = "",
@@ -137,6 +142,7 @@ struct ItemPreview: Identifiable, Sendable {
         self.name = name
         self.category = category
         self.description = description
+        self.tags = tags
         self.quantity = quantity
         self.personalNotes = personalNotes
         self.purchaseDate = purchaseDate

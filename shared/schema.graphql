@@ -32,6 +32,9 @@ input AddItemInput {
   """Storage attachment (mutually exclusive with zoneId)"""
   storageId: StorageId
 
+  """Search keywords (deduplicated, max 20)"""
+  tags: [ItemTag!]
+
   """
   Zone attachment when no storage is chosen (mutually exclusive with storageId)
   """
@@ -138,6 +141,9 @@ input ConfirmItemInput {
 
   """Storage attachment (mutually exclusive with zoneId)"""
   storageId: StorageId
+
+  """Search keywords (deduplicated, max 20)"""
+  tags: [ItemTag!]
 
   """Zone attachment when no storage is chosen"""
   zoneId: ZoneId
@@ -275,6 +281,11 @@ type Item {
   """Reminders attached to this item, sorted by dueDate asc"""
   reminders: [Reminder!]!
 
+  """
+  Search keywords: what is written on the units this item groups ("cumin", "paprika") and what describes it ("condiment", "cuisine")
+  """
+  tags: [ItemTag!]!
+
   """Last update date"""
   updatedAt: DateTime!
 }
@@ -352,6 +363,11 @@ type ItemPreview {
 
   """Number of identical items"""
   quantity: Int!
+
+  """
+  Suggested search keywords: labels read on the units, then descriptive words
+  """
+  tags: [String!]!
 }
 
 """Sort field for item listing"""
@@ -362,6 +378,9 @@ enum ItemSort {
   """Sort by item name"""
   name
 }
+
+"""Item search keyword (non-empty, max 50 characters)"""
+scalar ItemTag
 
 """Paginated list of items"""
 type Items {
@@ -887,6 +906,9 @@ input UpdateItemInput {
 
   """New quantity"""
   quantity: Quantity
+
+  """New search keywords (empty list to clear; omit to leave unchanged)"""
+  tags: [ItemTag!]
 }
 
 """Input for updating a place"""

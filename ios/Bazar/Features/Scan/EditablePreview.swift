@@ -6,6 +6,7 @@ struct EditablePreview: Identifiable, Equatable {
     var name: String
     var category: ItemCategory?
     var description: String
+    var tags: [String]
     var quantity: Int
     var personalNotes: String
     var purchaseDate: Date?
@@ -18,6 +19,7 @@ struct EditablePreview: Identifiable, Equatable {
         category: ItemCategory?,
         description: String,
         quantity: Int,
+        tags: [String] = [],
         personalNotes: String = "",
         purchaseDate: Date? = nil,
         purchaseLocation: String = "",
@@ -27,6 +29,7 @@ struct EditablePreview: Identifiable, Equatable {
         self.name = name
         self.category = category
         self.description = description
+        self.tags = tags
         self.quantity = quantity
         self.personalNotes = personalNotes
         self.purchaseDate = purchaseDate
@@ -41,6 +44,7 @@ struct EditablePreview: Identifiable, Equatable {
             category: preview.category,
             description: preview.description,
             quantity: preview.quantity,
+            tags: preview.tags,
             personalNotes: preview.personalNotes,
             purchaseDate: preview.purchaseDate,
             purchaseLocation: preview.purchaseLocation,
@@ -55,6 +59,7 @@ struct EditablePreview: Identifiable, Equatable {
             category: category,
             description: description,
             quantity: quantity,
+            tags: tags,
             personalNotes: personalNotes,
             purchaseDate: purchaseDate,
             purchaseLocation: purchaseLocation,

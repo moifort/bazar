@@ -3,6 +3,7 @@ query ItemDetail($id: ItemId!) {
     id
     name
     description
+    tags
     category
     quantity
     addedBy

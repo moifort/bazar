@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql'
 import { ZodError } from 'zod'
-import { ItemId, ItemName, Quantity } from '~/domain/item/primitives'
+import { ItemId, ItemName, ItemTag, Quantity } from '~/domain/item/primitives'
 import {
   PlaceId,
   PlaceName,
@@ -43,6 +43,12 @@ builder.scalarType('ItemName', {
   description: 'Item name (non-empty, max 500 characters)',
   serialize: (value) => value as string,
   parseValue: validatedParse('ItemName', ItemName),
+})
+
+builder.scalarType('ItemTag', {
+  description: 'Item search keyword (non-empty, max 50 characters)',
+  serialize: (value) => value as string,
+  parseValue: validatedParse('ItemTag', ItemTag),
 })
 
 builder.scalarType('Quantity', {

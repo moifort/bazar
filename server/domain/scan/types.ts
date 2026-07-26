@@ -9,6 +9,9 @@ export type ItemPreview = {
   name: string
   category?: ItemCategory
   description: string
+  /** Raw keywords suggested by the AI. They are only branded once the batch is
+   * confirmed — until then nothing here is an item's data. */
+  tags: string[]
   quantity: number
 }
 

@@ -15,7 +15,9 @@ const entries = async (userId: UserId): Promise<SearchEntry[]> => {
     ...items.map((item) => ({
       type: 'item' as const,
       entityId: item.id,
-      text: [item.name, item.description, item.personalNotes].filter(Boolean).join(' '),
+      text: [item.name, item.description, item.personalNotes, ...item.tags]
+        .filter(Boolean)
+        .join(' '),
     })),
     ...places.map((place) => ({
       type: 'place' as const,

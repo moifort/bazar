@@ -57,6 +57,7 @@ enum GraphQLItemsAPI {
             id: item.id,
             name: item.name,
             description: item.description,
+            tags: item.tags,
             category: ItemCategory(rawValue: item.category.rawValue) ?? .other,
             quantity: Int(item.quantity) ?? 1,
             addedBy: item.addedBy,

@@ -5,6 +5,7 @@ struct ConfirmItemInput: Sendable {
     let name: String
     let category: String
     let description: String?
+    let tags: [String]
     let quantity: Int
     let storageId: String?
     let zoneId: String?
@@ -26,7 +27,8 @@ enum GraphQLScanAPI {
                 name: preview.name,
                 category: preview.category.flatMap { ItemCategory(rawValue: $0) },
                 description: preview.description,
-                quantity: preview.quantity
+                quantity: preview.quantity,
+                tags: preview.tags
             )
         }
     }
@@ -45,6 +47,7 @@ enum GraphQLScanAPI {
                 purchaseLocation: GraphQLHelpers.graphQLNullable(item.purchaseLocation?.isEmpty == false ? item.purchaseLocation : nil),
                 quantity: GraphQLHelpers.graphQLNullable(item.quantity > 1 ? "\(item.quantity)" : nil),
                 storageId: GraphQLHelpers.graphQLNullable(item.storageId),
+                tags: .some(item.tags),
                 zoneId: GraphQLHelpers.graphQLNullable(item.zoneId)
             )
         }

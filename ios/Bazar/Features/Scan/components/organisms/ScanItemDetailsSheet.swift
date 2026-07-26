@@ -18,6 +18,7 @@ struct ScanItemDetailsSheet: View {
                     category: preview.category ?? .other,
                     quantity: preview.quantity,
                     notes: preview.personalNotes,
+                    tags: preview.tags,
                     purchaseDate: preview.purchaseDate,
                     purchaseLocation: preview.purchaseLocation,
                     purchaseCondition: preview.purchaseCondition
@@ -27,6 +28,7 @@ struct ScanItemDetailsSheet: View {
                     var updated = preview
                     updated.name = fields.name
                     updated.description = fields.description
+                    updated.tags = fields.tags
                     updated.category = fields.category
                     updated.quantity = fields.quantity
                     updated.personalNotes = fields.notes

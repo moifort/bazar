@@ -6,6 +6,7 @@ export const AddItemInput = builder.inputType('AddItemInput', {
   fields: (t) => ({
     name: t.field({ type: 'ItemName', required: true, description: 'Item name' }),
     description: t.string({ description: 'Item description' }),
+    tags: t.field({ type: ['ItemTag'], description: 'Search keywords (deduplicated, max 20)' }),
     category: t.field({ type: ItemCategoryEnum, required: true, description: 'Item category' }),
     quantity: t.field({ type: 'Quantity', description: 'Quantity (default 1)' }),
     storageId: t.field({
@@ -35,6 +36,10 @@ export const UpdateItemInput = builder.inputType('UpdateItemInput', {
   fields: (t) => ({
     name: t.field({ type: 'ItemName', description: 'New item name' }),
     description: t.string({ description: 'New description' }),
+    tags: t.field({
+      type: ['ItemTag'],
+      description: 'New search keywords (empty list to clear; omit to leave unchanged)',
+    }),
     category: t.field({ type: ItemCategoryEnum, description: 'New category' }),
     quantity: t.field({ type: 'Quantity', description: 'New quantity' }),
     personalNotes: t.string({ description: 'New personal notes' }),
@@ -64,6 +69,7 @@ export const ConfirmItemInput = builder.inputType('ConfirmItemInput', {
   fields: (t) => ({
     name: t.field({ type: 'ItemName', required: true, description: 'Item name' }),
     description: t.string({ description: 'Item description' }),
+    tags: t.field({ type: ['ItemTag'], description: 'Search keywords (deduplicated, max 20)' }),
     category: t.field({ type: ItemCategoryEnum, required: true, description: 'Item category' }),
     quantity: t.field({ type: 'Quantity', description: 'Quantity (default 1)' }),
     storageId: t.field({

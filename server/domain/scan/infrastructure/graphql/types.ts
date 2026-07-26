@@ -11,6 +11,9 @@ export const ItemPreviewType = builder.objectRef<ItemPreview>('ItemPreview').imp
       description: 'Suggested category',
     }),
     description: t.exposeString('description', { description: 'Item description' }),
+    tags: t.exposeStringList('tags', {
+      description: 'Suggested search keywords: labels read on the units, then descriptive words',
+    }),
     quantity: t.exposeInt('quantity', { description: 'Number of identical items' }),
   }),
 })
