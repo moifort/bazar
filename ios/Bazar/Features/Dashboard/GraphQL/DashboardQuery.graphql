@@ -1,4 +1,7 @@
 query Dashboard {
+  me {
+    firstName
+  }
   dashboard {
     totalItems
     itemsByCategory {

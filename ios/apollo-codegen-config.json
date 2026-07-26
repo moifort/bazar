@@ -12,6 +12,7 @@
       "Bazar/Features/Dashboard/GraphQL/*.graphql",
       "Bazar/Features/Reminders/GraphQL/*.graphql",
       "Bazar/Features/Notifications/GraphQL/*.graphql",
+      "Bazar/Features/Onboarding/GraphQL/*.graphql",
       "Bazar/Features/Settings/GraphQL/*.graphql",
       "Bazar/Features/Quota/GraphQL/*.graphql",
       "Bazar/Features/Subscription/GraphQL/*.graphql"

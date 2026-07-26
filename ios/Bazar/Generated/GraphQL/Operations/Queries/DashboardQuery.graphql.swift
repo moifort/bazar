@@ -8,7 +8,7 @@ extension BazarGraphQL {
     static let operationName: String = "Dashboard"
     static let operationDocument: ApolloAPI.OperationDocument = .init(
       definition: .init(
-        #"query Dashboard { dashboard { __typename totalItems itemsByCategory { __typename category count } itemsByPlace { __typename placeId placeName count } recentItems { __typename id name category quantity addedBy createdAt location { __typename fullPath } } lowStockItems { __typename id name category quantity lowStockThreshold location { __typename fullPath } } } }"#
+        #"query Dashboard { me { __typename firstName } dashboard { __typename totalItems itemsByCategory { __typename category count } itemsByPlace { __typename placeId placeName count } recentItems { __typename id name category quantity addedBy createdAt location { __typename fullPath } } lowStockItems { __typename id name category quantity lowStockThreshold location { __typename fullPath } } } }"#
       ))
 
     public init() {}
@@ -19,11 +19,38 @@ extension BazarGraphQL {
 
       static var __parentType: any ApolloAPI.ParentType { BazarGraphQL.Objects.Query }
       static var __selections: [ApolloAPI.Selection] { [
+        .field("me", Me?.self),
         .field("dashboard", Dashboard.self),
       ] }
 
+      /// Who you are, as you introduced yourself. `null` means you never went through the onboarding — which is exactly what the app reads on launch to decide whether to run it.
+      ///
+      /// ```graphql
+      /// me {
+      ///   firstName
+      ///   onboardedOn
+      /// }
+      /// ```
+      var me: Me? { __data["me"] }
       /// Dashboard with inventory statistics
       var dashboard: Dashboard { __data["dashboard"] }
+
+      /// Me
+      ///
+      /// Parent Type: `User`
+      struct Me: BazarGraphQL.SelectionSet {
+        let __data: DataDict
+        init(_dataDict: DataDict) { __data = _dataDict }
+
+        static var __parentType: any ApolloAPI.ParentType { BazarGraphQL.Objects.User }
+        static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("firstName", BazarGraphQL.FirstName.self),
+        ] }
+
+        /// How to call the user, e.g. `"Thibaut"`
+        var firstName: BazarGraphQL.FirstName { __data["firstName"] }
+      }
 
       /// Dashboard
       ///

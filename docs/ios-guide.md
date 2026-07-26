@@ -26,6 +26,7 @@ path to `project.yml` is only needed for a new top-level group.
 ```
 ios/Bazar/
 ├── BazarApp.swift              # @main — AuthRoot, or DebugGallery under -gallery
+│                               #   AuthRoot gates: login → onboarding → ContentView
 ├── ContentView.swift           # the TabView: Accueil, Objets, Scanner, Lieux
 ├── Features/{Feature}/
 │   ├── {Feature}API.swift      # the mapping boundary: GraphQL → model types
@@ -47,7 +48,7 @@ ios/Bazar/
 ```
 
 Features: `Items`, `Locations`, `Scan`, `Search`, `Dashboard`, `Reminders`, `Notifications`,
-`Auth`, `Settings`, `Subscription`, `Quota`.
+`Auth`, `Onboarding`, `Settings`, `Subscription`, `Quota`.
 
 ## Data fetching — GraphQL, not REST
 
@@ -234,6 +235,18 @@ what the user reads: labels, titles, accessibility *labels*, preview names. See
 runs Sign in with Apple, `AppleNonce` generates the nonce Firebase requires, `AuthSession` holds
 the session. Every GraphQL request then carries the Firebase ID token through the interceptor.
 Portal-side setup: [apple-sign-in.md](./apple-sign-in.md).
+
+## Onboarding — the gate above the tabs
+
+`AuthRoot` has three states, not two: no user → `LoginView`, a user the server has never met →
+`OnboardingView`, anyone else → `ContentView`. What "never met" means is the server's answer
+(`me` is `null`), never a `UserDefaults` flag — a reinstall or a second phone must not ask twice,
+and an account that predates the onboarding must be asked once.
+
+`OnboardingViewModel` is app-scoped, asked once per signed-in account (it resets when the user id
+changes), and **fails open**: a server that hiccups leaves the app in its normal state rather than
+walling it behind an onboarding nobody can get through. The three steps close with a single
+`completeOnboarding` mutation, so a half-finished onboarding leaves nothing behind.
 
 ## In-app purchase — StoreKit 2, server-decided
 

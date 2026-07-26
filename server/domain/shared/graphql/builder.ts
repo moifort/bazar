@@ -14,6 +14,7 @@ import type {
 } from '~/domain/location/types'
 import type { ReminderCompletionId, ReminderId, ReminderTitle } from '~/domain/reminder/types'
 import type { UserId } from '~/domain/shared/types'
+import type { FirstName } from '~/domain/user/types'
 import type { Loaders } from './loaders'
 
 export type GraphQLContext = {
@@ -46,6 +47,7 @@ export const builder = new SchemaBuilder<{
     StorageId: { Input: StorageId; Output: StorageId }
     StorageName: { Input: StorageName; Output: StorageName }
     UserId: { Input: UserId; Output: UserId }
+    FirstName: { Input: FirstName; Output: FirstName }
     ReminderId: { Input: ReminderId; Output: ReminderId }
     ReminderCompletionId: { Input: ReminderCompletionId; Output: ReminderCompletionId }
     ReminderTitle: { Input: ReminderTitle; Output: ReminderTitle }

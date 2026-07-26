@@ -23,6 +23,12 @@ final class AuthSession {
         }
     }
 
+    /// The first word of the name Apple handed over at sign-in, when it did.
+    /// The onboarding pre-fills its field with it rather than asking twice.
+    var suggestedFirstName: String? {
+        user?.displayName?.split(separator: " ").first.map(String.init)
+    }
+
     func signOut() throws {
         try Auth.auth().signOut()
     }

@@ -29,6 +29,7 @@ server/
 │   │   ├── types.ts             # UserId
 │   │   ├── primitives.ts        # their Zod constructors
 │   │   └── graphql/             # builder.ts, scalars.ts, schema.ts, loaders.ts, errors.ts
+│   ├── user/                    # who the account belongs to — written by the onboarding
 │   ├── item/                    # the objects the user owns — the central domain
 │   ├── location/                # place > room > zone > storage hierarchy
 │   ├── reminder/                # maintenance reminders attached to an item
@@ -61,8 +62,8 @@ server/
 └── test/fake-firestore.ts       # in-memory Firestore fake with read/write accounting
 ```
 
-Not every domain has every file. `item`, `location`, `reminder` and `notification` persist and own
-a repository; `scan` is ephemeral (a photo analysis is previewed and confirmed, never stored as
+Not every domain has every file. `user`, `item`, `location`, `reminder` and `notification` persist
+and own a repository; `scan` is ephemeral (a photo analysis is previewed and confirmed, never stored as
 such); `search` and `dashboard` are **read-only** — no `command.ts`, no repository, they assemble
 data through other domains' public `Query` namespaces.
 
@@ -107,7 +108,7 @@ Every collection reference is wrapped with `genericDataConverter<T>()` (from
 const items = () => db().collection('items').withConverter(genericDataConverter<Item>())
 ```
 
-Collections are flat and owner-scoped: `items`, `places`, `rooms`, `zones`, `storages`,
+Collections are flat and owner-scoped: `users`, `items`, `places`, `rooms`, `zones`, `storages`,
 `reminders`, `reminder-completions`, `notification-subscriptions`. **Every query filters on
 `userId`** — multi-tenancy is not a filter the caller can forget. Firestore is initialised with
 `ignoreUndefinedProperties: true`, which is what lets the domain express absence as a missing

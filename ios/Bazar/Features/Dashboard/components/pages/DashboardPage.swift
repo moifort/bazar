@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct DashboardPage: View {
+    let firstName: String?
     let totalItems: Int
     let placeCounts: [PlaceCountRow]
     let recentItems: [RecentItemRow]
@@ -60,7 +61,7 @@ struct DashboardPage: View {
                 }
             }
         }
-        .navigationTitle("Accueil")
+        .navigationTitle(title)
         .navigationSubtitle(subtitle)
         .navigationBarTitleDisplayMode(.large)
         .refreshable { await onRefresh() }
@@ -82,6 +83,11 @@ struct DashboardPage: View {
                 )
             }
         }
+    }
+
+    private var title: String {
+        guard let firstName, !firstName.isEmpty else { return "Accueil" }
+        return "Bonjour \(firstName)"
     }
 
     private var subtitle: String {
@@ -124,6 +130,7 @@ extension LowStockAlertRow {
 #Preview("Loaded") {
     NavigationStack {
         DashboardPage(
+            firstName: "Thibaut",
             totalItems: 152,
             placeCounts: [
                 .init(id: "p1", placeName: "Maison", count: 120),
@@ -146,6 +153,7 @@ extension LowStockAlertRow {
 #Preview("Empty") {
     NavigationStack {
         DashboardPage(
+            firstName: nil,
             totalItems: 0,
             placeCounts: [],
             recentItems: [],

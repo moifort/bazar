@@ -2,6 +2,12 @@
 
 All notable changes to Bazar, most recent first.
 
+## Unreleased
+
+### New
+
+- First launch asks for a first name and the name of a first house, then offers the rooms it usually has — the inventory has somewhere to go from the start.
+
 ## 1.0.0 (2026.07.25)
 
 ### New

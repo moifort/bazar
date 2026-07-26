@@ -25,6 +25,8 @@ beforeEach(() => {
   fake.seed('reminders', 'rem2', { id: 'rem2', userId: other, itemId: 'i2', title: 'Nettoyer' })
   fake.seed('notification-subscriptions', 'n1', { userId: owner, token: 'token-1' })
   fake.seed('notification-subscriptions', 'n2', { userId: other, token: 'token-2' })
+  fake.seed('users', owner, { id: owner, firstName: 'Thibaut', onboardedAt: new Date() })
+  fake.seed('users', other, { id: other, firstName: 'Camille', onboardedAt: new Date() })
 })
 
 describe('AccountUseCase.remove', () => {
@@ -54,6 +56,12 @@ describe('AccountUseCase.remove', () => {
     await AccountUseCase.remove(owner)
 
     expect([...fake.snapshot('notification-subscriptions').keys()]).toEqual(['n2'])
+  })
+
+  test('erases the name the user gave us', async () => {
+    await AccountUseCase.remove(owner)
+
+    expect([...fake.snapshot('users').keys()]).toEqual([other])
   })
 
   test('deletes the authentication account itself', async () => {

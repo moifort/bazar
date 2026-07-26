@@ -3,6 +3,12 @@ import { builder } from '~/domain/shared/graphql/builder'
 // Custom scalars (must be registered before types that reference them)
 import '~/domain/shared/graphql/scalars'
 
+// User domain
+import '~/domain/user/infrastructure/graphql/types'
+import '~/domain/user/infrastructure/graphql/inputs'
+import '~/domain/user/infrastructure/graphql/queries'
+import '~/domain/user/infrastructure/graphql/mutations'
+
 // Location domain
 import '~/domain/location/infrastructure/graphql/types'
 import '~/domain/location/infrastructure/graphql/inputs'

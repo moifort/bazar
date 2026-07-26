@@ -2,6 +2,12 @@
 
 Toutes les évolutions notables de Bazar, la plus récente en premier.
 
+## Unreleased
+
+### New
+
+- Au premier lancement, l'application demande un prénom et le nom d'une première maison, puis propose ses pièces habituelles — l'inventaire a tout de suite où se ranger.
+
 ## 1.0.0 (2026.07.25)
 
 ### New

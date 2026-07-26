@@ -54,6 +54,7 @@ struct DebugGallery: View {
         case "dashboard":
             NavigationStack {
                 DashboardPage(
+                    firstName: "Thibaut",
                     totalItems: 152,
                     placeCounts: Fixtures.placeCounts,
                     recentItems: Fixtures.recentItems,
@@ -98,6 +99,12 @@ struct DebugGallery: View {
                     onReorderPlaces: { _, _ in }
                 )
             }
+        case "onboarding-name":
+            OnboardingGalleryPage(step: .name)
+        case "onboarding-house":
+            OnboardingGalleryPage(step: .house)
+        case "onboarding-rooms":
+            OnboardingGalleryPage(step: .rooms)
         case "scan-preview":
             ScanFlowPage(
                 step: .preview(Fixtures.previews),
@@ -131,6 +138,33 @@ struct DebugGallery: View {
                 description: Text(screen)
             )
         }
+    }
+}
+
+/// The onboarding page holds what the user types, so the gallery needs somewhere
+/// to hold it too — a page rendered with constant bindings would not react to a
+/// keystroke.
+private struct OnboardingGalleryPage: View {
+    let step: OnboardingPage.Step
+
+    @State private var firstName = ""
+    @State private var houseName = ""
+    @State private var selectedRooms = SuggestedRooms.preselected
+
+    var body: some View {
+        OnboardingPage(
+            step: step,
+            firstName: $firstName,
+            houseName: $houseName,
+            selectedRooms: $selectedRooms,
+            suggestedRooms: SuggestedRooms.all,
+            continueLabel: step == .rooms ? "Terminer" : "Continuer",
+            canContinue: true,
+            isSubmitting: false,
+            errorMessage: nil,
+            onContinue: {},
+            onBack: step == .name ? nil : {}
+        )
     }
 }
 

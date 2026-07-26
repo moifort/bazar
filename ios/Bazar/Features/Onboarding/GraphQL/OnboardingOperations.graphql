@@ -1,0 +1,14 @@
+query OnboardingState {
+  me {
+    firstName
+  }
+  places {
+    id
+  }
+}
+
+mutation CompleteOnboarding($input: CompleteOnboardingInput!) {
+  completeOnboarding(input: $input) {
+    firstName
+  }
+}

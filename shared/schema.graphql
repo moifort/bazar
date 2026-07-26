@@ -86,6 +86,25 @@ type ChangelogEntry {
   version: String!
 }
 
+"""
+What the first launch collected: a first name, and the first house with its rooms
+"""
+input CompleteOnboardingInput {
+  """How to call the user, e.g. `"Thibaut"`"""
+  firstName: FirstName!
+
+  """Optional emoji icon for the house, e.g. `"🏠"`"""
+  houseIcon: String
+
+  """
+  Name of the first house, e.g. `"Maison"` — omit it for an account that already owns places, which would otherwise end up with a duplicate
+  """
+  houseName: PlaceName
+
+  """Rooms to create in that house — ignored when no `houseName` is given"""
+  rooms: [OnboardingRoomInput!]!
+}
+
 """Input for confirming a scanned item"""
 input ConfirmItemInput {
   """Item category"""
@@ -208,6 +227,9 @@ type Entitlement {
   """
   productId: String
 }
+
+"""First name (non-empty, max 50 characters)"""
+scalar FirstName
 
 """A household item stored in the inventory"""
 type Item {
@@ -394,6 +416,24 @@ type Mutation {
   ): [ItemPreview!]!
 
   """
+  Close the first launch: record how to call you, create your first house and the rooms you picked, all at once. Everything that follows has somewhere to go.
+  
+  Answers `ALREADY_ONBOARDED` when you have already been through it — running it twice would hand you a second house.
+  
+  ```graphql
+  completeOnboarding(input: {
+    firstName: "Thibaut"
+    houseName: "Maison"
+    houseIcon: "🏠"
+    rooms: [{ name: "Cuisine", icon: "🍳" }]
+  }) {
+    firstName
+  }
+  ```
+  """
+  completeOnboarding(input: CompleteOnboardingInput!): User!
+
+  """
   Mark a reminder as done. Recurring reminders reschedule automatically; one-shot reminders are deleted and null is returned.
   """
   completeReminder(id: ReminderId!): Reminder
@@ -414,7 +454,7 @@ type Mutation {
   createZone(input: CreateZoneInput!): Zone!
 
   """
-  Delete your account and everything the app holds on you: every item, every place, room, zone and storage spot, every reminder and its completion history, and every device registered for notifications. IRREVERSIBLE and immediate — there is no grace period and no way back. Returns `true` once it is done.
+  Delete your account and everything the app holds on you: your first name, every item, every place, room, zone and storage spot, every reminder and its completion history, and every device registered for notifications. IRREVERSIBLE and immediate — there is no grace period and no way back. Returns `true` once it is done.
   
   ```graphql
   deleteAccount
@@ -487,6 +527,15 @@ type Mutation {
 
   """Update an existing zone"""
   updateZone(id: ZoneId!, input: UpdateZoneInput!): Zone!
+}
+
+"""A room to create in the house the onboarding names"""
+input OnboardingRoomInput {
+  """Optional emoji icon, e.g. `"🍳"`"""
+  icon: String
+
+  """Room name, e.g. `"Cuisine"`"""
+  name: RoomName!
 }
 
 """A physical location (e.g. Appartement, Cave)"""
@@ -614,6 +663,18 @@ type Query {
     """Sort field"""
     sort: ItemSort
   ): Items!
+
+  """
+  Who you are, as you introduced yourself. `null` means you never went through the onboarding — which is exactly what the app reads on launch to decide whether to run it.
+  
+  ```graphql
+  me {
+    firstName
+    onboardedOn
+  }
+  ```
+  """
+  me: User
 
   """All places with nested rooms, zones, and storages"""
   places: [Place!]!
@@ -886,6 +947,19 @@ input UpdateZoneInput {
 
   """New sort order"""
   order: Int
+}
+
+"""
+Who the signed-in account belongs to, as the user introduced themselves during the onboarding. It only exists once that onboarding is done.
+"""
+type User {
+  """How to call the user, e.g. `"Thibaut"`"""
+  firstName: FirstName!
+
+  """
+  When the user went through the onboarding, e.g. `"2026-07-26T09:12:00.000Z"`
+  """
+  onboardedOn: DateTime!
 }
 
 """Firebase Auth user identifier (UID)"""

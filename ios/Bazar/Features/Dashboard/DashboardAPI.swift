@@ -9,6 +9,7 @@ enum GraphQLDashboardAPI {
         let data = try await GraphQLHelpers.fetch(client, query: query)
         let dashboard = data.dashboard
         return DashboardData(
+            firstName: data.me?.firstName,
             totalItems: dashboard.totalItems,
             itemsByCategory: dashboard.itemsByCategory.map { entry in
                 CategoryCount(

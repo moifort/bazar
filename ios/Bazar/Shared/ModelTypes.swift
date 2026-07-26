@@ -211,6 +211,8 @@ struct Storage: Identifiable, Sendable {
 // MARK: - Dashboard
 
 struct DashboardData: Sendable {
+    /// How to greet the user — absent until they went through the onboarding.
+    let firstName: String?
     let totalItems: Int
     let itemsByCategory: [CategoryCount]
     let itemsByPlace: [PlaceCount]

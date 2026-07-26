@@ -13,6 +13,7 @@ import {
 } from '~/domain/location/primitives'
 import { ReminderCompletionId, ReminderId, ReminderTitle } from '~/domain/reminder/primitives'
 import { UserId } from '~/domain/shared/primitives'
+import { FirstName } from '~/domain/user/primitives'
 import { builder } from './builder'
 
 const validatedParse =
@@ -104,6 +105,13 @@ builder.scalarType('UserId', {
   description: 'Firebase Auth user identifier (UID)',
   serialize: (value) => value as string,
   parseValue: validatedParse('UserId', UserId),
+})
+
+// User domain
+builder.scalarType('FirstName', {
+  description: 'First name (non-empty, max 50 characters)',
+  serialize: (value) => value as string,
+  parseValue: validatedParse('FirstName', FirstName),
 })
 
 // Reminder domain

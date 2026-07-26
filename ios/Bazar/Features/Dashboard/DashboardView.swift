@@ -12,6 +12,7 @@ struct DashboardView: View {
             Group {
                 if let data = viewModel.data {
                     DashboardPage(
+                        firstName: data.firstName,
                         totalItems: data.totalItems,
                         placeCounts: data.itemsByPlace.map { entry in
                             .init(id: entry.placeId, placeName: entry.placeName, count: entry.count)

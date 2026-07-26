@@ -13,6 +13,12 @@ final class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency Messag
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
 
+        #if DEBUG
+        // The gallery renders screens with no server and no user; a system
+        // permission alert on top of every one of them defeats the point.
+        guard UserDefaults.standard.string(forKey: "gallery") == nil else { return true }
+        #endif
+
         Task {
             if await NotificationManager.requestAuthorizationIfNeeded() {
                 await MainActor.run { application.registerForRemoteNotifications() }

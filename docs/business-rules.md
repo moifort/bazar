@@ -8,6 +8,25 @@ Bazar is a household inventory: the user photographs their stuff, the AI names i
 remembers **what** they own, **where** it is, **how much** is left and **when** it needs
 attention.
 
+## A user introduces themselves once
+
+The first launch asks two things — how to call the user, and what their first place is called —
+then offers the rooms it usually has. The answers are not preferences: they are the first
+documents of the account.
+
+- **The user document is the flag.** There is no `hasOnboarded` boolean: a user who never went
+  through the onboarding simply has no document, and that absence is what the app reads on launch.
+  A reinstall or a second phone therefore never asks twice, and an account created before the
+  onboarding existed is asked exactly once.
+- **The house is a place.** Naming it creates an ordinary `place` — the model already accepts
+  several of them, and nothing about the first one is special afterwards.
+- **The suggested rooms are a shortcut, nothing more.** They create ordinary rooms, in the order
+  they were picked, and an account that skips them all is in a perfectly normal state.
+- **An account that already owns places is only asked its name.** Offering it a first house would
+  hand it a duplicate of the one it filled.
+- **Running it twice is refused** (`'already-onboarded'`), not merged: the second run would create
+  a second house.
+
 ## The location hierarchy is exactly four levels
 
 `place > room > zone > storage` — a building, a room in it, an area of that room, the furniture
@@ -119,9 +138,9 @@ was paid for; a refund ends it on the spot, whatever the expiry says.
 ## Deleting an account erases everything, in one direction
 
 `deleteAccount` is irreversible and immediate: no grace period, no scheduled job, no soft delete
-to reason about. Each domain forgets its own documents — items, the four location levels,
-reminders with their completion history, the registered devices, the scan counters and the
-entitlement — and none of them knows about the others; `server/system/account/` orchestrates.
+to reason about. Each domain forgets its own documents — the name the user gave us, items, the
+four location levels, reminders with their completion history, the registered devices, the scan
+counters and the entitlement — and none of them knows about the others; `server/system/account/` orchestrates.
 
 What it cannot do is end a subscription: only the App Store can, at the user's own request.
 

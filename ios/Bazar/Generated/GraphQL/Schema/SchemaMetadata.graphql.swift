@@ -46,6 +46,7 @@ extension BazarGraphQL {
       case "Room": return BazarGraphQL.Objects.Room
       case "SearchEntry": return BazarGraphQL.Objects.SearchEntry
       case "Storage": return BazarGraphQL.Objects.Storage
+      case "User": return BazarGraphQL.Objects.User
       case "Zone": return BazarGraphQL.Objects.Zone
       default: return nil
       }

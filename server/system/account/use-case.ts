@@ -5,6 +5,7 @@ import { NotificationCommand } from '~/domain/notification/command'
 import { QuotaCommand } from '~/domain/quota/command'
 import { ReminderCommand } from '~/domain/reminder/command'
 import type { UserId } from '~/domain/shared/types'
+import { UserCommand } from '~/domain/user/command'
 import { auth } from '~/system/firebase'
 
 export namespace AccountUseCase {
@@ -26,6 +27,7 @@ export namespace AccountUseCase {
     await NotificationCommand.forget(userId)
     await QuotaCommand.forget(userId)
     await EntitlementCommand.forget(userId)
+    await UserCommand.forget(userId)
     await auth().deleteUser(userId)
   }
 }
