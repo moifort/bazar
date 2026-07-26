@@ -70,6 +70,10 @@ Concentre-toi uniquement sur les objets clairement visibles au centre du cadre, 
 Ignore les objets en arriere-plan, flous, partiellement coupes par le bord de l'image, ou en peripherie.
 En cas de doute sur un objet, ne l'inclus pas.
 
+N'inventorie jamais le meuble ni le contenant qui porte les objets : tiroir, etagere, placard,
+armoire, commode, buffet, casier, boite de rangement sont des lieux de rangement, pas des objets.
+Un meuble qui ne range rien (canape, table, lampe, chaise) reste un objet valide.
+
 Pour chaque objet retenu, extrais :
 - name : nom de l'objet en francais
 - category : une parmi tools, appliances, decor, clothing, documents, food, electronics, furniture, kitchenware, linen, sports, toys, books, media, hygiene, other

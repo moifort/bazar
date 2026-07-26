@@ -81,6 +81,11 @@ persisted at that point**. The user reviews the batch, edits what the AI got wro
   fallback is `other`, never a silent wrong category.
 - A refused batch leaves no trace. There is no "draft item" state in the model.
 - One photo can yield several items: batch detection is the point, not an edge case.
+- **The furniture holding the items is never one of them.** A drawer, a shelf, a cupboard, a
+  wardrobe are levels of the location hierarchy (`zone` / `storage`) — photographing a full drawer
+  must not add "Tiroir" to the inventory next to its contents. The prompt says so and
+  `scan/business-rules.ts` enforces it, because a prompt is a request and not a guarantee. A piece
+  of furniture that stores nothing (a sofa, a table, a lamp) stays a perfectly valid item.
 
 ## A reminder is dated, attached to an item, and either recurring or one-shot
 

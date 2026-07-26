@@ -1,16 +1,6 @@
 import { describe, expect, test } from 'bun:test'
-import { fuzzyScore, normalize, searchEntries } from './business-rules'
+import { fuzzyScore, searchEntries } from './business-rules'
 import type { SearchEntry } from './types'
-
-describe('normalize', () => {
-  test('removes accents and lowercases', () => {
-    expect(normalize('Étagère Métallique')).toBe('etagere metallique')
-  })
-
-  test('trims and collapses whitespace', () => {
-    expect(normalize('  hello   world  ')).toBe('hello world')
-  })
-})
 
 describe('fuzzyScore', () => {
   test('exact match scores 100', () => {

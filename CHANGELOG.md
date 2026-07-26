@@ -8,6 +8,10 @@ All notable changes to Bazar, most recent first.
 
 - First launch asks for a first name and the name of a first house, then offers the rooms it usually has — the inventory has somewhere to go from the start.
 
+### Fixed
+
+- The scan no longer inventories the furniture on the photo: a drawer, a shelf or a cupboard is a storage place, not an item.
+
 ## 1.0.0 (2026.07.25)
 
 ### New

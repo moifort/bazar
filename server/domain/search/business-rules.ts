@@ -1,16 +1,9 @@
+import { normalizeText } from '~/utils/text'
 import type { SearchEntry } from './types'
 
-export const normalize = (text: string) =>
-  text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, ' ')
-
 export const fuzzyScore = (query: string, text: string) => {
-  const q = normalize(query)
-  const t = normalize(text)
+  const q = normalizeText(query)
+  const t = normalizeText(text)
 
   if (q.length === 0) return 0
   if (t === q) return 100
@@ -26,7 +19,7 @@ export const fuzzyScore = (query: string, text: string) => {
 }
 
 export const searchEntries = (entries: SearchEntry[], query: string, limit: number) => {
-  const normalizedQuery = normalize(query)
+  const normalizedQuery = normalizeText(query)
   if (normalizedQuery.length === 0) return []
 
   return entries
