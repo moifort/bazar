@@ -46,7 +46,7 @@ builder.scalarType('ItemName', {
 })
 
 builder.scalarType('ItemTag', {
-  description: 'Item search keyword (non-empty, max 50 characters)',
+  description: 'Item search keyword, stored lowercased (non-empty, max 200 characters)',
   serialize: (value) => value as string,
   parseValue: validatedParse('ItemTag', ItemTag),
 })

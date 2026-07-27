@@ -36,9 +36,17 @@ describe('ItemTag', () => {
     expect(() => ItemTag('   ')).toThrow()
   })
 
+  test('lowercases the keyword — case is not information', () => {
+    expect(ItemTag('BOSCH')).toBe('bosch' as never)
+  })
+
+  test('keeps the accents, which belong to the word', () => {
+    expect(ItemTag('Épice')).toBe('épice' as never)
+  })
+
   test('accepts a whole printed line, not just a word', () => {
     expect(ItemTag('Confiture de fraises extra bio 370 g')).toBe(
-      'Confiture de fraises extra bio 370 g' as never,
+      'confiture de fraises extra bio 370 g' as never,
     )
   })
 
@@ -57,7 +65,7 @@ describe('parseItemTags', () => {
   })
 
   test('treats a different case or accent as the same keyword, first spelling wins', () => {
-    expect(parseItemTags(['Épice', 'epice', 'ÉPICE'])).toEqual(['Épice'] as never)
+    expect(parseItemTags(['Épice', 'epice', 'ÉPICE'])).toEqual(['épice'] as never)
   })
 
   test('drops the blanks an untouched input field sends', () => {

@@ -73,6 +73,8 @@ A tag comes from one of two places, in this order:
   "cuisine").
 
 - The list is **always present**, empty when the item carries none, and never `null`.
+- **A tag is stored lowercased.** Case is not information — "Bosch", "BOSCH" and "bosch" are one
+  keyword. Accents are kept: they belong to the word, and the search folds them on its own.
 - **The list is uncapped.** The only thing dropped is what says nothing new: a blank, and a
   keyword already there under a different case or accent — first spelling wins.
 - A tag holds a whole printed line, not just a word, so its ceiling is a length (200 characters),

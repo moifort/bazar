@@ -88,8 +88,8 @@ Pour chaque objet retenu, extrais :
      les plus interessants — s'il y a quinze etiquettes lisibles, les quinze sont dans la liste.
      Recopie chaque texte tel qu'il est ecrit, meme s'il fait plusieurs mots.
      Quand tu regroupes des exemplaires identiques, la liste porte le texte de chacun d'eux.
-  2. ensuite, quelques mots en minuscules qui decrivent l'objet lui-meme : nature generique,
-     matiere, couleur, usage. Un ou deux mots chacun, jamais la simple reprise de name.
+  2. ensuite, quelques mots qui decrivent l'objet lui-meme : nature generique, matiere, couleur,
+     usage. Un ou deux mots chacun, jamais la simple reprise de name.
   La liste n'a pas de longueur maximale.
   Exemple pour les douze pots : ["cumin", "paprika", "curry", "thym", "origan", "laurier",
   "epice", "condiment", "cuisine"]

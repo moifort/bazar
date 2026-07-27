@@ -383,7 +383,7 @@ enum ItemSort {
   name
 }
 
-"""Item search keyword (non-empty, max 50 characters)"""
+"""Item search keyword, stored lowercased (non-empty, max 200 characters)"""
 scalar ItemTag
 
 """Paginated list of items"""

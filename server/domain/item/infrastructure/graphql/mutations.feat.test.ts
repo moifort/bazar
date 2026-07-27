@@ -62,14 +62,14 @@ describe('addItem mutation', () => {
     expect(stored).toMatchObject({ storageId: s1, placeId: p1 })
   })
 
-  test('stores the search keywords, deduplicated', async () => {
+  test('stores the search keywords lowercased and deduplicated', async () => {
     const result = await execute(`
       mutation {
         addItem(input: {
           name: "Pot d'epices"
           category: food
           quantity: 12
-          tags: ["cumin", "Cumin", "paprika", "condiment"]
+          tags: ["Cumin", "cumin", "PAPRIKA", "condiment"]
         }) {
           tags
         }

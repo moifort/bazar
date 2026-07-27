@@ -47,10 +47,12 @@ struct TagField: View {
     }
 
     private func commitDraft() {
-        let tag = draft.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Lowercased here, exactly as the server stores it, so the chip the user
+        // sees now is the chip that comes back on the next load.
+        let tag = draft.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         draft = ""
         guard !tag.isEmpty else { return }
-        guard !tags.contains(where: { $0.caseInsensitiveCompare(tag) == .orderedSame }) else { return }
+        guard !tags.contains(tag) else { return }
         tags.append(tag)
     }
 }

@@ -23,17 +23,22 @@ export const ItemName = (value: unknown) => {
 }
 
 // A tag holds a label copied off the object as often as a keyword describing
-// it, so the ceiling has to fit a whole printed line ("Confiture de fraises
+// it, so the ceiling has to fit a whole printed line ("confiture de fraises
 // extra bio 370 g"), not just a word.
+//
+// Case is not information here: "Bosch", "BOSCH" and "bosch" are the same
+// keyword, and lowercasing on the way in is what keeps the stored value and the
+// deduplication key telling the same story. Accents are kept — they belong to
+// the word, and the search folds them on its own.
 export const ItemTag = (value: unknown) => {
-  const v = z.string().trim().min(1).max(200).parse(value)
+  const v = z.string().trim().toLowerCase().min(1).max(200).parse(value)
   return make<ItemTagType>()(v)
 }
 
 // Every readable label goes in — the list is not capped. What is dropped is
 // only what says nothing new: a blank, and a keyword already there under a
-// different case or accent. First spelling wins, so the labels read on the
-// units keep the order the AI listed them in, ahead of the descriptive words.
+// different accent. First spelling wins, so the labels read on the units keep
+// the order the AI listed them in, ahead of the descriptive words.
 export const parseItemTags = (values: unknown): ItemTagType[] => {
   const raw = z.array(z.string()).parse(values)
   const seen = new Set<string>()
