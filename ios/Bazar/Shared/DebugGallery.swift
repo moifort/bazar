@@ -114,6 +114,34 @@ struct DebugGallery: View {
                     onClose: {}
                 )
             }
+        case "item-detail-full":
+            NavigationStack {
+                ItemDetailPage(
+                    id: "i2",
+                    name: "Machine à café",
+                    description: "",
+                    tags: ["delonghi", "expresso", "cafetière"],
+                    category: .appliances,
+                    quantity: 1,
+                    location: Fixtures.itemLocation,
+                    personalNotes: "",
+                    createdAt: Date(timeIntervalSinceNow: -86_400 * 200),
+                    purchaseDate: Date(timeIntervalSinceNow: -86_400 * 200),
+                    purchaseLocation: "Darty",
+                    purchaseCondition: .new,
+                    lowStockThreshold: 1,
+                    purchaseLocationSuggestions: [],
+                    reminders: Fixtures.itemReminders,
+                    onRefresh: {},
+                    onDelete: {},
+                    onEditSave: { _ in },
+                    onOpenReminders: {},
+                    onOpenMove: {},
+                    onOpenPurchaseEdit: {},
+                    onOpenLowStockEdit: {},
+                    onClose: {}
+                )
+            }
         case "locations":
             NavigationStack {
                 LocationsPage(
@@ -331,6 +359,27 @@ enum Fixtures {
         storageId: "s1",
         storageName: "Étagère du haut"
     )
+
+    static let itemReminders: [ReminderRow.Model] = [
+        .init(
+            id: "r1",
+            title: "Détartrer",
+            notes: "Vinaigre blanc, cycle complet",
+            dueDate: Date(timeIntervalSinceNow: -86_400 * 3),
+            isRecurring: true,
+            frequencyLabel: "Tous les 3 mois",
+            isOverdue: true
+        ),
+        .init(
+            id: "r2",
+            title: "Changer le filtre à eau",
+            notes: "",
+            dueDate: Date(timeIntervalSinceNow: 86_400 * 45),
+            isRecurring: true,
+            frequencyLabel: "Tous les 6 mois",
+            isOverdue: false
+        ),
+    ]
 
     static let previews: [ItemPreview] = [
         ItemPreview(previewId: "pv1", name: "Boîte de conserve — tomates pelées", category: .food, description: "Conserve 400 g", quantity: 4, tags: ["tomates pelées", "conserve", "légume"], personalNotes: "", purchaseLocation: ""),

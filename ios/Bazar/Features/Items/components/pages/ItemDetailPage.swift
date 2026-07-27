@@ -124,80 +124,59 @@ struct ItemDetailPage: View {
                 .accessibilityHint("Touchez pour déplacer l'objet")
             }
 
-            Section("Alerte stock") {
-                Button(action: onOpenLowStockEdit) {
-                    HStack {
-                        Label(lowStockSummaryLabel, systemImage: lowStockSystemImage)
-                            .foregroundStyle(isLowStock ? Color.orange : .primary)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
-                            .font(.caption.weight(.semibold))
-                    }
-                    .contentShape(.rect)
+            // A function that carries nothing has nothing to show: it shrinks to
+            // one line in the shared block below. The moment it holds data, it
+            // takes its own section back, detail rows and all.
+            if hasLowStockAlert {
+                Section("Alerte stock") {
+                    lowStockRow
                 }
-                .accessibilityIdentifier("edit-low-stock-button")
             }
 
-            Section {
-                ForEach(reminders.prefix(3)) { reminder in
-                    ReminderRow(
-                        title: reminder.title,
-                        notes: reminder.notes,
-                        dueDate: reminder.dueDate,
-                        isRecurring: reminder.isRecurring,
-                        frequencyLabel: reminder.frequencyLabel,
-                        isOverdue: reminder.isOverdue,
-                        showsOverdueBadge: true
-                    )
-                }
-                Button {
-                    onOpenReminders()
-                } label: {
-                    HStack {
-                        Label(reminders.isEmpty ? "Ajouter un rappel" : "Voir tous les rappels", systemImage: "bell.badge")
-                        Spacer()
-                        if reminders.count > 3 {
-                            Text("\(reminders.count)")
-                                .foregroundStyle(.secondary)
-                        }
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
-                            .font(.caption.weight(.semibold))
+            if !reminders.isEmpty {
+                Section("Rappels") {
+                    ForEach(reminders.prefix(3)) { reminder in
+                        ReminderRow(
+                            title: reminder.title,
+                            notes: reminder.notes,
+                            dueDate: reminder.dueDate,
+                            isRecurring: reminder.isRecurring,
+                            frequencyLabel: reminder.frequencyLabel,
+                            isOverdue: reminder.isOverdue,
+                            showsOverdueBadge: true
+                        )
                     }
+                    remindersRow
                 }
-            } header: {
-                Text("Rappels")
             }
 
-            Section("Achat") {
-                if let purchaseDate {
-                    LabeledContent("Date", value: purchaseDate.formatted(date: .abbreviated, time: .omitted))
-                }
-                if !purchaseLocation.isEmpty {
-                    if let url = locationURL(from: purchaseLocation) {
-                        LabeledContent("Lieu") {
-                            Link(purchaseLocation, destination: url)
+            if hasPurchaseInfo {
+                Section("Achat") {
+                    if let purchaseDate {
+                        LabeledContent("Date", value: purchaseDate.formatted(date: .abbreviated, time: .omitted))
+                    }
+                    if !purchaseLocation.isEmpty {
+                        if let url = locationURL(from: purchaseLocation) {
+                            LabeledContent("Lieu") {
+                                Link(purchaseLocation, destination: url)
+                            }
+                        } else {
+                            LabeledContent("Lieu", value: purchaseLocation)
                         }
-                    } else {
-                        LabeledContent("Lieu", value: purchaseLocation)
                     }
-                }
-                if let purchaseCondition {
-                    LabeledContent("État", value: purchaseCondition.label)
-                }
-                Button {
-                    onOpenPurchaseEdit()
-                } label: {
-                    HStack {
-                        Label(hasPurchaseInfo ? "Modifier l'achat" : "Ajouter un achat", systemImage: "bag.badge.plus")
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.secondary)
-                            .font(.caption.weight(.semibold))
+                    if let purchaseCondition {
+                        LabeledContent("État", value: purchaseCondition.label)
                     }
+                    purchaseRow
                 }
-                .accessibilityIdentifier("edit-purchase-button")
+            }
+
+            if hasPendingActions {
+                Section("Actions") {
+                    if !hasLowStockAlert { lowStockRow }
+                    if reminders.isEmpty { remindersRow }
+                    if !hasPurchaseInfo { purchaseRow }
+                }
             }
 
             if !tags.isEmpty {
@@ -223,8 +202,46 @@ struct ItemDetailPage: View {
         }
     }
 
+    // The three rows the shared block draws from. Each one reads the same in
+    // its own section and in the block — only its wording follows the state.
+    private var lowStockRow: some View {
+        DetailActionRow(
+            title: lowStockSummaryLabel,
+            systemImage: lowStockSystemImage,
+            action: onOpenLowStockEdit
+        )
+        .accessibilityIdentifier("edit-low-stock-button")
+    }
+
+    private var remindersRow: some View {
+        DetailActionRow(
+            title: reminders.isEmpty ? "Ajouter un rappel" : "Voir tous les rappels",
+            systemImage: "bell.badge",
+            badge: reminders.count > 3 ? "\(reminders.count)" : nil,
+            action: onOpenReminders
+        )
+        .accessibilityIdentifier("open-reminders-button")
+    }
+
+    private var purchaseRow: some View {
+        DetailActionRow(
+            title: hasPurchaseInfo ? "Modifier l'achat" : "Ajouter un achat",
+            systemImage: "bag.badge.plus",
+            action: onOpenPurchaseEdit
+        )
+        .accessibilityIdentifier("edit-purchase-button")
+    }
+
     private var hasPurchaseInfo: Bool {
         purchaseDate != nil || !purchaseLocation.isEmpty || purchaseCondition != nil
+    }
+
+    private var hasLowStockAlert: Bool {
+        lowStockThreshold != nil
+    }
+
+    private var hasPendingActions: Bool {
+        !hasLowStockAlert || reminders.isEmpty || !hasPurchaseInfo
     }
 
     private var isLowStock: Bool {
@@ -289,6 +306,32 @@ struct ItemDetailPage: View {
     }
 }
 
+/// Row that opens one of the item's satellite editors. Tinted like any list
+/// action, with the chevron that says a sheet is behind it.
+private struct DetailActionRow: View {
+    let title: String
+    let systemImage: String
+    var badge: String?
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Label(title, systemImage: systemImage)
+                Spacer()
+                if let badge {
+                    Text(badge)
+                        .foregroundStyle(.secondary)
+                }
+                Image(systemName: "chevron.right")
+                    .foregroundStyle(.secondary)
+                    .font(.caption.weight(.semibold))
+            }
+            .contentShape(.rect)
+        }
+    }
+}
+
 #Preview("Loaded") {
     NavigationStack {
         ItemDetailPage(
@@ -347,6 +390,48 @@ struct ItemDetailPage: View {
             lowStockThreshold: 5,
             purchaseLocationSuggestions: [],
             reminders: [],
+            onRefresh: {},
+            onDelete: {},
+            onEditSave: { _ in },
+            onOpenReminders: {},
+            onOpenMove: {},
+            onOpenPurchaseEdit: {},
+            onOpenLowStockEdit: {},
+            onClose: {}
+        )
+    }
+}
+
+/// The three functions configured: nothing is left in the shared block, so it
+/// disappears entirely.
+#Preview("Tout configuré") {
+    NavigationStack {
+        ItemDetailPage(
+            id: "i3",
+            name: "Machine à café",
+            description: "",
+            tags: ["delonghi", "expresso"],
+            category: .appliances,
+            quantity: 1,
+            location: nil,
+            personalNotes: "",
+            createdAt: Date(timeIntervalSinceNow: -86_400 * 200),
+            purchaseDate: Date(timeIntervalSinceNow: -86_400 * 200),
+            purchaseLocation: "Darty",
+            purchaseCondition: .new,
+            lowStockThreshold: 1,
+            purchaseLocationSuggestions: [],
+            reminders: [
+                .init(
+                    id: "r1",
+                    title: "Détartrer",
+                    notes: "",
+                    dueDate: Date(timeIntervalSinceNow: -86_400 * 3),
+                    isRecurring: true,
+                    frequencyLabel: "Tous les 3 mois",
+                    isOverdue: true
+                )
+            ],
             onRefresh: {},
             onDelete: {},
             onEditSave: { _ in },
