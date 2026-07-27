@@ -19,11 +19,6 @@ struct ItemPreviewCard: View {
     var body: some View {
         VStack(spacing: 0) {
             header
-            if !preview.tags.isEmpty {
-                TagChips(tags: preview.tags, font: .caption)
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 12)
-            }
             Divider()
                 .padding(.horizontal, 16)
             ItemCategoryMenu(category: $preview.category)

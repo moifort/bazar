@@ -102,7 +102,7 @@ extension BazarGraphQL {
       set { __data["storageId"] = newValue }
     }
 
-    /// Search keywords (deduplicated, max 20)
+    /// Search keywords, uncapped (deduplicated case- and accent-insensitively)
     var tags: GraphQLNullable<[ItemTag]> {
       get { __data["tags"] }
       set { __data["tags"] = newValue }

@@ -22,18 +22,18 @@ export const ItemName = (value: unknown) => {
   return make<ItemNameType>()(v)
 }
 
+// A tag holds a label copied off the object as often as a keyword describing
+// it, so the ceiling has to fit a whole printed line ("Confiture de fraises
+// extra bio 370 g"), not just a word.
 export const ItemTag = (value: unknown) => {
-  const v = z.string().trim().min(1).max(50).parse(value)
+  const v = z.string().trim().min(1).max(200).parse(value)
   return make<ItemTagType>()(v)
 }
 
-// The upper bound is a guard rail, not a feature: past twenty keywords a tag
-// list stops telling the search engine anything it did not already know.
-const MAX_TAGS = 20
-
-// One keyword written twice with a different case or a missing accent is one
-// keyword. First spelling wins, so the labels read on the units keep the order
-// the AI listed them in, ahead of the words describing the item.
+// Every readable label goes in — the list is not capped. What is dropped is
+// only what says nothing new: a blank, and a keyword already there under a
+// different case or accent. First spelling wins, so the labels read on the
+// units keep the order the AI listed them in, ahead of the descriptive words.
 export const parseItemTags = (values: unknown): ItemTagType[] => {
   const raw = z.array(z.string()).parse(values)
   const seen = new Set<string>()
@@ -47,7 +47,6 @@ export const parseItemTags = (values: unknown): ItemTagType[] => {
     if (seen.has(key)) continue
     seen.add(key)
     tags.push(ItemTag(value))
-    if (tags.length === MAX_TAGS) break
   }
 
   return tags

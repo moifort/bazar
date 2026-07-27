@@ -32,7 +32,9 @@ input AddItemInput {
   """Storage attachment (mutually exclusive with zoneId)"""
   storageId: StorageId
 
-  """Search keywords (deduplicated, max 20)"""
+  """
+  Search keywords, uncapped (deduplicated case- and accent-insensitively)
+  """
   tags: [ItemTag!]
 
   """
@@ -142,7 +144,9 @@ input ConfirmItemInput {
   """Storage attachment (mutually exclusive with zoneId)"""
   storageId: StorageId
 
-  """Search keywords (deduplicated, max 20)"""
+  """
+  Search keywords, uncapped (deduplicated case- and accent-insensitively)
+  """
   tags: [ItemTag!]
 
   """Zone attachment when no storage is chosen"""

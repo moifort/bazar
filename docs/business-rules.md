@@ -64,14 +64,19 @@ item is searched by.
 
 A tag comes from one of two places, in this order:
 
-- **what is written on the units** — the label, the brand, the flavour, the variant, the size
-  ("cumin", "paprika", "Bosch", "18V");
+- **every text readable on the object** — the label, the brand, the flavour, the variant, the
+  size, a handwritten note ("cumin", "paprika", "Bosch", "18V"). **All of them, with no
+  exception**: nothing is summarised, nothing is picked as more interesting than the rest, and
+  fifteen legible labels make fifteen tags. Grouping identical units does not merge their labels —
+  the one item carries the text of each.
 - **what describes the item** — its generic nature, material, colour, use ("condiment",
   "cuisine").
 
 - The list is **always present**, empty when the item carries none, and never `null`.
-- Keywords are deduplicated case- and accent-insensitively, first spelling wins, and the list is
-  capped at twenty — past that a tag list stops telling the search anything new.
+- **The list is uncapped.** The only thing dropped is what says nothing new: a blank, and a
+  keyword already there under a different case or accent — first spelling wins.
+- A tag holds a whole printed line, not just a word, so its ceiling is a length (200 characters),
+  never a word count.
 - `tags` feed the search index alongside the name, the description and the personal notes, which
   is the whole point of the field: "paprika" and "condiment" both find the jar.
 - The AI proposes them on a scan; the user edits them like any other field. Nothing about a tag is

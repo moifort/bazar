@@ -82,11 +82,17 @@ Pour chaque objet retenu, extrais :
 - name : nom de l'objet en francais
 - category : une parmi tools, appliances, decor, clothing, documents, food, electronics, furniture, kitchenware, linen, sports, toys, books, media, hygiene, other
 - description : breve description en francais (1-2 phrases)
-- tags : de 3 a 8 mots-cles courts en minuscules qui permettront de retrouver l'objet, dans cet ordre :
-  d'abord ce qui est ecrit sur chaque exemplaire (etiquette, marque, parfum, variante, taille),
-  ensuite ce qui decrit l'objet (nature generique, matiere, couleur, usage).
-  Un ou deux mots par tag, jamais une phrase, et jamais la simple reprise de name.
-  Exemple pour les douze pots : ["cumin", "paprika", "curry", "epice", "condiment", "cuisine"]
+- tags : les mots-cles qui permettront de retrouver l'objet, dans cet ordre :
+  1. TOUS les textes lisibles sur l'objet, sans exception : etiquette, marque, parfum, variante,
+     taille, contenance, mention manuscrite. N'en omets aucun, n'en resume aucun, ne choisis pas
+     les plus interessants — s'il y a quinze etiquettes lisibles, les quinze sont dans la liste.
+     Recopie chaque texte tel qu'il est ecrit, meme s'il fait plusieurs mots.
+     Quand tu regroupes des exemplaires identiques, la liste porte le texte de chacun d'eux.
+  2. ensuite, quelques mots en minuscules qui decrivent l'objet lui-meme : nature generique,
+     matiere, couleur, usage. Un ou deux mots chacun, jamais la simple reprise de name.
+  La liste n'a pas de longueur maximale.
+  Exemple pour les douze pots : ["cumin", "paprika", "curry", "thym", "origan", "laurier",
+  "epice", "condiment", "cuisine"]
 - quantity : nombre d'exemplaires du meme type visibles (defaut 1)
 
 Si aucun objet ne satisfait ces criteres, reponds avec une liste vide.

@@ -36,8 +36,14 @@ describe('ItemTag', () => {
     expect(() => ItemTag('   ')).toThrow()
   })
 
-  test('rejects a keyword past 50 characters', () => {
-    expect(() => ItemTag('a'.repeat(51))).toThrow()
+  test('accepts a whole printed line, not just a word', () => {
+    expect(ItemTag('Confiture de fraises extra bio 370 g')).toBe(
+      'Confiture de fraises extra bio 370 g' as never,
+    )
+  })
+
+  test('rejects a keyword past 200 characters', () => {
+    expect(() => ItemTag('a'.repeat(201))).toThrow()
   })
 })
 
@@ -58,10 +64,10 @@ describe('parseItemTags', () => {
     expect(parseItemTags(['cumin', '  ', ''])).toEqual(['cumin'] as never)
   })
 
-  test('caps the list at twenty keywords', () => {
-    const many = Array.from({ length: 25 }, (_, i) => `tag-${i}`)
+  test('never caps the list — every readable label goes in', () => {
+    const many = Array.from({ length: 60 }, (_, i) => `tag-${i}`)
 
-    expect(parseItemTags(many)).toHaveLength(20)
+    expect(parseItemTags(many)).toHaveLength(60)
   })
 
   test('rejects anything that is not a list of strings', () => {
