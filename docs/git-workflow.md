@@ -56,6 +56,15 @@ versions the Cloud Function build cannot survive (`graphql` < 17, `firebase-admi
 firebase preset installs `firebase-functions@latest` with npm, whose peer ranges reject them).
 Leave those pins in place; a red Renovate PR is a real incompatibility, not a flake.
 
+The nightly run needs a `RENOVATE_TOKEN` repository secret — a fine-grained PAT on this repo
+with **Contents**, **Issues**, **Pull requests** and **Workflows** in read/write, plus **Commit
+statuses** in read. `GITHUB_TOKEN` cannot stand in: the PRs it opens never trigger the
+`pull_request` test workflows the automerge waits on, and it is forbidden from editing
+`.github/workflows/`, which is half of what Renovate bumps here. The action exits in seconds on
+a missing secret (`'token' MUST be passed using its input or the 'RENOVATE_TOKEN' environment
+variable`) and nothing else fails, so the schedule can rot unnoticed — check the Renovate run
+after any change to the secret.
+
 ## Never push until asked
 
 **Never push until the user explicitly says "push".** Commits accumulate locally; pushing is
