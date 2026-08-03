@@ -15,7 +15,7 @@ settings:
 packages:
   Apollo:
     url: https://github.com/apollographql/apollo-ios.git
-    minorVersion: "1.25.7"
+    minorVersion: "2.3.0"
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk.git
     from: "12.17.0"
