@@ -18,7 +18,7 @@ packages:
     minorVersion: "2.4.0"
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk.git
-    from: "12.19.2"
+    from: "13.0.1"
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa.git
     from: "9.30.0"
