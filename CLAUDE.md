@@ -123,7 +123,7 @@ fallback and the beta-macOS `BuildMachineOSBuild` patch:
 
 ## Gemini API Key & Secrets
 
-- The AI (photo scan) is **Gemini 2.5 Flash** in `server/domain/scan/infrastructure/gemini.ts`, key in `NITRO_GOOGLE_API_KEY`; `POST /admin/migrate` is gated by `NITRO_ADMIN_TOKEN`; optional: `NITRO_SENTRY_DSN` (a non-URL value disables error reporting), `NITRO_PREMIUM_USER_IDS` (comped Premium accounts), `NITRO_APPLE_APP_ID` and `NITRO_APPLE_ENVIRONMENT` (pins App Store signature checks, `Xcode` for the local StoreKit file). Local `.env` (see `.env.example`); in production, GCP Secret Manager (project `polyforms-bazar-prod`), provisioned by `infra/secrets.tf`. Never commit a key. Always update `.env.example` and this section when adding an env var.
+- The AI (photo scan) is **Gemini 3.5 Flash-Lite** in `server/domain/scan/infrastructure/gemini.ts`, key in `NITRO_GOOGLE_API_KEY`; `POST /admin/migrate` is gated by `NITRO_ADMIN_TOKEN`; optional: `NITRO_SENTRY_DSN` (a non-URL value disables error reporting), `NITRO_PREMIUM_USER_IDS` (comped Premium accounts), `NITRO_APPLE_APP_ID` and `NITRO_APPLE_ENVIRONMENT` (pins App Store signature checks, `Xcode` for the local StoreKit file). Local `.env` (see `.env.example`); in production, GCP Secret Manager (project `polyforms-bazar-prod`), provisioned by `infra/secrets.tf`. Never commit a key. Always update `.env.example` and this section when adding an env var.
 
 ## iOS Simulator
 

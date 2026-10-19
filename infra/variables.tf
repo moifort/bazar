@@ -83,7 +83,7 @@ variable "apns_private_key_path" {
 
 # Backend secrets
 variable "google_api_key" {
-  description = "Google AI API key for Gemini 2.5 Flash (item photo analysis)"
+  description = "Google AI API key for Gemini 3.5 Flash-Lite (item photo analysis)"
   type        = string
   sensitive   = true
 }

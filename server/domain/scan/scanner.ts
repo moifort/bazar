@@ -10,7 +10,7 @@ import type { ItemPreview, ScanResult } from './types'
 const log = createLogger('scanner')
 
 export const analyzePhoto = async (userId: UserId, imageBase64: string): Promise<ScanResult> => {
-  log.info('Analyzing photo with Gemini 2.5 Flash')
+  log.info('Analyzing photo with Gemini 3.5 Flash-Lite')
 
   const items = await analyzeImage(imageBase64)
 

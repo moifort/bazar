@@ -100,7 +100,7 @@ means the user never wants to hear about this item.
 
 ## A scan produces previews, not items
 
-Photographing is not owning. The AI (Gemini 2.5 Flash vision) returns a batch of **previews** —
+Photographing is not owning. The AI (Gemini 3.5 Flash-Lite vision) returns a batch of **previews** —
 name, guessed category, description, tags, quantity — identified by a `previewId`, and **nothing
 is persisted at that point**. The user reviews the batch, edits what the AI got wrong, and
 **confirms**; only then are items created, all at once, in one place.

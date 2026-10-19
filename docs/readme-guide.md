@@ -83,7 +83,7 @@ One subsection per key. Each answers three questions: **what it does** (one sent
 ```md
 ### Gemini API key
 
-**What it does:** powers photo scanning — identifying the items in a picture (Gemini 2.5 Flash).
+**What it does:** powers photo scanning — identifying the items in a picture (Gemini 3.5 Flash-Lite).
 
 **How to get it:** create a key in Google AI Studio (https://aistudio.google.com/apikey).
 

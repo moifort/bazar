@@ -1,11 +1,28 @@
+import * as Sentry from '@sentry/node'
 import { z } from 'zod'
-import { config } from '~/system/config/index'
+import { config } from '~/system/config'
 import { createLogger } from '~/system/logger'
 
 const log = createLogger('gemini')
 
-const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
+// The model every scan goes to. Not gemini-2.5-flash any more: Google stopped
+// serving it to API keys created after 2026-10-19, and the failure is a 404 on
+// the model path, not a deprecation warning — the next retirement will land the
+// same way, which is why the name is one constant. Flash-Lite is priced the same
+// as 2.5 Flash was ($0.30 / $2.50 per million tokens), answers in seconds rather
+// than tens of seconds and spends no thinking tokens, with the same vision input
+// and structured JSON output the scan relies on.
+const GEMINI_MODEL = 'gemini-3.5-flash-lite'
+
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`
+
+// What a caller sees of a failed call. The cause goes to the log and the
+// reporter and no further: the fetch error quotes the request URL and the
+// model's answer, and Apollo relays an uncaught resolver error's message to
+// the client as is.
+export const GEMINI_FAILED = 'The model did not answer'
+
+type GeminiResponse = { candidates?: { content: { parts: { text?: string }[] } }[] }
 
 const itemSchema = z.object({
   name: z.string().min(1),
@@ -101,30 +118,39 @@ Reponds en JSON avec le schema : { "items": [{ "name", "category", "description"
 export const analyzeImage = async (imageBase64: string) => {
   const { googleApiKey } = config()
 
-  const response = await $fetch<{
-    candidates: { content: { parts: { text?: string }[] } }[]
-  }>(`${GEMINI_API_URL}?key=${googleApiKey}`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: {
-      contents: [
-        {
-          parts: [
-            { text: PROMPT },
-            {
-              inline_data: {
-                mime_type: 'image/jpeg',
-                data: imageBase64,
+  let response: GeminiResponse
+  try {
+    response = await $fetch<GeminiResponse>(GEMINI_API_URL, {
+      method: 'POST',
+      // The key travels in a header, never in the URL: a failed call's error
+      // message quotes the URL, and that message gets logged and reported.
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': googleApiKey },
+      body: {
+        contents: [
+          {
+            parts: [
+              { text: PROMPT },
+              {
+                inline_data: {
+                  mime_type: 'image/jpeg',
+                  data: imageBase64,
+                },
               },
-            },
-          ],
+            ],
+          },
+        ],
+        generationConfig: {
+          responseMimeType: 'application/json',
         },
-      ],
-      generationConfig: {
-        responseMimeType: 'application/json',
       },
-    },
-  })
+    })
+  } catch (error) {
+    // Apollo answers 200 on a resolver error, so Nitro's `error` hook — where
+    // the Sentry plugin listens — never fires for this one: report it here.
+    log.error('Gemini call failed', error)
+    Sentry.captureException(error)
+    throw new Error(GEMINI_FAILED)
+  }
 
   const text = response.candidates?.[0]?.content?.parts?.find((part) => part.text)?.text
   if (!text) throw new Error('Gemini did not return any text')
