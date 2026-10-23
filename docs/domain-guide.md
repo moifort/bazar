@@ -14,14 +14,14 @@ GraphQL slice. Read it before writing a new one.
 One business concept = **one word**, at every layer — domain, GraphQL schema, iOS app, tests.
 Bazar's vocabulary:
 
-| Word | Meaning |
-|------|---------|
-| **item** | A physical object the user owns. Never "object", "thing" or "product". |
-| **place / room / zone / storage** | The four levels of the location hierarchy, in that order. A *place* is a building, a *room* a room in it, a *zone* an area of that room, a *storage* the furniture the item sits in. |
-| **attach / move** | Binding an item to a storage or a zone; `move` changes an existing attachment. Never "assign", "link". |
-| **scan** | A photo analysed by the AI. It produces **previews**, which the user **confirms** into items. |
-| **reminder** | A dated maintenance task attached to an item. Completing it either **reschedules** it (recurring) or **finishes** it (one-shot). |
-| **low stock** | An item whose quantity has fallen to or below its `lowStockThreshold`. The moment it happens is a **crossing**. |
+| Word                              | Meaning                                                                                                                                                                              |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **item**                          | A physical object the user owns. Never "object", "thing" or "product".                                                                                                               |
+| **place / room / zone / storage** | The four levels of the location hierarchy, in that order. A _place_ is a building, a _room_ a room in it, a _zone_ an area of that room, a _storage_ the furniture the item sits in. |
+| **attach / move**                 | Binding an item to a storage or a zone; `move` changes an existing attachment. Never "assign", "link".                                                                               |
+| **scan**                          | A photo analysed by the AI. It produces **previews**, which the user **confirms** into items.                                                                                        |
+| **reminder**                      | A dated maintenance task attached to an item. Completing it either **reschedules** it (recurring) or **finishes** it (one-shot).                                                     |
+| **low stock**                     | An item whose quantity has fallen to or below its `lowStockThreshold`. The moment it happens is a **crossing**.                                                                      |
 
 Renaming a concept renames it everywhere, in the same task. A half-renamed vocabulary is worse
 than the old name.
@@ -71,8 +71,8 @@ export type Item = {
   userId: UserId
   name: ItemName
   quantity: Quantity
-  storageId?: StorageId       // absent when the item is attached to a zone, or nowhere
-  zoneId?: ZoneId             // never set together with storageId
+  storageId?: StorageId // absent when the item is attached to a zone, or nowhere
+  zoneId?: ZoneId // never set together with storageId
   createdAt: Date
 }
 ```
@@ -121,7 +121,6 @@ export const findBy = async (userId: UserId, id: ItemId) => {
 ```
 
 Rules that bite here:
-
 - **`findAll` / `findBy` naming survives only in the repository** — it is the repository idiom.
 - **Every query filters on `userId`.** A document read by id is checked for ownership before
   being returned, and returns `undefined` (not `null`) when missing or foreign.
@@ -200,7 +199,7 @@ never orchestrate back over `item`.
 
 ## 9. Optional: events (`events.ts`)
 
-When another domain must *react* without being depended upon, publish instead of importing.
+When another domain must _react_ without being depended upon, publish instead of importing.
 The event shape lives in the publishing domain; the subscription is wired in
 `server/plugins/03-notifications.ts`:
 
@@ -227,7 +226,6 @@ bun run generate:graphql && bun run generate:ios
 ## 11. Write the tests
 
 Co-located, with the suffix stating the level (the arch test enforces both):
-
 - `*.unit.test.ts` — pure functions: `business-rules.ts`, `primitives.ts`, `events.ts`.
 - `*.int.test.ts` — commands, queries and repositories against `server/test/fake-firestore.ts`.
   Assert three things: **behaviour** (what was persisted), **atomicity** (one committed batch, no

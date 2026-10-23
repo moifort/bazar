@@ -34,9 +34,8 @@ Button {
 ```
 
 Rules that come with it:
-
 - **One source of truth for "in flight."** If the action already runs through a helper that tracks
-  its own state (an error presenter, a view model flag), bind the spinner to *that* — never a
+  its own state (an error presenter, a view model flag), bind the spinner to _that_ — never a
   parallel `@State` boolean that can drift out of sync.
 - **Refresh inside the in-flight window.** When success is followed by a reload, `await` the reload
   in the same closure rather than in a detached `Task`: otherwise the spinner stops before the view
@@ -44,7 +43,7 @@ Rules that come with it:
 - **`.interactiveDismissDisabled(isRunning)` on any sheet that writes.** A swipe mid-write orphans
   the task and leaves the user unsure whether anything was saved.
 - **A row in a list carries its own spinner**, in its trailing edge — a form with several actions
-  needs to say *which* one is running, so track the running action as an enum, not a boolean.
+  needs to say _which_ one is running, so track the running action as an enum, not a boolean.
 
 ### 2. Long or AI work — the full-bleed loader
 
@@ -67,6 +66,6 @@ and reload the list, which puts the row back.
 - An `alert` button that `await`s in silence: the alert dismisses and the screen freezes with no
   indication anything is happening. An alert cannot host a spinner — either move the work to a
   screen that can, or make it optimistic (shape 3).
-- A `ProgressView` parked in a section unrelated to the control that was tapped — put it *on* the
+- A `ProgressView` parked in a section unrelated to the control that was tapped — put it _on_ the
   control.
 - A spinner with no `.disabled`: it says "working" while still accepting a second tap.

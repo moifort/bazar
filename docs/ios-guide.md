@@ -7,15 +7,15 @@ of them.
 
 ## Tech stack
 
-| Piece | Choice |
-|-------|--------|
-| Target | iOS 26.0, Swift 6, strict concurrency `complete` |
-| Project | XcodeGen — `ios/project.yml` is the source of truth, `ios/Bazar.xcodeproj` is generated |
-| Bundle id / team | `co.polyforms.bazar` / `46C337T7YN` |
-| UI | SwiftUI, native iOS 26 components (Liquid Glass — no custom re-skins) |
-| Data | Apollo iOS 1.18, generated into `ios/Bazar/Generated/GraphQL` |
-| Auth / push | Firebase Auth (Sign in with Apple), Firebase Messaging |
-| Error reporting | `sentry-cocoa` (SPM), release builds only |
+| Piece            | Choice                                                                                  |
+| ---------------- | --------------------------------------------------------------------------------------- |
+| Target           | iOS 26.0, Swift 6, strict concurrency `complete`                                        |
+| Project          | XcodeGen — `ios/project.yml` is the source of truth, `ios/Bazar.xcodeproj` is generated |
+| Bundle id / team | `co.polyforms.bazar` / `46C337T7YN`                                                     |
+| UI               | SwiftUI, native iOS 26 components (Liquid Glass — no custom re-skins)                   |
+| Data             | Apollo iOS 1.18, generated into `ios/Bazar/Generated/GraphQL`                           |
+| Auth / push      | Firebase Auth (Sign in with Apple), Firebase Messaging                                  |
+| Error reporting  | `sentry-cocoa` (SPM), release builds only                                               |
 
 Because the project is generated, **never add files through Xcode's UI**: create the file on disk
 and, if a new folder appeared, re-run XcodeGen (`xcodegen generate` in `ios/`). Adding a source
@@ -56,7 +56,6 @@ Features: `Items`, `Locations`, `Scan`, `Search`, `Dashboard`, `Reminders`, `Not
 
 `Shared/GraphQLClient.swift` builds the singleton `ApolloClient` against
 `SharedConfig.serverURL + /graphql`, with two custom interceptors around Apollo's default chain:
-
 1. `FirebaseTokenInterceptor` — injects `Authorization: Bearer <Firebase ID token>` on every
    request. There is no static API token in the app.
 2. `GraphQLLoggingInterceptor` — logs the operation name and any GraphQL error code.
@@ -120,7 +119,6 @@ view decides what to show for it.
 
 One `@MainActor @Observable final class` per feature, holding the state the screens read and the
 `load` / `loadMore` / mutation methods. Models it exposes are `Sendable` value types.
-
 - **Single-flight**: guard re-entrancy (`guard !isLoading`) so a `.task` plus a `.refreshable`
   don't fire twice.
 - **Stale responses**: when a filter can change mid-flight, bump a `generation` token and drop
@@ -150,12 +148,12 @@ struct ItemsView: View {                       // coordinator
 
 ## Atomic design
 
-| Layer | Location | Receives |
-|-------|----------|----------|
-| **Atoms** | `Shared/Components/atoms/` | Primitives — cross-feature (`AsyncToolbarButton`) |
-| **Molecules** | `Features/{F}/components/molecules/` | Primitives (`ItemRow`, `ReminderRow`) |
+| Layer         | Location                             | Receives                                                |
+| ------------- | ------------------------------------ | ------------------------------------------------------- |
+| **Atoms**     | `Shared/Components/atoms/`           | Primitives — cross-feature (`AsyncToolbarButton`)       |
+| **Molecules** | `Features/{F}/components/molecules/` | Primitives (`ItemRow`, `ReminderRow`)                   |
 | **Organisms** | `Features/{F}/components/organisms/` | Primitives, or one model struct at the mapping boundary |
-| **Pages** | `Features/{F}/components/pages/` | Data + closures |
+| **Pages**     | `Features/{F}/components/pages/`     | Data + closures                                         |
 
 Promote a molecule used by two features up into `Shared/Components/`.
 
@@ -187,10 +185,10 @@ The rule is in
 [swiftui-best-practices.md](./swiftui-best-practices.md#a-cta-that-fires-a-network-call-never-waits-in-silence).
 In this app:
 
-| Shape | Here |
-|-------|------|
-| Inline spinner in a toolbar button | `Shared/Components/atoms/AsyncToolbarButton.swift` — owns its `isInProgress`, ignores re-taps |
-| Optimistic + background | Item deletion: the sheet closes at once, the mutation follows, a failure surfaces on the next reload |
+| Shape                              | Here                                                                                                 |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Inline spinner in a toolbar button | `Shared/Components/atoms/AsyncToolbarButton.swift` — owns its `isInProgress`, ignores re-taps        |
+| Optimistic + background            | Item deletion: the sheet closes at once, the mutation follows, a failure surfaces on the next reload |
 
 `.disabled(…)` alone is never enough: a disabled button with no spinner reads as a broken app.
 
@@ -226,7 +224,7 @@ from installing on the physical iPhone, which always requires an explicit yes.
 ## Language
 
 Identifiers, file names, comments and accessibility **identifiers** are English. French is for
-what the user reads: labels, titles, accessibility *labels*, preview names. See
+what the user reads: labels, titles, accessibility _labels_, preview names. See
 [code-style.md](./code-style.md#language).
 
 ## Auth — Firebase + Sign in with Apple

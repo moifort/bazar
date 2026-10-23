@@ -1,6 +1,6 @@
 # Business Rules — The Product Model
 
-What Bazar *is*, as a model. Read this before touching `item`, `location`, `reminder` or the AI
+What Bazar _is_, as a model. Read this before touching `item`, `location`, `reminder` or the AI
 prompts. The code that carries these rules lives in each domain's `business-rules.ts` and in the
 commands; where those files sit is [architecture.md](./architecture.md).
 
@@ -13,7 +13,6 @@ attention.
 The first launch asks two things — how to call the user, and what their first place is called —
 then offers the rooms it usually has. The answers are not preferences: they are the first
 documents of the account.
-
 - **The user document is the flag.** There is no `hasOnboarded` boolean: a user who never went
   through the onboarding simply has no document, and that absence is what the app reads on launch.
   A reinstall or a second phone therefore never asks twice, and an account created before the
@@ -33,11 +32,10 @@ documents of the account.
 inside it. The chain is strict and each level points at its parent (`Room.placeId`,
 `Zone.roomId`, `Storage.zoneId`). There is no fifth level and no shortcut: a zone always belongs
 to a room, never directly to a place.
-
 - **Siblings are user-ordered.** Every level carries an `order`; a new sibling lands last
   (`nextOrder` = max + 1), and reordering rewrites `order`, never the ids.
 - **Deleting cascades downward.** Deleting a place deletes its rooms, hence their zones, hence
-  their storages. Nothing is orphaned, and nothing cascades *upward*.
+  their storages. Nothing is orphaned, and nothing cascades _upward_.
 - **The path is derived, never stored.** `fullPath` (`"Appartement > Cuisine > Placard > Étagère
   2"`) is recomputed from the four names at read time — renaming a room instantly renames every
   path that runs through it.
@@ -47,7 +45,6 @@ to a room, never directly to a place.
 The attachment is where the object physically sits. The user may be precise (a storage) or vague
 (a zone, when the thing is "somewhere in the garage"), and an item may be attached to nothing at
 all — just created, not yet put away.
-
 - Providing both `storageId` and `zoneId` is the sentinel `'invalid-location'`; the schema cannot
   express "exactly one of", so the command does.
 - Pointing at something that doesn't exist (or belongs to someone else) is
@@ -63,7 +60,6 @@ distinguishes the units is not lost in the grouping: it goes into **`tags`**, th
 item is searched by.
 
 A tag comes from one of two places, in this order:
-
 - **every text readable on the object** — the label, the brand, the flavour, the variant, the
   size, a handwritten note ("cumin", "paprika", "Bosch", "18V"). **All of them, with no
   exception**: nothing is summarised, nothing is picked as more interesting than the rest, and
@@ -88,9 +84,8 @@ A tag comes from one of two places, in this order:
 
 An item has a `quantity` (a positive integer) and optionally a `lowStockThreshold`. No threshold
 means the user never wants to hear about this item.
-
-- Low stock is `quantity <= lowStockThreshold` — *at or below*, not strictly below.
-- What triggers a push is not *being* low, it is **crossing** into low: the item was not low
+- Low stock is `quantity <= lowStockThreshold` — _at or below_, not strictly below.
+- What triggers a push is not _being_ low, it is **crossing** into low: the item was not low
   before the update and is low after. Re-saving an already-low item stays silent, so a user
   editing a description at 1-left doesn't get notified again.
 - Lowering the threshold below the current quantity un-arms the alert; the next crossing will
@@ -104,7 +99,6 @@ Photographing is not owning. The AI (Gemini 3.5 Flash-Lite vision) returns a bat
 name, guessed category, description, tags, quantity — identified by a `previewId`, and **nothing
 is persisted at that point**. The user reviews the batch, edits what the AI got wrong, and
 **confirms**; only then are items created, all at once, in one place.
-
 - A preview whose category the AI couldn't guess arrives without one — the user picks it; the
   fallback is `other`, never a silent wrong category.
 - A refused batch leaves no trace. There is no "draft item" state in the model.
@@ -118,14 +112,13 @@ is persisted at that point**. The user reviews the batch, edits what the AI got 
 ## A reminder is dated, attached to an item, and either recurring or one-shot
 
 A reminder ("change the water filter") lives on an item and carries a `dueDate`.
-
 - **Frequency drives the lifecycle.** `monthly`, `quarterly`, `biannual`, `annual` and
   `custom-days` are recurring; an **absent** frequency means one-shot.
 - `custom-days` — and only `custom-days` — carries `customIntervalDays`. Any other combination
   (an interval without `custom-days`, `custom-days` without an interval) is a rejected input,
   not a stored inconsistency.
-- **Completing is the only way forward.** A recurring reminder is *rescheduled* to its next due
-  date and its completion is recorded; a one-shot reminder is *finished* — the completion is kept,
+- **Completing is the only way forward.** A recurring reminder is _rescheduled_ to its next due
+  date and its completion is recorded; a one-shot reminder is _finished_ — the completion is kept,
   the reminder is deleted.
 - The next due date is computed from **the later of** the current due date and the completion
   date: completing a reminder three weeks late doesn't schedule the next one in the past.
@@ -138,7 +131,6 @@ A reminder ("change the water filter") lives on an item and carries a `dueDate`.
 
 Both are read-only views assembled from the other domains at read time — there is no stored
 projection to fall out of sync.
-
 - **Search** is fuzzy and accent-insensitive across items, places and rooms, ranked by how the
   match happened: exact (100), prefix (80), word prefix (60), substring (40), near-miss within
   edit distance 2 (20). Anything scoring zero is not a result. An item is matched on its name, its
@@ -159,7 +151,7 @@ The allowance is checked **before** the AI is called and the scan recorded **aft
 a refusal costs nothing, and a failed analysis is not a scan the user spent.
 
 Premium answers to a 4000-scan ceiling over the last 12 months, which the app never shows: it is
-anti-abuse plumbing, not a plan limit. The copy says "scannez sans compter" and never *illimité* —
+anti-abuse plumbing, not a plan limit. The copy says "scannez sans compter" and never _illimité_ —
 the ceiling exists, so the word would be a lie. Full model:
 [in-app-purchase.md](./in-app-purchase.md).
 
@@ -194,5 +186,5 @@ real threshold, `''` is a real (if odd) name, and absence is neither.
 
 Enum values, discriminants and identifiers are English technical symbols (`kitchenware`,
 `custom-days`, `low-stock-crossed`); the app translates them. The only French the backend holds is
-the copy it *sends to the user* — the push notification body — and French sample values quoted in
+the copy it _sends to the user_ — the push notification body — and French sample values quoted in
 the AI prompts. See [code-style.md](./code-style.md#language).

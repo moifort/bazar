@@ -74,7 +74,6 @@ data through other domains' public `Query` namespaces.
 Each domain is a self-contained bounded context. The per-file responsibilities are the generic ones
 ([ddd-best-practices.md](./ddd-best-practices.md#the-building-blocks-and-where-they-live)); what is
 specific here:
-
 - **types.ts** — branded types via `ts-brand`. No Zod here.
 - **primitives.ts** — Zod constructors; must import both `ts-brand` and `zod` (checked by the arch test).
 - **command.ts** / **query.ts** — exported as a namespace object (`ItemCommand`, `LocationQuery`).
@@ -124,7 +123,6 @@ every document.
 
 There is **no** `read-model/` directory and no stored projection. Composite reads are served two
 ways:
-
 1. **Read-only domains** — `search` and `dashboard` expose a `query.ts` that assembles data
    through other domains' public `Query` namespaces. They never touch a repository.
 2. **GraphQL loaders** — the location fields grafted onto `ItemType` resolve through the
@@ -149,7 +147,6 @@ Code-first GraphQL (Apollo Server 5 + Pothos 4), exposed at the single endpoint 
 There is **no** central `server/graphql/` directory: each domain owns its slice under
 `infrastructure/graphql/{enums,types,inputs,queries,mutations}.ts`. The shared plumbing lives
 in `server/domain/shared/graphql/`:
-
 - **builder.ts** — the single Pothos `SchemaBuilder`; declares the `GraphQLContext`
   (`{ event, userId, loaders }`), `DefaultFieldNullability: false`, and the branded `Scalars` map.
 - **scalars.ts** — registers every scalar (including `DateTime`); `parseValue` runs the domain's
@@ -168,7 +165,6 @@ The SDL is exported to `shared/schema.graphql` (`bun run generate:graphql`) for 
 ### Route Layer (`server/routes/`)
 
 The app is GraphQL-first; only three HTTP handlers exist:
-
 - `routes/graphql.ts` — `GET`/`POST /graphql`; builds a fresh per-request context
   `{ event, userId, loaders: createLoaders(userId) }` and forwards to Apollo.
 - `routes/health.get.ts` — unauthenticated liveness probe for Cloud Run.

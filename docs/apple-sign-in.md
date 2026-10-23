@@ -9,26 +9,25 @@ repo. The iOS side needs no changes.
 
 Already set across the project — do not change them.
 
-| Item | Value |
-| ---- | ----- |
-| Apple Team ID | `46C337T7YN` |
-| App ID (bundle id) | `co.polyforms.bazar` |
-| Services ID | `co.polyforms.bazar.signin` |
-| Firebase / GCP project | `polyforms-bazar-prod` |
-| Firebase auth domain | `polyforms-bazar-prod.firebaseapp.com` |
-| OAuth return URL | `https://polyforms-bazar-prod.firebaseapp.com/__/auth/handler` |
+| Item                   | Value                                                          |
+| ---------------------- | -------------------------------------------------------------- |
+| Apple Team ID          | `46C337T7YN`                                                   |
+| App ID (bundle id)     | `co.polyforms.bazar`                                           |
+| Services ID            | `co.polyforms.bazar.signin`                                    |
+| Firebase / GCP project | `polyforms-bazar-prod`                                         |
+| Firebase auth domain   | `polyforms-bazar-prod.firebaseapp.com`                         |
+| OAuth return URL       | `https://polyforms-bazar-prod.firebaseapp.com/__/auth/handler` |
 
 ## Apple Developer portal
 
 In [developer.apple.com/account](https://developer.apple.com/account) under Team `46C337T7YN`:
-
 1. **App ID** — Certificates, Identifiers & Profiles → Identifiers → App IDs.
-   - Ensure the App ID `co.polyforms.bazar` exists (create it as type *App* otherwise).
-   - Enable the **Sign In with Apple** capability (*Enable as a primary App ID*), then save.
+   - Ensure the App ID `co.polyforms.bazar` exists (create it as type _App_ otherwise).
+   - Enable the **Sign In with Apple** capability (_Enable as a primary App ID_), then save.
 
-2. **Services ID** — Identifiers → (filter *Services IDs*) → +.
+2. **Services ID** — Identifiers → (filter _Services IDs_) → +.
    - Identifier `co.polyforms.bazar.signin`, description `Bazar Sign In`.
-   - Check **Sign In with Apple**, then *Configure*:
+   - Check **Sign In with Apple**, then _Configure_:
      - **Primary App ID**: `co.polyforms.bazar`
      - **Domains and Subdomains**: `polyforms-bazar-prod.firebaseapp.com`
      - **Return URLs**: `https://polyforms-bazar-prod.firebaseapp.com/__/auth/handler`
@@ -36,8 +35,8 @@ In [developer.apple.com/account](https://developer.apple.com/account) under Team
 
 3. **Sign in with Apple key** — Keys → +.
    - Name `Bazar Sign In Key`.
-   - Check **Sign In with Apple**, *Configure* → Primary App ID `co.polyforms.bazar`.
-   - *Continue* → *Register* → **download the `.p8` file** (⚠️ downloadable **only once**).
+   - Check **Sign In with Apple**, _Configure_ → Primary App ID `co.polyforms.bazar`.
+   - _Continue_ → _Register_ → **download the `.p8` file** (⚠️ downloadable **only once**).
    - Note the 10-character **Key ID** shown on the key's page.
 
 ## Deliverables

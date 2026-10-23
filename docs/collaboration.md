@@ -14,7 +14,7 @@ the single source for collaboration conventions, replacing any machine-local ass
   gets flagged, not silently patched.
 - **Rules are written project-agnostic; wiring is written per project.** A practice that would hold
   in any codebase belongs in a `*-best-practices.md` (or `code-style.md`) with neutral examples and
-  no product noun in sight; how *this* repo implements it — paths, library names, domain examples —
+  no product noun in sight; how _this_ repo implements it — paths, library names, domain examples —
   belongs in the matching project guide, which links to the rule. A rule that can only be read
   through this product's vocabulary can't be reused, reviewed, or challenged.
 - **Codify corrections.** When the user corrects an architecture/style point in conversation
@@ -36,7 +36,6 @@ the single source for collaboration conventions, replacing any machine-local ass
 ## Closing a task: surfaces, then diff size
 
 Every finished task closes with two lines in the reply, in this order:
-
 1. **The surfaces touched** — one sentence naming which of the three the task changed:
    **the database** (a Firestore document shape, a new collection, a migration), **the backend**
    (anything under `server/`), **the iOS app** (anything under `ios/`). Name the ones changed and
@@ -103,7 +102,6 @@ collaboration learning, preference, or project note is codified in this file or 
 `/Users/thibaut/Code/shuhari` (sibling repo) shares Bazar's exact stack and conventions (Bun +
 Nitro + Pothos + Firestore repositories, SwiftUI + Apollo codegen, same DDD layout) and is where
 these guides come from. When a pattern exists there, **replicate it rather than inventing one**:
-
 - Cursor pagination in a repository (`where` + `orderBy` + `startAfter(docSnapshot)` +
   `limit(n+1)` → `hasMore`), with a hand-rolled page type `{ items, hasMore, totalCount }` — no
   Relay connections.
@@ -119,7 +117,6 @@ these guides come from. When a pattern exists there, **replicate it rather than 
 ## Project status (dated notes)
 
 Temporal facts — **delete each note once it no longer holds.**
-
 - **2026-07-20 — the iOS app has no test target.** `ios/project.yml` declares the app alone, so
   the SwiftUI side has no automated coverage at all: every iOS change is verified by building and
   looking at it in the simulator. Delete this note when a test target exists.

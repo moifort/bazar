@@ -13,11 +13,11 @@ A smart household inventory app — scan your stuff, know where everything is.
 
 ## Tech Stack
 
-| Layer | Stack |
-|-------|-------|
-| iOS | SwiftUI, Swift 6, iOS 26 |
+| Layer   | Stack                                      |
+| ------- | ------------------------------------------ |
+| iOS     | SwiftUI, Swift 6, iOS 26                   |
 | Backend | Nitro, TypeScript, Zod, file-based storage |
-| AI | Gemini 2.5 Flash (vision) |
+| AI      | Gemini 2.5 Flash (vision)                  |
 
 ## Getting Started
 
@@ -57,6 +57,7 @@ bun run dev
 ### iOS App
 
 1. Copy the Secrets template:
+
    ```bash
    cp ios/Bazar/Shared/Secrets.swift.example ios/Bazar/Shared/Secrets.swift
    ```
