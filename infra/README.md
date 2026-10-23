@@ -30,7 +30,6 @@ bun run bootstrap
 ```
 
 The `bootstrap.sh` driver:
-
 1. validates prerequisites,
 2. runs `bun install + bun run generate:graphql + bun run build`,
 3. runs `terraform init && terraform apply -auto-approve`,
@@ -50,7 +49,6 @@ GCS. Only the function source archive changes between runs.
 
 Push notifications to iOS go through Firebase Cloud Messaging (FCM), which
 in turn forwards to APNs. Two pieces of state are needed:
-
 1. **APIs enabled** (`fcm.googleapis.com`, `fcmregistrations.googleapis.com`)
    — declared in `project.tf`.
 2. **APNs Authentication Key uploaded** to Firebase Cloud Messaging.
@@ -58,7 +56,7 @@ in turn forwards to APNs. Two pieces of state are needed:
 The same Apple `.p8` used for Sign in with Apple is reused by default
 (`apns_key_id` / `apns_private_key_path` default to `apple_*` values). The
 key must have the **APNs** capability enabled in Apple Developer (in
-addition to *Sign in with Apple*). If only one key is needed and it has
+addition to _Sign in with Apple_). If only one key is needed and it has
 both capabilities, no extra config is required.
 
 `messaging.tf` runs `scripts/upload-apns-key.sh` via a `null_resource` to
@@ -80,14 +78,14 @@ FCM v1 send API with Application Default Credentials.
 
 Every entry point is a `bun run` script — there is no Makefile.
 
-| Script | What it does |
-| --- | --- |
-| `bun run bootstrap` | One-shot provisioning of a fresh project (`scripts/bootstrap.sh`) |
+| Script                | What it does                                                        |
+| --------------------- | ------------------------------------------------------------------- |
+| `bun run bootstrap`   | One-shot provisioning of a fresh project (`scripts/bootstrap.sh`)   |
 | `bun run infra:build` | Install, `nitro prepare`, export the SDL, build the function bundle |
-| `bun run infra:init` | `terraform init` in `infra/` |
-| `bun run infra:plan` | Build, then `terraform plan` |
-| `bun run infra:apply` | Build, then `terraform apply` |
-| `bun run destroy` | Tear the whole stack down (`scripts/teardown.sh`) |
+| `bun run infra:init`  | `terraform init` in `infra/`                                        |
+| `bun run infra:plan`  | Build, then `terraform plan`                                        |
+| `bun run infra:apply` | Build, then `terraform apply`                                       |
+| `bun run destroy`     | Tear the whole stack down (`scripts/teardown.sh`)                   |
 
 `plan` and `apply` rebuild first on purpose: the function source archive is an
 input to the plan, so planning against a stale bundle plans the wrong deploy.

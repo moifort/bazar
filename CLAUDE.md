@@ -7,7 +7,7 @@ which shelf, which box it sits in — and get a push when something runs low.
 
 Everything versioned and technical is **English**: commits, code, comments, docs (incl.
 `CHANGELOG.md`), identifiers, file names, GraphQL descriptions, AI prompts, test names, iOS
-accessibility *identifiers*. Enum/union values are English technical symbols (`kitchenware`,
+accessibility _identifiers_. Enum/union values are English technical symbols (`kitchenware`,
 `custom-days`, `low-stock-crossed`) — the schema never speaks the user's language, the app
 translates. The **only** French in the repo: user-facing copy (`CHANGELOG.fr.md` + its generated
 asset `server/system/changelog-content.ts`, the iOS app's on-screen text and preview names, the
@@ -20,7 +20,6 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 
 > Full working agreement: [docs/collaboration.md](docs/collaboration.md) — read it at the start
 > of any session. Key rules:
-
 - **Docs are the spec**: align code to `docs/`, never the reverse; `docs/code-style.md` is law and is never edited to match the code (it changes only on an explicit user request). Corrections given in conversation are applied repo-wide **and** codified in the matching doc, in the same task.
 - **Rules generic, wiring specific**: a practice that would hold in any codebase goes in a `*-best-practices.md` with neutral examples; how this repo implements it goes in the matching project guide, which links to the rule.
 - **Work inline, never through subagents**: exploration, review, debugging and planning all happen in the main conversation — never `Task`/`Agent`, never a parallel-worker or subagent-driven skill, plan mode included.
@@ -40,6 +39,7 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 - **Runtime**: always use `bun`/`bunx`, never `npm`/`npx`
 - **GraphQL codegen** (if the schema changed): `bun run generate:graphql` (regenerates `shared/schema.graphql`), then `bun run generate:ios`
 - **iOS build**:
+
   ```
   DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -project ios/Bazar.xcodeproj -scheme Bazar -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.2' build
   ```
@@ -49,7 +49,6 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 > **Git commit & push rules live in [docs/git-workflow.md](docs/git-workflow.md)** (portable rules:
 > [docs/git-best-practices.md](docs/git-best-practices.md)) — read it at the start of any coding
 > session. This section is the quick reference.
-
 1. **Work in the main checkout — never a `git worktree`** ([docs/git-workflow.md](docs/git-workflow.md#never-work-in-a-git-worktree)): everything lands on `main` here, so isolation buys nothing and costs a missing `nitro prepare`, a missing SwiftPM resolve and a split DerivedData. Decline if a harness offers to create one.
 2. Verify the build before committing: `bun tsc --noEmit` and/or the iOS `xcodebuild`, depending on what was touched (`bunx nitro prepare` first if routes changed).
 3. Review the diff yourself, **inline**, before committing — never through a subagent.
@@ -71,7 +70,6 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 > [collaboration](docs/collaboration.md), [app-store-release](docs/app-store-release.md),
 > [in-app-purchase](docs/in-app-purchase.md).
 > This section is the quick reference.
-
 - **Stack**: Bun + Nitro 2.13 (`preset firebase`, gen 2, nodejs22, `europe-west3`) + Apollo Server 5 + Pothos 4 + firebase-admin (native Firestore) + Zod + ts-brand. DDD/CQRS strict. Biome (spaces 2, single quotes, no semicolons, width 100), `ts-pattern` (`match().exhaustive()`), `lodash-es`.
 - **Domains**: `server/domain/{user,item,location,reminder,notification,scan,quota,entitlement,search,dashboard,shared}` — `user`, `item`, `location`, `reminder`, `notification`, `quota` and `entitlement` persist; `scan` is ephemeral (previews are never stored); `search` and `dashboard` are read-only aggregations over the other domains' public `Query` namespaces. System concerns in `server/system/` (`account` = the irreversible `deleteAccount`, `changelog` = the app's "Nouveautés" list). Standard layout (`types.ts`, `primitives.ts`, `command.ts`, `query.ts`, `infrastructure/{repository,graphql/*}.ts`, optional `business-rules.ts` / `use-case.ts` / `events.ts`): [docs/domain-guide.md](docs/domain-guide.md).
 - **Branded types** (`ts-brand` + Zod constructors in `primitives.ts`: `ItemId`, `Quantity`, `StorageId`, `ReminderTitle`…); discriminated results for absence/errors (`'not-found' as const`) — no exceptions for control flow, **no `null` in the domain** (absence = `field?: T`, converted only at the GraphQL/Firestore boundaries).
@@ -85,7 +83,6 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 
 > Full model narrative: [docs/business-rules.md](docs/business-rules.md) — read it before touching
 > `item`, `location`, `reminder` or the AI prompts. The invariants in one glance:
-
 - **A user introduces themselves once**: the first launch asks a first name and a first house (an ordinary `place`) with its rooms, in one `completeOnboarding`. The `user` document's **existence** is the flag — no `hasOnboarded` boolean, so a reinstall never asks twice; an account that already owns places is asked its name only.
 - **The location hierarchy is exactly four levels**: `place > room > zone > storage`, each pointing at its parent, siblings ordered by `order` (`nextOrder` = max + 1). Deleting cascades downward only. `fullPath` is derived at read time, never stored.
 - **An item attaches to a storage OR a zone, never both** (`'invalid-location'`), possibly to nothing. `placeId` is denormalised at attach time and rewritten on every move.
@@ -94,7 +91,7 @@ those exceptions. Full rules: [docs/code-style.md](docs/code-style.md#language).
 - **A scan produces previews, not items**: nothing is persisted until the user confirms the batch; a refused batch leaves no trace. The furniture holding the items is never one of them — a drawer, a shelf, a cupboard is a location, and `scan/business-rules.ts` drops it whatever the AI returned.
 - **A reminder is recurring or one-shot** (absent frequency = one-shot); `customIntervalDays` belongs to `custom-days` and to nothing else. Completing reschedules (from the later of due date and completion date) or finishes and deletes. Deleting an item deletes its reminders.
 - **Search and dashboard derive, never store** — no projection to fall out of sync.
-- **The photo scan is the only metered action**: 10/month on the free plan, no monthly allowance on Premium (a 4000-per-12-months anti-abuse ceiling the app never shows — the copy says "scannez sans compter", never *illimité*). Checked before the AI call, recorded after it answered. Premium is a transaction Apple signed and the server verified, nothing else: [docs/in-app-purchase.md](docs/in-app-purchase.md).
+- **The photo scan is the only metered action**: 10/month on the free plan, no monthly allowance on Premium (a 4000-per-12-months anti-abuse ceiling the app never shows — the copy says "scannez sans compter", never _illimité_). Checked before the AI call, recorded after it answered. Premium is a transaction Apple signed and the server verified, nothing else: [docs/in-app-purchase.md](docs/in-app-purchase.md).
 - **Deleting an account erases everything, data before account**: each domain forgets its own documents, then Firebase Auth drops the user — never the reverse, which would strand documents nobody can authenticate as.
 
 ## Database Migrations
@@ -110,7 +107,6 @@ The `(default)` database has delete protection and seven-day point-in-time recov
 
 > Full iOS guide: [docs/ios-guide.md](docs/ios-guide.md) — project wiring; the portable SwiftUI
 > rules live in [docs/swiftui-best-practices.md](docs/swiftui-best-practices.md).
-
 - Target iOS 26.0, Swift 6 (strict concurrency). XcodeGen (`ios/project.yml` is the source, `ios/Bazar.xcodeproj` is generated), scheme `Bazar`, bundle id `co.polyforms.bazar`, team `46C337T7YN`. MVVM with `@Observable` (`@MainActor` ViewModels, `Sendable` models), Apollo iOS codegen, Firebase Auth + Sign in with Apple, Firebase Messaging for push.
 - Style: **Liquid Glass** = native iOS 26 components (no custom re-skins). Feature structure `Features/{Feature}/components/{pages,organisms,molecules,atoms}/`, shared atoms in `Shared/Components/`.
 - **Generated Apollo types stop at `{Feature}API.swift`** — nothing above that boundary imports `BazarGraphQL`. **Primitive-first leaf views**; **pages = pure presentation**, coordinators (`{Feature}View.swift`) own navigation, sheets and network calls; **previews as Storybook** (everything below page level previewable offline); **a CTA that hits the network shows it** (`AsyncToolbarButton`, optimistic deletes — never `.disabled(...)` alone).

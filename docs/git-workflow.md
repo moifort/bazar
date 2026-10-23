@@ -3,7 +3,7 @@
 This repo's git policy — how work is checkpointed locally and shipped to the remote. The portable
 rules it builds on (one task one commit, verify before committing, Conventional Commits, revert over
 surgery, reshape before pushing) are in [git-best-practices.md](./git-best-practices.md). CLAUDE.md's
-*Development Workflow* section is the quick reference; this doc is the full spec.
+_Development Workflow_ section is the quick reference; this doc is the full spec.
 
 ## What the generic rules mean here
 
@@ -47,7 +47,7 @@ If an agent harness offers to isolate the session in one, decline and stay in th
 
 This is a solo project: CI (Tests + Deploy) runs on `main` pushes only, so a pull request
 is pure ceremony. **Never open one, never suggest one.** On "push", the work goes straight to
-`origin/main` — even from a feature branch (see *Push protocol* below).
+`origin/main` — even from a feature branch (see _Push protocol_ below).
 
 The one exception is **Renovate**, which opens its own dependency PRs and merges them itself once
 the test workflows pass — the PR is the bot's review surface, not ours. `renovate.json` groups

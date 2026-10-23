@@ -22,7 +22,7 @@ server/system/migration/
 The rule is
 [here](./ddd-best-practices.md#migrations-are-forward-only-and-owned-by-a-runner): migrate when a
 field is renamed, restructured or removed, or when an enum value changes meaning. Adding an
-`ItemCategory` value is *additive* — no migration. Don't migrate for a new optional field, a new
+`ItemCategory` value is _additive_ — no migration. Don't migrate for a new optional field, a new
 collection, or a change in query logic or routes.
 
 **Dropping `null` in favour of an absent field is a migration.** The domain models absence as a
@@ -123,7 +123,7 @@ test('drops null fields', async () => {
 ```
 
 A migration without its test does not ship: it is the only thing that proves the transform on the
-*old* shape, which by definition no longer exists in the code.
+_old_ shape, which by definition no longer exists in the code.
 
 ## Trigger — `POST /admin/migrate`
 

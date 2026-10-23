@@ -15,7 +15,6 @@ change?**
 ## Only what changes what the product does
 
 Two things earn a line:
-
 - a **capability** that did not exist;
 - a **defect that was visible** — something that failed, lost data, or displayed the wrong thing.
 

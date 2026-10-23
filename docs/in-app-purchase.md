@@ -6,22 +6,21 @@ this is entirely this product's wiring.
 
 ## What is sold
 
-| | Free | Premium |
-| --- | --- | --- |
-| Items, locations, reminders, notifications | unlimited | unlimited |
-| AI photo scans | **10 per calendar month** | no monthly allowance |
-| Price | — | **1,99 €/month** or **19,99 €/year** (7-day free trial on the yearly) |
+|                                            | Free                      | Premium                                                               |
+| ------------------------------------------ | ------------------------- | --------------------------------------------------------------------- |
+| Items, locations, reminders, notifications | unlimited                 | unlimited                                                             |
+| AI photo scans                             | **10 per calendar month** | no monthly allowance                                                  |
+| Price                                      | —                         | **1,99 €/month** or **19,99 €/year** (7-day free trial on the yearly) |
 
 Products, identical in App Store Connect, in `ios/Bazar/Bazar.storekit` and in
 `SubscriptionProducts.swift` — a typo in any of the three makes the product fail to load, silently:
-
 - `co.polyforms.bazar.premium.monthly`
 - `co.polyforms.bazar.premium.yearly`
 
-**Premium is sold as "scannez sans compter", and the app shows no counter for it.** There *is* a
+**Premium is sold as "scannez sans compter", and the app shows no counter for it.** There _is_ a
 ceiling — 4000 scans over the last 12 months — but it is anti-abuse plumbing, not a plan limit: a
 household inventory does not come near it, and a script driving thousands of scans a month is not
-one. Never surface it, and never use the word *illimité* in the copy: the ceiling exists, so the
+one. Never surface it, and never use the word _illimité_ in the copy: the ceiling exists, so the
 word would be a lie.
 
 ## Why these numbers
@@ -32,7 +31,6 @@ Apple Developer Program at **99 $/year (~8 €/month)** and a Cloud Function tha
 tier at this scale.
 
 That shapes the whole model:
-
 - **Ten free scans a month cost about 2,5 centimes.** Free users are not what costs money; they
   are what makes the app worth opening. The free tier is generous on purpose — a household
   inventory nobody can fill is worth nothing.
@@ -49,8 +47,7 @@ posts it to `syncEntitlement`; the server verifies Apple's signature against the
 certificates (`server/system/apple/`) and only then records the entitlement.
 
 Two checks stand between a claim and Premium:
-
-1. **The signature.** Verified against Production *and* Sandbox unless `NITRO_APPLE_ENVIRONMENT`
+1. **The signature.** Verified against Production _and_ Sandbox unless `NITRO_APPLE_ENVIRONMENT`
    pins one — a shipped app receives both (TestFlight and App Review sign in Sandbox). Set it to
    `Xcode` locally, where the `.storekit` file signs with a throwaway certificate that cannot
    chain to Apple's roots.
@@ -76,7 +73,6 @@ to attach it to until the app syncs the purchase itself.
 `server/domain/quota/` counts scans, one document per user and per month
 (`scan-quotas/{userId}_{YYYY-MM}`), keyed deterministically so a month is read by key and last
 month's document is simply never read again — no purge, no scheduled job.
-
 - The month is **UTC**, so the window does not move with the caller's timezone.
 - The allowance is checked **before** the AI is called (a refusal must cost nothing) and the scan
   is recorded **after** it answered (a Gemini failure is not a scan the user spent).

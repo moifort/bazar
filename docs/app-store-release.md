@@ -35,7 +35,6 @@ ship on approval is a version that should not have been tagged.
 ## What the guard catches
 
 `bun scripts/release-notes.ts guard <version>` runs before anything reaches Apple and fails on:
-
 - a tag that disagrees with `MARKETING_VERSION` — otherwise the upload is labelled with someone
   else's version number, which App Store Connect accepts silently;
 - a changelog section still called `## Unreleased`, in either language;
@@ -52,7 +51,6 @@ flat (the store shows one plain list and would print `###` literally) for the "W
 those texts in the web console is therefore pointless — the next release wipes them.
 
 Two deliberate exceptions:
-
 - **Screenshots are uploaded by hand** (`skip_screenshots`). They change when the interface
   changes, which is not a release's rhythm, and generating them in CI cost more than it returned:
   the simulator has to be brought to the front and the app has to have finished drawing, and both
@@ -84,7 +82,6 @@ Fastfile writes the key under `build/`, which git ignores and the runner throws 
 A listing needs a **privacy policy URL** and a **support URL**, both reachable without an account.
 They live in `docs/pages/` as two static files and are published by the Pages workflow on every
 push that touches them:
-
 - <https://moifort.github.io/bazar/privacy.html>
 - <https://moifort.github.io/bazar/support.html>
 
@@ -130,7 +127,7 @@ then `-exportArchive` with the App Store export options, and upload through Xcod
 
 If the dev Mac runs a **beta macOS**, the archive carries a prerelease `BuildMachineOSBuild` stamp
 that App Store validation also rejects with ITMS-90111. Patch it to the latest **public** macOS
-build number after archiving and *before* `-exportArchive` — export re-signs, so the patch
+build number after archiving and _before_ `-exportArchive` — export re-signs, so the patch
 survives:
 
 ```bash
