@@ -21,6 +21,7 @@ Already set across the project — do not change them.
 ## Apple Developer portal
 
 In [developer.apple.com/account](https://developer.apple.com/account) under Team `46C337T7YN`:
+
 1. **App ID** — Certificates, Identifiers & Profiles → Identifiers → App IDs.
    - Ensure the App ID `co.polyforms.bazar` exists (create it as type _App_ otherwise).
    - Enable the **Sign In with Apple** capability (_Enable as a primary App ID_), then save.

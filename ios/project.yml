@@ -15,13 +15,13 @@ settings:
 packages:
   Apollo:
     url: https://github.com/apollographql/apollo-ios.git
-    minorVersion: "2.4.0"
+    minorVersion: "2.5.0"
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk.git
     from: "13.1.1"
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa.git
-    from: "9.32.0"
+    from: "9.33.0"
 
 targets:
   Bazar:

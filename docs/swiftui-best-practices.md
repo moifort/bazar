@@ -34,6 +34,7 @@ Button {
 ```
 
 Rules that come with it:
+
 - **One source of truth for "in flight."** If the action already runs through a helper that tracks
   its own state (an error presenter, a view model flag), bind the spinner to _that_ — never a
   parallel `@State` boolean that can drift out of sync.

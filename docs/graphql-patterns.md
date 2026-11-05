@@ -105,6 +105,7 @@ location: t.field({
 ```
 
 Rules:
+
 - A loader is **per request** — built in `routes/graphql.ts` from `createLoaders(userId)`, never
   module-level (it would leak one user's data into another's request).
 - A loader batches by owner, not by id: the location tree of a single user is small, so one read

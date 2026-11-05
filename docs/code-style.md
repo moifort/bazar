@@ -280,5 +280,6 @@ This repo's list is in [CLAUDE.md](../CLAUDE.md#language).
 See [swiftui-best-practices.md](./swiftui-best-practices.md) for the portable UI rules and
 [ios-guide.md](./ios-guide.md) for this app's conventions. The two style rules that cross the
 boundary:
+
 - Arrays are never optional (same rule as above), on the wire and in the client model.
 - Write the UI language's accented copy as real UTF-8 characters, never as `"\u{00E9}"` escapes.

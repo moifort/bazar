@@ -14,6 +14,7 @@ this is entirely this product's wiring.
 
 Products, identical in App Store Connect, in `ios/Bazar/Bazar.storekit` and in
 `SubscriptionProducts.swift` — a typo in any of the three makes the product fail to load, silently:
+
 - `co.polyforms.bazar.premium.monthly`
 - `co.polyforms.bazar.premium.yearly`
 
@@ -31,6 +32,7 @@ Apple Developer Program at **99 $/year (~8 €/month)** and a Cloud Function tha
 tier at this scale.
 
 That shapes the whole model:
+
 - **Ten free scans a month cost about 2,5 centimes.** Free users are not what costs money; they
   are what makes the app worth opening. The free tier is generous on purpose — a household
   inventory nobody can fill is worth nothing.
@@ -47,6 +49,7 @@ posts it to `syncEntitlement`; the server verifies Apple's signature against the
 certificates (`server/system/apple/`) and only then records the entitlement.
 
 Two checks stand between a claim and Premium:
+
 1. **The signature.** Verified against Production _and_ Sandbox unless `NITRO_APPLE_ENVIRONMENT`
    pins one — a shipped app receives both (TestFlight and App Review sign in Sandbox). Set it to
    `Xcode` locally, where the `.storekit` file signs with a throwaway certificate that cannot
@@ -73,6 +76,7 @@ to attach it to until the app syncs the purchase itself.
 `server/domain/quota/` counts scans, one document per user and per month
 (`scan-quotas/{userId}_{YYYY-MM}`), keyed deterministically so a month is read by key and last
 month's document is simply never read again — no purge, no scheduled job.
+
 - The month is **UTC**, so the window does not move with the caller's timezone.
 - The allowance is checked **before** the AI is called (a refusal must cost nothing) and the scan
   is recorded **after** it answered (a Gemini failure is not a scan the user spent).
