@@ -30,6 +30,7 @@ bun run bootstrap
 ```
 
 The `bootstrap.sh` driver:
+
 1. validates prerequisites,
 2. runs `bun install + bun run generate:graphql + bun run build`,
 3. runs `terraform init && terraform apply -auto-approve`,
@@ -49,6 +50,7 @@ GCS. Only the function source archive changes between runs.
 
 Push notifications to iOS go through Firebase Cloud Messaging (FCM), which
 in turn forwards to APNs. Two pieces of state are needed:
+
 1. **APIs enabled** (`fcm.googleapis.com`, `fcmregistrations.googleapis.com`)
    — declared in `project.tf`.
 2. **APNs Authentication Key uploaded** to Firebase Cloud Messaging.

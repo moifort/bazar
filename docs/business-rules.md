@@ -13,6 +13,7 @@ attention.
 The first launch asks two things — how to call the user, and what their first place is called —
 then offers the rooms it usually has. The answers are not preferences: they are the first
 documents of the account.
+
 - **The user document is the flag.** There is no `hasOnboarded` boolean: a user who never went
   through the onboarding simply has no document, and that absence is what the app reads on launch.
   A reinstall or a second phone therefore never asks twice, and an account created before the
@@ -32,6 +33,7 @@ documents of the account.
 inside it. The chain is strict and each level points at its parent (`Room.placeId`,
 `Zone.roomId`, `Storage.zoneId`). There is no fifth level and no shortcut: a zone always belongs
 to a room, never directly to a place.
+
 - **Siblings are user-ordered.** Every level carries an `order`; a new sibling lands last
   (`nextOrder` = max + 1), and reordering rewrites `order`, never the ids.
 - **Deleting cascades downward.** Deleting a place deletes its rooms, hence their zones, hence
@@ -45,6 +47,7 @@ to a room, never directly to a place.
 The attachment is where the object physically sits. The user may be precise (a storage) or vague
 (a zone, when the thing is "somewhere in the garage"), and an item may be attached to nothing at
 all — just created, not yet put away.
+
 - Providing both `storageId` and `zoneId` is the sentinel `'invalid-location'`; the schema cannot
   express "exactly one of", so the command does.
 - Pointing at something that doesn't exist (or belongs to someone else) is
@@ -60,6 +63,7 @@ distinguishes the units is not lost in the grouping: it goes into **`tags`**, th
 item is searched by.
 
 A tag comes from one of two places, in this order:
+
 - **every text readable on the object** — the label, the brand, the flavour, the variant, the
   size, a handwritten note ("cumin", "paprika", "Bosch", "18V"). **All of them, with no
   exception**: nothing is summarised, nothing is picked as more interesting than the rest, and
@@ -84,6 +88,7 @@ A tag comes from one of two places, in this order:
 
 An item has a `quantity` (a positive integer) and optionally a `lowStockThreshold`. No threshold
 means the user never wants to hear about this item.
+
 - Low stock is `quantity <= lowStockThreshold` — _at or below_, not strictly below.
 - What triggers a push is not _being_ low, it is **crossing** into low: the item was not low
   before the update and is low after. Re-saving an already-low item stays silent, so a user
@@ -99,6 +104,7 @@ Photographing is not owning. The AI (Gemini 3.5 Flash-Lite vision) returns a bat
 name, guessed category, description, tags, quantity — identified by a `previewId`, and **nothing
 is persisted at that point**. The user reviews the batch, edits what the AI got wrong, and
 **confirms**; only then are items created, all at once, in one place.
+
 - A preview whose category the AI couldn't guess arrives without one — the user picks it; the
   fallback is `other`, never a silent wrong category.
 - A refused batch leaves no trace. There is no "draft item" state in the model.
@@ -112,6 +118,7 @@ is persisted at that point**. The user reviews the batch, edits what the AI got 
 ## A reminder is dated, attached to an item, and either recurring or one-shot
 
 A reminder ("change the water filter") lives on an item and carries a `dueDate`.
+
 - **Frequency drives the lifecycle.** `monthly`, `quarterly`, `biannual`, `annual` and
   `custom-days` are recurring; an **absent** frequency means one-shot.
 - `custom-days` — and only `custom-days` — carries `customIntervalDays`. Any other combination
@@ -131,6 +138,7 @@ A reminder ("change the water filter") lives on an item and carries a `dueDate`.
 
 Both are read-only views assembled from the other domains at read time — there is no stored
 projection to fall out of sync.
+
 - **Search** is fuzzy and accent-insensitive across items, places and rooms, ranked by how the
   match happened: exact (100), prefix (80), word prefix (60), substring (40), near-miss within
   edit distance 2 (20). Anything scoring zero is not a result. An item is matched on its name, its

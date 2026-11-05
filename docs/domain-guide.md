@@ -121,6 +121,7 @@ export const findBy = async (userId: UserId, id: ItemId) => {
 ```
 
 Rules that bite here:
+
 - **`findAll` / `findBy` naming survives only in the repository** — it is the repository idiom.
 - **Every query filters on `userId`.** A document read by id is checked for ownership before
   being returned, and returns `undefined` (not `null`) when missing or foreign.
@@ -226,6 +227,7 @@ bun run generate:graphql && bun run generate:ios
 ## 11. Write the tests
 
 Co-located, with the suffix stating the level (the arch test enforces both):
+
 - `*.unit.test.ts` — pure functions: `business-rules.ts`, `primitives.ts`, `events.ts`.
 - `*.int.test.ts` — commands, queries and repositories against `server/test/fake-firestore.ts`.
   Assert three things: **behaviour** (what was persisted), **atomicity** (one committed batch, no

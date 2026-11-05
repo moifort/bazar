@@ -56,6 +56,7 @@ Features: `Items`, `Locations`, `Scan`, `Search`, `Dashboard`, `Reminders`, `Not
 
 `Shared/GraphQLClient.swift` builds the singleton `ApolloClient` against
 `SharedConfig.serverURL + /graphql`, with two custom interceptors around Apollo's default chain:
+
 1. `FirebaseTokenInterceptor` — injects `Authorization: Bearer <Firebase ID token>` on every
    request. There is no static API token in the app.
 2. `GraphQLLoggingInterceptor` — logs the operation name and any GraphQL error code.
@@ -119,6 +120,7 @@ view decides what to show for it.
 
 One `@MainActor @Observable final class` per feature, holding the state the screens read and the
 `load` / `loadMore` / mutation methods. Models it exposes are `Sendable` value types.
+
 - **Single-flight**: guard re-entrancy (`guard !isLoading`) so a `.task` plus a `.refreshable`
   don't fire twice.
 - **Stale responses**: when a filter can change mid-flight, bump a `generation` token and drop
