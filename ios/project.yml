@@ -21,7 +21,7 @@ packages:
     from: "13.2.0"
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa.git
-    from: "9.35.0"
+    from: "9.36.0"
 
 targets:
   Bazar:
